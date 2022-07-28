@@ -57,7 +57,7 @@
                                   ?>
                                   <ul class="nav navbar-nav-items">
 
-                                    <li ><a href="<?= base_url('directory/') ?>">Directory </a></li>
+                                    <li ><a href="<?= base_url('/directory/') ?>">Directory </a></li>
                                     <li><a href="#">CHL</a></li>
                                     <li class="dropdown currency ">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">

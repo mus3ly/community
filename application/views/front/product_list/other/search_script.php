@@ -17,7 +17,7 @@
     <input type="hidden" name="featured" id="featuredaa">
     <input type="hidden" name="range" id="rangeaa">
     <input type="hidden" name="text" id="search_text">
-    <input type="hidden" name="view_type" id="view_type" value="grid">
+    <input type="hidden" name="view_type" id="view_type" value="list">
     <input type="hidden" name="sort" id="sorter" value="">
 
 </form>
@@ -39,11 +39,12 @@
     var base_url 			= '<?php echo base_url(); ?>';
 	
     $(document).ready(function(){
+
     	var title_page 		= $('title').html();
     	var curr_url 		= window.location.href;
     	var newHREF			= curr_url.replace(url_text,search_text);
     	history.pushState('', title_page, newHREF);
-		set_view('grid');
+		set_view('list');//default view type
         var univ_max = $('#univ_max').val(); 
         $('.on_click_search').on('click',function(){
 			var set_cat = $('#cur_cat').val();
@@ -144,10 +145,11 @@
 				}
 				
 				if($(this).find('i').hasClass('fa-angle-down') || $(this).hasClass('all_category_set')){
-                	setTimeout(function(){ do_product_search('0'); }, 500);
+                	 setTimeout(function(){ do_product_search('0'); }, 500);
 				}
             }
         });
+
         $('#cur_cat').val(cur_category);
         if(range == '0;0'){
             set_price_slider(0,univ_max,0,univ_max);

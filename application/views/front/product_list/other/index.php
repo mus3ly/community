@@ -210,7 +210,7 @@
 function initMap() {
   const uluru = { lat: <?= $this->config->item('lat'); ?>, lng: <?= $this->config->item('lng'); ?> };
   const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 12,
+    zoom: 4,
     center: uluru,
   });
     for (var i = 0; i < markers.length; i++) {
