@@ -23,18 +23,7 @@
             	$brands=$this->db->where('category',$row['sub_category_id'])->get('sub3_category')->result_array();
 			?>
             <td>
-				<?php 
-                    if($brands)
-                    {
-					foreach($brands as $row1){
-				?>
-                    <span class="label label-info" style="margin-right: 5px;">
-                        <?php echo $row1['sub_category_name'];?>
-                    </span>
-               	<?php 
-					}
-                    } 
-				?>
+    				
           	</td>
             <td class="text-right">
                 <a class="btn btn-primary btn-labeled fa fa-plus-circle " 
@@ -71,19 +60,19 @@
             </thead>
                 
             <tbody >
-            <?php
-                $i = 0;
-                foreach($all_sub_category as $row){
-                    $i++;
-            ?>
-            <tr>
-                <td><?php echo $i; ?></td>
-                <td><?php echo $row['sub_category_name']; ?></td>
-                <td><?php echo $this->crud_model->get_type_name_by_id('category',$row['category'],'category_name'); ?></td>
-            </tr>
-            <?php
-                }
-            ?>
+                <?php
+                    $i = 0;
+                    foreach($all_sub_category as $row){
+                        $i++;
+                ?>
+                <tr>
+                    <td><?php echo $i; ?></td>
+                    <td><?php echo $row['sub_category_name']; ?></td>
+                    <td><?php echo $this->crud_model->get_type_name_by_id('category',$row['category'],'category_name'); ?></td>
+                </tr>
+                <?php
+                    }
+                ?>
             </tbody>
     </table>
 </div>

@@ -112,6 +112,7 @@ class Admin extends CI_Controller
             foreach ($exp as $key => $value) {
                 $data['category_name'] = $value;
             $data['fa_icon'] = $this->input->post('fa_icon');
+            $data['pcat'] = $this->input->post('pcat');
             $this->db->insert('category', $data);
             $id = $this->db->insert_id();
             }
@@ -124,6 +125,7 @@ class Admin extends CI_Controller
         } elseif ($para1 == "update") {
             $data['category_name'] = $this->input->post('category_name');
             $data['fa_icon'] = $this->input->post('fa_icon');
+            $data['pcat'] = $this->input->post('pcat');
             $this->db->where('category_id', $para2);
             $this->db->update('category', $data);
             if($_FILES['img']['name']!== ''){

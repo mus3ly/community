@@ -22,12 +22,19 @@
 					</div>
 				</div>
 
+            <div class="form-group">
+                <label class="col-sm-4 control-label"><?php echo translate('category');?></label>
+                <div class="col-sm-6">
+                    <?php echo $this->crud_model->select_html('category','pcat','category_name','edit','demo-chosen-select form-control ',$row['pcat'],'digital',NULL); ?>
+                </div>
+            </div>
+
             
             <div class="form-group">
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('fa_icon');?></label>
                 <div class="col-sm-6">
                     <input type="text" name="fa_icon" value="<?php echo $row['fa_icon'];?>" id="demo-hor-1" 
-                        placeholder="<?php echo translate('fontawsome_icon'); ?>" class="form-control required">
+                        placeholder="<?php echo translate('fontawsome_icon'); ?>" class="form-control">
                         <div>
                         <span><a href="https://fontawesome.com/icons">Click here</a> to find icon code</span>
                     </div>

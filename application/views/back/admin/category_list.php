@@ -1,14 +1,35 @@
+<?php
+function get_cat_level($id)
+{
+	$l = 1;
+	$ci =& get_instance();
+
+	$row1 = $ci->db->where('category_id', $id)->get('category')->row();
+	$parent = $row1->pcat;
+	while ($parent) {
+		$l++;
+		$row1 = $ci->db->where('category_id', $parent)->get('category')->row();
+	$parent = $row1->pcat;
+	}
+return $l;
+}
+
+?>
 	<div class="panel-body" id="demo_s">
 		<table id="demo-table" class="table table-striped"  data-pagination="true" data-show-refresh="true" data-ignorecol="0,2" data-show-toggle="true" data-show-columns="false" data-search="true" >
 
 			<thead>
 				<tr>
 					<th><?php echo translate('no');?></th>
+					<th><?php echo translate('level');?></th>
 					<th><?php echo translate('name');?></th>
+					<th><?php echo translate('parent_category');?></th>
                     <th><?php echo translate('fontawsome_icon');?></th>
+                    
                     <th><?php echo translate('business_type');?></th>
                     <th><?php echo translate('signup_main_category');?></th>
                     <th><?php echo translate('main_category');?></th>
+                    <th><?php echo translate('innner_categories');?></th>
 					<th class="text-right"><?php echo translate('options');?></th>
 				</tr>
 			</thead>
@@ -42,11 +63,44 @@
 			?>
 			<tr>
 				<td><?php echo $i; ?></td>
+				<td><?php echo get_cat_level($row['category_id']); ?></td>
                 <td><?php echo $row['category_name']; ?></td>
+                <td>
+               		<?php
+               		if($row['pcat'])
+               		{
+               			$row1 = $this->db->where('category_id', $row['pcat'])->get('category')->row();
+               			if($row1)
+               			{
+               				echo $row1->category_name; 
+               			}
+
+               		}
+
+               		?>
+               	</td>
                	<td><i class="fa <?= $row['fa_icon'] ?>" style="    font-size: 50px;" aria-hidden="true"></i></td>
+               	
                	<td><input type="checkbox" name="" class="signup_cat" onclick="signup_cat('<?= $row['category_id'] ?>');" value="<?= $row['category_id'] ?>" <?= in_array($row['category_id'], $result)?"checked":""; ?>></td>
                	<td><input type="checkbox" name="" class="signup_main_cat" onclick="signup_main_cat('<?= $row['category_id'] ?>');" value="<?= $row['category_id'] ?>" <?= in_array($row['category_id'], $result2)?"checked":""; ?>></td>
                	<td><input type="checkbox" name="" class="main_cat" onclick="main_cat('<?= $row['category_id'] ?>');" value="<?= $row['category_id'] ?>" <?= in_array($row['category_id'], $result1)?"checked":""; ?>></td>
+               	<?php
+            	$brands=$this->db->where('pcat',$row['category_id'])->get('category')->result_array();
+			?>
+			<td>
+             <?php 
+                        if($brands)
+                        {
+    					foreach($brands as $row1){
+    				?>
+                        <span class="label label-info" style="margin-right: 5px;">
+                            <?php echo $row1['category_name'];?>
+                        </span>
+                   	<?php 
+    					}
+                        } 
+    				?>
+    			</td>
 				<td class="text-right">
 					<a class="btn btn-success btn-xs btn-labeled fa fa-wrench" data-toggle="tooltip" 
                     	onclick="ajax_modal('edit','<?php echo translate('edit_category_(_physical_product_)'); ?>','<?php echo translate('successfully_edited!'); ?>','category_edit','<?php echo $row['category_id']; ?>')" 
