@@ -34,7 +34,7 @@
 <body id="home" class="wide">
 <!-- PRELOADER -->
 <?php
-$preloader = '1';
+$preloader = '2';
 //include 'preloader/preloader_'.$preloader.'.php';
 include 'preloader.php';
 ?>
@@ -51,7 +51,7 @@ include 'preloader.php';
 
     <!-- HEADER -->
     <?php
-    $header = '1';
+    $header = '2';
     include 'header/header_'.$header.'.php';
     ?>
     <!-- /HEADER -->
@@ -69,7 +69,7 @@ include 'preloader.php';
 
     <!-- FOOTER -->
     <?php
-    $footer = '1';
+    $footer = '2';
     include 'footer/footer_'.$footer.'.php';
     ?>
     <!-- /FOOTER -->

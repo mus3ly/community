@@ -91,6 +91,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         if (demo()) {
             $home_style = isset($_REQUEST['requested_homepage']) ? $_REQUEST['requested_homepage'] : $this->db->get_where('ui_settings', array('type' => 'home_page_style'))->row()->value;
         }
+        $home_style = 2;
         $page_data['page_name'] = "home/home" . $home_style;
         $page_data['asset_page'] = "home";
         $page_data['page_title'] = translate('home');
