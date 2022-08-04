@@ -16,6 +16,21 @@ return $l;
 
 ?>
 	<div class="panel-body" id="demo_s">
+		<?php
+		$tlevel = 5;
+		?>
+		<select onchange="slevel()" id="cat_level">
+			<option value="0">Select Level</option>
+			<?php
+			for($i = 1; $i<=$tlevel;$i++)
+			{
+				?>
+					<option value="<?= $i ?>"><?= $i ?> Level</option>
+				<?php
+
+			}
+			?>
+		</select>
 		<table id="demo-table" class="table table-striped"  data-pagination="true" data-show-refresh="true" data-ignorecol="0,2" data-show-toggle="true" data-show-columns="false" data-search="true" >
 
 			<thead>
@@ -60,6 +75,8 @@ return $l;
 				$i = 0;
             	foreach($all_categories as $row){
             		$i++;
+					if(isset($_GET['level']) && $_GET['level'] == get_cat_level($row['category_id']))
+					{
 			?>
 			<tr>
 				<td><?php echo $i; ?></td>
@@ -114,6 +131,7 @@ return $l;
 				</td>
 			</tr>
             <?php
+					}
             	}
 			?>
 			</tbody>
@@ -135,6 +153,7 @@ return $l;
 					$i = 0;
 	            	foreach($all_categories as $row){
 	            		$i++;
+						
 				?>
 				<tr>
 					<td><?php echo $i; ?></td>
@@ -147,3 +166,9 @@ return $l;
 		</table>
 	</div>
 
+<script>
+function slevel()
+{
+	ajax_set_list('level');
+}
+</script>

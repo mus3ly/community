@@ -130,7 +130,15 @@
 	}
 
 	function ajax_set_list(extra){
+		if(extra == 'level')
+		{
+			var level = $('#cat_level').val();
+			ajax_load(base_url+''+user_type+'/'+module+'/'+list_cont_func+'?level='+level,'list','first');
+		}
+		else
+		{
 		ajax_load(base_url+''+user_type+'/'+module+'/'+list_cont_func+'/'+extra,'list','first');
+		}
 		sound('ajax_load');
 	}
 
