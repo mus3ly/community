@@ -2960,7 +2960,7 @@ foreach($vendors as $kk=> $vv)
         $physical_product_activation = $this->db->get_where('general_settings', array('type' => 'physical_product_activation'))->row()->value;
         $digital_product_activation = $this->db->get_where('general_settings', array('type' => 'digital_product_activation'))->row()->value;
 
-        if ($category_data->row()->digital == '') {
+        if (true) {
             if ($physical_product_activation !== 'ok') {
                 return false;
             }

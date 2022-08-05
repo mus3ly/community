@@ -6181,6 +6181,11 @@ class Admin extends CI_Controller
             $this->db->update('general_settings', array(
                 'value' => json_encode($this->input->post('footer_category'))
             ));
+
+            $this->db->where('type', "footer_page");
+            $this->db->update('general_settings', array(
+                'value' => json_encode($this->input->post('footer_page'))
+            ));
         }
          if ($para1 == "font") {
             $this->db->where('type', "font");
