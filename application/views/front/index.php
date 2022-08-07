@@ -26,9 +26,9 @@
     }
     ?>
     <title><?php echo $page_title; ?> | <?php echo $system_title; ?></title>
-    <style href="<?= base_url(); ?>/template/front/css/socialmedia9_style.css" ></style>
+    <!--<style href="<?= base_url(); ?>/template/front/css/socialmedia9_style.css" ></style>-->
     <?php
-    include 'includes/top/index.php';
+    // include 'includes/top/index.php';
     ?>
 </head>
 <body id="home" class="wide">
