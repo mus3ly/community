@@ -46,7 +46,7 @@
             </ul>
         </div>
         <div class="searchform">
-             <form action="<?= base_url('/home/text_search'); ?>"  onkeyup="submitForm(event)" oninput="submitForm(event)" method="post">
+              <form action="<?= base_url('/home/text_search'); ?>"  onkeyup="submitForm(event)" oninput="submitForm(event)" method="post"> 
             <input type="search" id="home-search" name="query" placeholder="Search..." value="" class="searchbox" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off" aria-label="Search">
                 <button type="submit">Search places <i class="fa fa-angle-right"></i> </button>
            </form>

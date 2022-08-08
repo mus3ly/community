@@ -14,7 +14,7 @@
             <div class="panel-body">
                 <div class="form-group">
                     <?php
-                        $style = array(1);
+                        $style = array(1,2);
                         foreach($style as $value){
                     ?>
                         <div class="col-sm-4 box_area">

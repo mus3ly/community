@@ -26,9 +26,10 @@
     }
     ?>
     <title><?php echo $page_title; ?> | <?php echo $system_title; ?></title>
-    <!--<style href="<?= base_url(); ?>/template/front/css/socialmedia9_style.css" ></style>-->
+    <style href="<?= base_url(); ?>/template/front/css/socialmedia9_style.css" ></style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
-    // include 'includes/top/index.php';
+     include 'includes/top/index_new.php';
     ?>
 </head>
 <body id="home" class="wide">
@@ -82,7 +83,7 @@ include 'preloader.php';
  include 'script_texts.php';
 ?>
 <?php
- include 'includes/bottom/index.php';
+ include 'includes/bottom/index_new.php';
 ?>
 
 
@@ -158,6 +159,10 @@ include 'preloader.php';
     }
 </style>
 <script>
+    function submitForm()
+    {
+        alert();
+    }
     $(document).ready(function(){
         $('.home-switch button').on('click', function(){
             if ($('.home-switch').hasClass('active')) {

@@ -25,7 +25,7 @@ return $l;
 			for($i = 1; $i<=$tlevel;$i++)
 			{
 				?>
-					<option value="<?= $i ?>"><?= $i ?> Level</option>
+					<option value="<?= $i ?>" <?= (isset($_GET['level']) && $_GET['level'] == $i)?"selected":""; ?>><?= $i ?> Level</option>
 				<?php
 
 			}
@@ -75,7 +75,7 @@ return $l;
 				$i = 0;
             	foreach($all_categories as $row){
             		$i++;
-					if(isset($_GET['level']) && $_GET['level'] == get_cat_level($row['category_id']))
+					if(!$_GET['level'] || $_GET['level'] == get_cat_level($row['category_id']))
 					{
 			?>
 			<tr>

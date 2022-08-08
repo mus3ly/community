@@ -1,0 +1,42 @@
+<div class="dotted_lines">
+    <img src="https://ads.strokedev.net/template/front/images/doted-lines.png" alt="">
+</div>
+<div class="ellipse">
+    <img src="https://ads.strokedev.net/template/front/images/Ellipse.png" alt="">
+</div>
+<div class="lines_shape">
+    <img src="https://ads.strokedev.net/template/front/images/lines-shape.png" alt="">
+</div>
+<div class="rounded_box">
+    <img src="https://ads.strokedev.net/template/front/images/rounded.png" alt="">
+</div>
+<header class="header_wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 logobox">
+                <a href="#"><img src="https://ads.strokedev.net/template/front/images/logo.png" alt=""></a>
+            </div>
+            <div class="col-sm-9 navbar_box_items">
+                <ul>
+                    <li><a href="#"><b>Directory</b></a></li>
+                    <li><a href="#">CHL</a></li>
+                    <li>
+                        <a href="#">Account</a>
+                        <div class="dropdown_box">
+                            <ul>
+                                <li><a href="#">Education</a></li>
+                                <li><a class="active" href="#">Travel</a></li>
+                                <li><a href="#">Technology</a></li>
+                                <li><a href="#">Banking</a></li>
+                                <li><a href="#">Pharma</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#" class="add_listing">Add Listing <img src="https://ads.strokedev.net/template/front/images/plus-icon.png" alt=""></a></li>
+                    <li class="padd_right"><a href="#"><img class="avatar_img" src="https://ads.strokedev.net/template/front/images/avatar.png" alt=""></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
