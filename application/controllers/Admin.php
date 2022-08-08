@@ -4149,7 +4149,7 @@ class Admin extends CI_Controller
             redirect(base_url() . 'admin');
         }
         if ($para1 == "ui_home") {
-            if ($para2 == 'update_home_page') {
+            if ($para2 == 'update_home_page' && $this->input->post('home_page')) {
                 $this->db->where('type', "home_page_style");
                 $this->db->update('ui_settings', array(
                     'value' => $this->input->post('home_page')
@@ -4308,7 +4308,7 @@ class Admin extends CI_Controller
                 if($_FILES["par3"]['tmp_name']){
                     if(!demo()){
                         $path = 'uploads/others/parralax_search.jpg';
-                        move_uploaded_file($_FILES["par3"]['tmp_name'], $path);
+                        $r = move_uploaded_file($_FILES["par3"]['tmp_name'], $path);
                         $data = \Cloudinary\Uploader::upload($path);
                                             if(isset($data['public_id']))
                                             {
@@ -6185,6 +6185,11 @@ class Admin extends CI_Controller
             $this->db->where('type', "footer_page");
             $this->db->update('general_settings', array(
                 'value' => json_encode($this->input->post('footer_page'))
+            ));
+
+            $this->db->where('type', "footer_disc");
+            $this->db->update('general_settings', array(
+                'value' => json_encode($this->input->post('footer_disc'))
             ));
         }
          if ($para1 == "font") {
