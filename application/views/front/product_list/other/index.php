@@ -9,7 +9,7 @@
                                             foreach($categories as $row){
                                                 if($this->crud_model->if_publishable_category($row)){
                                                     $result[]=$row;
-                                                }
+                                                } 
                                             }
 
                     foreach ($brands as $key => $value) {
@@ -215,6 +215,8 @@ function initMap() {
   });
     for (var i = 0; i < markers.length; i++) {
         console.log(markers[i]);
+        if(markers[i].lat)
+        {
         var num = i+1;
         var contentString =
     '<div id="content">' +
@@ -237,13 +239,16 @@ function initMap() {
     "(last visited June 22, 2009).</p>" +
     "</div>" +
     "</div>";
+    var icon_lat = markers[i].lat;
+    var icon_lng = markers[i].lng;
          generateIcon(num, function(src) {
-        var uluru = { lat: parseFloat(markers[i]['lat']), lng: parseFloat(markers[i]['lng']) };
+            // alert(icon_lat);
+        var uluru = { lat: parseFloat(icon_lat), lng: parseFloat(icon_lng) };
     const marker = new google.maps.Marker({
     position: uluru,
     map,
     icon: src,
-    title: markers[i]['title'],
+    title: 'Testing',
   });
 
   marker.addListener("click", () => {
@@ -255,7 +260,8 @@ function initMap() {
     });
   });      
     });
-    }
+}//if checkes
+}
    
   const infowindow = new google.maps.InfoWindow({
     content: contentString,

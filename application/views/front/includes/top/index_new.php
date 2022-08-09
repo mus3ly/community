@@ -217,7 +217,7 @@ $font =  $this->db->get_where('ui_settings',array('type' => 'font'))->row()->val
 ?>
 
 <link href='https://fonts.googleapis.com/css?family=<?php echo $font; ?>:400,500,600,700,800,900' rel='stylesheet' type='text/css'>
-<link href="<?php echo base_url(); ?>template/front/css/socialmedia9_style.css" rel="stylesheet">
+
 <style>
 
     *{

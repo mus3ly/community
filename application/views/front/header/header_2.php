@@ -14,11 +14,11 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-3 logobox">
-                <a href="#"><img src="https://ads.strokedev.net/template/front/images/logo.png" alt=""></a>
+                <a href="<?= base_url(); ?>"><img src="https://ads.strokedev.net/template/front/images/logo.png" alt=""></a>
             </div>
             <div class="col-sm-9 navbar_box_items">
                 <ul>
-                    <li><a href="#"><b>Directory</b></a></li>
+                    <li><a href="<?= base_url('/directory'); ?>"><b>Directory</b></a></li>
                     <li><a href="#">CHL</a></li>
                     <li>
                         <a href="#">Account</a>

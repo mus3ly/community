@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <?php
+    $home_style = $this->db->get_where('ui_settings', array('type' => 'home_page_style'))->row()->value;
     $vendor_system   =  $this->crud_model->get_settings_value('general_settings','vendor_system');
     $physical_system =  $this->crud_model->get_settings_value('general_settings','physical_product_activation');
     $digital_system  =  $this->crud_model->get_settings_value('general_settings','digital_product_activation');
@@ -26,7 +27,15 @@
     }
     ?>
     <title><?php echo $page_title; ?> | <?php echo $system_title; ?></title>
-    <style href="<?= base_url(); ?>/template/front/css/socialmedia9_style.css" ></style>
+    <?php
+    if($home_style != 2)
+    {
+        ?>
+         <style href="<?= base_url(); ?>/template/front/css/socialmedia9_style.css" ></style>   
+        <?php
+    }
+    ?>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <?php
      include 'includes/top/index_new.php';
@@ -52,7 +61,7 @@ include 'preloader.php';
 
     <!-- HEADER -->
     <?php
-    $header = '2';
+    $header = $home_style;
     include 'header/header_'.$header.'.php';
     ?>
     <!-- /HEADER -->
@@ -70,7 +79,7 @@ include 'preloader.php';
 
     <!-- FOOTER -->
     <?php
-    $footer = '2';
+    $footer = $home_style;
     include 'footer/footer_'.$footer.'.php';
     ?>
     <!-- /FOOTER -->

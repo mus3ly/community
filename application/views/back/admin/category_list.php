@@ -1,20 +1,4 @@
-<?php
-function get_cat_level($id)
-{
-	$l = 1;
-	$ci =& get_instance();
 
-	$row1 = $ci->db->where('category_id', $id)->get('category')->row();
-	$parent = $row1->pcat;
-	while ($parent) {
-		$l++;
-		$row1 = $ci->db->where('category_id', $parent)->get('category')->row();
-	$parent = $row1->pcat;
-	}
-return $l;
-}
-
-?>
 	<div class="panel-body" id="demo_s">
 		<?php
 		$tlevel = 5;

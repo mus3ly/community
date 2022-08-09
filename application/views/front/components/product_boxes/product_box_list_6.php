@@ -1,9 +1,26 @@
-<div class="thumbnail list_box_style1 item" itemscope itemtype="http://schema.org/Product">
+<?php
+$cat = $this->db->where('category_id',$category)->get('category')->row();
+$img = '';
+                        if($comp_cover)
+                        {
+                            $img = $this->crud_model->get_img($comp_cover);
+                            if(isset($img->secure_url))
+                            {
+                                $img = $img->secure_url;
+                            }
+
+                        }
+                        else
+                        {
+                            $img = $this->crud_model->file_view('product',$product_id,'','','thumb','src','multi','one');
+
+                        }
+                        ?><div class="thumbnail list_box_style1 item"  itemscope itemtype="http://schema.org/Product">
     <div class="row product-single">
         <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="media">
             	<div class="cover"></div>                
-        		<div class="media-link image_delay" data-src="<?php echo $this->crud_model->file_view('product',$product_id,'','','thumb','src','multi','one'); ?>" style="background-image:url('<?php echo img_loading(); ?>');background-size:cover; background-position:center;">
+        		<div class="media-link image_delay" data-src="<?php echo $img; ?>" style="background-image:url('<?php echo $img; ?>');background-size:cover; background-position:center;">
                     <span onclick="quick_view('<?php echo $this->crud_model->product_link($product_id,'quick'); ?>')">
                         <span class="icon-view">
                             <strong><i class="fa fa-eye"></i></strong>
@@ -127,6 +144,27 @@
                             ?>
                         </span>
                     </span>
+                    
+                    <?php
+                                if($lat && $lng)
+                                {
+                                ?>
+                                    
+
+                                 
+                    <span class="btn btn-add-to" onclick="open_marker(<?= $lat?>, <?=$lng ?>)">
+                    
+
+                    <i onclick="" class="fa-solid fa-location-dot"></i>
+                        <span class="hidden-sm hidden-xs">
+							
+                                Map 
+                            
+                        </span>
+                    </span>
+                    <?php
+                                }
+                                ?>
                 </div>
             </div>
         </div>

@@ -1,4 +1,60 @@
 <script type="text/javascript">
+	var cloader = 'Loading ...';
+	function open_marker(lat, lng)
+	{
+		alert("Here");
+	}
+	function load_sub(cid)
+	{
+		var mid = '#child_'+cid;
+		var icon_id = '#icon_'+cid;
+		if($(icon_id).hasClass('fa-angle-down'))
+		{
+			$(icon_id).removeClass('fa-angle-down');
+		$(icon_id).addClass('fa-angle-up');
+			$(mid).html('');
+
+		}
+		else{
+			$(mid).html(cloader);
+		
+	
+		$(icon_id).removeClass('fa-angle-up');
+		$(icon_id).addClass('fa-angle-down');
+		var url = '<?= base_url('/home/pcat'); ?>/'+cid;
+		// alert(cid);
+		$.ajax({
+        url: url,
+        dataType: "json",
+        type: "get",
+        async: true,
+        data: { },
+        success: function (data) {
+			alert(data);
+           if(data != 'no')
+		   {
+			// alert(data);
+		   }
+
+        },
+        error: function (xhr, exception) {
+			console.log(xhr.responseText);
+			// alert('error');
+            if(xhr.responseText != 'no')
+		   {
+			$(mid).html(xhr.responseText);
+
+			// alert(xhr.responseText);
+		   }
+		   else
+		   {
+			$(mid).html(' ');
+		   }
+           
+        }
+    }); 
+}
+	}
 	  var markers = [
   [1, -14.2350040, -51.9252800]
 ];
@@ -251,7 +307,7 @@
             success: function(data) {
                 place.html(data);
 				load_iamges();
-                $('div.rateit, span.rateit').rateit();
+                // $('div.rateit, span.rateit').rateit();
                 // markers = 'yes';
                 $('.item').each(function(i, obj) {
                 	if($(this).attr('data-lat') && $(this).attr('data-lng'))
@@ -265,6 +321,7 @@
 					    markers.push(item);
 					}
 				});
+				alert(markers);
 				console.log(markers);
                 initMap();
             },

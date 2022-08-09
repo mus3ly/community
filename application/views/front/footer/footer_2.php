@@ -46,7 +46,7 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                         if($row)
                         {
                         ?>
-                        <li><a href="<?= base_url('home/page/'.$value->parmalink); ?>"><?= $row->page_name ?></li></a>
+                        <li><a href="<?= base_url('home/page/'.$row->parmalink); ?>"><?= $row->page_name ?></li></a>
                         <?php
                         }
                     }
@@ -63,7 +63,7 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                         if($row)
                         {
                         ?>
-                        <li><a href="<?= base_url('home/page/'.$value->parmalink); ?>"><?= $row->page_name ?></li></a>
+                        <li><a href="<?= base_url('home/page/'.$row->parmalink); ?>"><?= $row->page_name ?></li></a>
                         <?php
                         }
                     }

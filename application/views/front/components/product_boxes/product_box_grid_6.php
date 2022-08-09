@@ -36,7 +36,7 @@ $img = '';
                                         <img src="<?= $img?>"  class="owl-lazy" alt="" style="opacity: 1;">
                                         <a class="strip_info">
                                             <?php
-                                            if($cat->category_name)
+                                            if(isset($cat->category_name))
                                             {
                                                 ?>
                                             <small><?= $cat->category_name ?></small>

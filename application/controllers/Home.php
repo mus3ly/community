@@ -95,6 +95,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $page_data['page_name'] = "home/home" . $home_style;
         $page_data['asset_page'] = "home";
         $page_data['page_title'] = translate('home');
+        $page_data['new'] = 1;
         $this->benchmark->mark('code_start');
         $this->load->view('front/index', $page_data);
 
@@ -2095,6 +2096,28 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
 
     }
 
+    function pcat($id)
+    {
+        $cats = $this->db->where('pcat',$id)->get('category')->result();
+        if($cats)
+        {
+            echo "<ul>";
+            foreach ($cats as $key => $value) {
+                if($this->crud_model->if_publishable_category($value->category_id))
+                {
+                echo '<li onclick="load_sub('.$value->category_id.')">';
+                echo '<span>'.$value->category_name.'<i  id="icon_'. $value->category_id.'" class="fa fa-angle-up"></i></span>';
+                echo '</li>
+                <div class="children" id="child_'.$value->category_id.'"></div>';
+                }
+            }
+            echo "</ul>";
+
+        }
+        else{
+            die('no');
+        }
+    }
     function text_search()
     {
         $type = 'product';
@@ -2102,8 +2125,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $category = 0;
         $this->session->set_flashdata('query', $search);
 
-        if (false) {
-            // echo $search = $this->input->post('query');
+        if ($this->input->post('query')) {  
 
             redirect(base_url() . 'home/category/' . $category . '/0-0/0/0/' . $search, 'refresh');
         } else {

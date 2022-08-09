@@ -41,9 +41,9 @@
                 <h5>Amet consectetur adipisicing New</h5>
                 <h3>Find Your <b>Perfect Place.</b></h3>
                 <div class="search_bar">
-                <form action="<?= base_url('/home/text_search'); ?>"  method="post"> 
-                    <img src="<?= base_url(); ?>template/front/images/Location.png" alt="">
-                    <input type="text" placeholder="Find Your  Place" name="">
+                <form action="<?= base_url('/home/text_search'); ?>"  onkeyup="submitForm(event)" id="srch_form" method="post">
+                    <img src="<?= base_url(); ?>template/front/images/Location.png" alt="Search">
+                    <input type="text" placeholder="Find Your  Place"  name="query" alt="" onkeyup="submitForm(event)">
                     <button type="submit">Search</button>
                 </form>
                 </div>

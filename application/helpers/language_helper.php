@@ -12,6 +12,20 @@
  * @since		Version 1.0
  * @filesource
  */
+function get_cat_level($id)
+{
+	$l = 1;
+	$ci =& get_instance();
+
+	$row1 = $ci->db->where('category_id', $id)->get('category')->row();
+	$parent = $row1->pcat;
+	while ($parent) {
+		$l++;
+		$row1 = $ci->db->where('category_id', $parent)->get('category')->row();
+	$parent = $row1->pcat;
+	}
+return $l;
+}
 
 	function asset_url(){
 		return 'http://developers.activeitzone.com/activesupershopv1.4/';
