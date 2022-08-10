@@ -28,7 +28,7 @@
     ?>
     <title><?php echo $page_title; ?> | <?php echo $system_title; ?></title>
     <?php
-    if($home_style != 2)
+    if($home_style != 2 && !isset($new))
     {
         ?>
          <style href="<?= base_url(); ?>/template/front/css/socialmedia9_style.css" ></style>   

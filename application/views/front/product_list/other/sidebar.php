@@ -69,7 +69,7 @@
     <br>
     <div class="row hidden-sm hidden-xs">
     <?php
-		echo $this->html_model->widget('special_products');
+		//echo $this->html_÷model->widget('special_products');
 	?>
     </div>
 </aside>
