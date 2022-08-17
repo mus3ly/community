@@ -151,6 +151,7 @@
             </tr>
             <?php
             $gtot = $shipping + $stot;
+            var_dump($gtot);
             ?>
 
             <tr class="coupon_disp" <?php if($this->cart->total_discount()<=0){ ?>style="display:none;" <?php } ?>>

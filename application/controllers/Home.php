@@ -2970,9 +2970,9 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         //s
         if($user->pack)
         {
-            $pack = $this->db->where('id',$user->pack)->get('bpkg')->row();
+            $pack = $this->db->where('membership_id',$user->pack)->get('membership')->row();
             $option = array(
-                'ads' => $pack->ads,
+                'ads' => $pack->product_limit,
             );
             $this->cart->destroy();
             $data = array(
@@ -2981,9 +2981,9 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                 'signup_pkg' => 1,
                 'option' => json_encode($option),
                 'vendor' => $id,
-                'vendor_name' => $user->name,
+                'vendor_name' => $user->title,
                 'price' => $pack->price,
-                'name' =>$pack->name,
+                'name' =>$pack->title,
                 'shipping' => 0,
                 'tax' => 0
             );
@@ -2995,7 +2995,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         else
         {
             $pack = $this->db->where('def',1)->get('bpkg')->row();
-            $this->process_pack($id,$pack->id);
+            $this->process_pack($id,0);
         }
         //bpage
     }
@@ -3019,15 +3019,20 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     }
     function process_pack($vid, $pid)
     {
-        $pack = $this->db->where('id',$pid)->get('bpkg')->row();
+        $this->crud_model->upgrade_membership($vid,$pid);
+        /*
+        $pack = $this->db->where('membership_id',$pid)->get('membership')->row();
         // var_dump($pack);
         $date = date('Y-m-d H:i:s');
+        $days = ($pid)?$pack->timespan:30;
+        $limit = ($pid)?$pack->product_limit:$this->db->get_where('general_settings',array('type'=>'default_member_product_limit'))->row()->value;
         $exp = date('Y-m-d H:i:s', strtotime($date. ' + '.$pack->days.' days')); 
         $up = array(
             'exp_date' => $exp,
-            'listings' => $pack->ads,
+            'membership_id' => $pid,
+            'listings' => $limit,
         );
-        $this->db->where('vendor_id',$vid)->update('vendor', $up);
+        $this->db->where('vendor_id',$vid)->update('vendor', $up);*/
 
     }
     function vendor_logup($para1 = "", $para2 = "")
@@ -3106,7 +3111,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                                 }
                             }
                             $this->vendor_page($this->db->insert_id());
-                            echo $msg;
+                            // echo $msg;
                         } else {
                             echo translate('please_fill_the_captcha');
                         }
@@ -3123,20 +3128,19 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                         $data['zip'] = $this->input->post('zip');
                         $data['pack'] = $this->input->post('pack');
                             $data['cat1'] = $this->input->post('buss_type');
-                            $data['cat2'] = $this->input->post('sub_category');
-                            $data['cat3'] = $this->input->post('sub3_category');
                         $data['create_timestamp'] = time();
                         $data['approve_timestamp'] = 0;
                         $data['approve_timestamp'] = 0;
                         $data['membership'] = 0;
                         $data['status'] = 'pending';
 
+
                         if ($this->input->post('password1') == $this->input->post('password2')) {
                             $password = $this->input->post('password1');
                             $data['password'] = sha1($password);
                             $this->db->insert('vendor', $data);
-                            var_dump($data);
-                            die();
+                            // print_r($this->db->last_query());    
+                            // die();
                             $this->vendor_page($this->db->insert_id());
 
                             $msg = 'done';
@@ -3150,9 +3154,6 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                                 $msg = 'done_and_sent';
                             }
                         }
-                        
-                        
-                            echo $msg;
                     }
                 } else {
                     echo 'Disallowed charecter : " ' . $char . ' " in the POST';
@@ -3166,8 +3167,8 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                 $page_data['recaptcha_html'] = $this->recaptcha->render();
             }
 
-            $page_data['pkgs'] = $this->db->get('bpkg')->result_array();
-            $page_data['def'] = $this->db->where('def',1)->get('bpkg')->row();
+            $page_data['pkgs'] = $this->db->get('membership')->result_array();
+            // $page_data['def'] = $this->db->where('def',1)->get('package')->row();
             $page_data['page_name'] = "vendor/register";
             $page_data['asset_page'] = "register";
             $page_data['page_title'] = translate('registration');
@@ -4730,6 +4731,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 $this->db->where('sale_id', $sale_id);
                 $this->db->update('sale', $data);
 
+
                 $this->session->set_userdata('sale_id', $sale_id);
 
                 /****TRANSFERRING USER TO PAYPAL TERMINAL****/
@@ -4739,8 +4741,15 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 $this->paypal->add_field('upload', '1');
                 $i = 1;
                 $exchange = 1;
+                $signup_pkg = array();
 
                 foreach ($carted as $val) {
+                    $this->db->where('sale_id', $sale_id);
+                $this->db->delete('sale');
+                    if($val['signup_pkg'])
+                    {
+                        $signup_pkg = $val;
+                    }
                     $this->paypal->add_field('item_number_' . $i, $i);
                     $this->paypal->add_field('item_name_' . $i, $val['name']);
                     $this->paypal->add_field('amount_' . $i, $this->cart->format_number(($val['price'] / $exchange)));
@@ -4754,16 +4763,26 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                     $this->paypal->add_field('quantity_' . $i, $val['qty']);
                     $i++;
                 }
-                // echo "<pre>";
-                // print_r($this->paypal);
-                // echo "</pre>";
-                // exit;
+                if($signup_pkg)
+                {
+                    $paypal_email           = $this->db->get_where('business_settings',array('type'=>'paypal_email'))->row()->value;
+                    $data = array();
+                    $data['vendor']         = $signup_pkg['vendor'];
+                    $data['amount']         = $signup_pkg['price'];
+                    $data['status']         = 'due';
+                    $data['method']         = 'paypal';
+                    $data['membership']     = $signup_pkg['id'];
+                    $data['timestamp']      = time();
+                    $this->db->insert('membership_payment', $data);
+                    $sale_id           = 'memvership-'.$this->db->insert_id();
+                }
                 if ($this->crud_model->get_type_name_by_id('business_settings', '3', 'value') == 'fixed') {
                     $this->paypal->add_field('shipping_1', $this->cart->format_number(($this->crud_model->get_type_name_by_id('business_settings', '2', 'value') / $exchange)));
                 }
                 // $this->paypal->add_field('amount', $grand_total);
                 $this->paypal->add_field('currency_code', 'GBP');
                 $this->paypal->add_field('custom', $sale_id);
+                $this->paypal->add_field('invoice_id', $invoice_id);
                 $this->paypal->add_field('business', $paypal_email);
                 $this->paypal->add_field('notify_url', base_url() . 'home/paypal_ipn');
                 $this->paypal->add_field('cancel_return', base_url() . 'home/paypal_cancel');
@@ -5469,12 +5488,28 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
     /* FUNCTION: Verify paypal payment by IPN*/
     function paypal_ipn()
     {
+        var_dump($_REQUEST);
+        die();
         if ($this->paypal->validate_ipn() == true) {
 
             $data['payment_details'] = json_encode($_POST);
             $data['payment_timestamp'] = strtotime(date("m/d/Y"));
             $data['payment_type'] = 'paypal';
             $sale_id = $_POST['custom'];
+            $pos = strpos($sale_id, "memvership-");
+        if($pos > -1)
+        {
+            $invoice_id = preg_replace('/[^0-9]/', '', $sale_id);  
+            $data = array();
+            $data['status']         = 'paid';
+            $data['details']        = json_encode($_POST);
+            // $invoice_id             = $_POST['custom'];
+            $this->db->where('membership_payment_id', $invoice_id);
+            $r = $this->db->update('membership_payment', $data);
+            $type = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->membership;
+            $vendor = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->vendor;
+            $this->crud_model->upgrade_membership($vendor,$type);
+        }
             // $sale_id = 256;
             $vendors = $this->crud_model->vendors_in_sale($sale_id);
             $payment_status = array();
@@ -5506,10 +5541,32 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
     /* FUNCTION: Loads after successful paypal payment*/
     function paypal_success($sale_id = 0)
     {
+        
         $carted = $this->cart->contents();
         if(isset($_REQUEST['custom']))
+        {
         $sale_id = $_REQUEST['custom'];
-        $guest_id = $this->crud_model->get_type_name_by_id('sale', $sale_id, 'guest_id');
+        }
+        // $sale_id = 'memvership-34';
+        // var_dump($sale_id);
+        $pos = strpos($sale_id, "memvership-");
+        if($pos > -1)
+        {
+            $invoice_id = preg_replace('/[^0-9]/', '', $sale_id);  
+            $data = array();
+            $data['status']         = 'paid';
+            $data['details']        = json_encode($_POST);
+            // $invoice_id             = $_POST['custom'];
+            $this->db->where('membership_payment_id', $invoice_id);
+            $r = $this->db->update('membership_payment', $data);
+            $type = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->membership;
+            $vendor = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->vendor;
+            $this->crud_model->upgrade_membership($vendor,$type);
+        }
+        
+        $guest_id = $this->db->where('sale_id',$sale_id)->get('sale')->row();
+        $this->process_order($sale_id);
+        // return 0;
         $this->crud_model->process_affiliation($sale_id,false);
         foreach ($carted as $value) {
             $this->crud_model->decrease_quantity($value['id'], $value['qty']);
@@ -5534,7 +5591,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
         if ($this->session->userdata('user_login') == 'yes') {
             redirect(base_url() . 'home/invoice/' . $sale_id, 'refresh');
         } else {
-            redirect(base_url() . 'home/guest_invoice/' . $guest_id, 'refresh');
+            redirect(base_url() . 'home/guest_invoice/' . $sale_id, 'refresh');
         }
     }
 

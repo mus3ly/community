@@ -91,6 +91,7 @@
                     });
 
                     function cart_submission(elem){
+                        alert();
 
                         if(elem.hasAttribute("disabled") || elem.classList.contains("disabled")){
                             return;

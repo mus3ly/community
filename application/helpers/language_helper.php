@@ -140,7 +140,8 @@ return $l;
 			}			
 			$exchange_rate = $CI->db->get_where('currency_settings', array('currency_settings_id' => $currency_id))->row()->exchange_rate_def;
 			$symbol = $CI->db->get_where('currency_settings', array('currency_settings_id' => $currency_id))->row()->symbol;
-			
+			// die($val);
+			$exchange_rate = 1;
 			if($val == ''){
 				return $symbol;
 			} else {

@@ -2034,8 +2034,8 @@ foreach($vendors as $kk=> $vv)
         $data['membership'] = $membership;
         $this->db->where('vendor_id', $vendor);
         $this->db->update('vendor', $data);
-        $this->email_model->membership_upgrade_email($vendor);
-        $this->email_model->membership_upgrade_email_to_admin($row['vendor_id']);
+        // $this->email_model->membership_upgrade_email($vendor);
+        // $this->email_model->membership_upgrade_email_to_admin($vendor);
     }
 
     //GETTING ADMIN PERMISSION

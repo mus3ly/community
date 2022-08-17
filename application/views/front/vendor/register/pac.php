@@ -111,17 +111,37 @@
 </style>
 
                       <div class="row container" style="width:104%;">
-                        <?php
+                        
+					  <div class="col-md-3 col-sm-12 col-xs-12">
+                             <!-- here -->
+                              <div id="pricing-table" class="clear">
+                                <div class="plan">
+                                    <h3>Free<span><img src="<?php echo $this->crud_model->file_view('membership',0,'100','','thumb','src','','','.png') ?>" 
+                        width="48.5%" id='blah' > </span></h3>
+                                    <a class="signup" href="<?= base_url('vendor_logup/registration'); ?>?pack=0">Sign up</a>         
+                                    <ul>
+                                        <li><b><?php echo $this->db->get_where('general_settings',array('type'=>'default_member_product_limit'))->row()->value; ?> </b> Products limit</li>
+                                        <li><b>30 day </b> Time span</li>
+                                        <li>Buy in <b>Free</b></li>
+                                    </ul> 
+                                </div>
+                                </div>
+                              
+                          </div>
+						<?php
                         foreach ($pkgs as $k => $v) {
                           ?>
                           <div class="col-md-3 col-sm-12 col-xs-12">
                              <!-- here -->
                               <div id="pricing-table" class="clear">
                                 <div class="plan">
-                                    <h3><?= $v['name'] ?><span><?= ($v['price'] == 0)?"Free":$v['price']; ?></span></h3>
-                                    <a class="signup" href="<?= base_url('vendor_logup/registration'); ?>?pack=<?= $v['id'] ?>">Sign up</a>         
+                                    <h3><?= $v['title'] ?><span><img width="70" height="70" class="img-md img-circle"
+                    src="<?php echo $this->crud_model->file_view('membership',$v['membership_id'],'100','','thumb','src','','','.png') ?>"  /></span></h3>
+                                    <a class="signup" href="<?= base_url('vendor_logup/registration'); ?>?pack=<?= $v['membership_id'] ?>">Sign up</a>         
                                     <ul>
-                                        <li><b><?=  $v['ads'] ?> </b> Avalible Ads</li>
+                                        <li><b><?=  $v['product_limit'] ?> </b> Avalible Ads</li>
+                                        <li><b><?=  $v['timespan'] ?> day </b> Time span</li>
+                                        <li>Buy in<b><?=  $v['price'] ?> GBP </b></li>
                                     </ul> 
                                 </div>
                                 </div>

@@ -16,7 +16,13 @@
             <div class="col-sm-3 logobox">
                 <a href="<?= base_url(); ?>"><img src="https://ads.strokedev.net/template/front/images/logo.png" alt=""></a>
             </div>
+            <div class="menubtn">
+                <i class="fa fa-bars"></i>
+            </div>
             <div class="col-sm-9 navbar_box_items">
+                <div class="close_icon">
+                    <i class="fa fa-close"></i>
+                </div>
                 <ul>
                     <li><a href="<?= base_url('/directory'); ?>"><b>Directory</b></a></li>
                     <li><a href="#">CHL</a></li>
@@ -33,8 +39,17 @@
                         </div>
                     </li>
                     <li><a href="#">FAQ</a></li>
-                    <li><a href="#" class="add_listing">Add Listing <img src="https://ads.strokedev.net/template/front/images/plus-icon.png" alt=""></a></li>
-                    <li class="padd_right"><a href="#"><img class="avatar_img" src="https://ads.strokedev.net/template/front/images/avatar.png" alt=""></a></li>
+                    <li><a href="<?= base_url('vendor_logup/registration'); ?>" class="add_listing">Add Listing <img src="https://ads.strokedev.net/template/front/images/plus-icon.png" alt=""></a></li>
+                    <li class="padd_right"><a href="#"><img class="avatar_img" src="https://ads.strokedev.net/template/front/images/avatar.png" alt=""></a>
+                        <div class="dropdown_box" id="user_dropdonw">
+                            <ul>
+                                <li><a href="#">Settings</a></li>
+                                <li><a class="active" href="#">Profile</a></li>
+                                <li><a href="#">Login</a></li>
+                                <li><a href="#">Logout</a></li>
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

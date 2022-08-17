@@ -1,7 +1,11 @@
 
 	<!--Chosen [ OPTIONAL ]-->
 	<link href="<?= base_url() ?>/template/back/plugins/chosen/chosen.min.css" rel="stylesheet">
-
+<style>
+    #order_place_btn{
+        position: absolute;
+    }
+</style>
 <?php
 echo form_open(base_url() . 'home/cart_finish/go', array(
             'method' => 'post',

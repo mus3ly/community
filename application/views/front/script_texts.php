@@ -1153,7 +1153,6 @@ if (keyCode == 13){
 					here.html(ing); // change submit button text
 				},
 				success: function(data) {
-							
 					here.fadeIn();
 					here.html(prv);
 					if(data == 'checkout'){

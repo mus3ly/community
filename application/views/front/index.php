@@ -92,7 +92,7 @@ include 'preloader.php';
  include 'script_texts.php';
 ?>
 <?php
- include 'includes/bottom/index_new.php';
+ include 'includes/bottom/index.php';
 ?>
 
 
