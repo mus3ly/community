@@ -1,3 +1,22 @@
+                <style type="text/css">
+    .get_into .logo_top{
+        display: none;
+    }
+    .get_into .title{
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .logup_btn{
+        background: #f2651f;
+        width: auto;
+        border-radius: 4px;
+    }
+    .form-login .row div[class*="col-"], .form-login .row aside[class*="col-"] {
+    margin-top: 0;
+    margin: 0 0 17px;
+}
+</style>
+
                  <style>
     #pricing-table {
 	margin: 10px auto;
