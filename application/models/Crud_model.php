@@ -653,6 +653,7 @@ foreach($vendors as $kk=> $vv)
             if ($condition == '') {
                 $all = $this->db->get($from)->result_array();
             } else if ($condition !== '') {
+                
                 if ($condition_type == 'single') {
                     $all = $this->db->get_where($from, array(
                         $condition => $c_match
@@ -1909,13 +1910,25 @@ foreach($vendors as $kk=> $vv)
         }
     }
 
+    
     function can_add_product($vendor)
     {
-        $membership = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->listings;
-        $expire = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->exp_date;
+        $membership = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->membership;
+        $expire = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->member_expire_timestamp;
+        $already = $this->db->get_where('product', array('added_by' => '{"type":"vendor","id":"' . $vendor . '"}','status'=>'ok','is_bpage'=> 0))->num_rows();
+        // $already = $already -1;//remove b pages
+        if ($membership == '0') {
+            $max = $this->db->get_where('general_settings', array('type' => 'default_member_product_limit'))->row()->value;
+        } else {
+            $max = $this->db->get_where('membership', array('membership_id' => $membership))->row()->product_limit;
+        }
 
-        if ($expire > time() && $membership) {
-            return true;
+        if ($expire > time() || $membership == '0') {
+            if ($max <= $already) {
+                return false;
+            } else if ($max > $already) {
+                return true;
+            }
         } else {
             return false;
         }
@@ -2030,6 +2043,7 @@ foreach($vendors as $kk=> $vv)
         $timespan = $membership_spec->row()->timespan;
         //$new_expire       = $cur_expire+($timespan*24*60*60);
         $new_expire = time() + ($timespan * 24 * 60 * 60);
+        
         $data['member_expire_timestamp'] = $new_expire;
         $data['membership'] = $membership;
         $this->db->where('vendor_id', $vendor);
