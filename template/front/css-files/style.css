@@ -16,6 +16,10 @@ body, input, select, textarea, p, a, b{
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+h1, h2, h3, h4, h5, h6, p, b{
+font-family:Dosis!important;
+}
+
 a:hover { 
     -webkit-transition:0.4s;
     -moz-transition:0.4s;
@@ -37,6 +41,13 @@ ______________________*/
     max-width: 1250px;
     margin: 0 auto;
 }
+.big_imgmove{
+    position: relative;
+}
+.share_save_btns{position: absolute;bottom: 43px;z-index: 99;right: 109px;}
+.share_save_btns a{margin: 0 2px;color: #fff;display: inline-block;font-size: 14px;border-radius: 5px;padding: 9px 37px;}
+.share_save_btns .orange_btn_save{background: #F26122;border: 2px solid transparent;}
+.share_save_btns .share_btns{border: 2px solid #ccc;}
 .row{
     margin: 0;
 }
@@ -57,7 +68,6 @@ body{
     padding: 0;
 }
 .logobox a img {
-    width: 189px;
 }
 .navbar_box_items {
     padding: 0;
@@ -70,12 +80,14 @@ body{
 }
 .navbar_box_items ul li b{
     color: #33334C;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 16px;
+text-transform:uppercase;
 }
 .navbar_box_items ul li > a {
     color: #4D4D61;
     padding: 12px 0;
+text-transform:uppercase;
 }
 .dropdown_box {
     position: absolute;
@@ -94,6 +106,7 @@ body{
     color: #333333;
     padding: 8px 13px;
     width: 100%;
+text-transform:capitalize;
 }
 .dropdown_box ul li .active,.dropdown_box ul li a:hover{
     background: #FFF6F2;

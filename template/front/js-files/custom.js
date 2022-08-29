@@ -13,43 +13,7 @@ $(document).ready(function(){
 
 });
 
-(function($) {
-	
-	/*---Owl-carousel----*/
 
-	// ___Owl-carousel-icons
-	var owl = $('.owl-carousel-icons');
-	owl.owlCarousel({
-		loop: true,
-		rewind: false,
-		margin: 0,
-		animateIn: 'fadeInDowm',
-		animateOut: 'fadeOutDown',
-		autoplay: false,
-		autoplayTimeout: 5000, 
-		autoplayHoverPause: true,
-		dots: false,
-		nav: true,
-		autoplay: true,
-		responsiveClass: true,
-		responsive: {
-			0: {
-				items: 1,
-				nav: true
-			},
-			600: {
-				items: 2,
-				nav: true
-			},
-			1250: {
-				items: 8,
-				nav: true
-			}
-		}
-	})
- // ___Owl-carousel-icons
-
-})(jQuery);
 
 
 

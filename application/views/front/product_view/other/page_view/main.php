@@ -1,3 +1,65 @@
+<?php
+$pro = array();
+if(isset($product_data[0]))
+{
+    $pro = $product_data[0];
+}
+//galary
+$imgs = $this->db->where('pid',$pro['product_id'])->get('product_to_images')->result_array();
+$fimg = '';
+if(isset($imgs[0]))
+{
+    $fimg = $this->crud_model->size_img($imgs[0]['img'],500,500);
+}
+$logo = '';
+$cat = '';
+if($pro['category'])
+{
+    $c = $this->db->where('category_id',$pro['category'])->get('category')->row();
+    if(isset($c->category_name))
+    {
+        $cat = $c->category_name;
+    }
+}
+    $address = '';
+    if($pro['lat'] && $pro['lng'])
+    {
+        $lat = $pro['lat'];
+        $long = $pro['lng'];
+        $url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$long&sensor=false&key=".$this->config->item('map_key');
+;
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, $url);
+curl_setopt($curl, CURLOPT_HEADER, false);
+curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($curl, CURLOPT_ENCODING, "");
+$curlData = curl_exec($curl);
+curl_close($curl);
+
+$data = json_decode($curlData);
+if(isset($data->results[0]->formatted_address))
+{
+    $address = $data->results[0]->formatted_address;
+}
+
+
+    }
+if(true)
+                                            {
+                                                $logo = $this->crud_model->size_img($pro['comp_logo'],100,100);
+                                            }
+?>
+<?php
+?>
+<?php
+if(isset($_GET['test']))
+{
+    include "index_new.php";
+    die();
+}
+?>
+
 <!DOCTYPE html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -16,12 +78,43 @@
     <link rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/style.css" />
 <style type="text/css">
-	.ellipse,.rounded_box{display: none;}
+	.ellipse,.rounded_box,.lines_shape{display: none;}
+    .owl-carousel .owl-item img {
+    width: 100%;
+    padding: 0 7px;
+}
+.review-btn{
+    background-color:white;
+    border:none;
+    color:black !important;
+}
+.review-btn i{
+    color:grey !important;
+    padding-right: 5px;
+}
+.big_imgmove img {
+    width: 100% !important;
+    padding: 0 7px;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 10px;
+}
+.owl-carousel .owl-item img {
+    height: 196px;
+    object-fit: cover;
+
+}
+.owl-nav button span{
+    display: block;
+    color: transparent;
+}
+.owl-nav button:before,.owl-nav button:after{
+    display: none;
+}
 </style>
 </head>
 <body id="page-name">
-here
-
 <div class="lines_shape">
     <img src="<?= base_url(); ?>template/front/images/lines-shape.png" alt="">
 </div>
@@ -33,13 +126,79 @@ here
 <div class="gallery_wrap">
     <div class="container">
         <div id="wrap" >
+<!-- big img -->
+                <div class="big_imgmove" >
+                    <?php
+                    
+                    ?>
+                    <img src="<?= $fimg; ?>" class="d-block w-100" alt="...">
+                    <div class="share_save_btns">
+                         <?php
+                    if ($this->session->userdata('user_login') == "yes") {
+                        
+                        $user_id = $this->session->userdata('user_id');
+                    ?>
+                        <a href="#" class="review-btn"><i class="fa-solid fa-star"></i>Write a review</a>
+                        <a href="#" class="orange_btn_save">SAVE</a>
+                        <a href="#" class="share_btns">SHARE</a>
+                    <?php
+                    }
+                    ?>
+                   
+                    </div>
+                </div>
+            <div id="small-categories" class="owl-carousel owl-carousel-icons1 owl-loaded owl-drag">
+                
+
+
+                <!-- small img -->
+                  <div class="owl-stage-outer">
+                     <div class="owl-stage" style="transform: translate3d(-3002px, 0px, 0px); transition: all 0.25s ease 0s; width: 4804px;">
+                        
+                            <?php
+                            
+                foreach ($imgs as $key => $value) {
+                    $img = $this->crud_model->size_img($value['img'],500,500);
+                    ?>
+                    <div class="owl-item " >
+                   <div class="item">
+                              <div class="cat-img"> <img src="<?= $img; ?>" alt="img"> </div>
+                           </div>
+                    </div>
+                    <?php
+                }
+                ?>
+                           
+                        
+                     </div>
+                  </div>
+                  <div class="owl-nav">
+                     <button type="button" role="presentation" class="owl-prev"><span aria-label="Previous"><img src="<?= base_url(); ?>template/front/images/left-arrow--1.png"></span></button>
+                     <button type="button" role="presentation" class="owl-next"><span aria-label="Next"><img src="<?= base_url(); ?>template/front/images/right-arrow--1.png"></span>
+                     </button>
+                  </div>
+
+                  
+                
+
+                  <div class="owl-dots disabled"></div>
+               </div>
     
             <!-- Carousel -->
-            <div id="carousel" class="carousel slide gallery" data-ride="carousel">
+            <!-- <div id="carousel" class="carousel slide gallery" data-ride="carousel">
                 <div class="carousel-inner">
+                <?php
+                        $i = 0;
+                foreach ($imgs as $key => $value) {
+                    $i++;
+                    $img = $this->crud_model->size_img($value['img'],271,181);
+                    ?>
                     <div class="carousel-item active" data-slide-number="0" data-toggle="lightbox" data-gallery="gallery" data-remote="images/big-img.png">
-                        <img src="<?= base_url(); ?>template/front/images/big-img.png" class="d-block w-100" alt="...">
+                        <img src="<?= $img; ?>" class="d-block w-100" alt="...">
                     </div>
+                    <?php
+                    }
+                    ?>
                     <div class="carousel-item" data-slide-number="1" data-toggle="lightbox" data-gallery="gallery" data-remote="images/big-img.png">
                         <img src="<?= base_url(); ?>template/front/images/big-img.png" class="d-block w-100" alt="...">
                     </div>
@@ -66,10 +225,10 @@ here
                     </div>
                 </div>
                 
-            </div>
+            </div> -->
 
             <!-- Carousel Navigatiom -->
-            <div id="carousel-thumbs" class="carousel slide" data-ride="carousel">
+            <!-- <div id="carousel-thumbs" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active" data-slide-number="0">
                         <div class="row mx-0">
@@ -113,7 +272,7 @@ here
                     <span class="carousel-control-next-icon" aria-hidden="true"><img src="<?= base_url(); ?>template/front/images/right-arrow--1.png"></span>
                     <span class="sr-only">Next</span>
                 </a>
-            </div>
+            </div> -->
 </div>
     </div>
 </div>
@@ -123,28 +282,54 @@ here
     <div class="container">
         <div class="inner_box_info">
             <h2>Information</h2>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            <p><?= $pro['description']; ?></p>
         </div>
 
         <div class="row" id="volume_box">
             <div class="col-sm-6 business_graphic">
-                <img src="<?= base_url(); ?>template/front/images/volume.png" alt="">
+                <?php
+                        
+                        $cover = base_url().'template/front/images/volume.png';
+                        if($pro['firstImg'])
+                                                                    {
+                                                                        $cover = $this->crud_model->size_img($pro['firstImg'],820,312);
+                                                                    }
+                                                                    ?>
+                <img src="<?= $cover; ?>" alt="">
             </div>
             <div class="col-sm-6 communitybox  ">
-                <h3>See what your friends are <span>saying about The W14 Hotel </span> <span>Kensington London.</span></h3>
-                <p>By creating an account you are able to follow friends and experts you trust and see the places they’ve recommended.</p>
+                <h3><?= $pro['slogan']; ?></h3>
+                <p><?= $pro['main_heading']; ?></p>
                 <ul>
-                        <li>Job openings</li>
-                        <li>Job openings</li>
-                        <li>Business Products</li>
-                        <li>Business Products</li>
-                        <li>Voluntary positions</li>
-                        <li>Voluntary positions</li>
+                    <?php
+                    $features = json_decode($pro['feature'], true);
+                    foreach($features as $k => $v){
+                    ?>
+                        <li><?= $v['fdet'];?></li>
+                    <?php
+                        }
+                    ?>
                     </ul>
                 <div class="learn_more_btns">
-                    <a href="#" class="our_projects">Sign up with Facebook</a>
-                    <span>Or</span>
-                    <a href="#">Sign up with email</a>
+                   <?php
+                                $btns  = json_decode($pro['buttons'],true);
+                                $i = 0;
+
+                                foreach ($btns as $key => $value) {
+                                    $i++;
+                                    if($i %2 !=  0)
+                                    {
+                                        ?>
+                                        <a href="<?= $value['url'] ?>" class="our_projects"><?= $value['txt'] ?></a>
+                                        <?php
+                                    }
+                                    else{
+                                        ?>
+                                        <a href="<?= $value['url'] ?>"><?= $value['txt'] ?></a>
+                                        <?php
+                                    }
+                                }
+                                ?>
                 </div>
             </div>
         </div>
@@ -156,13 +341,16 @@ here
 
         <div class="tags_box">
             <ul>
-                <li><a href="#"><img src="<?= base_url(); ?>template/front/images/Vector.png" alt=""> Parking Street</a></li>
-                <li><a href="#"><img src="<?= base_url(); ?>template/front/images/Vector-1.png" alt=""> Smoking Allowed</a></li>
-                <li><a href="#"><img src="<?= base_url(); ?>template/front/images/Vector3.png" alt="">  Wireless Internett</a></li>
-                <li><a href="#"><img src="<?= base_url(); ?>template/front/images/Vector4.png" alt=""> Coupons</a></li>
-                <li><a href="#"><img src="<?= base_url(); ?>template/front/images/Vector5.png" alt=""> Bike Parking</a></li>
-                <li><a href="#"><img src="<?= base_url(); ?>template/front/images/Vector6.png" alt="">  Accepts Credit Cards</a></li>
-            </ul>
+                <?php
+                $tags = $pro['tag'];
+                $x = (explode(",",$tags));
+                foreach($x as $K => $v){
+                ?>
+                <li><a href="#"><img src="#" alt=""> <?=  $v;?></a></li>
+                <?php
+                }
+                ?>
+               </ul>
         </div>
 
     </div>
@@ -171,7 +359,7 @@ here
 <div class="orange_pathwrap" style="margin-top: 0;">
                         <div class="container">
                             <div class="iframe_box">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d26983.347295044805!2d72.28043105!3d32.28717145!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1659939966283!5m2!1sen!2s" width="100%" height="540" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                <div id="googleMap" style="width:100%;height:550px;"></div>
 
 
                                 <div class="getin_touch">
@@ -336,15 +524,115 @@ here
                                 </div>
                             </div>
                         </div>
+                        <div class="disqus_comment" >
+                            <div id="disqus_thread"></div>
+<script>
+    /**
+    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    /*
+    var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+    */
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://coummityhyubland.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                        </div>
         </div>
     </div>
 </div>
 
 
 
+<script type="text/javascript">
+    $(document).ready(function(){
+    
+    $('ul.tabss li').click(function(){
+        var tab_id = $(this).attr('data-tab');
 
+        $('ul.tabss li').removeClass('current');
+        $('.tab-content').removeClass('current');
+
+        $(this).addClass('current');
+        $("#"+tab_id).addClass('current');
+    })
+
+})
+
+$(".right_box .locationbox h4").click(function(){
+    $(".clock_time").toggle();
+});
+
+</script>
+<script>
+function myMap() {
+var mapProp= {
+  center:new google.maps.LatLng(<?= $pro['lat'] ?>,<?= $pro['lng'] ?>),
+  zoom:12,
+};
+var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+        var myLatLng = {lat: <?= $pro['lat'] ?>, lng: <?= $pro['lng'] ?>};
+
+var marker = new google.maps.Marker({
+          position: myLatLng,
+          map: map,
+          title: 'Hello World!'
+        });
+}
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<?= $this->config->item('map_key'); ?>&callback=myMap"></script>
+<script src="https://ads.strokedev.net/template/front/js-files/custom.js"></script>
 <script src="<?= base_url(); ?>template/front/js-files/jquery.js"></script>
 <script src="<?= base_url(); ?>template/front/js-files/bootstrap.min.js"></script>
+<script src="<?= base_url(); ?>template/front/js-files/owl.carousel.js"></script>
 <script src="<?= base_url(); ?>template/front/js-files/custom.js"></script>
+<script type="text/javascript">
+    
+(function($) {
+    
+    /*---Owl-carousel----*/
+
+    // ___Owl-carousel-icons
+    var owl = $('.owl-carousel-icons1');
+    owl.owlCarousel({
+        loop: true,
+        rewind: false,
+        margin: 0,
+        animateIn: 'fadeInDowm',
+        animateOut: 'fadeOutDown',
+        autoplay: false,
+        autoplayTimeout: 5000, 
+        autoplayHoverPause: true,
+        dots: false,
+        nav: true,
+        autoplay: true,
+        responsiveClass: true,
+        responsive: {
+            0: {
+                items: 1,
+                nav: true
+            },
+            600: {
+                items: 2,
+                nav: true
+            },
+            1250: {
+                items: 4,
+                nav: true
+            }
+        }
+    })
+ // ___Owl-carousel-icons
+
+})(jQuery);
+</script>
 </body>
 </html>

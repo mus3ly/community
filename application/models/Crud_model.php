@@ -2891,10 +2891,10 @@ foreach($vendors as $kk=> $vv)
         //$this->db->select('product_id');
         $this->db->where('status', 'ok');
         $this->db->limit($limit);
-        $this->db->where_in('added_by', $vendors);
+        // $this->db->where_in('added_by', $vendors);
 
         if ($physical_product_activation == 'ok' && $digital_product_activation !== 'ok') {
-            $this->db->where('download', NULL);
+            // $this->db->where('download', NULL);
         } else if ($physical_product_activation !== 'ok' && $digital_product_activation == 'ok') {
             $this->db->where('download', 'ok');
         } else if ($physical_product_activation !== 'ok' && $digital_product_activation !== 'ok') {
@@ -2918,6 +2918,7 @@ foreach($vendors as $kk=> $vv)
         }
 
         if ($speciality == 'vendor_featured') {
+            // die("I m here");
             $this->db->where('vendor_featured', 'ok');
             $this->db->where('added_by', json_encode(array('type' => 'vendor', 'id' => $id)));
         }
@@ -2937,7 +2938,7 @@ foreach($vendors as $kk=> $vv)
 
         $this->db->order_by('product_id', 'desc');
         $res = $this->db->get('product')->result_array();
-        echo $this->db->last_query();
+        //  echo $this->db->last_query();
         
 
         return $res;

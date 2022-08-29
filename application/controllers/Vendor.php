@@ -21,7 +21,7 @@ class Vendor extends CI_Controller
         $this->load->library('vouguepay');
         $this->load->library('pum');
         /*cache control*/
-        $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        $this->output->set_header('Cache-Control: no-store, no-cachn e, must-revalidate, post-check=0, pre-check=0');
         $this->output->set_header('Pragma: no-cache');
         //$this->crud_model->ip_data();
         $vendor_system   =  $this->db->get_where('general_settings',array('type' => 'vendor_system'))->row()->value;
@@ -408,6 +408,7 @@ class Vendor extends CI_Controller
     /* Product add, edit, view, delete, stock increase, decrease, discount */
     function product($para1 = '', $para2 = '', $para3 = '')
     {
+        
         // die("PL");
         if (!$this->crud_model->vendor_permission('product')) {
             redirect(base_url() . 'vendor');
@@ -429,8 +430,9 @@ class Vendor extends CI_Controller
             $data['description']        = $this->input->post('description');
             $data['sub_category']       = $this->input->post('sub_category');
             $data['sale_price']         = $this->input->post('sale_price');
-            $data['lat']         = $this->input->post('lat');
-            $data['lng']         = $this->input->post('lng');
+            $data['whatsapp_number']    = $this->input->post('whatsapp_number');
+            $data['lat']                = $this->input->post('lat');
+            $data['lng']                = $this->input->post('lng');
             $data['add_timestamp']      = time();
             $data['download']           = NULL;
             $data['featured']           = 'no';
@@ -453,7 +455,7 @@ class Vendor extends CI_Controller
             $data['additional_fields']  = json_encode($additional_fields);
             $data['brand']              = $this->input->post('brand');
             $data['unit']               = $this->input->post('unit');
-            $option              = $this->input->post('option');
+            $option                     = $this->input->post('option');
             $choice_titles              = $this->input->post('op_title');
             $choice_types               = $this->input->post('op_type');
             $choice_no                  = $this->input->post('op_no');
@@ -527,6 +529,21 @@ class Vendor extends CI_Controller
                         
                     }
                 }
+
+                    $this->load->library('cloudinarylib');
+                    if($id && isset($_FILES['firstImg']['name']) && !empty($_FILES['firstImg']['name'])){
+                    
+                        $sneakerimg = $this->crud_model->file_up("sneakerimg", "product", 'firstImg_'.time());
+                    $data = \Cloudinary\Uploader::upload($sneakerimg);
+                    if(isset($data['public_id']))
+                    {
+                        $logo_id = $this->crud_model->add_img($sneakerimg,$data);
+                        array_push($dataInfo,$logo_id);
+                        $this->db->where('product_id',$id)->update('product',array('firstImg'=>$logo_id));
+                        
+                        
+                    }
+                }
                     
                     if($id && isset($_FILES['sideimg']['name']) && !empty($_FILES['sideimg']['name'])){
                     
@@ -571,8 +588,17 @@ class Vendor extends CI_Controller
             $data['seo_title']          = $this->input->post('seo_title');
             $data['seo_description']    = $this->input->post('seo_description');
             $data['title']              = $this->input->post('title');
-            $data['lat']              = $this->input->post('lat');
-            $data['lng']              = $this->input->post('lng');
+            $data['title']              = $this->input->post('title');
+            $data['slogan']             = $this->input->post('slogan');
+            $data['main_heading']       = $this->input->post('main_heading');
+            $data['bussniuss_email']    = $this->input->post('bussniuss_email');
+            $data['bussniuss_phone']    = $this->input->post('bussniuss_phone');
+            $data['whatsapp_number']    = $this->input->post('whatsapp_number');
+            $data['feature']            = ($this->input->post('feature'))?json_encode($this->input->post('feature')):'';
+            $data['buttons']            = ($this->input->post('buttons'))?json_encode($this->input->post('buttons')):'';
+            $data['text']               = ($this->input->post('text'))?json_encode($this->input->post('text')):'';
+            $data['lat']                = $this->input->post('lat');
+            $data['lng']                = $this->input->post('lng');
             $data['category']           = $this->input->post('category');
             $data['description']        = $this->input->post('description');
             $data['sub_category']       = $this->input->post('sub_category');
@@ -647,7 +673,8 @@ class Vendor extends CI_Controller
 
             $this->db->where('product_id', $para2);
             $this->db->update('product', $data);
-$this->load->library('cloudinarylib');
+    
+            $this->load->library('cloudinarylib');
             $id = $para2;
             if($id && isset($_FILES['sneakerimg']['name']) && !empty($_FILES['sneakerimg']['name'])){
                     $path = 'uploads/product_image/product_' . time() . '.png';
@@ -661,6 +688,22 @@ $this->load->library('cloudinarylib');
                         
                     }
                 }//if iumg set thensss
+                // var_dump($_FILES);
+                // die();
+                if($id && isset($_FILES['firstImg']['name']) && !empty($_FILES['firstImg']['name'])){
+                    
+                    $sneakerimg = $this->crud_model->file_up("firstImg", "product", 'firstImg_'.time());
+                    
+                $data = \Cloudinary\Uploader::upload($sneakerimg);
+                if(isset($data['public_id']))
+                {
+                    $logo_id = $this->crud_model->add_img($sneakerimg,$data);
+                    // array_push($dataInfo,$logo_id);
+                    $this->db->where('product_id',$id)->update('product',array('firstImg'=>$logo_id));
+                    
+                    
+                }
+            }
                     
                     if($id && isset($_FILES['sideimg']['name']) && !empty($_FILES['sideimg']['name'])){
                     
@@ -696,7 +739,8 @@ $this->load->library('cloudinarylib');
             $page_data['row'] =(array) $sing;
             $page_data['brands'] =  $this->db->get('category')->result_array();
             // echo $this->load->view('back/vendor/', $page_data,true);
-            $page_data['page_name']   = "product_edit";
+            
+            $page_data['page_name']   = ($sing->is_bpage)?"bpage_edit":"product_edit";
             $this->load->view('back/index', $page_data);
         } else if ($para1 == 'view') {
             $page_data['product_data'] = $this->db->get_where('product', array(
@@ -739,11 +783,11 @@ $this->load->library('cloudinarylib');
                                         ?>
                                         </ul>
             <?php
-            die();
         } elseif ($para1 == 'list') {
             $this->db->order_by('product_id', 'desc');
             $this->db->where('added_by',json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id'))));
             $this->db->where('download=',NULL);
+            $this->db->where('is_bpage=',0);
             $page_data=array();
             $page_data['all_product'] = $this->db->get('product')->result_array();
              $this->load->view('back/vendor/product_list', $page_data);
@@ -770,6 +814,7 @@ $this->load->library('cloudinarylib');
             }
             $this->db->where('added_by',json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id'))));
             $this->db->where('download=',NULL);
+            $this->db->where('is_bpage=',0);
             $products   = $this->db->get('product', $limit, $offset)->result_array();
             $data       = array();
             foreach ($products as $row) {
@@ -890,7 +935,63 @@ $this->load->library('cloudinarylib');
                 recache();
             }
         } elseif ($para1 == 'sub_by_cat') {
-            echo $this->crud_model->select_html('sub_category', 'sub_category', 'sub_category_name', 'add', 'demo-chosen-select required', '', 'category', $para2, 'get_brnd');
+            $brands = $this->db->where('pcat',$para2)->get('category')->result_array();
+            if(!$brands)
+            {
+                die('0');
+            }
+            $level = get_cat_level($para2);
+            $breed = array();
+            $cid = $para2;
+            for ($i=1; $i <= $level; $i++) { 
+                // var_dump($i);
+                $breed[] = $cid;
+                $row = $this->db->where('category_id',$cid)->get('category')->row();
+                $cid = $row->pcat;
+                
+            }
+            if($breed)
+            {
+                ?>
+                <div class="breaddcum">
+                    <ul>
+                        <?php
+                        foreach(array_reverse($breed) as $k=> $v)
+                        {
+                            $row = $this->db->where('category_id',$v)->get('category')->row();
+                            ?>
+                            <li onclick="selecttype('<?= $row->pcat;?>')"><?= $row->category_name;?></li>
+                            <?php
+                        }
+                        ?>
+
+
+                    </ul>
+                </div>
+                <?php
+            }
+            
+            foreach($brands as $k=>$v){
+                if(true)
+                {
+            ?>
+                <div class="col-md-4 col-sm-12 col-xs-12 <?= ($product_data->category == $v['category_id'])?"active":"" ?>" onclick="selecttype('<?= $v['category_id'];?>')" >
+                    <a href="#"><div class="flip-card ">
+                  <div class="flip-card-inner">
+                    <div class="flip-card-front <?= ($product_data->category == $v['category_id'])?"active":"" ?>">
+                        <i class="fa <?= $v['fa_icon'];?>" aria-hidden="true"></i>
+                        <br>
+                        <p><?= $v['category_name'];?></p>
+                    </div>
+                    <div class="flip-card-back"><p><?= $v['category_name'];?> </p></div>
+                  </div>
+                </div>
+                </a>
+                </div>
+                <?php 
+                }
+            }
+            // echo $this->crud_model->select_html('sub_category', 'sub_category', 'sub_category_name', 'add', 'demo-chosen-select required', '', 'category', $para2, 'get_brnd');
         } elseif ($para1 == 'brand_by_sub') {
             $brands=json_decode($this->crud_model->get_type_name_by_id('sub_category',$para2,'brand'),true);
             echo $this->crud_model->select_html('brand', 'brand', 'name', 'add', 'demo-chosen-select required', '', 'brand_id', $brands, '', 'multi');

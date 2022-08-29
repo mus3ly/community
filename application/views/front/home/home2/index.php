@@ -61,10 +61,13 @@
                                                     $result[]=$row;
                                                 }
                                             }
+                                            // var_dump($brands);
+                                            // die('OK');
 
                     foreach ($brands as $key => $value) {
                         if(in_array($value['category_id'], $result))
                         {
+                            // echo $value['category_id'];
                         ?>
                             <div class="owl-item " >
                            <div class="item">
@@ -302,57 +305,58 @@
         <img src="<?= base_url(); ?>template/front/images/doted-lines-right.png" alt="">
     </div>
 </div>
-
-
-<div class="verifed_listings">
-    <div class="vertical_dot">
-        <img src="<?= base_url(); ?>template/front/images/vertical.png" alt="">
+<?php
+include "featured_products.php";
+?>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <center><a href="#"><button class="btn-lg" style="background-color:#F26122; color:white; border:none; margin-bottom:120px; font-family:Dosis!important; font-weight:200;">Join Community HubLand Affiliate Marketing</button></a></center>
     </div>
-    <div class="container">
-        <div class="verify_head">
-            <h3>Verified Listings</h3>
-            <p>Explore and contact businesses directly with no obligation</p>
-            <div class="listing_lines">
-                <img src="<?= base_url(); ?>template/front/images/Group.png" alt="">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-4 listingbox">
-                <a href="#">
-                    <div class="hover_listingbox">
-                        <img src="<?= base_url(); ?>template/front/images/listing-1.png" alt="">
-                    </div>
-                    <div class="hover_box_list">
-                        <h4>Business Website</h4>
-                        <p>Explore and contact businesses </p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm-4 listingbox">
-                <a href="#">
-                    <div class="hover_listingbox">
-                        <img src="<?= base_url(); ?>template/front/images/listing-2.png" alt="">
-                    </div>
-                    <div class="hover_box_list">
-                        <h4>Business Website</h4>
-                        <p>Explore and contact businesses </p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm-4 listingbox">
-                <a href="#">
-                    <div class="hover_listingbox">
-                        <img src="<?= base_url(); ?>template/front/images/listing-3.png" alt="">
-                    </div>
-                    <div class="hover_box_list">
-                        <h4>Business Website</h4>
-                        <p>Explore and contact businesses </p>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="orange_purple">
-            <img src="<?= base_url(); ?>template/front/images/arrow-purple.png" alt="">
-        </div>
-    </div>
+  </div>
 </div>
+
+<script src="https://ads.strokedev.net/template/front/js-files/jquery-3.2.1.min.js"></script>
+<script src="https://ads.strokedev.net/template/front/js-files/owl.carousel.js"></script>
+<script src="https://ads.strokedev.net/template/front/js-files/custom.js"></script>
+          <script type="text/javascript">
+              (function($) {
+    
+    /*---Owl-carousel----*/
+
+    // ___Owl-carousel-icons
+    var owl = $('.owl-carousel-icons');
+    owl.owlCarousel({
+        loop: true,
+        rewind: false,
+        margin: 0,
+        animateIn: 'fadeInDowm',
+        animateOut: 'fadeOutDown',
+        autoplay: false,
+        autoplayTimeout: 5000, 
+        autoplayHoverPause: true,
+        dots: false,
+        nav: true,
+        autoplay: true,
+        responsiveClass: true,
+        responsive: {
+            0: {
+                items: 1,
+                nav: true
+            },
+            600: {
+                items: 2,
+                nav: true
+            },
+            1250: {
+                items: 8,
+                nav: true
+            }
+        }
+    })
+ // ___Owl-carousel-icons
+
+})(jQuery);
+          </script>
+
+

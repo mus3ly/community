@@ -490,3 +490,11 @@ footer a:visited:hover {
     font-size: 1em;
   }
 }
+.breaddcum ul li{
+   margin: 10px;
+   border-bottom: 2px solid #FECB00;
+}
+.breaddcum ul{
+    list-style: none;
+    display: flex;
+}

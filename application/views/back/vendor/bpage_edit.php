@@ -116,8 +116,8 @@ btn1 .fa{
 </style>
 <div class="row" style="margin-right:20px;">
     <div class="col-md-12" style="border-bottom: 1px solid #ebebeb;padding: 5px;     margin-top:64px;">
-                            <button class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" onclick="ajax_set_full('add','Add Product','Successfully Added!','product_add',''); proceed('to_list');" style="display: none;">Create Listings</button>
-                            <a href="<?= base_url('/vendor/product'); ?>" class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" style="" onclick="ajax_set_list();  proceed('to_add');">Back To Listings</a>
+                            <button class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" onclick="ajax_set_full('add','Add Product','Successfully Added!','product_add',''); proceed('to_list');" style="display: none;">Create Product                            </button>
+                            <a href="<?= base_url('/vendor/product'); ?>" class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" style="" onclick="ajax_set_list();  proceed('to_add');">Back To Product List                            </a>
                         </div>
     <div class="col-md-10"  style="margin-top: 52px;    margin-left: 244px;
 ">
@@ -136,23 +136,28 @@ btn1 .fa{
                         <li class="active">
                             <a data-toggle="tab" href="#customer_choice_options"><?php echo translate('business_type'); ?></a>
                         </li>
-                        
                         <li >
-                            <a data-toggle="tab" href="#top_banner"><?php echo translate('general'); ?></a>
-                        </li>
-                        
-                        <li >
-                            <a data-toggle="tab" href="#event_images"><?php echo translate('images_gallary'); ?></a>
+                            <a data-toggle="tab" href="#top_banner"><?php echo translate('top_bannner'); ?></a>
                         </li>
 
                         <li >
                             <a data-toggle="tab" href="#first_section"><?php echo translate('Desciptive_section'); ?></a>
                         </li>
 
-                        
+                        <li >
+                            <a data-toggle="tab" href="#event_images"><?php echo translate('images_gallary'); ?></a>
                         </li>
-                        <li>
-                            <a data-toggle="tab" href="#location"><?php echo translate('location'); ?></a>
+                        </li>
+
+                        <li >
+                            <a data-toggle="tab" href="#text_gallary"><?php echo translate('text_gallary'); ?></a>
+                        </li>
+<!-- 
+                        <li >
+                            <a data-toggle="tab" href="#general"><?php echo translate('general'); ?></a>
+                        </li> -->
+                        <li >
+                            <a data-toggle="tab" href="#location"><?php echo translate('info_section'); ?></a>
                         </li>
                         </li>
                         <li>
@@ -200,21 +205,9 @@ btn1 .fa{
                             <h4 class="text-thin text-center"><?php echo translate('top_banner'); ?></h4> 
                             <div class="form-group btm_border">
                             <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('listing_title');?></label>
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('business_title');?></label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="title" id="demo-hor-1" value="<?php echo $row['title']; ?>" placeholder="<?php echo translate('listing_title');?>" class="form-control required">
-                                </div>
-                            </div>
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('listing_detail'); ?></label>
-                                <div class="col-sm-6">
-                                    <textarea rows="9" name="description"  class="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>
-                                </div>
-                                </div>
-                                <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('tags');?></label>
-                                <div class="col-sm-6">
-                                    <input type="text" name="tag" value="<?= $row['tag']; ?>" data-role="tagsinput" placeholder="<?php echo translate('tags');?>" class="form-control">
+                                    <input type="text" name="title" id="demo-hor-1" value="<?php echo $row['title']; ?>" placeholder="<?php echo translate('business_title');?>" class="form-control required">
                                 </div>
                             </div>
                             <div class="form-group btm_border">
@@ -298,15 +291,22 @@ btn1 .fa{
                                     </div>
                                 </div>
                                 <div class="form-group btm_border">
+                                    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('slogan');?></label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="slogan" id="demo-hor-1" value="<?php echo $row['slogan']; ?>" placeholder="<?php echo translate('slogan');?>" class="form-control ">
+                                    </div>
+                                </div>
+
+                                <div class="form-group btm_border">
                                     <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('main_heading');?></label>
                                     <div class="col-sm-6">
-                                        <input type="text" name="slogan" id="demo-hor-1" value="<?php echo $row['slogan']; ?>" placeholder="<?php echo translate('main_heading');?>" class="form-control ">
+                                        <input type="text" name="main_heading" id="demo-hor-1" value="<?php echo $row['main_heading']; ?>" placeholder="<?php echo translate('main_heading');?>" class="form-control required">
                                     </div>
                                 </div>
                                 <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('description'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" name="main_heading"  class="summernotes" data-height="200" data-name="main_heading"><?php echo $row['main_heading']; ?></textarea>
+                                    <textarea rows="9" name="description"  class="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>
                                 </div>
                                 </div>
                                 <div class="form-group btm_border">
@@ -322,6 +322,7 @@ btn1 .fa{
                                                 {
                                                     ?>
                                                     <div class="feature_single" >
+                                                        <input type="text" class="form-control" value="<?= $value['fhead'] ?>" name="feature[0][fhead]" style="width:45%;float:left;" placeholder="Heading" />
                                                         <textarea class="form-control" name="feature[0][fdet]" style="width:45%;float:left;" placeholder="Details"><?= $value['fdet'] ?></textarea>
                                                         <button style="width:4px;" class="btn btn-success" onclick="add_feature()" >+</buuton>
                                                     </div>
@@ -353,7 +354,7 @@ btn1 .fa{
                                         
 
                                     </div>
-                                   </div>
+                                </div>
                                 </div>
                                 <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('section_buttons'); ?></label>
@@ -389,9 +390,9 @@ btn1 .fa{
                                         else
                                         {?>
                                         <div class="feature_single" >
-                                            <input type="text" class="form-control" name="buttons[0][txt]" style="width:45%;float:left;" placeholder="Text" />
-                                            <input type="text" class="form-control" name="buttons[0][url]" style="width:45%;float:left;" placeholder="Url" />
-                                            <button style="width:4px;" class="btn btn-success" onclick="add_btn()" >+</button>
+                                            <input type="text" class="form-control" name="feature[0][txt]" style="width:45%;float:left;" placeholder="Text" />
+                                            <input type="text" class="form-control" name="feature[0][url]" style="width:45%;float:left;" placeholder="Url" />
+                                            <button style="width:4px;" class="btn btn-success" onclick="add_btn()" >+</buuton>
                                         </div>
                                         <?php  
                                         }
@@ -514,10 +515,12 @@ btn1 .fa{
                                             $img = $this->crud_model->size_img($value['img'],100,100);
                                             ?>
                                             <li id="gimg_<?= $value['id']; ?>">
-                                                <div onclick="delimg('<?= $value['id']; ?>')" class="del_icon"><i class="fa fa-trash-o" aria-hidden="true"></i>
-</div>
-
-                                                <img src="<?= $img ?>"/></li>
+                                                <div onclick="delimg('<?= $value['id']; ?>')" class="del_icon">
+                                                    <i class="fa-solid fa-xmark"></i>
+                                                </div>
+                                                <img src="<?= $img ?>"/>
+                                                </li>
+                                                
 
                                             <?php
                                         }
@@ -836,11 +839,13 @@ function selecttype(id)
         var pre = $('#category').val()+','+id;
         // alert(pre);
         $('#category').val(pre);
+
     }
     else{
         $('#category').val(id);
     }
     var url  = base_url+'vendor/product/sub_by_cat/'+id;
+        // alert(url);
     $.ajax({
   url: url,
   cache: false,
@@ -1005,6 +1010,7 @@ function showPosition(position) {
 
         feature = feature +1;
         var html = '<div class="feature_single" id="fid_'+ feature+'">';
+        html += '<input type="text" class="form-control" name="feature['+feature+'][fhead]" style="width:45%;float:left;" placeholder="Heading" />';
         html += '<textarea class="form-control"  name="feature['+feature+'][fdet]" style="width:45%;float:left;" placeholder="Details"></textarea>';
         html += '<button style="width:4px;" class="btn btn-danger" onclick="remove_feature('+feature+')" >-</buuton>';
                                        html+= '</div>';

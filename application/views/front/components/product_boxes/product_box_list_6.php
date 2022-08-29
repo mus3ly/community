@@ -15,7 +15,7 @@ $img = '';
                             $img = $this->crud_model->file_view('product',$product_id,'','','thumb','src','multi','one');
 
                         }
-                        ?><div class="thumbnail list_box_style1 item"  itemscope itemtype="http://schema.org/Product">
+                        ?><div class="thumbnail list_box_style1 item"  data-lat="<?= $lat; ?>" data-lng="<?= $lng; ?>"  itemscope itemtype="http://schema.org/Product">
     <div class="row product-single">
         <div class="col-md-4 col-sm-4 col-xs-12">
             <div class="media">

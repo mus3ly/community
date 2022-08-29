@@ -1,9 +1,10 @@
 <head>
-   <link rel="stylesheet" type="text/css" href="https://ads.strokedev.net/template/front/js/owl.carousel.css">
+   <link rel="stylesheet" type="text/css" href="https://ads.strokedev.net/template/front/css-files/owl.carousel.css">
 </head>
 
 
 <?php
+
                                             $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '62'))->row();
                                             if($top_banner)
                                             {
@@ -312,6 +313,45 @@
 </div>
 
 
- <script src="https://ads.strokedev.net/template/front/js/jquery-3.2.1.min.js"></script>
-         <script src="https://ads.strokedev.net/template/front/js/owl.carousel.js"></script>
-          <script src="https://ads.strokedev.net/template/front/js/custom.js"></script>
+<script src="https://ads.strokedev.net/template/front/js-files/jquery-3.2.1.min.js"></script>
+<script src="https://ads.strokedev.net/template/front/js-files/owl.carousel.js"></script>
+<script src="https://ads.strokedev.net/template/front/js-files/custom.js"></script>
+          <script type="text/javascript">
+              (function($) {
+    
+    /*---Owl-carousel----*/
+
+    // ___Owl-carousel-icons
+    var owl = $('.owl-carousel-icons');
+    owl.owlCarousel({
+        loop: true,
+        rewind: false,
+        margin: 0,
+        animateIn: 'fadeInDowm',
+        animateOut: 'fadeOutDown',
+        autoplay: false,
+        autoplayTimeout: 5000, 
+        autoplayHoverPause: true,
+        dots: false,
+        nav: true,
+        autoplay: true,
+        responsiveClass: true,
+        responsive: {
+            0: {
+                items: 1,
+                nav: true
+            },
+            600: {
+                items: 2,
+                nav: true
+            },
+            1250: {
+                items: 8,
+                nav: true
+            }
+        }
+    })
+ // ___Owl-carousel-icons
+
+})(jQuery);
+          </script>

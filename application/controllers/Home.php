@@ -3207,6 +3207,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                 echo validation_errors();
             }
             else {
+                // var_dump(sha1($this->input->post('password')));
                 $signin_data = $this->db->get_where('user', array(
                     'email' => $this->input->post('email'),
                     'password' => sha1($this->input->post('password'))

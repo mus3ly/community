@@ -1,4 +1,3 @@
-
 <?php
 
 	$system_name	 =  $this->db->get_where('general_settings',array('type' => 'system_name'))->row()->value;
@@ -8,7 +7,18 @@
 
 ?>
 <body>
-	<div id="container" class="<?php if($page_name=='product' || $page_name=='digital' || $page_name=='display_settings' || $page_name=='product_bundle'){ echo 'effect mainnav-sm'; } else{ echo 'effect mainnav-lg'; } ?>">
+	<div id="container" class="
+	<?php
+	if($page_name=='product' || $page_name=='digital' || $page_name=='display_settings' || $page_name=='product_bundle')
+	{ 
+	    echo 'effect mainnav-sm';
+	}
+	else
+	{
+	    echo 'effect mainnav-lg';
+	} 
+	?>
+	">
 		<!--NAVBAR-->
 		<?php include 'header.php'; ?>
 		<!--END NAVBAR-->

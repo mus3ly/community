@@ -38,7 +38,7 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                             <a href="#">
                                 <i class="fa fa-shopping-cart"></i>
                                     <span class="menu-title">
-                                        <?php echo translate('products');?>
+                                        <?php echo translate('listings');?>
                                     </span>
                                 	<i class="fa arrow"></i>
                             </a>
@@ -61,7 +61,7 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                     <a href="#">
                                         <i class="fa fa-list"></i>
                                             <span class="menu-title">
-                                                <?php echo translate('physical_products');?>
+                                                <?php echo translate('listings');?>
                                             </span>
                                             <i class="fa arrow"></i>
                                     </a>
@@ -77,7 +77,7 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                             <li <?php if($page_name=="product"){?> class="active-link" <?php } ?> >
                                                 <a href="<?php echo base_url(); ?>vendor/product">
                                                     <i class="fa fa-circle fs_i"></i>
-                                                        <?php echo translate('all_products');?>
+                                                        <?php echo translate('all_listings');?>
                                                 </a>
                                             </li>
                                         <?php
@@ -135,7 +135,7 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
 								<a href="#">
 									<i class="fa fa-list"></i>
 										<span class="menu-title">
-											<?php echo translate('products');?>
+											<?php echo translate('listings');?>
 										</span>
 										<i class="fa arrow"></i>
 								</a>
@@ -151,7 +151,7 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                         <li <?php if ($page_name == "product") { ?> class="active-link" <?php } ?> >
                                             <a href="<?php echo base_url(); ?>vendor/product">
                                                 <i class="fa fa-circle fs_i"></i>
-                                                <?php echo translate('all_products'); ?>
+                                                <?php echo translate('all_listings'); ?>
                                             </a>
                                         </li>
 									<?php

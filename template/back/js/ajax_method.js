@@ -527,6 +527,14 @@
 						    $('#form').html(data);
 						    return false;
 						}
+						if(form_id == 'product_add')
+						{
+							var buttonp = $('.enterer');
+						    buttonp.removeClass('disabled');
+						    buttonp.text('Save');
+						    // $('#form').html(data);
+						    // return false;
+						}
 						//ajax_load(base_url+''+user_type+'/'+module+'/'+list_cont_func+'/'+extra,'list','first');
 						$.activeitNoty({
 							type: 'success',

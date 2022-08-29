@@ -312,29 +312,31 @@ btn1 .fa{
                             </div>
                                                            </div>
                         <div id="customer_choice_options" class="tab-pane fade active in">
-                           
-                            <div class="row">
-                                <input type="hidden" id="category" name="category"/>
-                                 <?php
-                            foreach($brands as $k=>$v){
-                            ?>
-                                <div class="col-md-4 col-sm-12 col-xs-12" onclick="selecttype('<?= $v['category_id'];?>')">
-                                    <a href="#"><div class="flip-card">
-                                  <div class="flip-card-inner">
-                                    <div class="flip-card-front">
-                                        <i class="fa <?= $v['fa_icon'];?>" aria-hidden="true"></i>
-                                        <br>
-                                        <p><?= $v['category_name'];?></p>
-                                    </div>
-                                    <div class="flip-card-back">
-                                    </div>
-                                  </div>
-                                </div>
-                                </a>
-                                </div>
-                                <?php 
-                            }
-                            ?>
+                        <input type="hidden" id="category" name="category"/>
+                        <div class="row" id="cat_res">
+                                
+                                <?php
+                           foreach($brands as $k=>$v){
+                               if(get_cat_level($v['category_id']) == 1)
+                               {
+                           ?>
+                               <div class="col-md-4 col-sm-12 col-xs-12 <?= ($product_data->category == $v['category_id'])?"active":"" ?>" onclick="selecttype('<?= $v['category_id'];?>')" >
+                                   <a href="#"><div class="flip-card ">
+                                 <div class="flip-card-inner">
+                                   <div class="flip-card-front <?= ($product_data->category == $v['category_id'])?"active":"" ?>">
+                                       <i class="fa <?= $v['fa_icon'];?>" aria-hidden="true"></i>
+                                       <br>
+                                       <p><?= $v['category_name'];?></p>
+                                   </div>
+                                   <div class="flip-card-back"><p><?= $v['category_name'];?> </p></div>
+                                 </div>
+                               </div>
+                               </a>
+                               </div>
+                               <?php 
+                               }
+                           }
+                           ?>
                                 <div class="col-md-4 col-sm-12 col-xs-12"></div>
                                 <div class="col-md-4 col-sm-12 col-xs-12"></div>
                             </div>
@@ -563,9 +565,35 @@ var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
 }
 function selecttype(id)
 {
-    $('#category').val(id);
-    get_cat(id,this)
-    next_tab();
+    if($('#category').val())
+    {
+        var pre = $('#category').val()+','+id;
+        // alert(pre);
+        $('#category').val(pre);
+
+    }
+    else{
+        $('#category').val(id);
+    }
+    var url  = base_url+'vendor/product/sub_by_cat/'+id;
+        // alert(url);
+    $.ajax({
+  url: url,
+  cache: false,
+  success: function(html){
+    if(html == '0')
+    {
+        next_tab();
+
+    }
+    else
+    {
+    $("#cat_res").html(html);
+    }
+  }
+});
+
+    // get_cat(id,this);
 }
 function preview2(input) {
         // alert('preview2');

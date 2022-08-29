@@ -1,3 +1,6 @@
+<?php
+die('yes');
+?>
 <div id="content-container">
 	<div id="page-title">
 		<h1 class="page-header text-overflow"><?php echo translate('manage_listing');?></h1>
@@ -7,10 +10,10 @@
                 <div class="panel-body">
                     <div class="tab-content">
                         <div class="col-md-12" style="border-bottom: 1px solid #ebebeb;padding: 5px;">
-                            <a class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" href="<?= base_url('vendor/product/add'); ?>"><?php echo translate('create_product');?>
+                            <a class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" href="<?= base_url('vendor/product/add'); ?>"><?php echo translate('create_listings');?>
                             </a>
                             <button class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" 
-                                style="display:none;"  onclick="ajax_set_list();  proceed('to_add');"><?php echo translate('back_to_product_list');?>
+                                style="display:none;"  onclick="ajax_set_list();  proceed('to_add');"><?php echo translate('here');?>
                             </button>
                         </div>
                     <!-- LIST -->
