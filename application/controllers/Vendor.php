@@ -66,6 +66,43 @@ class Vendor extends CI_Controller
             // }
         }
     }
+    public function gupload()
+    {
+        $img_id = 0;
+        if(isset($_POST['img']))
+        {
+            $pid = (isset($_POST['pid']))?$_POST['pid']:0;
+            $this->load->library('cloudinarylib');
+            $img = $_POST['img'];
+            $base64string = $img;
+    $uploadpath   = 'uploads/';
+    $parts        = explode(";base64,", $base64string);
+    $imageparts   = explode("image/", @$parts[0]);
+    $imagetype    = $imageparts[1];
+    $imagebase64  = base64_decode($parts[1]);
+    $file         = $uploadpath . uniqid() . '.png';
+    file_put_contents($file, $imagebase64);
+           
+            $data = \Cloudinary\Uploader::upload($file);
+            if(isset($data['public_id']))
+                                            {
+                                                $logo_id = $this->crud_model->add_img($file,$data);
+                                                $data['img_id'] = $logo_id;
+                                                if($logo_id && $pid)
+                                                {
+                                                   $in = array(
+                                                    'pid' =>$pid,
+                                                    'img' =>$logo_id,
+                                                   );
+                                                   $this->db->insert('product_to_images',$in);
+                                               }
+                                               echo json_encode($data);
+                                               exit();
+                                               
+                                            }
+        }
+        die("0");
+    }
     public function index()
     {
         // $all = $this->db->get('product')->result();
@@ -410,15 +447,18 @@ class Vendor extends CI_Controller
     {
         
         // die("PL");
-        if (!$this->crud_model->vendor_permission('product')) {
+        if($this->session->userdata('admin_login') != 'yes')
+        {
+        if (!$this->crud_model->vendor_permission('product') ) {
             redirect(base_url() . 'vendor');
+        }
         }
         if ($this->crud_model->get_type_name_by_id('general_settings','68','value') !== 'ok') {
             redirect(base_url() . 'admin');
         }
         
         if ($para1 == 'do_add') {
-
+                
             $option              = $this->input->post('option');
             $options = array();
             $num_of_imgs = 0;
@@ -426,6 +466,13 @@ class Vendor extends CI_Controller
             $data['seo_title']          = $this->input->post('seo_title');
             $data['seo_description']    = $this->input->post('seo_description');
             $data['title']              = $this->input->post('title');
+            $data['slogan']             = $this->input->post('slogan');
+            $data['main_heading']       = $this->input->post('main_heading');
+            $data['bussniuss_email']    = $this->input->post('bussniuss_email');
+            $data['bussniuss_phone']    = $this->input->post('bussniuss_phone');
+            $data['whatsapp_number']    = $this->input->post('whatsapp_number');
+            $data['feature']            = ($this->input->post('feature'))?json_encode($this->input->post('feature')):'';
+            $data['buttons']            = ($this->input->post('buttons'))?json_encode($this->input->post('buttons')):'';
             $data['category']           = $this->input->post('category');
             $data['description']        = $this->input->post('description');
             $data['sub_category']       = $this->input->post('sub_category');
@@ -440,11 +487,6 @@ class Vendor extends CI_Controller
             $data['is_bundle']          = 'no';
             $data['status']             = 'ok';
             $data['rating_user']        = '[]';
-            // $data['tax']                = $this->input->post('tax');
-            // $data['discount']           = $this->input->post('discount');
-            // $data['discount_type']      = $this->input->post('discount_type');
-            // $data['tax_type']           = $this->input->post('tax_type');
-            // $data['shipping_cost']      = $this->input->post('shipping_cost');
             $data['tag']                = $this->input->post('tag');
             $data['color']              = json_encode($option);
             $data['num_of_imgs']        = $num_of_imgs;
@@ -460,24 +502,16 @@ class Vendor extends CI_Controller
             $choice_types               = $this->input->post('op_type');
             $choice_no                  = $this->input->post('op_no');
             $data['added_by']           = json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id')));
-            if(count($choice_titles ) > 0){
-                foreach ($choice_titles as $i => $row) {
-                    $choice_options         = $this->input->post('op_set'.$choice_no[$i]);
-                    $options[]              =   array(
-                                                    'no' => $choice_no[$i],
-                                                    'title' => $choice_titles[$i],
-                                                    'name' => 'choice_'.$choice_no[$i],
-                                                    'type' => $choice_types[$i],
-                                                    'option' => $choice_options
-                                                );
-                }
-            }
+            
             if ($this->db->get_where('business_settings',array('type' => 'commission_set'))->row()->value == 'no') {
+                
                 
                 if(true){
 
                     $this->db->insert('product', $data);
                     $id = $this->db->insert_id();
+                    // var_dump($this->db->last_query());
+                    // die('ok');
                     if(true){
                         $this->load->library('cloudinarylib');
                         $total = count($_FILES['images']['name']);
@@ -588,7 +622,6 @@ class Vendor extends CI_Controller
             $data['seo_title']          = $this->input->post('seo_title');
             $data['seo_description']    = $this->input->post('seo_description');
             $data['title']              = $this->input->post('title');
-            $data['title']              = $this->input->post('title');
             $data['slogan']             = $this->input->post('slogan');
             $data['main_heading']       = $this->input->post('main_heading');
             $data['bussniuss_email']    = $this->input->post('bussniuss_email');
@@ -618,6 +651,14 @@ class Vendor extends CI_Controller
             $data['additional_fields']  = json_encode($additional_fields);
             $data['brand']              = $this->input->post('brand');
             $data['unit']               = $this->input->post('unit');
+            $data['info_head']          = $this->input->post('info_head');
+            $data['info_desc']          = $this->input->post('info_desc');
+            $data['info_button']        = $this->input->post('button_txt');
+            $data['button_url']         = $this->input->post('button_url');
+            $data['facbook']            = $this->input->post('facebook');
+            $data['google']             = $this->input->post('google');
+            $data['twitter']            = $this->input->post('twitter');
+            $data['linkedin']           = $this->input->post('linkedin');
             $choice_titles              = $this->input->post('op_title');
             $choice_types               = $this->input->post('op_type');
             $choice_no                  = $this->input->post('op_no');
@@ -738,10 +779,10 @@ class Vendor extends CI_Controller
             ))->row();
             $page_data['row'] =(array) $sing;
             $page_data['brands'] =  $this->db->get('category')->result_array();
-            // echo $this->load->view('back/vendor/', $page_data,true);
             
             $page_data['page_name']   = ($sing->is_bpage)?"bpage_edit":"product_edit";
             $this->load->view('back/index', $page_data);
+            
         } else if ($para1 == 'view') {
             $page_data['product_data'] = $this->db->get_where('product', array(
                 'product_id' => $para2
@@ -773,7 +814,30 @@ class Vendor extends CI_Controller
                                             $img = $this->crud_model->size_img($value['img'],100,100);
                                             ?>
                                             <li id="gimg_<?= $value['id']; ?>">
-                                                <div onclick="delimg('<?= $value['id']; ?>')" class="del_icon"><i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                <div onclick="delimg('<?= $value['id']; ?>')" class="del_icon"><i class="fa-solid fa-xmark" aria-hidden="true"></i>
+</div>
+
+                                                <img src="<?= $img ?>"/></li>
+
+                                            <?php
+                                        }
+                                        ?>
+                                        </ul>
+            <?php
+        }
+         elseif ($para1 == 'rimg') {
+            $pid =  $para2;
+            ?>
+            <ul>
+                                        <?php
+                                        $this->db->order_by("id", "desc");
+
+                                        $imgs = $this->db->where('pid',$pid)->get('product_to_images')->result_array();
+                                        foreach ($imgs as $key => $value) {
+                                            $img = $this->crud_model->size_img($value['img'],100,100);
+                                            ?>
+                                            <li id="gimg_<?= $value['id']; ?>">
+                                                <div onclick="delimg('<?= $value['id']; ?>')" class="del_icon"><i class="fa-solid fa-xmark" aria-hidden="true"></i>
 </div>
 
                                                 <img src="<?= $img ?>"/></li>
@@ -1953,7 +2017,7 @@ $price = $this->crud_model->getMainPrice($v['product_id']);
             $data['added_by']     = json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id')));
             $this->db->insert('stock', $data);
             print_r($data);
-            die($this->db->insert_id());
+            // die($this->db->insert_id());
             recache();
         } else if ($para1 == 'do_destroy') {
             $data['type']         = 'destroy';
@@ -3166,6 +3230,61 @@ $price = $this->crud_model->getMainPrice($v['product_id']);
             }
         }
     }
+    // Blog
+    function blog($para1 = '', $para2 = '')
+    {
+        if ($para1 == 'do_add') {
+            $data['title']          = $this->input->post('title');
+            $data['date']           = $this->input->post('date');
+            $data['author']         = $this->input->post('author');
+            $data['summery']        = $this->input->post('summery');
+            $data['blog_category']  = $this->input->post('blog_category');
+            $data['description']    = $this->input->post('description');
+            $data['added_by']       = json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id')));
+            $this->db->insert('blog', $data);
+            $id = $this->db->insert_id();
+            if(!demo()){
+                $this->crud_model->file_up("img", "blog", $id, '', '', '.jpg');
+            }
+            recache();
+        } else if ($para1 == 'edit') {
+            $page_data['blog_data'] = $this->db->get_where('blog', array(
+                'blog_id' => $para2
+            ))->result_array();
+            $this->load->view('back/vendor/blog_edit', $page_data);
+        } elseif ($para1 == "update") {
+            $data['title']          = $this->input->post('title');
+            $data['date']           = $this->input->post('date');
+            $data['author']         = $this->input->post('author');
+            $data['summery']        = $this->input->post('summery');
+            $data['blog_category']  = $this->input->post('blog_category');
+            $data['description']    = $this->input->post('description');
+            $this->db->where('blog_id', $para2);
+            $this->db->update('blog', $data);
+            $this->crud_model->file_up("img", "blog", $para2, '', '', '.jpg');
+            recache();
+        } elseif ($para1 == 'delete') {
+            if(!demo()){
+                $this->crud_model->file_dlt('blog', $para2, '.jpg');
+                $this->db->where('blog_id', $para2);
+                $this->db->delete('blog');
+                recache();
+            }
+        } elseif ($para1 == 'list') {
+            $this->db->order_by('blog_id', 'desc');
+            $this->db->where('added_by',json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id'))));
+            $page_data['all_blogs'] = $this->db->get('blog')->result_array();
+            $this->load->view('back/vendor/blog_list', $page_data);
+        } elseif ($para1 == 'add') {
+            $this->load->view('back/vendor/blog_add');
+        } else {
+            $page_data['page_name']      = "blog";
+            $page_data['all_blogs'] = $this->db->get('blog')->result_array();
+            $this->load->view('back/index', $page_data);
+        }
+    }
+
+
     /* Manage Favicons */
     function vendor_images($para1 = "")
     {

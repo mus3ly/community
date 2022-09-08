@@ -4,6 +4,8 @@ if(isset($product_data[0]))
 {
     $pro = $product_data[0];
 }
+$pros = $this->db->where('added_by',$pro['added_by'])->get('product')->result_array();
+
 //galary
 $imgs = $this->db->where('pid',$pro['product_id'])->get('product_to_images')->result_array();
 $fimg = '';
@@ -133,17 +135,21 @@ if(isset($_GET['test']))
                     ?>
                     <img src="<?= $fimg; ?>" class="d-block w-100" alt="...">
                     <div class="share_save_btns">
-                         <?php
+                            <?php
                     if ($this->session->userdata('user_login') == "yes") {
                         
                         $user_id = $this->session->userdata('user_id');
                     ?>
-                        <a href="#" class="review-btn"><i class="fa-solid fa-star"></i>Write a review</a>
-                        <a href="#" class="orange_btn_save">SAVE</a>
-                        <a href="#" class="share_btns">SHARE</a>
-                    <?php
+                        <li><a href="<?php echo $this->crud_model->product_link($pro['product_id']); ?>?rate=1"><i class="fa-solid fa-star"></i> Write a review</a></li>
+                        <?php
                     }
-                    ?>
+                    else
+                    {
+                        ?>
+                        <li><a href="<?php echo base_url('home/login_set/login'); ?>"><i class="fa-solid fa-star"></i> Write a review</a></li>
+                        <?php
+                    }
+                        ?>
                    
                     </div>
                 </div>
@@ -423,60 +429,69 @@ if(isset($_GET['test']))
 
 
         <div class="client_say">
-            <div class="container">
+                <div class="container">
                 <div class="clients_box">
                     <h3>Take a look what our client Says</h3>
                     <h4>Reviews</h4>
+                    
                 </div>
                 <div class="row">
+                    <?php
+                    // var_dump($pro);
+                    $rating = $this->db->where('product_id', $pro['product_id'])->get('user_rating')->result_array();
+                    // var_dump($rating);
+                    foreach($rating as $k=> $v){
+                    ?>
                     <div class="col-sm-4 cilent_gapp">
                         <div class="info_client">
-                            <img src="<?= base_url(); ?>template/front/images/Group 19.png" alt="">
-                            <h4>Boby Gusmon</h4>
-                            <h6>Euismod ipsum</h6>
-                            <p>“In purus at morbi magna in in maecenas. Nunc nulla magna elit, varius phasellus blandit convallis.”</p>
+                            <?php
+                            
+                            $user_id = $v['user_id'];
+                            $users = $this->db->where('user_id', $user_id)->get('user')->row();
+                            // var_dump($users);
+                            ?>
+                            <img src="
+                            <?php 
+                                // $user_id = $v['user_id'];
+                                if(file_exists('uploads/user_image/user_'.$user_id.'.jpg')){ 
+                                    
+                                    echo $this->crud_model->file_view('user',$user_id,'100','100','no','src','','','.jpg').'?t='.time();
+                                } else if(empty($row['fb_id']) !== true){ 
+                                    echo 'https://graph.facebook.com/'. $row['fb_id'] .'/picture?type=large';
+                                } else if(empty($row['g_id']) !== true ){
+                                    echo $row['g_photo'];
+                                } else {
+                                    echo base_url().'uploads/user_image/default.jpg';
+                                } 
+                            ?>
+                            " alt="">
+                            <h4><?= $users->username?></h4>
+                            <p>“<?= $v['comment'];?>”</p>
                             <div class="rating">
-                                <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-half-star"></i>
-                            <span>4,5</span>
+                                <?php
+                                for($i =1; $i<=5;$i++)
+                                {
+                                    if($i<= $v['rating'])
+                                    {
+                                        ?>
+                                        <i class="fa fa-star"></i>
+                                        <?php
+                                    }
+                                    else
+                                    {
+                                        ?>
+                                        <i class="fa fa-star gray"></i>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            <span><?= $v['rating'];?></span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-4 cilent_gapp">
-                        <div class="info_client">
-                            <img src="<?= base_url(); ?>template/front/images/Group 19.png" alt="">
-                            <h4>Boby Gusmon</h4>
-                            <h6>Euismod ipsum</h6>
-                            <p>“In purus at morbi magna in in maecenas. Nunc nulla magna elit, varius phasellus blandit convallis.”</p>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-half-star"></i>
-                            <span>4,5</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 cilent_gapp">
-                        <div class="info_client">
-                            <img src="<?= base_url(); ?>template/front/images/Group 19.png" alt="">
-                            <h4>Boby Gusmon</h4>
-                            <h6>Euismod ipsum</h6>
-                            <p>“In purus at morbi magna in in maecenas. Nunc nulla magna elit, varius phasellus blandit convallis.”</p>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-half-star"></i>
-                            <span>4,5</span>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>

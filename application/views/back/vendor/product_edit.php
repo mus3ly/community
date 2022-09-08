@@ -1036,6 +1036,8 @@ function showPosition(position) {
                                        $('#text_div').append(html);
         }
     }
+    </script>
+    <script>
     var button = 0;
     <?php
     if($btns)

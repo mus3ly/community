@@ -1,4 +1,15 @@
+<?php
+$pro = array();
+if(isset($product_data[0]))
+{
+    $pro = $product_data[0];
+}
+$pros = $this->db->where('added_by',$pro['added_by'])->get('product')->result_array();
+?>
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+
    <style type="text/css">
       /*! CSS Used from: Embedded */
       div,span,h1,h2,p,a,img,ul,li,fieldset,form,aside{margin:0px;padding:0px;border:0px;font:inherit;vertical-align:baseline;}
@@ -227,47 +238,23 @@
                <div class=" header__09f24__SEy5F border-color--default__09f24__NPAKY">
                   <div class=" biz-header-title-container__09f24__gKmY4 border-color--default__09f24__NPAKY">
                      <a href="#" class="biz-header-title-link__09f24__DJFkk css-1q6i1gy" target="_blank" rel="noopener noreferrer" role="link">
-                        <h1 class="css-133wuwu">Super Duper Burgers</h1>
+                        <h1 class="css-133wuwu"><?= $pro['title'] ?></h1>
                      </a>
                   </div>
                   <div class=" biz-header-guidelines-container__09f24__XD_xp border-color--default__09f24__NPAKY"><a href="#" class="review-guidelines-link css-1q6i1gy" role="link">Read our review guidelines</a></div>
                </div>
                <div class=" border-color--default__09f24__NPAKY">
-                  <form class="" data-testid="form">
+                  <form class="" action="<?= base_url('home/add_rate') ?>" >
                      <div class=" border-color--default__09f24__NPAKY">
                         <div class=" css-14s1wf padding-t3__09f24__TMrIW padding-r3__09f24__eaF7p padding-b3__09f24__S8R2d padding-l3__09f24__IOjKY border-color--default__09f24__NPAKY" role="presentation">
                            <div class=" css-10687n6 margin-b3__09f24__l9v5d border-color--default__09f24__NPAKY" gap="1">
                               <div class=" css-1r871ch border-color--default__09f24__NPAKY">
                                  <fieldset class=" rating-selector__09f24__LNhhs">
-                                    <ul class=" i-stars__09f24__M1AR7 i-stars--large-3__09f24__shqlT stars__09f24__qckiD" aria-label="Rating">
-                                       <li class=" star__09f24__VkGcP">
-                                          <div class=" input-wrapper__09f24__u2wFT border-color--default__09f24__NPAKY"><input type="radio" name="rating-97025ee5-7ee9-439a-96f6-9a9795190471" class="input__09f24__IPTwS" aria-labelledby="rating-input-label-2a80ffae-9d97-46f9-b400-4f16a0179a28" aria-describedby="rating-input-description-2a80ffae-9d97-46f9-b400-4f16a0179a28" value="1"></div>
-                                          <div class=" label__09f24__GnhA2 border-color--default__09f24__NPAKY" id="rating-input-label-2a80ffae-9d97-46f9-b400-4f16a0179a28">1 star rating</div>
-                                          <div class=" label__09f24__GnhA2 border-color--default__09f24__NPAKY" id="rating-input-description-2a80ffae-9d97-46f9-b400-4f16a0179a28">Not good</div>
-                                       </li>
-                                       <li class=" star__09f24__VkGcP">
-                                          <div class=" input-wrapper__09f24__u2wFT border-color--default__09f24__NPAKY"><input type="radio" name="rating-97025ee5-7ee9-439a-96f6-9a9795190471" class="input__09f24__IPTwS" aria-labelledby="rating-input-label-b1482f61-35d1-479b-a37a-a1b82550164c" aria-describedby="rating-input-description-b1482f61-35d1-479b-a37a-a1b82550164c" value="2"></div>
-                                          <div class=" label__09f24__GnhA2 border-color--default__09f24__NPAKY" id="rating-input-label-b1482f61-35d1-479b-a37a-a1b82550164c">2 star rating</div>
-                                          <div class=" label__09f24__GnhA2 border-color--default__09f24__NPAKY" id="rating-input-description-b1482f61-35d1-479b-a37a-a1b82550164c">Could’ve been better</div>
-                                       </li>
-                                       <li class=" star__09f24__VkGcP">
-                                          <div class=" input-wrapper__09f24__u2wFT border-color--default__09f24__NPAKY"><input type="radio" name="rating-97025ee5-7ee9-439a-96f6-9a9795190471" class="input__09f24__IPTwS" aria-labelledby="rating-input-label-01c121b0-f5c0-481f-94fd-230e29c627e7" aria-describedby="rating-input-description-01c121b0-f5c0-481f-94fd-230e29c627e7" value="3" checked=""></div>
-                                          <div class=" label__09f24__GnhA2 border-color--default__09f24__NPAKY" id="rating-input-label-01c121b0-f5c0-481f-94fd-230e29c627e7">3 star rating</div>
-                                          <div class=" label__09f24__GnhA2 border-color--default__09f24__NPAKY" id="rating-input-description-01c121b0-f5c0-481f-94fd-230e29c627e7">OK</div>
-                                       </li>
-                                       <li class=" star__09f24__VkGcP">
-                                          <div class=" input-wrapper__09f24__u2wFT border-color--default__09f24__NPAKY"><input type="radio" name="rating-97025ee5-7ee9-439a-96f6-9a9795190471" class="input__09f24__IPTwS" aria-labelledby="rating-input-label-07b6b0cb-5855-420e-963b-26e64c24da35" aria-describedby="rating-input-description-07b6b0cb-5855-420e-963b-26e64c24da35" value="4"></div>
-                                          <div class=" label__09f24__GnhA2 border-color--default__09f24__NPAKY" id="rating-input-label-07b6b0cb-5855-420e-963b-26e64c24da35">4 star rating</div>
-                                          <div class=" label__09f24__GnhA2 border-color--default__09f24__NPAKY" id="rating-input-description-07b6b0cb-5855-420e-963b-26e64c24da35">Good</div>
-                                       </li>
-                                       <li class=" star__09f24__VkGcP">
-                                          <div class=" input-wrapper__09f24__u2wFT border-color--default__09f24__NPAKY"><input type="radio" name="rating-97025ee5-7ee9-439a-96f6-9a9795190471" class="input__09f24__IPTwS" aria-labelledby="rating-input-label-be8a12f8-fb3e-435f-840b-4527662b9578" aria-describedby="rating-input-description-be8a12f8-fb3e-435f-840b-4527662b9578" value="5"></div>
-                                          <div class=" label__09f24__GnhA2 border-color--default__09f24__NPAKY" id="rating-input-label-be8a12f8-fb3e-435f-840b-4527662b9578">5 star rating</div>
-                                          <div class=" label__09f24__GnhA2 border-color--default__09f24__NPAKY" id="rating-input-description-be8a12f8-fb3e-435f-840b-4527662b9578">Great</div>
-                                       </li>
-                                    </ul>
+                                    <div id="rateYo"></div>
+                                    <input type="hidden" value="0" name="rating" id="rate" />
+                                    <input type="hidden" value="<?= $pro['product_id'] ?>" name="pid" id="pid" />
                                     <div class=" description__09f24__qRKe3 border-color--default__09f24__NPAKY" aria-hidden="true">
-                                       <p class="description-text--non-zero__09f24__Ln52s css-qgunke">OK</p>
+                                       <p class="description-text--non-zero__09f24__Ln52s css-qgunke">/</p>
                                     </div>
                                  </fieldset>
                               </div>
@@ -277,12 +264,12 @@
                               <div class="css-1sdb4og" contenteditable="true" spellcheck="true" data-lexical-editor="true" style="user-select: text; white-space: pre-wrap; word-break: break-word;" role="textbox">
                                  <p><br></p>
                               </div>
-                              <div class=" css-1kngrp9 border-color--default__09f24__NPAKY">Doesn’t look like much when you walk past, but I was practically dying of hunger so I popped in. The definition of a hole-in-the-wall. I got the regular hamburger and wow…  there are no words. A classic burger done right. Crisp bun, juicy patty, stuffed with all the essentials (ketchup, shredded lettuce, tomato, and pickles). There’s about a million options available between the menu board and wall full of specials, so it can get a little overwhelming, but you really can’t go wrong. Not much else to say besides go see for yourself! You won’t be disappointed.</div>
+                              <textarea name="comment" class="" placeholder="Add comment here"></textarea>
                            </div>
                            <div class=" css-c7yo1x margin-t3__09f24__riq4X border-color--default__09f24__NPAKY background-color--white__09f24__ulvSM"></div>
                         </div>
                      </div>
-                     <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:200px"><button type="submit" class=" css-hv9ohz" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></div>
+                     <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:200px"><button type="button"  id="rate_form" class=" css-hv9ohz" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></div>
                   </form>
                   <div></div>
                </div>
@@ -297,378 +284,138 @@
             <div class=" margin-t2__09f24__b0bxj margin-b2__09f24__CEMjT border-color--default__09f24__NPAKY">
                <h2 class="css-h19vjk">Recent Reviews</h2>
             </div>
-            <div class=" margin-r1__09f24__rN_ga margin-b3__09f24__l9v5d padding-b3__09f24__S8R2d border--bottom__09f24___mg5X border-color--default__09f24__NPAKY" style="word-break:break-word">
-               <div class=" margin-b3__09f24__l9v5d border-color--default__09f24__NPAKY">
-                  <div class=" border-color--default__09f24__NPAKY" role="region" aria-label="Priyanka K.">
-                     <div class=" arrange__09f24__LDfbs gutter-1__09f24__yAbCL vertical-align-middle__09f24__zU9sE border-color--default__09f24__NPAKY">
-                        <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">
-                           <div class=" css-0 border-color--default__09f24__NPAKY"><img class=" css-1pz4y59" src="https://ads.strokedev.net/template/front/images/ls.jpg" srcset="https://ads.strokedev.net/template/front/images/ls.jpg" alt="Photo of Priyanka K." height="40" width="40" loading="lazy" draggable="true"></div>
+                            <div class="row">
+                    <?php
+                    // var_dump($pro);
+                    $rating = $this->db->where('product_id', $pro['product_id'])->get('user_rating')->result_array();
+                    // var_dump($rating);
+                    foreach($rating as $k=> $v){
+                    ?>
+                    <div class="col-sm-4 cilent_gapp">
+                        <div class="info_client">
+                            <?php
+                            
+                            $user_id = $v['user_id'];
+                            $users = $this->db->where('user_id', $user_id)->get('user')->row();
+                            // var_dump($users);
+                            ?>
+                            <img src="
+                            <?php 
+                                // $user_id = $v['user_id'];
+                                if(file_exists('uploads/user_image/user_'.$user_id.'.jpg')){ 
+                                    
+                                    echo $this->crud_model->file_view('user',$user_id,'100','100','no','src','','','.jpg').'?t='.time();
+                                } else if(empty($row['fb_id']) !== true){ 
+                                    echo 'https://graph.facebook.com/'. $row['fb_id'] .'/picture?type=large';
+                                } else if(empty($row['g_id']) !== true ){
+                                    echo $row['g_photo'];
+                                } else {
+                                    echo base_url().'uploads/user_image/default.jpg';
+                                } 
+                            ?>
+                            " alt="">
+                            <h4><?= $users->username?></h4>
+                            <p>“<?= $v['comment'];?>”</p>
+                            <div class="rating">
+                                <?php
+                                for($i =1; $i<=5;$i++)
+                                {
+                                    if($i<= $v['rating'])
+                                    {
+                                        ?>
+                                        <i class="fa fa-star"></i>
+                                        <?php
+                                    }
+                                    else
+                                    {
+                                        ?>
+                                        <i class="fa fa-star gray"></i>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            <span><?= $v['rating'];?></span>
+                            </div>
                         </div>
-                        <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">
-                           <div class=" user-passport-info border-color--default__09f24__NPAKY">
-                              <span class="fs-block css-ux5mu6" data-font-weight="bold">Priyanka K.</span>
-                              <div class=" elite-badge__09f24__dykWK display--inline-block__09f24__fEDiJ margin-l1__09f24__m8GL9 border-color--default__09f24__NPAKY"><a href="#" class="css-1q44n7j"><span class="css-1adhs7a">Elite 22</span></a></div>
-                           </div>
-                           <div class=" display--inline-block__09f24__fEDiJ border-color--default__09f24__NPAKY">
-                              <div class=" user-passport-stats__09f24__NQxB4 border-color--default__09f24__NPAKY">
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Friends">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-friends-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46a3.523 3.523 0 003.519 3.52h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zm-6.462 1.5h6.462a2.022 2.022 0 012.019 2.02v6.223a8.71 8.71 0 00-2.218-1.177c.164-.395.249-.819.25-1.247V7.562a3.281 3.281 0 10-6.563 0v1.007c0 .428.085.852.249 1.247-.792.283-1.54.68-2.218 1.177V4.77a2.022 2.022 0 012.019-2.02zm5.012 5.82a1.781 1.781 0 01-3.562 0V7.561a1.781 1.781 0 013.562 0v1.007zm1.45 4.68H4.769a2.007 2.007 0 01-1.49-.668.415.415 0 01.15-.237 7.259 7.259 0 012.498-1.254 3.21 3.21 0 004.144.002c.907.25 1.756.676 2.5 1.252.076.06.129.143.15.237a2.007 2.007 0 01-1.49.668z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">169</span></span>
-                                 </div>
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Reviews">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-review-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 14.75H4.769a3.524 3.524 0 01-3.519-3.52V4.77a3.523 3.523 0 013.519-3.52h6.462a3.523 3.523 0 013.519 3.52v6.46a3.523 3.523 0 01-3.519 3.52zm-6.462-12A2.022 2.022 0 002.75 4.77v6.46a2.022 2.022 0 002.019 2.02h6.462a2.022 2.022 0 002.019-2.02V4.77a2.022 2.022 0 00-2.019-2.02H4.769z"></path>
-                                          <path d="M11.226 7.229a.5.5 0 00-.404-.341l-1.64-.239-.734-1.486a.522.522 0 00-.896 0L6.818 6.65l-1.64.239a.5.5 0 00-.277.853l1.187 1.156-.28 1.633a.5.5 0 00.725.528L8 10.286l1.467.772a.498.498 0 00.725-.528l-.28-1.633L11.1 7.741a.5.5 0 00.127-.512z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">111</span></span>
-                                 </div>
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Photos">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-photos-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M5.076 6.674a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                                          <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46c.002.441.087.878.252 1.287l-.003.003.005.005a3.519 3.519 0 003.265 2.225h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zM2.75 11.23V4.77a2.022 2.022 0 012.019-2.02h6.462a2.022 2.022 0 012.019 2.02v4.096l-1.363-1.08a4.097 4.097 0 00-5.3.163l-3.822 3.433c-.004-.05-.015-.1-.015-.152zm8.481 2.02H4.769a2 2 0 01-1.298-.486l4.118-3.7a2.6 2.6 0 013.365-.103l2.296 1.82v.45a2.022 2.022 0 01-2.019 2.019z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">140</span></span>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class=" arrange__09f24__LDfbs gutter-1-5__09f24__vMtpw margin-b1__09f24__vaLrm border-color--default__09f24__NPAKY">
-                  <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">
-                     <span class=" display--inline__09f24__c6N_k border-color--default__09f24__NPAKY">
-                        <div class=" i-stars__09f24__M1AR7 i-stars--regular-5__09f24__tKNMk border-color--default__09f24__NPAKY overflow--hidden__09f24___ayzG" aria-label="5 star rating" role="img"><img class=" offscreen__09f24__gZT9P" src="https://s3-media0.fl.yelpcdn.com/assets/public/stars_v2.yji-59bbc2cf8e3d4be04fcc.png" width="132" height="560" alt=""></div>
-                     </span>
-                  </div>
-                  <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">
-                     <p class=" css-chan6m">7/18/2022</p>
-                  </div>
-               </div>
-               <div class=" border-color--default__09f24__NPAKY">
-                  <div class=" border-color--default__09f24__NPAKY" role="region" aria-live="polite" id="expander-link-content-a4ca5e1e-1032-4525-9399-3bfeb43ab2fb">
-                     <div class=" border-color--default__09f24__NPAKY">
-                        <p class=" css-2sacua">Tried their amazing vegetarian burger today as takeout, and I'm an instant fan. I didn't need to add sauces to give it flavor since it had its own personality!</p>
-                        <p class=" css-2sacua">My husband tried out the chicken burger which he thoroughly enjoyed as well.</p>
-                        <p class=" css-2sacua">Honestly I was starving and I could have had two of the burgers to feel full.</p>
-                        <p class=" css-qgunke">Can't wait to check out this place in person!</p>
-                     </div>
-                  </div>
-                  <button class=" css-105z2ub" aria-expanded="true" aria-controls="expander-link-content-a4ca5e1e-1032-4525-9399-3bfeb43ab2fb" type="submit">
-                     <span class="css-15j7fnr">
-                        <p class=" css-war30n" data-font-weight="semibold">Read less</p>
-                     </span>
-                  </button>
-               </div>
-            </div>
-            <div class=" margin-r1__09f24__rN_ga margin-b3__09f24__l9v5d padding-b3__09f24__S8R2d border--bottom__09f24___mg5X border-color--default__09f24__NPAKY" style="word-break:break-word">
-               <div class=" margin-b3__09f24__l9v5d border-color--default__09f24__NPAKY">
-                  <div class=" border-color--default__09f24__NPAKY" role="region" aria-label="Levette D.">
-                     <div class=" arrange__09f24__LDfbs gutter-1__09f24__yAbCL vertical-align-middle__09f24__zU9sE border-color--default__09f24__NPAKY">
-                        <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">
-                           <div class=" css-0 border-color--default__09f24__NPAKY"><img class=" css-1pz4y59" src="https://ads.strokedev.net/template/front/images/ls.jpg" srcset="https://ads.strokedev.net/template/front/images/ls.jpg" alt="Photo of Levette D." height="40" width="40" loading="lazy" draggable="true"></div>
-                        </div>
-                        <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">
-                           <div class=" user-passport-info border-color--default__09f24__NPAKY">
-                              <span class="fs-block css-ux5mu6" data-font-weight="bold">Levette D.</span>
-                              <div class=" elite-badge__09f24__dykWK display--inline-block__09f24__fEDiJ margin-l1__09f24__m8GL9 border-color--default__09f24__NPAKY"><a href="#" class="css-1q44n7j"><span class="css-1adhs7a">Elite 22</span></a></div>
-                           </div>
-                           <div class=" display--inline-block__09f24__fEDiJ border-color--default__09f24__NPAKY">
-                              <div class=" user-passport-stats__09f24__NQxB4 border-color--default__09f24__NPAKY">
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Friends">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-friends-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46a3.523 3.523 0 003.519 3.52h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zm-6.462 1.5h6.462a2.022 2.022 0 012.019 2.02v6.223a8.71 8.71 0 00-2.218-1.177c.164-.395.249-.819.25-1.247V7.562a3.281 3.281 0 10-6.563 0v1.007c0 .428.085.852.249 1.247-.792.283-1.54.68-2.218 1.177V4.77a2.022 2.022 0 012.019-2.02zm5.012 5.82a1.781 1.781 0 01-3.562 0V7.561a1.781 1.781 0 013.562 0v1.007zm1.45 4.68H4.769a2.007 2.007 0 01-1.49-.668.415.415 0 01.15-.237 7.259 7.259 0 012.498-1.254 3.21 3.21 0 004.144.002c.907.25 1.756.676 2.5 1.252.076.06.129.143.15.237a2.007 2.007 0 01-1.49.668z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">10</span></span>
-                                 </div>
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Reviews">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-review-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 14.75H4.769a3.524 3.524 0 01-3.519-3.52V4.77a3.523 3.523 0 013.519-3.52h6.462a3.523 3.523 0 013.519 3.52v6.46a3.523 3.523 0 01-3.519 3.52zm-6.462-12A2.022 2.022 0 002.75 4.77v6.46a2.022 2.022 0 002.019 2.02h6.462a2.022 2.022 0 002.019-2.02V4.77a2.022 2.022 0 00-2.019-2.02H4.769z"></path>
-                                          <path d="M11.226 7.229a.5.5 0 00-.404-.341l-1.64-.239-.734-1.486a.522.522 0 00-.896 0L6.818 6.65l-1.64.239a.5.5 0 00-.277.853l1.187 1.156-.28 1.633a.5.5 0 00.725.528L8 10.286l1.467.772a.498.498 0 00.725-.528l-.28-1.633L11.1 7.741a.5.5 0 00.127-.512z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">85</span></span>
-                                 </div>
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Photos">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-photos-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M5.076 6.674a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                                          <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46c.002.441.087.878.252 1.287l-.003.003.005.005a3.519 3.519 0 003.265 2.225h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zM2.75 11.23V4.77a2.022 2.022 0 012.019-2.02h6.462a2.022 2.022 0 012.019 2.02v4.096l-1.363-1.08a4.097 4.097 0 00-5.3.163l-3.822 3.433c-.004-.05-.015-.1-.015-.152zm8.481 2.02H4.769a2 2 0 01-1.298-.486l4.118-3.7a2.6 2.6 0 013.365-.103l2.296 1.82v.45a2.022 2.022 0 01-2.019 2.019z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">204</span></span>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class=" arrange__09f24__LDfbs gutter-1-5__09f24__vMtpw margin-b1__09f24__vaLrm border-color--default__09f24__NPAKY">
-                  <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">
-                     <span class=" display--inline__09f24__c6N_k border-color--default__09f24__NPAKY">
-                        <div class=" i-stars__09f24__M1AR7 i-stars--regular-4__09f24__qui79 border-color--default__09f24__NPAKY overflow--hidden__09f24___ayzG" aria-label="4 star rating" role="img"><img class=" offscreen__09f24__gZT9P" src="https://s3-media0.fl.yelpcdn.com/assets/public/stars_v2.yji-59bbc2cf8e3d4be04fcc.png" width="132" height="560" alt=""></div>
-                     </span>
-                  </div>
-                  <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">
-                     <p class=" css-chan6m">6/12/2022</p>
-                  </div>
-               </div>
-               <div class=" border-color--default__09f24__NPAKY">
-                  <div class=" border-color--default__09f24__NPAKY" role="region" aria-live="polite" id="expander-link-content-0d6cd297-f22b-4513-a393-1595d0c718e2">
-                     <div class=" border-color--default__09f24__NPAKY">
-                        <p class=" css-qgunke">Burger was great. I ordered the single with bacon, grilled onion, and all the fixings and it was nice and juicy. Also ordered the garlic fries. Let me say I need to really brush my teeth now and I won't need to worry about vampires. I finished it off with their signature lemonade made with brown sugar. Don't let the looks be discouraging because…</p>
-                     </div>
-                  </div>
-                  <button class=" css-105z2ub" aria-expanded="false" aria-controls="expander-link-content-0d6cd297-f22b-4513-a393-1595d0c718e2" type="submit">
-                     <span class="css-15j7fnr">
-                        <p class=" css-war30n" data-font-weight="semibold">Read more</p>
-                     </span>
-                  </button>
-               </div>
-            </div>
-            <div class=" margin-r1__09f24__rN_ga margin-b3__09f24__l9v5d padding-b3__09f24__S8R2d border--bottom__09f24___mg5X border-color--default__09f24__NPAKY" style="word-break:break-word">
-               <div class=" margin-b3__09f24__l9v5d border-color--default__09f24__NPAKY">
-                  <div class=" border-color--default__09f24__NPAKY" role="region" aria-label="Gary H.">
-                     <div class=" arrange__09f24__LDfbs gutter-1__09f24__yAbCL vertical-align-middle__09f24__zU9sE border-color--default__09f24__NPAKY">
-                        <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">
-                           <div class=" css-0 border-color--default__09f24__NPAKY"><img class=" css-1pz4y59" src="https://ads.strokedev.net/template/front/images/ls.jpg" srcset="https://ads.strokedev.net/template/front/images/ls.jpg" alt="Photo of Gary H." height="40" width="40" loading="lazy" draggable="true"></div>
-                        </div>
-                        <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">
-                           <div class=" user-passport-info border-color--default__09f24__NPAKY"><span class="fs-block css-ux5mu6" data-font-weight="bold">Gary H.</span></div>
-                           <div class=" display--inline-block__09f24__fEDiJ border-color--default__09f24__NPAKY">
-                              <div class=" user-passport-stats__09f24__NQxB4 border-color--default__09f24__NPAKY">
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Friends">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-friends-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46a3.523 3.523 0 003.519 3.52h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zm-6.462 1.5h6.462a2.022 2.022 0 012.019 2.02v6.223a8.71 8.71 0 00-2.218-1.177c.164-.395.249-.819.25-1.247V7.562a3.281 3.281 0 10-6.563 0v1.007c0 .428.085.852.249 1.247-.792.283-1.54.68-2.218 1.177V4.77a2.022 2.022 0 012.019-2.02zm5.012 5.82a1.781 1.781 0 01-3.562 0V7.561a1.781 1.781 0 013.562 0v1.007zm1.45 4.68H4.769a2.007 2.007 0 01-1.49-.668.415.415 0 01.15-.237 7.259 7.259 0 012.498-1.254 3.21 3.21 0 004.144.002c.907.25 1.756.676 2.5 1.252.076.06.129.143.15.237a2.007 2.007 0 01-1.49.668z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">0</span></span>
-                                 </div>
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Reviews">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-review-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 14.75H4.769a3.524 3.524 0 01-3.519-3.52V4.77a3.523 3.523 0 013.519-3.52h6.462a3.523 3.523 0 013.519 3.52v6.46a3.523 3.523 0 01-3.519 3.52zm-6.462-12A2.022 2.022 0 002.75 4.77v6.46a2.022 2.022 0 002.019 2.02h6.462a2.022 2.022 0 002.019-2.02V4.77a2.022 2.022 0 00-2.019-2.02H4.769z"></path>
-                                          <path d="M11.226 7.229a.5.5 0 00-.404-.341l-1.64-.239-.734-1.486a.522.522 0 00-.896 0L6.818 6.65l-1.64.239a.5.5 0 00-.277.853l1.187 1.156-.28 1.633a.5.5 0 00.725.528L8 10.286l1.467.772a.498.498 0 00.725-.528l-.28-1.633L11.1 7.741a.5.5 0 00.127-.512z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">66</span></span>
-                                 </div>
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Photos">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-photos-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M5.076 6.674a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                                          <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46c.002.441.087.878.252 1.287l-.003.003.005.005a3.519 3.519 0 003.265 2.225h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zM2.75 11.23V4.77a2.022 2.022 0 012.019-2.02h6.462a2.022 2.022 0 012.019 2.02v4.096l-1.363-1.08a4.097 4.097 0 00-5.3.163l-3.822 3.433c-.004-.05-.015-.1-.015-.152zm8.481 2.02H4.769a2 2 0 01-1.298-.486l4.118-3.7a2.6 2.6 0 013.365-.103l2.296 1.82v.45a2.022 2.022 0 01-2.019 2.019z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">20</span></span>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class=" arrange__09f24__LDfbs gutter-1-5__09f24__vMtpw margin-b1__09f24__vaLrm border-color--default__09f24__NPAKY">
-                  <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">
-                     <span class=" display--inline__09f24__c6N_k border-color--default__09f24__NPAKY">
-                        <div class=" i-stars__09f24__M1AR7 i-stars--regular-2__09f24__mq_AY border-color--default__09f24__NPAKY overflow--hidden__09f24___ayzG" aria-label="2 star rating" role="img"><img class=" offscreen__09f24__gZT9P" src="https://s3-media0.fl.yelpcdn.com/assets/public/stars_v2.yji-59bbc2cf8e3d4be04fcc.png" width="132" height="560" alt=""></div>
-                     </span>
-                  </div>
-                  <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">
-                     <p class=" css-chan6m">6/9/2022</p>
-                  </div>
-               </div>
-               <div class=" border-color--default__09f24__NPAKY">
-                  <div class=" border-color--default__09f24__NPAKY" role="region" aria-live="polite" id="expander-link-content-af3ea81c-e692-4ff2-a318-7bec63dad30a">
-                     <div class=" border-color--default__09f24__NPAKY">
-                        <p class=" css-2sacua">Eh?</p>
-                        <p class=" css-qgunke">The burger was tasty and the fries were good. My only issue was how greasy the burger was. After the first couple of bites, my hands looked like I'd dipped them in vegetable oil. They were literally covered with grease. I went through several napkins trying to keep…</p>
-                     </div>
-                  </div>
-                  <button class=" css-105z2ub" aria-expanded="false" aria-controls="expander-link-content-af3ea81c-e692-4ff2-a318-7bec63dad30a" type="submit">
-                     <span class="css-15j7fnr">
-                        <p class=" css-war30n" data-font-weight="semibold">Read more</p>
-                     </span>
-                  </button>
-               </div>
-            </div>
-            <div class=" margin-r1__09f24__rN_ga margin-b3__09f24__l9v5d padding-b3__09f24__S8R2d border--bottom__09f24___mg5X border-color--default__09f24__NPAKY" style="word-break:break-word">
-               <div class=" margin-b3__09f24__l9v5d border-color--default__09f24__NPAKY">
-                  <div class=" border-color--default__09f24__NPAKY" role="region" aria-label="Neel K.">
-                     <div class=" arrange__09f24__LDfbs gutter-1__09f24__yAbCL vertical-align-middle__09f24__zU9sE border-color--default__09f24__NPAKY">
-                        <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">
-                           <div class=" css-0 border-color--default__09f24__NPAKY"><img class=" css-1pz4y59" src="https://ads.strokedev.net/template/front/images/ls.jpg" srcset="https://ads.strokedev.net/template/front/images/ls.jpg" alt="Photo of Neel K." height="40" width="40" loading="lazy" draggable="true"></div>
-                        </div>
-                        <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">
-                           <div class=" user-passport-info border-color--default__09f24__NPAKY">
-                              <span class="fs-block css-ux5mu6" data-font-weight="bold">Neel K.</span>
-                              <div class=" elite-badge__09f24__dykWK display--inline-block__09f24__fEDiJ margin-l1__09f24__m8GL9 border-color--default__09f24__NPAKY"><a href="#" class="css-1q44n7j"><span class="css-1adhs7a">Elite 22</span></a></div>
-                           </div>
-                           <div class=" display--inline-block__09f24__fEDiJ border-color--default__09f24__NPAKY">
-                              <div class=" user-passport-stats__09f24__NQxB4 border-color--default__09f24__NPAKY">
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Friends">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-friends-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46a3.523 3.523 0 003.519 3.52h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zm-6.462 1.5h6.462a2.022 2.022 0 012.019 2.02v6.223a8.71 8.71 0 00-2.218-1.177c.164-.395.249-.819.25-1.247V7.562a3.281 3.281 0 10-6.563 0v1.007c0 .428.085.852.249 1.247-.792.283-1.54.68-2.218 1.177V4.77a2.022 2.022 0 012.019-2.02zm5.012 5.82a1.781 1.781 0 01-3.562 0V7.561a1.781 1.781 0 013.562 0v1.007zm1.45 4.68H4.769a2.007 2.007 0 01-1.49-.668.415.415 0 01.15-.237 7.259 7.259 0 012.498-1.254 3.21 3.21 0 004.144.002c.907.25 1.756.676 2.5 1.252.076.06.129.143.15.237a2.007 2.007 0 01-1.49.668z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">25</span></span>
-                                 </div>
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Reviews">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-review-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 14.75H4.769a3.524 3.524 0 01-3.519-3.52V4.77a3.523 3.523 0 013.519-3.52h6.462a3.523 3.523 0 013.519 3.52v6.46a3.523 3.523 0 01-3.519 3.52zm-6.462-12A2.022 2.022 0 002.75 4.77v6.46a2.022 2.022 0 002.019 2.02h6.462a2.022 2.022 0 002.019-2.02V4.77a2.022 2.022 0 00-2.019-2.02H4.769z"></path>
-                                          <path d="M11.226 7.229a.5.5 0 00-.404-.341l-1.64-.239-.734-1.486a.522.522 0 00-.896 0L6.818 6.65l-1.64.239a.5.5 0 00-.277.853l1.187 1.156-.28 1.633a.5.5 0 00.725.528L8 10.286l1.467.772a.498.498 0 00.725-.528l-.28-1.633L11.1 7.741a.5.5 0 00.127-.512z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">98</span></span>
-                                 </div>
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Photos">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-photos-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M5.076 6.674a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                                          <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46c.002.441.087.878.252 1.287l-.003.003.005.005a3.519 3.519 0 003.265 2.225h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zM2.75 11.23V4.77a2.022 2.022 0 012.019-2.02h6.462a2.022 2.022 0 012.019 2.02v4.096l-1.363-1.08a4.097 4.097 0 00-5.3.163l-3.822 3.433c-.004-.05-.015-.1-.015-.152zm8.481 2.02H4.769a2 2 0 01-1.298-.486l4.118-3.7a2.6 2.6 0 013.365-.103l2.296 1.82v.45a2.022 2.022 0 01-2.019 2.019z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">125</span></span>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class=" arrange__09f24__LDfbs gutter-1-5__09f24__vMtpw margin-b1__09f24__vaLrm border-color--default__09f24__NPAKY">
-                  <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">
-                     <span class=" display--inline__09f24__c6N_k border-color--default__09f24__NPAKY">
-                        <div class=" i-stars__09f24__M1AR7 i-stars--regular-5__09f24__tKNMk border-color--default__09f24__NPAKY overflow--hidden__09f24___ayzG" aria-label="5 star rating" role="img"><img class=" offscreen__09f24__gZT9P" src="https://s3-media0.fl.yelpcdn.com/assets/public/stars_v2.yji-59bbc2cf8e3d4be04fcc.png" width="132" height="560" alt=""></div>
-                     </span>
-                  </div>
-                  <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">
-                     <p class=" css-chan6m">8/22/2022</p>
-                  </div>
-               </div>
-               <div class=" border-color--default__09f24__NPAKY">
-                  <p class=" css-qgunke">Such a juicy burger!! I love their meat quality and the flavor is amazing as well. I ordered online during my lunch and then just came and picked it up. The ordering online feature definitely helps since they tend to get busy during lunch. I would recommend this place if your craving some juicy burger.</p>
-               </div>
-            </div>
-            <div class=" margin-r1__09f24__rN_ga margin-b3__09f24__l9v5d padding-b3__09f24__S8R2d border--bottom__09f24___mg5X border-color--default__09f24__NPAKY" style="word-break:break-word">
-               <div class=" margin-b3__09f24__l9v5d border-color--default__09f24__NPAKY">
-                  <div class=" border-color--default__09f24__NPAKY" role="region" aria-label="Alex Z.">
-                     <div class=" arrange__09f24__LDfbs gutter-1__09f24__yAbCL vertical-align-middle__09f24__zU9sE border-color--default__09f24__NPAKY">
-                        <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">
-                           <div class=" css-0 border-color--default__09f24__NPAKY"><img class=" css-1pz4y59" src="https://ads.strokedev.net/template/front/images/ls.jpg" srcset="https://ads.strokedev.net/template/front/images/ls.jpg" alt="Photo of Alex Z." height="40" width="40" loading="lazy" draggable="true"></div>
-                        </div>
-                        <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">
-                           <div class=" user-passport-info border-color--default__09f24__NPAKY"><span class="fs-block css-ux5mu6" data-font-weight="bold">Alex Z.</span></div>
-                           <div class=" display--inline-block__09f24__fEDiJ border-color--default__09f24__NPAKY">
-                              <div class=" user-passport-stats__09f24__NQxB4 border-color--default__09f24__NPAKY">
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Friends">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-friends-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46a3.523 3.523 0 003.519 3.52h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zm-6.462 1.5h6.462a2.022 2.022 0 012.019 2.02v6.223a8.71 8.71 0 00-2.218-1.177c.164-.395.249-.819.25-1.247V7.562a3.281 3.281 0 10-6.563 0v1.007c0 .428.085.852.249 1.247-.792.283-1.54.68-2.218 1.177V4.77a2.022 2.022 0 012.019-2.02zm5.012 5.82a1.781 1.781 0 01-3.562 0V7.561a1.781 1.781 0 013.562 0v1.007zm1.45 4.68H4.769a2.007 2.007 0 01-1.49-.668.415.415 0 01.15-.237 7.259 7.259 0 012.498-1.254 3.21 3.21 0 004.144.002c.907.25 1.756.676 2.5 1.252.076.06.129.143.15.237a2.007 2.007 0 01-1.49.668z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">0</span></span>
-                                 </div>
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Reviews">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-review-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 14.75H4.769a3.524 3.524 0 01-3.519-3.52V4.77a3.523 3.523 0 013.519-3.52h6.462a3.523 3.523 0 013.519 3.52v6.46a3.523 3.523 0 01-3.519 3.52zm-6.462-12A2.022 2.022 0 002.75 4.77v6.46a2.022 2.022 0 002.019 2.02h6.462a2.022 2.022 0 002.019-2.02V4.77a2.022 2.022 0 00-2.019-2.02H4.769z"></path>
-                                          <path d="M11.226 7.229a.5.5 0 00-.404-.341l-1.64-.239-.734-1.486a.522.522 0 00-.896 0L6.818 6.65l-1.64.239a.5.5 0 00-.277.853l1.187 1.156-.28 1.633a.5.5 0 00.725.528L8 10.286l1.467.772a.498.498 0 00.725-.528l-.28-1.633L11.1 7.741a.5.5 0 00.127-.512z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">29</span></span>
-                                 </div>
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Photos">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-photos-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M5.076 6.674a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>
-                                          <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46c.002.441.087.878.252 1.287l-.003.003.005.005a3.519 3.519 0 003.265 2.225h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zM2.75 11.23V4.77a2.022 2.022 0 012.019-2.02h6.462a2.022 2.022 0 012.019 2.02v4.096l-1.363-1.08a4.097 4.097 0 00-5.3.163l-3.822 3.433c-.004-.05-.015-.1-.015-.152zm8.481 2.02H4.769a2 2 0 01-1.298-.486l4.118-3.7a2.6 2.6 0 013.365-.103l2.296 1.82v.45a2.022 2.022 0 01-2.019 2.019z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">3</span></span>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class=" arrange__09f24__LDfbs gutter-1-5__09f24__vMtpw margin-b1__09f24__vaLrm border-color--default__09f24__NPAKY">
-                  <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">
-                     <span class=" display--inline__09f24__c6N_k border-color--default__09f24__NPAKY">
-                        <div class=" i-stars__09f24__M1AR7 i-stars--regular-5__09f24__tKNMk border-color--default__09f24__NPAKY overflow--hidden__09f24___ayzG" aria-label="5 star rating" role="img"><img class=" offscreen__09f24__gZT9P" src="https://s3-media0.fl.yelpcdn.com/assets/public/stars_v2.yji-59bbc2cf8e3d4be04fcc.png" width="132" height="560" alt=""></div>
-                     </span>
-                  </div>
-                  <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">
-                     <p class=" css-chan6m">8/22/2022</p>
-                  </div>
-               </div>
-               <div class=" border-color--default__09f24__NPAKY">
-                  <div class=" border-color--default__09f24__NPAKY" role="region" aria-live="polite" id="expander-link-content-9aac4043-f12c-4ae6-ac1e-c247d691433a">
-                     <div class=" border-color--default__09f24__NPAKY">
-                        <p class=" css-qgunke">This place will hold a special spot in my heart. On the day before my Irish friend flew home, we got to share a bite here. We both ordered super burgers and milk shakes. No exaggeration, best food chain burger and milk shake I have ever eaten! It was such a fitting parting meal. We sat in silence just appreciating and savoring our food. It hit the…</p>
-                     </div>
-                  </div>
-                  <button class=" css-105z2ub" aria-expanded="false" aria-controls="expander-link-content-9aac4043-f12c-4ae6-ac1e-c247d691433a" type="submit">
-                     <span class="css-15j7fnr">
-                        <p class=" css-war30n" data-font-weight="semibold">Read more</p>
-                     </span>
-                  </button>
-               </div>
-            </div>
-            <div class=" margin-r1__09f24__rN_ga margin-b3__09f24__l9v5d padding-b3__09f24__S8R2d border--bottom__09f24___mg5X border-color--default__09f24__NPAKY" style="word-break:break-word">
-               <div class=" margin-b3__09f24__l9v5d border-color--default__09f24__NPAKY">
-                  <div class=" border-color--default__09f24__NPAKY" role="region" aria-label="Martin W.">
-                     <div class=" arrange__09f24__LDfbs gutter-1__09f24__yAbCL vertical-align-middle__09f24__zU9sE border-color--default__09f24__NPAKY">
-                        <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">
-                           <div class=" css-0 border-color--default__09f24__NPAKY"><img class=" css-1pz4y59" src="https://ads.strokedev.net/template/front/images/ls.jpg" srcset="https://ads.strokedev.net/template/front/images/ls.jpg" alt="Photo of Martin W." height="40" width="40" loading="lazy" draggable="true"></div>
-                        </div>
-                        <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">
-                           <div class=" user-passport-info border-color--default__09f24__NPAKY"><span class="fs-block css-ux5mu6" data-font-weight="bold">Martin W.</span></div>
-                           <div class=" display--inline-block__09f24__fEDiJ border-color--default__09f24__NPAKY">
-                              <div class=" user-passport-stats__09f24__NQxB4 border-color--default__09f24__NPAKY">
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Friends">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-friends-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46a3.523 3.523 0 003.519 3.52h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zm-6.462 1.5h6.462a2.022 2.022 0 012.019 2.02v6.223a8.71 8.71 0 00-2.218-1.177c.164-.395.249-.819.25-1.247V7.562a3.281 3.281 0 10-6.563 0v1.007c0 .428.085.852.249 1.247-.792.283-1.54.68-2.218 1.177V4.77a2.022 2.022 0 012.019-2.02zm5.012 5.82a1.781 1.781 0 01-3.562 0V7.561a1.781 1.781 0 013.562 0v1.007zm1.45 4.68H4.769a2.007 2.007 0 01-1.49-.668.415.415 0 01.15-.237 7.259 7.259 0 012.498-1.254 3.21 3.21 0 004.144.002c.907.25 1.756.676 2.5 1.252.076.06.129.143.15.237a2.007 2.007 0 01-1.49.668z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">1</span></span>
-                                 </div>
-                                 <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Reviews">
-                                    <span alt="" aria-hidden="true" role="img" class="icon--16-review-v2 css-1nrzw89">
-                                       <svg width="16" height="16" class="icon_svg">
-                                          <path d="M11.231 14.75H4.769a3.524 3.524 0 01-3.519-3.52V4.77a3.523 3.523 0 013.519-3.52h6.462a3.523 3.523 0 013.519 3.52v6.46a3.523 3.523 0 01-3.519 3.52zm-6.462-12A2.022 2.022 0 002.75 4.77v6.46a2.022 2.022 0 002.019 2.02h6.462a2.022 2.022 0 002.019-2.02V4.77a2.022 2.022 0 00-2.019-2.02H4.769z"></path>
-                                          <path d="M11.226 7.229a.5.5 0 00-.404-.341l-1.64-.239-.734-1.486a.522.522 0 00-.896 0L6.818 6.65l-1.64.239a.5.5 0 00-.277.853l1.187 1.156-.28 1.633a.5.5 0 00.725.528L8 10.286l1.467.772a.498.498 0 00.725-.528l-.28-1.633L11.1 7.741a.5.5 0 00.127-.512z"></path>
-                                       </svg>
-                                    </span>
-                                    <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">1</span></span>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               
-               
-            </div>
-            
+                    </div>
+                    <?php
+                    }
+                    ?>
+                </div>
+
+            <!--<div class=" margin-r1__09f24__rN_ga margin-b3__09f24__l9v5d padding-b3__09f24__S8R2d border--bottom__09f24___mg5X border-color--default__09f24__NPAKY" style="word-break:break-word">-->
+            <!--   <div class=" margin-b3__09f24__l9v5d border-color--default__09f24__NPAKY">-->
+            <!--      <div class=" border-color--default__09f24__NPAKY" role="region" aria-label="Priyanka K.">-->
+            <!--         <div class=" arrange__09f24__LDfbs gutter-1__09f24__yAbCL vertical-align-middle__09f24__zU9sE border-color--default__09f24__NPAKY">-->
+            <!--            <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">-->
+            <!--               <div class=" css-0 border-color--default__09f24__NPAKY"><img class=" css-1pz4y59" src="https://ads.strokedev.net/template/front/images/ls.jpg" srcset="https://ads.strokedev.net/template/front/images/ls.jpg" alt="Photo of Priyanka K." height="40" width="40" loading="lazy" draggable="true"></div>-->
+            <!--            </div>-->
+            <!--            <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">-->
+            <!--               <div class=" user-passport-info border-color--default__09f24__NPAKY">-->
+            <!--                  <span class="fs-block css-ux5mu6" data-font-weight="bold">Priyanka K.</span>-->
+            <!--                  <div class=" elite-badge__09f24__dykWK display--inline-block__09f24__fEDiJ margin-l1__09f24__m8GL9 border-color--default__09f24__NPAKY"><a href="#" class="css-1q44n7j"><span class="css-1adhs7a">Elite 22</span></a></div>-->
+            <!--               </div>-->
+            <!--               <div class=" display--inline-block__09f24__fEDiJ border-color--default__09f24__NPAKY">-->
+            <!--                  <div class=" user-passport-stats__09f24__NQxB4 border-color--default__09f24__NPAKY">-->
+            <!--                     <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Friends">-->
+            <!--                        <span alt="" aria-hidden="true" role="img" class="icon--16-friends-v2 css-1nrzw89">-->
+            <!--                           <svg width="16" height="16" class="icon_svg">-->
+            <!--                              <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46a3.523 3.523 0 003.519 3.52h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zm-6.462 1.5h6.462a2.022 2.022 0 012.019 2.02v6.223a8.71 8.71 0 00-2.218-1.177c.164-.395.249-.819.25-1.247V7.562a3.281 3.281 0 10-6.563 0v1.007c0 .428.085.852.249 1.247-.792.283-1.54.68-2.218 1.177V4.77a2.022 2.022 0 012.019-2.02zm5.012 5.82a1.781 1.781 0 01-3.562 0V7.561a1.781 1.781 0 013.562 0v1.007zm1.45 4.68H4.769a2.007 2.007 0 01-1.49-.668.415.415 0 01.15-.237 7.259 7.259 0 012.498-1.254 3.21 3.21 0 004.144.002c.907.25 1.756.676 2.5 1.252.076.06.129.143.15.237a2.007 2.007 0 01-1.49.668z"></path>-->
+            <!--                           </svg>-->
+            <!--                        </span>-->
+            <!--                        <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">169</span></span>-->
+            <!--                     </div>-->
+            <!--                     <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Reviews">-->
+            <!--                        <span alt="" aria-hidden="true" role="img" class="icon--16-review-v2 css-1nrzw89">-->
+            <!--                           <svg width="16" height="16" class="icon_svg">-->
+            <!--                              <path d="M11.231 14.75H4.769a3.524 3.524 0 01-3.519-3.52V4.77a3.523 3.523 0 013.519-3.52h6.462a3.523 3.523 0 013.519 3.52v6.46a3.523 3.523 0 01-3.519 3.52zm-6.462-12A2.022 2.022 0 002.75 4.77v6.46a2.022 2.022 0 002.019 2.02h6.462a2.022 2.022 0 002.019-2.02V4.77a2.022 2.022 0 00-2.019-2.02H4.769z"></path>-->
+            <!--                              <path d="M11.226 7.229a.5.5 0 00-.404-.341l-1.64-.239-.734-1.486a.522.522 0 00-.896 0L6.818 6.65l-1.64.239a.5.5 0 00-.277.853l1.187 1.156-.28 1.633a.5.5 0 00.725.528L8 10.286l1.467.772a.498.498 0 00.725-.528l-.28-1.633L11.1 7.741a.5.5 0 00.127-.512z"></path>-->
+            <!--                           </svg>-->
+            <!--                        </span>-->
+            <!--                        <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">111</span></span>-->
+            <!--                     </div>-->
+            <!--                     <div class=" display--inline-block__09f24__fEDiJ margin-r1__09f24__rN_ga border-color--default__09f24__NPAKY" aria-label="Photos">-->
+            <!--                        <span alt="" aria-hidden="true" role="img" class="icon--16-photos-v2 css-1nrzw89">-->
+            <!--                           <svg width="16" height="16" class="icon_svg">-->
+            <!--                              <path d="M5.076 6.674a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"></path>-->
+            <!--                              <path d="M11.231 1.25H4.769A3.523 3.523 0 001.25 4.77v6.46c.002.441.087.878.252 1.287l-.003.003.005.005a3.519 3.519 0 003.265 2.225h6.462a3.524 3.524 0 003.519-3.52V4.77a3.523 3.523 0 00-3.519-3.52zM2.75 11.23V4.77a2.022 2.022 0 012.019-2.02h6.462a2.022 2.022 0 012.019 2.02v4.096l-1.363-1.08a4.097 4.097 0 00-5.3.163l-3.822 3.433c-.004-.05-.015-.1-.015-.152zm8.481 2.02H4.769a2 2 0 01-1.298-.486l4.118-3.7a2.6 2.6 0 013.365-.103l2.296 1.82v.45a2.022 2.022 0 01-2.019 2.019z"></path>-->
+            <!--                           </svg>-->
+            <!--                        </span>-->
+            <!--                        <span class=" display--inline__09f24__c6N_k padding-l0-5__09f24__tBn3z border-color--default__09f24__NPAKY"><span class=" css-1fnccdf" data-font-weight="semibold">140</span></span>-->
+            <!--                     </div>-->
+            <!--                  </div>-->
+            <!--               </div>-->
+            <!--            </div>-->
+            <!--         </div>-->
+            <!--      </div>-->
+            <!--   </div>-->
+            <!--   <div class=" arrange__09f24__LDfbs gutter-1-5__09f24__vMtpw margin-b1__09f24__vaLrm border-color--default__09f24__NPAKY">-->
+            <!--      <div class=" arrange-unit__09f24__rqHTg border-color--default__09f24__NPAKY">-->
+            <!--         <span class=" display--inline__09f24__c6N_k border-color--default__09f24__NPAKY">-->
+            <!--            <div class=" i-stars__09f24__M1AR7 i-stars--regular-5__09f24__tKNMk border-color--default__09f24__NPAKY overflow--hidden__09f24___ayzG" aria-label="5 star rating" role="img"><img class=" offscreen__09f24__gZT9P" src="https://s3-media0.fl.yelpcdn.com/assets/public/stars_v2.yji-59bbc2cf8e3d4be04fcc.png" width="132" height="560" alt=""></div>-->
+            <!--         </span>-->
+            <!--      </div>-->
+            <!--      <div class=" arrange-unit__09f24__rqHTg arrange-unit-fill__09f24__CUubG border-color--default__09f24__NPAKY">-->
+            <!--         <p class=" css-chan6m">7/18/2022</p>-->
+            <!--      </div>-->
+            <!--   </div>-->
+            <!--   <div class=" border-color--default__09f24__NPAKY">-->
+            <!--      <div class=" border-color--default__09f24__NPAKY" role="region" aria-live="polite" id="expander-link-content-a4ca5e1e-1032-4525-9399-3bfeb43ab2fb">-->
+            <!--         <div class=" border-color--default__09f24__NPAKY">-->
+            <!--            <p class=" css-2sacua">Tried their amazing vegetarian burger today as takeout, and I'm an instant fan. I didn't need to add sauces to give it flavor since it had its own personality!</p>-->
+            <!--            <p class=" css-2sacua">My husband tried out the chicken burger which he thoroughly enjoyed as well.</p>-->
+            <!--            <p class=" css-2sacua">Honestly I was starving and I could have had two of the burgers to feel full.</p>-->
+            <!--            <p class=" css-qgunke">Can't wait to check out this place in person!</p>-->
+            <!--         </div>-->
+            <!--      </div>-->
+            <!--      <button class=" css-105z2ub" aria-expanded="true" aria-controls="expander-link-content-a4ca5e1e-1032-4525-9399-3bfeb43ab2fb" type="submit">-->
+            <!--         <span class="css-15j7fnr">-->
+            <!--            <p class=" css-war30n" data-font-weight="semibold">Read less</p>-->
+            <!--         </span>-->
+            <!--      </button>-->
+            <!--   </div>-->
+            <!--</div>-->
+           
             
             
             
@@ -676,3 +423,48 @@
       </div>
    </aside>
 </div>
+<script>
+    $(function () {
+ 
+  $("#rateYo").rateYo({
+    starWidth: "40px",
+    fullStar: true,
+    onSet: function (rating, rateYoInstance) {
+        $('#rate').val(rating);
+    }
+  });
+ 
+});
+$('#rate_form').click(function(){
+    var form = $('form');
+    var here = $(this);
+    $.ajax({
+				url: form.attr('action')+'?'+form.serialize(), // form action url
+				type: 'POST', // form submit method get/post
+				dataType: 'html', // request type html/json/xml
+				data: form.serialize(), // serialize form data 
+				cache       : false,
+				contentType : false,
+				processData : false,
+				beforeSend: function() {
+					here.addClass('disabled');
+					here.html('submitting'); // change submit button text
+				},
+				success: function(data) {
+					here.fadeIn();
+					here.html('Post Review');
+					here.removeClass('disabled');
+					if(data == '1'){
+						notify('Review add successfully!','success','bottom','right');
+						window.location.replace("<?php echo $this->crud_model->product_link($pro['product_id']); ?>");
+
+					}else {
+						notify(data,'warning','bottom','right');
+					}
+				},
+				error: function(e) {
+					console.log(e)
+				}
+			});
+});
+</script>

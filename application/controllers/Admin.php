@@ -13,6 +13,7 @@ class Admin extends CI_Controller
 
     function __construct()
     {
+        
         parent::__construct();
         $this->load->database();
         $this->load->library('spreadsheet');
@@ -31,11 +32,12 @@ class Admin extends CI_Controller
     /* index of the admin. Default: Dashboard; On No Login Session: Back to login page. */
     public function index()
     {
-        
         if ($this->session->userdata('admin_login') == 'yes') {
             $page_data['page_name'] = "dashboard";
+            
             $this->load->view('back/index', $page_data);
         } else {
+            
             $page_data['control'] = "admin";
             $this->load->view('back/login',$page_data);
         }
@@ -1111,10 +1113,17 @@ class Admin extends CI_Controller
             // $this->crud_model->set_category_data(0);
             recache();
         } else if ($para1 == 'edit') {
-            $page_data['product_data'] = $this->db->get_where('product', array(
-                'product_id' => $para2
-            ))->result_array();
-            $this->load->view('back/admin/product_edit', $page_data);
+             $sing = $this->db->where('product_id' , $para2)->get('product')->row();
+            //  var_dump($sing);
+            //  die();
+            $attrs = $this->db->where('product_id' , $para2)->get('attribute_to_values')->result_array();
+            $page_data['product_data'] = $this->db->get_where('product', array('product_id' => $para2))->row();
+            // var_dump($page_data['product_data']);
+            // die();
+            $page_data['row'] =(array) $sing;
+            $page_data['brands'] =  $this->db->get('category')->result_array();
+            $page_data['page_name']   = ($sing->is_bpage)?"bpage_edit":"product_edit";
+            $this->load->view('back/index', $page_data);
         } else if ($para1 == 'view') {
             $page_data['product_data'] = $this->db->get_where('product', array(
                 'product_id' => $para2
@@ -1157,7 +1166,11 @@ class Admin extends CI_Controller
             foreach ($products as $row) {
                 $category = $row['category'];
                 $cat = $this->db->where('category_id',$category)->get('category')->row();
-                   $img = $this->crud_model->file_view('product',$row['product_id'],'','','thumb','src','multi','one'); 
+                   $img = $this->crud_model->get_img($row['comp_logo']);
+                   if(isset($img->secure_url))
+                            {
+                                $img = $img->secure_url;
+                            }
                 $res    = array(
                              'item'        => '',
                              'getMainPrice'        => '',
@@ -1225,13 +1238,14 @@ class Admin extends CI_Controller
                 }
 
                 //add html for action
+                // $edit = base_url('admin/product/edit/'.$row['product_id']);
                 $res['options'] = "
                             <a href='".base_url('home/product_view/').$row['product_id']."'\"
                                 class=\"btn btn-info btn-xs btn-labeled fa fa-eye\" data-toggle=\"tooltip\" data-original-title=\"Delete\" data-container=\"body\"> 
                                     ".translate('view')."
                             </a>
                             <a class=\"btn btn-success btn-xs btn-labeled fa fa-wrench\" data-toggle=\"tooltip\"
-                                onclick=\"ajax_set_full('edit','".translate('edit_product')."','".translate('successfully_edited!')."','product_edit','".$row['product_id']."');proceed('to_list');\" data-original-title=\"Edit\" data-container=\"body\">
+                            href='".base_url('admin/product/edit/').$row['product_id']."'\"  data-original-title=\"Edit\" data-container=\"body\">
                                     ".translate('edit')."
                             </a>
 
@@ -4252,6 +4266,14 @@ class Admin extends CI_Controller
                         'value' => $this->input->post('wave_paragaph')
                     ));
                 }
+                if($_REQUEST['section_bullets'])
+                {
+                    $this->db->where('type', "section_bullets");
+                    $this->db->update('ui_settings', array(
+                        'value' => $this->input->post('section_bullets')
+                    ));
+                }
+               
                 $this->load->library('cloudinarylib');
                 if($_FILES["par3"]['tmp_name']){
                     if(!demo()){
@@ -4274,6 +4296,111 @@ class Admin extends CI_Controller
                     }
                 }
                 recache();
+            }
+            elseif ($para2 == 'last_section') {
+                if($_REQUEST['last_heading'])
+                {
+                    $this->db->where('type', "last_heading");
+                    $this->db->update('ui_settings', array(
+                        'value' => $this->input->post('last_heading')
+                    ));
+                }
+                if($_REQUEST['last_paragaph'])
+                {
+                    $this->db->where('type', "last_paragaph");
+                    $this->db->update('ui_settings', array(
+                        'value' => $this->input->post('last_paragaph')
+                    ));
+                }
+                if($_REQUEST['last_info'])
+                {
+                    $this->db->where('type', "last_info");
+                    $this->db->update('ui_settings', array(
+                        'value' => $this->input->post('last_info')
+                    ));
+                }
+                if($_REQUEST['last_bullets'])
+                {
+                    $this->db->where('type', "last_bullets");
+                    $this->db->update('ui_settings', array(
+                        'value' => $this->input->post('last_bullets')
+                    ));
+                }
+                if($_REQUEST['last_button_text'])
+                {
+                    $this->db->where('type', "last_button_text");
+                    $this->db->update('ui_settings', array(
+                        'value' => $this->input->post('last_button_text')
+                    ));
+                }
+                if($_REQUEST['last_button_url'])
+                {
+                    $this->db->where('type', "last_button_url");
+                    $this->db->update('ui_settings', array(
+                        'value' => $this->input->post('last_button_url')
+                    ));
+                }
+                $this->load->library('cloudinarylib');
+                if($_FILES["par3"]['tmp_name']){
+                    if(!demo()){
+                        $path = 'uploads/others/wave_section_img.jpg';
+                        move_uploaded_file($_FILES["par3"]['tmp_name'], $path);
+                        $data = \Cloudinary\Uploader::upload($path);
+                                            if(isset($data['public_id']))
+                                            {
+                                                $logo_id = $this->crud_model->add_img($path,$data);
+                                                if($logo_id)
+                                                {
+                                                    $this->db->where('type', "last_image");
+                            $this->db->update('ui_settings', array(
+                                'value' => $logo_id
+                            ));
+
+                                               }
+                                            }
+                        //top_banner
+                    }
+                }
+                recache();
+            }
+            elseif ($para2 == 'info_section') {
+                if($_REQUEST['infosmall_heading'])
+                {
+                    $this->db->where('type', "infosmall_heading");
+                    $this->db->update('ui_settings', array(
+                        'value' => $this->input->post('infosmall_heading')
+                    ));
+                }
+                if($_REQUEST['infomain_heading'])
+                {
+                    $this->db->where('type', "infomain_heading");
+                    $this->db->update('ui_settings', array(
+                        'value' => $this->input->post('infomain_heading')
+                    ));
+                }
+                if($_REQUEST['info_paragaph'])
+                {
+                    $this->db->where('type', "info_paragaph");
+                    $this->db->update('ui_settings', array(
+                        'value' => $this->input->post('info_paragaph')
+                    ));
+                }
+                if($_REQUEST['info_bullets'])
+                {
+                    
+                    $this->db->where('type', "info_bullets");
+                    $r = $this->db->update('ui_settings', array(
+                        'value' => $this->input->post('info_bullets')
+                    ));
+                    
+                }
+                 if($_REQUEST['buttons'])
+                {
+                    $this->db->where('type', "sectoion_btns");
+                    $this->db->update('ui_settings', array(
+                        'value' => json_encode($this->input->post('buttons'))
+                    ));
+                }
             }
             elseif ($para2 == 'home_blog') {
                 $this->db->where('type', "parallax_blog_title");

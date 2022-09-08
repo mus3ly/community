@@ -321,7 +321,7 @@
 					    markers.push(item);
 					}
 				});
-				alert(markers);
+				// alert(markers);
 				console.log(markers);
                 initMap();
             },

@@ -147,7 +147,22 @@
                     </div>
                     <b><?= (isset($cboxes[$i]['heading'])?$cboxes[$i]['heading']:''); ?></b>
                     <ul>
-                    <?= (isset($cboxes[$i]['detail'])?$cboxes[$i]['detail']:''); ?>
+                        <?php
+                        $ex = explode(',',$cboxes[$i]['detail']);
+                        if(count($ex) > 1)
+                        {
+                            foreach($ex as $k=> $v)
+                            {
+                            ?>
+                            <li><?= $v; ?></li>
+                            <?php
+                            }
+                        }
+                        else
+                        {
+                            echo $cboxes[$i]['detail'];
+                        }
+                        ?>
                     </ul>
                     <div class="bottom_path active_path">
                         <img src="<?= base_url(); ?>template/front/images/rectangle.png" alt="">
@@ -174,14 +189,21 @@
         </div>
         <div class="row">
             <div class="col-sm-6 communitybox every_business">
-                <h3>Every Business has something to <span>offer their community</span></h3>
-                <p>On Community HubLand, you list your Events, Jobs, Blogs, Properties, and more. All the basics your business needs for success</p>
+                
+                <h3><?= $this->crud_model->get_type_name_by_id('ui_settings','69','value'); ?></h3>
+                <p><?= $this->crud_model->get_type_name_by_id('ui_settings','68','value'); ?></p>
+                
                 <ul>
-                    <li><img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""> Own a business website</li>
-                    <li><img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""> Access to your business affiliate marketing platform</li>
-                    <li><img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""> Post products in shops and receive payments</li>
-                    <li><img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""> Blog away with your audience</li>
-                    <li><img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""> Post ads in any category</li>
+                    <?php
+                    $bullets =  $this->crud_model->get_type_name_by_id('ui_settings','73','value'); 
+                    $bullets = explode(',',$bullets);
+                    foreach($bullets as $k=> $v)
+                    {
+                        ?>
+                        <li><img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""><?= $v ?></li>
+                        <?php
+                    }
+                    ?>
                 </ul>
                 <b>Price?</b>
                 <h5>Less than a the cost of a breakfast a month</h5>
@@ -189,7 +211,7 @@
             <div class="col-sm-6 business_graphic">
                 <?php
                                     $img = '';
-                                            $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '66'))->row();
+                                            $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '67'))->row();
                                             if($top_banner)
                                             {
                                              $img = $this->crud_model->get_img($top_banner->value)->secure_url;
@@ -214,31 +236,48 @@
             <div class="full_circle">
                 <img src="<?= base_url(); ?>template/front/images/business-card-right.png" alt="">
             </div>
-            <p>COMMUNITY HUBLAND DIGITAL SERVICES</p>
-            <h4>Professional Business Solutions <span>Designed For You</span></h4>
-            <p class="hire_para">Hire our experienced team of programmers, digital designers, and marketing professionals, who <span>know how to deliver results. With your requirements, we will help you identify your needs to</span> reach solutions</p>
+            <p><?= $this->crud_model->get_type_name_by_id('ui_settings','74','value'); ?></p>
+            <h4><?= $this->crud_model->get_type_name_by_id('ui_settings','75','value'); ?></span></h4>
+            <p class="hire_para"><?= $this->crud_model->get_type_name_by_id('ui_settings','76','value'); ?></p>
             <div class="row">
-                <div class="col-sm-6 checkbox_tick">
-                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
-                    <h4>WEB & ENTERPRISE PORTALS</h4>
-                    <p>Incredible UX and compelling functionality under the hood</p>
+                <?php
+                    $bullets =  $this->crud_model->get_type_name_by_id('ui_settings','77','value'); 
+                    $bullets = explode(',',$bullets);
+                    
+                    foreach($bullets as $k=> $v)
+                    {
+                        $exp = explode(':',$v);
+                        ?>
+                        <div class="col-sm-6 checkbox_tick">
+                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""> 
+                    <h4><?= (isset($exp[0])?$exp[0]:''); ?></h4>
+                    <p><?= (isset($exp[1])?$exp[1]:''); ?></p>
                 </div>
-                <div class="col-sm-6 checkbox_tick">
-                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
-                    <h4>ECOMMERCE DEVELOPMENT </h4>
-                    <p>Fully customized eCommerce solution for your online store</p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6 checkbox_tick">
-                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
-                    <h4>GRAPHICS ANALYSIS</h4>
-                    <p>Solutions empowered with computer Graphic Designing</p>
-                </div>
-            </div>
+                        <?php
+                    }
+                    ?>
+                
             <div class="learn_more_btns">
-                <a href="#" class="our_projects">OUR PROJECTS</a>
-                <a href="#" class="learn_more">LEARN MORE</a>
+                <?php
+                $btns  = json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => '78'))->row()->value,true);
+                // var_dump($btns);
+                $i = 0;
+                foreach($btns as $k => $v){
+                    if($i % 2 == 0)
+                    {
+                ?>
+                <a href="<?= $v['url']; ?>" class="our_projects"><?= $v['txt'];?></a>
+                <?php
+                }
+                else
+                {
+                    ?>
+                <a href="<?= $v['url']; ?>" ><?= $v['txt'];?></a>
+
+                    <?php
+                }
+                }
+                ?>
             </div>
             <div class="bottom_circled">
                 <img src="<?= base_url(); ?>template/front/images/bottom-circled.png" alt="">
@@ -257,7 +296,7 @@
             <div class="col-sm-6 business_graphic">
             <?php
                                     $img = '';
-                                            $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '70'))->row();
+                                            $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '85'))->row();
                                             if($top_banner)
                                             {
                                              $img = $this->crud_model->get_img($top_banner->value)->secure_url;
@@ -270,31 +309,31 @@
                     </div>
             </div>
             <div class="col-sm-6 communitybox">
-                <b>ADVERTISE ON COMMUNITY HUBLAND DIRECTORY SITE</b>
-                <h3>Advertise your professional business on Community HubLand directory site</h3>
-                <p>Reach larger interested audience with a digital presence that manage, monitor and consolidate all your business in one place. Get started with us and receive:</p>
+                <b><?= $this->crud_model->get_type_name_by_id('ui_settings','79','value'); ?></b>
+                <h3><?= $this->crud_model->get_type_name_by_id('ui_settings','80','value'); ?></h3>
+                <p><?= $this->crud_model->get_type_name_by_id('ui_settings','82','value'); ?></p>
                 <ul>
-                    <li>
-                        <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
-                         ADVERTISEMENT SPOT
-                         <p>Get listed on main directory site under your industry</p>
-                    </li>
-                    <li>
-                        <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
-                         WEB PAGE
-                         <p>You will be provided a web page where you can list more information about your business</p>
-                    </li>
-                    <li>
-                        <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
-                         AFFILIATE 
-                         <p>Become an affiliate and earn great rewards Advertise with Us</p>
-                    </li>
+                    <?php
+                    $bullets =  $this->crud_model->get_type_name_by_id('ui_settings','81','value'); 
+                    $bullets = explode(',',$bullets);
+                    foreach($bullets as $k=> $v)
+                    {
+                        $exp = explode(':',$v);
+                        ?>
+                        <div class="col-sm-6 checkbox_tick">
+                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""> 
+                    <h4  style="color:black;"><?= (isset($exp[0])?$exp[0]:''); ?></h4>
+                    <p style="color:black;"><?= (isset($exp[1])?$exp[1]:''); ?></p>
+                </div>
+                        <?php
+                    }
+                    ?>
                 </ul>
                 <div class="learn_more_btns">
-                <a href="#" class="our_projects">Advertise  With Us</a>
-                    <div class="purple_dot">
-                        <img src="<?= base_url(); ?>template/front/images/purple.png" alt="">
-                    </div>
+                <a href="<?= $this->crud_model->get_type_name_by_id('ui_settings','84','value'); ?>" class="our_projects"><?= $this->crud_model->get_type_name_by_id('ui_settings','83','value'); ?></a>
+                    <!--<div class="purple_dot">-->
+                    <!--    <img src="<?= base_url(); ?>template/front/images/purple.png" alt="">-->
+                    <!--</div>-->
                 </div>
                 
             </div>

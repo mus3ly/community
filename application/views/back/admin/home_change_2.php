@@ -11,14 +11,14 @@
                     <a data-toggle="tab" href="#tabb-4"><?php echo translate('section2_boxes'); ?></a>
                 </li>
                 <li>
-                    <a data-toggle="tab" href="#tabb-3"><?php echo translate('digital_services'); ?></a>
+                    <a data-toggle="tab" href="#tabb-31"><?php echo translate('digital_services'); ?></a>
                 </li>
                 <li>
-                    <a data-toggle="tab" href="#tabb-31"><?php echo translate('wave_section'); ?></a>
+                    <a data-toggle="tab" href="#tabb-35"><?php echo translate('last_section'); ?></a>
                 </li>
 
                 <li>
-                    <a data-toggle="tab" href="#tabb-32"><?php echo translate('advertise_section'); ?></a>
+                    <a data-toggle="tab" href="#tabb-33"><?php echo translate('info_section'); ?></a>
                 </li>
                  <li>
                     <a data-toggle="tab" href="#tabb-10"><?php echo translate('product_bundle'); ?></a>
@@ -359,6 +359,12 @@
                                     <textarea name="wave_paragaph"  class="form-control"><?php echo $this->crud_model->get_type_name_by_id('ui_settings','68','value'); ?></textarea>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" ><?php echo translate('section_bullets');?></label>
+                                <div class="col-sm-6">
+                                    <textarea name="section_bullets"  class="form-control"><?php echo $this->crud_model->get_type_name_by_id('ui_settings','73','value'); ?></textarea>
+                                </div>
+                            </div>
                                 <div class="form-group margin-top-10">
                                     <label class="col-sm-3 control-label margin-top-10" for="demo-hor-inputemail"><?php echo translate('background_image');?></label>
                                     <?php
@@ -386,6 +392,177 @@
                                         <div class="col-sm-2"></div>
                                     </div>
                                 </div>
+                                <div class="form-group col-sm-12">
+                                    <span class="btn btn-success btn-labeled fa fa-check submitter pull-right enterer" type= data-ing='<?php echo translate('updating'); ?>' data-msg='<?php echo translate('search_section_updated!'); ?>'>
+                                        <?php echo translate('update');?>
+                                    </span>
+                                </div>
+                            </form>
+                            </div>
+                    </div>
+                </div>
+                <div id="tabb-35" class="tab-pane fade">
+                    <div class="row">
+                        <div class="col-md-12 form-horizontal">
+                            <?php
+                                echo form_open(base_url() . 'admin/ui_settings/ui_home/last_section/', array(
+                                    'class' => 'form-horizontal',
+                                    'method' => 'post',
+                                    'id' => '',
+                                    'enctype' => 'multipart/form-data'
+                                ));
+                            ?>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" ><?php echo translate('wave_heading');?></label>
+                                <div class="col-sm-6">
+                                    <input type="texxt" name="last_heading" value="<?php echo $this->crud_model->get_type_name_by_id('ui_settings','79','value'); ?>"  class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" ><?php echo translate('wave_paragaph');?></label>
+                                <div class="col-sm-6">
+                                    <textarea name="last_paragaph"  class="form-control"><?php echo $this->crud_model->get_type_name_by_id('ui_settings','80','value'); ?></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" ><?php echo translate('section_paragaph');?></label>
+                                <div class="col-sm-6">
+                                    <textarea name="last_info"  class="form-control"><?php echo $this->crud_model->get_type_name_by_id('ui_settings','82','value'); ?></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" ><?php echo translate('section_bullets');?></label>
+                                <div class="col-sm-6">
+                                    <textarea name="last_bullets"  class="form-control"><?php echo $this->crud_model->get_type_name_by_id('ui_settings','81','value'); ?></textarea>
+                                </div>
+                            </div>
+                                <div class="form-group margin-top-10">
+                                    <label class="col-sm-3 control-label margin-top-10" for="demo-hor-inputemail"><?php echo translate('image');?></label>
+                                    <?php
+                                    $img = '';
+                                            $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '85'))->row();
+                                            if($top_banner)
+                                            {
+                                             $img = $this->crud_model->get_img($top_banner->value)->secure_url;
+                                         }
+
+                                        ?>
+                                    <div class="col-sm-9">
+                                        <div class="col-sm-5" style="margin:2px;padding:2px;">
+                                            <img class="img-responsive img-md img-border img_show2" style="width:150px;height:150px" src="<?php echo $img; ?>">
+                                        </div>
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <div class="col-sm-2">
+                                            <span class="pull-left btn btn-default btn-file margin-top-10">
+                                                <?php echo translate('select_image');?>
+                                                <input type="file" name="par3" class="form-control imgInp2">
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-2"></div>
+                                    </div>
+                                </div>
+                          <div class="form-group">
+                                <label class="col-sm-3 control-label" ><?php echo translate('Button');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="last_button_text" placeholder="Button Text" value="<?php echo $this->crud_model->get_type_name_by_id('ui_settings','83','value'); ?>">
+                                    <input type="text" class="form-control" name="last_button_url" placeholder="Url" value="<?php echo $this->crud_model->get_type_name_by_id('ui_settings','84','value'); ?>">
+                                </div>
+                            </div>
+                                <div class="form-group col-sm-12">
+                                    <span class="btn btn-success btn-labeled fa fa-check submitter pull-right enterer" type= data-ing='<?php echo translate('updating'); ?>' data-msg='<?php echo translate('search_section_updated!'); ?>'>
+                                        <?php echo translate('update');?>
+                                    </span>
+                                </div>
+                            </form>
+                            </div>
+                    </div>
+                </div>
+                <div id="tabb-33" class="tab-pane fade">
+                    <div class="row">
+                        <div class="col-md-12 form-horizontal">
+                            <?php
+                                echo form_open(base_url() . 'admin/ui_settings/ui_home/info_section/', array(
+                                    'class' => 'form-horizontal',
+                                    'method' => 'post',
+                                    'id' => '',
+                                    'enctype' => 'multipart/form-data'
+                                ));
+                            ?>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" ><?php echo translate('small_heading');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="infosmall_heading" value="<?php echo $this->crud_model->get_type_name_by_id('ui_settings','74','value'); ?>"  class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" ><?php echo translate('main_heading');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="infomain_heading" value="<?php echo $this->crud_model->get_type_name_by_id('ui_settings','75','value'); ?>"  class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" ><?php echo translate('section_paragaph');?></label>
+                                <div class="col-sm-6">
+                                    <textarea name="info_paragaph"  class="form-control"><?php echo $this->crud_model->get_type_name_by_id('ui_settings','76','value'); ?></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label" ><?php echo translate('section_bullets');?></label>
+                                <div class="col-sm-6">
+                                    <textarea name="info_bullets"  class="form-control"><?php echo $this->crud_model->get_type_name_by_id('ui_settings','77','value'); ?></textarea>
+                                </div>
+                            </div>
+                              <div class="form-group">
+                                <label class="col-sm-3 control-label" ><?php echo translate('Buttons');?></label>
+                                <div class="col-sm-6">
+                                <div id="button_div" >
+                                    <?php
+                                    // var_dump($this->db->get_where('ui_settings',array('ui_settings_id' => '78'))->row()->value);
+                                        if($this->db->get_where('ui_settings',array('ui_settings_id' => '78'))->row()->value)
+                                        {
+                                            $btns  = json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => '78'))->row()->value,true);
+                                            foreach ($btns as $key => $value) {
+                                                if($key == 0)
+                                                {
+                                                    ?>
+                                                    <div class="feature_single" >
+                                                        <input type="text" class="form-control" value="<?= $value['txt'] ?>" name="buttons[0][txt]" style="width:45%;float:left;" placeholder="Text" />
+                                                        <input type="text" class="form-control" value="<?= $value['url'] ?>" name="buttons[0][url]" style="width:45%;float:left;" placeholder="Url" />     
+                                                        <button style="width:4px;" type="button" class="btn btn-success" onclick="add_btn()" >+</button>
+                                                    </div>
+                                                    <?php
+                                                }
+                                                else{
+                                                    ?>
+                                                    <div class="feature_single"  id="bid_<?= $key ?>">
+                                                        <input type="text" class="form-control" value="<?= $value['txt'] ?>" name="buttons[<?= $key ?>][txt]" style="width:45%;float:left;" placeholder="Heading" />
+                                                        <input type="text" class="form-control" value="<?= $value['url'] ?>" name="buttons[<?= $key ?>][url]" style="width:45%;float:left;" placeholder="Url" />     
+                                                        <button style="width:4px;"  type="button" class="btn btn-danger" onclick="remove_btn('<?= $key; ?>')" >-</button>
+                                                    </div>
+                                              
+                                                    <?php
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {?>
+                                        <div class="feature_single" >
+                                            <input type="text" class="form-control" name="buttons[0][txt]" style="width:45%;float:left;" placeholder="Text" />
+                                            <input type="text" class="form-control" name="buttons[0][url]" style="width:45%;float:left;" placeholder="Url" />
+                                            <button style="width:4px;"  type="button" class="btn btn-success" onclick="add_btn()" >+</button>
+                                        </div>
+                                        <?php  
+                                        }
+                                        ?>
+                                    </div>
+                                    </div>
+                            </div>
+
                                 <div class="form-group col-sm-12">
                                     <span class="btn btn-success btn-labeled fa fa-check submitter pull-right enterer" type= data-ing='<?php echo translate('updating'); ?>' data-msg='<?php echo translate('search_section_updated!'); ?>'>
                                         <?php echo translate('update');?>
@@ -462,7 +639,7 @@
                             ));
                         ?>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label"><?php echo translate('vandor_(_show_/_hide_)');?></label>
+                                <label class="col-sm-3 control-label"><?php echo translate('vendor_(_show_/_hide_)');?></label>
                                 <div class="col-sm-6">
                                     <input id="feature_25" 
                                         data-id="25" class='sw2' 
@@ -1267,6 +1444,43 @@ $(document).ready(function() {
     set_checker();
     disable_selected_cat('');
 });
+
+    var button = 0;
+    <?php
+    if($btns)
+    {
+        ?>
+        button = <?= count($btns) -1; ?>;
+        <?php
+    }
+    ?>
+    function remove_btn(item)
+    {
+        button--;
+        var mid =  '#bid_'+item;
+        $(mid).remove();
+    }
+    function add_btn()
+    {
+        if(button >= 2)
+        {
+            alert('You can add maximum 3 buttons');
+        }
+        else
+        {
+            
+            button = button +1;
+        var html = '<div class="feature_single" id="bid_'+ button+'">';
+        html += '<input type="text" class="form-control" name="buttons['+button+'][txt]" style="width:45%;float:left;" placeholder="Text" />';
+        html += '<input type="text" class="form-control" name="buttons['+button+'][url]" style="width:45%;float:left;" placeholder="Url" />';
+        html += '<button style="width:4px;"  type="button" class="btn btn-danger" onclick="remove_btn('+button+')" >-</buuton>';
+                                       html+= '</div>';
+                                                   alert();
+                          $('#button_div').append(html);
+                                       
+        }
+    }
+    
 </script>
 <style>
     .element_box{

@@ -25,7 +25,8 @@
 		<div class="boxed" id="fol">
 			<!--CONTENT CONTAINER-->
 			<div>
-			<?php include $this->session->userdata('title').'/'.$page_name.'.php'; ?>
+			<?php 
+			include $this->session->userdata('title').'/'.$page_name.'.php'; ?>
 			</div>
 			<!--END CONTENT CONTAINER-->
 			

@@ -56,6 +56,30 @@ class Home extends CI_Controller
     }
 
     /* FUNCTION: Loads Homepage*/
+    public function add_rate()
+    {
+        if(isset($_GET['rating']) && isset($_GET['comment']) && isset($_GET['pid']) && $this->session->userdata('user_login') == "yes")
+        
+        {
+            $in =  array(
+                'comment' =>$_GET['comment'],
+                'rating' =>$_GET['rating'],
+                'product_id' =>$_GET['pid'],
+                'user_id' =>$this->session->userdata('user_id'),
+                );
+                $r = $this->db->insert('user_rating', $in);
+                if($r)
+                {
+                    echo 1;
+                    exit();
+                }
+        }
+        else
+        {
+            echo 'invalid request!';
+            exit();
+        }
+    }
     public function latest_load()
     {
         
@@ -2655,6 +2679,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         }
         $product_data = $this->db->get_where('product', array('product_id' => $para1, 'status' => 'ok'));
         $product_data = $this->db->get_where('product', array('product_id' => $para1));
+        
         $this->db->where('product_id', $para1);
         $this->db->update('product', array(
             'number_of_view' => $product_data->row()->number_of_view + 1,

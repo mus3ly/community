@@ -22,7 +22,7 @@
                                             foreach($brands as $row4){
                                                 if($i<5){
                                         ?>
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <a href="#" data-gal="prettyPhoto" class="brand-box">
                                                 <img class="img-responsive" src="<?php echo base_url();?>uploads/brand_image/<?php echo $this->crud_model->get_type_name_by_id('brand',$row4[0],'logo'); ?>" alt=""/>
                                             </a>

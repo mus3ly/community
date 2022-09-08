@@ -4,6 +4,11 @@ $footer_category =  $this->db->get_where('general_settings',array('type' => 'foo
 $footer_page =  $this->db->get_where('general_settings',array('type' => 'footer_page'))->row()->value;
 $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_disc'))->row()->value;
 ?>
+<style type="text/css">
+
+.footer_warp {
+    background-color: url(../images/footrer-bg.png), linear-gradient(190deg, #7c22989e, #1b198357);}
+</style>
 <footer class="footer_warp">
     <div class="container">
         <div class="row">

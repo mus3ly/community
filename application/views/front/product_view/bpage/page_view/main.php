@@ -1,5 +1,4 @@
 <?php
-
 if(isset($_GET['test']))
 {
     include "index_new.php";
@@ -12,6 +11,8 @@ if(isset($product_data[0]))
 {
     $pro = $product_data[0];
 }
+
+$pros = $this->db->where('added_by',$pro['added_by'])->get('product')->result_array();
 //galary
 $imgs = $this->db->where('pid',$pro['product_id'])->get('product_to_images')->result_array();
 $logo = '';
@@ -80,7 +81,15 @@ if(true)
     <link rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/style.css" />
 <style type="text/css">
+    .gray{color:gray!important;}
 	.ellipse,.rounded_box{display: none;}
+	.fa-brands{font-size: 35px; padding: 17px;}
+	.fa-facebook-f{color:#3b5998;}
+	.fa-twitter{color:	#55acee;}
+	.fa-google{color:#dc4e41}
+	.fa-linkedin-in{color:#0C63BC;}
+	.social_media{margin-left: 40%;}
+	.rating {direction: ltr!important;}
 </style>
 </head>
 <body id="page-name">
@@ -121,7 +130,13 @@ if(true)
                         
                         $user_id = $this->session->userdata('user_id');
                     ?>
-                        <li><a href="#"><i class="fa-solid fa-star"></i> Write a review</a></li>
+                        <li><a href="<?php echo $this->crud_model->product_link($pro['product_id']); ?>?rate=1"><i class="fa-solid fa-star"></i> Write a review</a></li>
+                        <?php
+                    }
+                    else
+                    {
+                        ?>
+                        <li><a href="<?php echo base_url('home/login_set/login'); ?>"><i class="fa-solid fa-star"></i> Write a review</a></li>
                         <?php
                     }
                         ?>
@@ -314,7 +329,22 @@ if(true)
                     </div>
                     <b><?= (isset($cboxes[$i]['fhead'])?$cboxes[$i][' fhead']:''); ?> </b>
                     <ul>
-                    <?= (isset($cboxes[$i]['fdet'])?$cboxes[$i]['fdet']:''); ?>
+                        <?php
+                        $ex = explode(',',$cboxes[$i]['fdet']);
+                        if(count($ex) > 1)
+                        {
+                            foreach($ex as $k=> $v)
+                            {
+                            ?>
+                            <li><?= $v; ?></li>
+                            <?php
+                            }
+                        }
+                        else
+                        {
+                            echo $cboxes[$i]['fdet'];
+                        }
+                        ?>
                     </ul>
                     <div class="bottom_path active_path">
                         <img src="<?= base_url(); ?>template/front/images/rectangle.png" alt="">
@@ -334,6 +364,38 @@ if(true)
     </div>
 </div>
 
+<div class="social_media">
+    <div class="container">
+       <?php
+       if(isset($pro['facbook']) && !empty($pro['facbook'])){
+       ?>
+        <span><a href="<?= $pro['facbook'];?>"><i class="fa-brands fa-facebook-f"></i></a></span>
+        <?php
+       }
+        ?>
+         <?php
+       if(isset($pro['twitter']) && !empty($pro['twitter'])){
+       ?>
+        <span><a href="<?= $pro['twitter'];?>"><i class="fa-brands fa-twitter"></i></a></span>
+         <?php
+       }
+        ?>
+         <?php
+       if(isset($pro['google']) && !empty($pro['google'])){
+       ?>
+        <span><a href="<?= $pro['google'];?>"><i class="fa-brands fa-google"></i></a></span>
+         <?php
+       }
+        ?>
+         <?php
+       if(isset($pro['linkedin']) && !empty($pro['linkedin'])){
+       ?>
+        <span><a href="<?= $pro['linkedin'];?>"><i class="fa-brands fa-linkedin-in"></i></a></span>
+         <?php
+       }
+        ?>
+    </div>
+</div>
                     <div class="orange_pathwrap">
                         <div class="container">
                             <div class="iframe_box">
@@ -404,9 +466,15 @@ if(true)
                             <div class="shape_doted_mix">
                                 <img src="<?= base_url(); ?>template/front/images/mixcher-orange.png" alt="">
                             </div>
-                            <h4>Do You Need Custom Built Web Solutions?</h4>
-                            <p>We match your project to the best developer, designer or digital marketer on our database. We manage your project requirements from start to finish</p>
-                            <a href="#">GET IN TOUCH</a>
+                            
+                            <h4><?= $pro['info_head']; ?></h4>
+                            <p><?= $pro['info_desc']; ?></p>
+                            <?php
+                            if(isset($pro['info_button']) && !empty($pro['info_button']) && isset($pro['button_url']) &&!empty($pro['button_url'])){
+                            ?><a href="<?= $pro['button_url']; ?>"><?= $pro['info_button']; ?></a>
+                            <?php
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="purple_line" id="intrested">
@@ -462,31 +530,64 @@ if(true)
             </div>
             <div id="tab_2" class="tab-content__box">
                 <div class="container">
-                    <div class="emptyspace">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut lablamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                </div>
+                    <?php
+                            foreach($pros as $sing)
+                            {
+                            
+                            $cats = explode(',', $sing['category']);
+                            if (in_array(407, $cats) && $sing['is_bpage'] == 0)
+                              {
+                                  echo $this->html_model->product_box($sing, 'grid', 6);
+                              }
+                            }
+                              ?>
+                   
                 </div>
             </div>
             <div id="tab_3" class="tab-content__box">
-                <div class="container">
-                    <div class="emptyspace">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut lablamco laur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                </div>
-                </div>
+                                    <div class="container">
+                        <div class="row">
+                            <?php
+                            $blog = $this->db->where('added_by',$pro['added_by'])->get('blog')->result_array();
+                            // var_dump($blog);
+                            foreach($blog as $k => $v){
+                            ?>
+                            <div class="col-sm-4 bottom_box">
+                                <div class="inner_bottombox">
+                                    <a href="<?= base_url('home/blog_view/'.$v['blog_id']);?>" target="_blank"><img src="<?php echo $this->crud_model->file_view('blog',$v['blog_id'],'','','thumb','src','',''); ?>" alt=""></a>
+                                    <div class="sidegapp_bottom">
+                                        <h5><?= $v['date'];?></h5>
+                                        <h3><?= $v['title'];?></h3>
+                                        <p><b><?= substr(strip_tags($v['summery']),0, 200);?>  .....</b></p>
+                                        <a href="<?= base_url('home/blog_view/'.$v['blog_id']);?>" target="_blank">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php
+                            }
+                            ?>
+                        </div>
+                        <div class="info_tooltip">
+                            <a href="#"><img src="<?= base_url(); ?>template/front/images/info-orange.png" alt=""></a>
+                        </div>
+                    </div>
+
                 
             </div>
             <div id="tab_4" class="tab-content__box">
                 <div class="container">
-                    <div class="emptyspace">
-                    <p>Lorem ipsum dolor siaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                </div>
+                    <?php
+                            foreach($pros as $sing)
+                            {
+                            
+                            $cats = explode(',', $sing['category']);
+                            if (in_array(78, $cats) && $sing['is_bpage'] == 0)
+                              {
+                                  echo $this->html_model->product_box($sing, 'grid', 6);
+                              }
+                            }
+                              ?>
+                   
                 </div>
                 
             </div>
@@ -503,14 +604,69 @@ if(true)
             </div>
             <div id="tab_6" class="tab-content__box">
                 <div class="container">
-                    <div class="emptyspace">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut lablamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis eprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <div class="clients_box">
+                    <h3>Take a look what our client Says</h3>
+                    <h4>Reviews</h4>
+                    
                 </div>
+                <div class="row">
+                    <?php
+                    // var_dump($pro);
+                    $rating = $this->db->where('product_id', $pro['product_id'])->get('user_rating')->result_array();
+                    foreach($rating as $k=> $v){
+                    ?>
+                    <div class="col-sm-4 cilent_gapp">
+                        <div class="info_client">
+                            <?php
+                            
+                            $user_id = $v['user_id'];
+                            $users = $this->db->where('user_id', $user_id)->get('user')->row();
+                            // var_dump($users);
+                            ?>
+                            <img src="
+                            <?php 
+                                // $user_id = $v['user_id'];
+                                if(file_exists('uploads/user_image/user_'.$user_id.'.jpg')){ 
+                                    
+                                    echo $this->crud_model->file_view('user',$user_id,'100','100','no','src','','','.jpg').'?t='.time();
+                                } else if(empty($row['fb_id']) !== true){ 
+                                    echo 'https://graph.facebook.com/'. $row['fb_id'] .'/picture?type=large';
+                                } else if(empty($row['g_id']) !== true ){
+                                    echo $row['g_photo'];
+                                } else {
+                                    echo base_url().'uploads/user_image/default.jpg';
+                                } 
+                            ?>
+                            " alt="">
+                            <h4><?= $users->username?></h4>
+                            <p>“<?= $v['comment'];?>”</p>
+                            <div class="rating">
+                                <?php
+                                for($i =1; $i<=5;$i++)
+                                {
+                                    if($i<= $v['rating'])
+                                    {
+                                        ?>
+                                        <i class="fa fa-star"></i>
+                                        <?php
+                                    }
+                                    else
+                                    {
+                                        ?>
+                                        <i class="fa fa-star gray"></i>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            <span><?= $v['rating'];?></span>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    }
+                    ?>
                 </div>
+            </div>
                 
             </div>
 </div>

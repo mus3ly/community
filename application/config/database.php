@@ -88,7 +88,6 @@ $db['default'] = array(
 $ip_server = $_SERVER['SERVER_ADDR'];
 
 if($ip_server == '::1' || $ip_server == "127.0.0.1")
-
 {
 
 	
@@ -97,7 +96,7 @@ $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => 'root',
-	'password' => '',
+	'password' => 'root',
 	'database' => 'chl',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

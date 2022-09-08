@@ -2,13 +2,13 @@
     <img src="<?= base_url(); ?>template/front/images/doted-lines.png" alt="">
 </div>
 <div class="ellipse">
-    <img src="<?= base_url(); ?>template/front/images/Ellipse.png" alt="">
+    <img src="<?= base_url(); ?>template/front/images/headar_left.png" alt="">
 </div>
 <div class="lines_shape">
     <img src="<?= base_url(); ?>template/front/images/lines-shape.png" alt="">
 </div>
 <div class="rounded_box">
-    <img src="<?= base_url(); ?>template/front/images/rounded.png" alt="">
+    <img src="<?= base_url(); ?>template/front/images/headar_top.png" width="650px" alt="">
 </div>
 <style>.arrow-down:before, .arrow-down:after{
    border-right: 2px solid;
@@ -27,7 +27,78 @@
 .arrow-down:after {
     margin: 5px 0px 0px -6px;
     transform: rotate(140deg);
-}</style>
+}
+
+/**Header des**/
+
+.ellipse, .dotted_lines, .rounded_box {
+    z-index: -1;
+}
+.ellipse,.rounded_box {
+    opacity: 0.5;
+}
+header.header_wrap {
+    background: linear-gradient(356deg, #7c2298ad, #1b1983a3);
+    padding-bottom: 10px;
+    border-bottom: 1px solid #0000004d;
+    box-shadow: 0px -1px 8px #00000094;
+}
+
+.header_wrap {
+    padding: 10px 0;
+}
+.navbar_box_items ul li > a {
+    color: white;
+    padding: 12px 0;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.navbar_box_items ul li b {
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    text-transform: uppercase;
+    padding: 8px;
+    border-radius: 5px;
+}
+.navbar_box_items .add_listing {
+    background: #6544a0;
+    color: white;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 10px 18px 7px 18px;
+    border: 1px solid white;
+}
+.logobox a img {
+    background: #00000026;
+    border-radius: 5px;
+    padding: 6px 15px 9px 15px;
+}
+.container .row {
+    padding-top: 8px;
+}
+.col-sm-9.navbar_box_items {
+    margin-top: 7px;
+}
+.arrow-down:before, .arrow-down:after {
+    border-right: 2px solid;
+    color: #ffffff;
+    font-weight: 400;
+}
+.dropdowon_color {
+    background: linear-gradient(45deg, #5B449E, #A068B7);
+    z-index: 1;
+    border: 1px solid white;
+}
+.dropdown_box ul li .active, .dropdown_box ul li a:hover {
+    background: #684bc7;
+}
+.navbar_box_items ul li > a {
+    padding-left: 10px;
+}
+/**Header des**/
+</style>
 <header class="header_wrap">
     <div class="container">
         <div class="row">
@@ -46,7 +117,7 @@
                     <li><a href="#">CHL</a></li>
                     <li>
                         <a href="#" class="arrow-down">Account</a>
-                        <div class="dropdown_box">
+                        <div class="dropdown_box dropdowon_color">
                             <ul>
                                 <li><a href="#">Education</a></li>
                                 <li><a class="active" href="#">Travel</a></li>

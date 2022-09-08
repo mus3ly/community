@@ -1,6 +1,7 @@
 <section class="banner_listing">
-    <div class="menu_items" id="menuitems">
-            <ul>
+    <div class="menu_items align" id="menuitems">
+        <div class="container menu_list_bg">
+            <ul class="menu_list">
                 <?php
                 $brands = $this->db->get('category')->result_array();
                 ?><?php
@@ -28,16 +29,175 @@
                     }
                 ?>
             </ul>
+            </div>
         </div>
 </section>
+
 <style type="text/css">
-.content-area{
+.content-area {
+    background: linear-gradient(518deg, #7c2298ad, #1b1983a3);
+}
+
+/** Menu List style start **/
+.menu_list {
+    list-style-type: none;
+    display: inline-block;
+}
+.menu_list li {
+    display: inline;
+    padding: 3px 4px;
+    background: rebeccapurple;
+}
+.align {text-align: center;
+    font-size: 18px;
+    padding: 5px 0px;
+}
+.menu_list_bg {
+    border-radius: 4px;
+    padding: 6px 0px;
+}
+.menu_list li a{
+    color: white;
+}
+.menu_list li a:hover {
+    color: #df7eff;
+    font-weight: 800;
+}
+
+/** Menu List style end **/
+
+/** Map style start**/
+.map_style {
+    height: 600px;
+    position: relative;
+    overflow: hidden;
+    padding: 15px;
+    border: 1px solid #dedede;
+    box-shadow: 0px 0px 5px #00000033;
+    line-height: 35px;
+    margin-bottom: 35px;
+}
+
+a.btn.btn-theme-transparent.btn-theme-sm.grid {
+    font-size: 0px;
+}
+a.btn.btn-theme-transparent.btn-theme-sm.list.active {
+    font-size: 0px;
+}
+a.btn.btn-theme-transparent.btn-theme-sm.list {
+    font-size: 0px;
+}
+
+button.btn.dropdown-toggle.selectpicker.btn-default {
+    border-radius: 0.25rem;
+}
+/**shop-sorting end**/
+
+/**List style two start**/
+.widget.shop-categories .widget-content {
+    border-top: solid 0px rgba(35, 35, 35, 0.1);
+    padding: 0px;
+}
+.widget.shop-categories {
+    border: solid 1px rgba(35, 35, 35, 0.1);
     background: #fff;
+    border-radius: 4px;
+    padding-top: 0px;
+}
+.listAndProducts {
+    padding: 0px;
+}
+/**List style two end**/
+
+/**List and products start**/
+.listAndProducts {
+    padding: 0px;
+}
+aside#sidebar {
+    padding: 0px;
+}
+div#content {
+    padding: 0px;
+}
+.list_box_style1.thumbnail {
+    border-radius: 4px;
+}
+.list_box_style1.thumbnail .media {
+    border-radius: 4px;
+}
+/**List and products end**/
+
+input#texted {
+    float: right;
+}
+.widget.shop-categories {
+    border: solid 1px white;
+    background: linear-gradient(307deg, #7c22989e, #1b198357);
+    border-radius: 4px;
+    padding-top: 0px;
+}
+.widget.shop-categories ul {
+    background: transparent;
+}
+.widget.shop-categories ul li.title-for-list {
+    background: #544df170;
+    font-weight: 800;
+}
+.widget.widget-filter-price {
+    border: solid 1px #ffffff;
+    background: linear-gradient(307deg, #1b198357, #7c22989e);
+}
+.menu_list li {
+    display: inline;
+    padding: 4px 4px;
+    border: 1px solid white;
+    margin: 0px 5px;
+    border-radius: 5px;
+}
+.desing1, .desing2, .desing3, .desing4, .desing5 {
+    position: absolute;
+    z-index: -1;
+}
+.desing1 {
+    rotate: 90deg;
+    margin-left: 87%;
+    margin-top: 200px;
+    opacity: 0.5;
+}
+.desing2 {
+    rotate: 90deg;
+    margin-left: 86%;
+    margin-top: 745px;
+    opacity: 0.5;
+}
+.desing3 {
+    rotate: 90deg;
+    margin-left: -3%;
+    margin-top: 1634px;
+    opacity: 0.5;
+}
+.desing4 {
+    margin-left: -1%;
+    margin-top: 985px;
+    opacity: 0.5;
+}
+.desing5 {
+    rotate: 90deg;
+    margin-left: 82%;
+    margin-top: 1497px;
+    opacity: 0.5;
 }
 </style>
  <!-- PAGE WITH SIDEBAR -->
+ 
+ <div class="desing1"><img src="<?php echo base_url(); ?>template/front/img/1.png" width="250px" alt=""/></div>
+<div class="desing2"><img src="<?php echo base_url(); ?>template/front/img/2.png" width="250px" alt=""/></div>
+<div class="desing3"><img src="<?php echo base_url(); ?>template/front/img/3.png" width="250px" alt=""/></div>
+<div class="desing4"><img src="<?php echo base_url(); ?>template/front/img/4.png" width="250px" alt=""/></div>
+<div class="desing5"><img src="<?php echo base_url(); ?>template/front/img/5.png" width="250px" alt=""/></div>
 <section class="page-section with-sidebar">
-    <div class="container_side">
+    <div class="container_side section_bg">
+        <div class="container listAndProducts">
         <div class="row">
             <!-- SIDEBAR -->
             <?php 
@@ -45,7 +205,7 @@
             ?>
             <!-- /SIDEBAR -->
             <!-- CONTENT -->
-                    <div class="col-md-6 col-sm-12 col-xs-12 content" id="content">
+                    <div class="col-md-9 col-sm-12 col-xs-12 content" id="content">
                         <!-- shop-sorting -->
                         <div class="shop-sorting">
                             <div class="row">
@@ -103,11 +263,13 @@
                         </div>
 
                     </div>
-                <div id="map" style="width:25%;height:800px;"></div>
+                
 
             <!-- /CONTENT -->
         </div>
+        </div>
     </div>
+    <div id="map" class="map_style container"></div>
 </section>
 <!-- /PAGE WITH SIDEBAR -->
 
@@ -344,3 +506,5 @@ function generateIcon(number, callback) {
       src="https://maps.googleapis.com/maps/api/js?key=<?= $this->config->item('map_key'); ?>&callback=initMap&v=weekly"
       defer
     ></script>
+
+<link rel="stylesheet" href="directoryPage.css">

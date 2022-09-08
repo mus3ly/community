@@ -194,6 +194,22 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                         <?php
 							}
 						?>
+                        <!----------------Blog-------------->
+                    	<?php
+							if($this->crud_model->vendor_permission('sale')){
+						?>
+                        <!--Menu list item-->
+                        <li <?php if($page_name=="Blog"){?> class="active-link" <?php } ?>>
+                            <a href="<?php echo base_url(); ?>vendor/blog/">
+                                <i class="fa fa-usd"></i>
+                                    <span class="menu-title">
+                                		<?php echo translate('Blog');?>
+                                    </span>
+                            </a>
+                        </li>
+                        <?php
+							}
+						?>
 
                         <!--  Payment from Admin -->
 						<?php

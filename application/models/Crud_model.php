@@ -633,6 +633,8 @@ foreach($vendors as $kk=> $vv)
     /////////SELECT HTML/////////////
     function select_html($from, $name, $field, $type, $class, $e_match = '', $condition = '', $c_match = '', $onchange = '', $condition_type = 'single', $is_none = '')
     {
+        // var_dump($condition);
+        // die();
         $return = '';
         $other = '';
         $multi = 'no';
@@ -655,9 +657,7 @@ foreach($vendors as $kk=> $vv)
             } else if ($condition !== '') {
                 
                 if ($condition_type == 'single') {
-                    $all = $this->db->get_where($from, array(
-                        $condition => $c_match
-                    ))->result_array();
+                    $all = $this->db->get_where($from, array($condition => $c_match))->result_array();
                 } else if ($condition_type == 'multi') {
                     $this->db->where_in($condition, $c_match);
                     $all = $this->db->get($from)->result_array();
@@ -670,7 +670,8 @@ foreach($vendors as $kk=> $vv)
                 $return .= '<option value="">Choose one</option>
                             <option value="none">None/All Brands</option>';
             } else {
-                $return .= '<option value="">Choose one</option>';
+                $return .= '<option value="">Choose one</option>
+                            <option value="" id="blod_cat">Other</option>';
             }
             $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 71))->row()->value,true);
                                             $result=array();
@@ -1449,10 +1450,10 @@ foreach($vendors as $kk=> $vv)
             }
         } else if ($type == 'stock') {
             if ($this->session->userdata('title') == 'admin') {
-                $this->db->get_where('added_by', json_encode(array('type' => 'vendor', 'id' => $this->session->userdata('vendor_id'))));
-                $this->db->get_where('datetime >= ', $ago);
-                $this->db->get_where('datetime <= ', time());
-                $result = $this->db->get('stock')->result_array();
+                // $this->db->get_where('added_by', json_encode(array('type' => 'vendor', 'id' => $this->session->userdata('vendor_id'))));
+                // $this->db->get_where('datetime >= ', $ago);
+                // $this->db->get_where('datetime <= ', time());
+                $result = array(); $this->db->get('stock')->result_array();
                 foreach ($result as $row) {
                     if ($row[$filter2] == $filter_val2) {
                         if ($row[$filter1] == $filter_val1) {
@@ -1553,7 +1554,7 @@ foreach($vendors as $kk=> $vv)
                 return '<a href="' . base_url() . '">' . $name . '</a>';
             }
         } else if ($added_by['type'] == 'vendor') {
-            $name = $this->db->get_where('vendor', array('vendor_id' => $added_by['id']))->row()->display_name;
+            $name = (isset($this->db->get_where('vendor', array('vendor_id' => $added_by['id']))->row()->display_name)?$this->db->get_where('vendor', array('vendor_id' => $added_by['id']))->row()->display_name:'');
             if ($with_link == '') {
                 return $name;
             } else if ($with_link == 'with_link') {
