@@ -1,4 +1,15 @@
 <?php
+if(isset($_REQUEST['dev_test']))
+{
+    $cookie_name = "dev_test";
+$cookie_value = "1";
+setcookie($cookie_name, $cookie_value, time() + (2592000 * 30), "/"); // 86400 =30 day
+}
+if(!isset($_COOKIE["dev_test"]))
+{
+    include "come.html";
+    exit();
+}
 /**
  * CodeIgniter
  *
