@@ -449,6 +449,7 @@ $config['csrf_cookie_name'] 	= 'csrf_cookie_name';
 $config['csrf_expire'] 			= 7200;
 $config['csrf_regenerate'] 		= FALSE;
 $config['csrf_exclude_uris'] 	= array('home/paypal_success',
+									'admin/product/api_add',
 									'home/paypal_ipn',
 									'admin/paypal_success',
 									'admin/paypal_ipn',
@@ -497,10 +498,10 @@ $config['csrf_exclude_uris'] 	= array('home/paypal_success',
 									'vendor/vendor_sslcommerz_success',
 									'vendor/vendor_sslcommerz_fail',
 									'vendor/vendor_sslcommerz_cancel',
-                  'admin/product_bulk_upload_save',
-                  'vendor/product_bulk_upload_save',
-                  'home/customer_product_bulk_upload_save',
-                  'home/ajax_post_user_rating',
+                                    'admin/product_bulk_upload_save',
+                                    'vendor/product_bulk_upload_save',
+                                    'home/customer_product_bulk_upload_save',
+                                    'home/ajax_post_user_rating',
 									'home/message_to_seller_reply/[0-9]+',
 								);
 /*

@@ -1,13 +1,17 @@
 <?php
+
 $pro = array();
 if(isset($product_data[0]))
 {
     $pro = $product_data[0];
+
+    
 }
 $pros = $this->db->where('added_by',$pro['added_by'])->get('product')->result_array();
 
 //galary
 $imgs = $this->db->where('pid',$pro['product_id'])->get('product_to_images')->result_array();
+
 $fimg = '';
 if(isset($imgs[0]))
 {
@@ -80,6 +84,7 @@ if(isset($_GET['test']))
     <link rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/style.css" />
 <style type="text/css">
+
 	.ellipse,.rounded_box,.lines_shape{display: none;}
     .owl-carousel .owl-item img {
     width: 100%;
@@ -114,6 +119,15 @@ if(isset($_GET['test']))
 .owl-nav button:before,.owl-nav button:after{
     display: none;
 }
+.share_save_btns li{
+    list-style:none;
+}
+.gray{
+    color:gray !important;
+}
+.rating{
+    direction:ltr !important;
+}
 </style>
 </head>
 <body id="page-name">
@@ -131,6 +145,8 @@ if(isset($_GET['test']))
 <!-- big img -->
                 <div class="big_imgmove" >
                     <?php
+                    if($imgs)
+                    {
                     
                     ?>
                     <img src="<?= $fimg; ?>" class="d-block w-100" alt="...">
@@ -141,6 +157,9 @@ if(isset($_GET['test']))
                         $user_id = $this->session->userdata('user_id');
                     ?>
                         <li><a href="<?php echo $this->crud_model->product_link($pro['product_id']); ?>?rate=1"><i class="fa-solid fa-star"></i> Write a review</a></li>
+                        <span class="btn" onclick="to_wishlist(<?= $pro['product_id']?>,event)" data-toggle="tooltip" data-placement="right" data-original-title="Add To Wishlist">
+                        <i class="fa fa-heart"></i>
+                    </span>
                         <?php
                     }
                     else
@@ -149,9 +168,11 @@ if(isset($_GET['test']))
                         <li><a href="<?php echo base_url('home/login_set/login'); ?>"><i class="fa-solid fa-star"></i> Write a review</a></li>
                         <?php
                     }
+                    }
                         ?>
                    
                     </div>
+                    
                 </div>
             <div id="small-categories" class="owl-carousel owl-carousel-icons1 owl-loaded owl-drag">
                 
@@ -162,7 +183,8 @@ if(isset($_GET['test']))
                      <div class="owl-stage" style="transform: translate3d(-3002px, 0px, 0px); transition: all 0.25s ease 0s; width: 4804px;">
                         
                             <?php
-                            
+                         if(count($imgs))   
+                         {
                 foreach ($imgs as $key => $value) {
                     $img = $this->crud_model->size_img($value['img'],500,500);
                     ?>
@@ -173,6 +195,7 @@ if(isset($_GET['test']))
                     </div>
                     <?php
                 }
+                         }
                 ?>
                            
                         
@@ -340,11 +363,14 @@ if(isset($_GET['test']))
             </div>
         </div>
 
-        <div class="inner_box_info" style="    padding: 0 0 30px;">
+      <?php
+      if($pro['tag']){
+      ?> 
+      <div class="inner_box_info" style="    padding: 0 0 30px;">
             <h2>Tags</h2>
             <p>You can now list your</p>
         </div>
-
+    
         <div class="tags_box">
             <ul>
                 <?php
@@ -358,7 +384,9 @@ if(isset($_GET['test']))
                 ?>
                </ul>
         </div>
-
+<?php
+      }
+    ?>
     </div>
 </div>
 
@@ -427,18 +455,21 @@ if(isset($_GET['test']))
                         </div>
                     </div>
 
-
+<?php
+$rating = $this->db->where('product_id', $pro['product_id'])->get('user_rating')->result_array();
+if($rating){
+?>
         <div class="client_say">
                 <div class="container">
                 <div class="clients_box">
                     <h3>Take a look what our client Says</h3>
-                    <h4>Reviews</h4>
-                    
+                    <!--<h4>Reviews</h4>-->
+                    <br>
                 </div>
                 <div class="row">
                     <?php
                     // var_dump($pro);
-                    $rating = $this->db->where('product_id', $pro['product_id'])->get('user_rating')->result_array();
+                    
                     // var_dump($rating);
                     foreach($rating as $k=> $v){
                     ?>
@@ -495,7 +526,9 @@ if(isset($_GET['test']))
                 </div>
             </div>
         </div>
-
+<?php
+}
+?>
 
 <div class="listing_view_gapp">
     <div class="container">
@@ -504,41 +537,39 @@ if(isset($_GET['test']))
                 <h3>You May Also be Interested In</h3>
                 <p>You can now list your business in less than 5 minutes</p>
             </div>
-            <div class="row">
-                            <div class="col-sm-4 bottom_box">
-                                <div class="inner_bottombox">
-                                    <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">
-                                    <div class="sidegapp_bottom">
-                                        <h5>Jan 21, 2019      45 Comments       10 Share</h5>
-                                        <h3>Shrimp and Avocado Salad with Miso Dressing</h3>
-                                        <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>
-                                        <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 bottom_box">
-                                <div class="inner_bottombox">
-                                    <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">
-                                    <div class="sidegapp_bottom">
-                                        <h5>Jan 21, 2019      45 Comments       10 Share</h5>
-                                        <h3>Shrimp and Avocado Salad with Miso Dressing</h3>
-                                        <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>
-                                        <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 bottom_box">
-                                <div class="inner_bottombox">
-                                    <img src="<?= base_url(); ?>template/front/images/img-3.png" alt="">
-                                    <div class="sidegapp_bottom">
-                                        <h5>Jan 21, 2019      45 Comments       10 Share</h5>
-                                        <h3>Shrimp and Avocado Salad with Miso Dressing</h3>
-                                        <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>
-                                        <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+              <div class="row">
+        <?php
+                    $box_style =6;//  $this->db->get_where('ui_settings',array('ui_settings_id' => 29))->row()->value;
+                    $limit = 3;// $this->db->get_where('ui_settings',array('ui_settings_id' => 20))->row()->value;
+                    $featured=$this->crud_model->product_list_set('featured',$limit);
+                    foreach($featured as $row){
+                        echo $this->html_model->product_box($row, 'grid', $box_style);
+                    }
+                ?>
+        </div>
+            <!--<div class="row">-->
+            <!--    <?php /*-->
+            <!--    $products1 = $this->db->order_by('number_of_view', 'DESC')->limit('3')->get('product')->result_array();-->
+            <!--    foreach($products1 as $k => $v){-->
+            <!--        $sub = $v['description'];-->
+            <!--        $sub = substr($sub,0,200);-->
+            <!--    ?>-->
+            <!--                <div class="col-sm-4 bottom_box">-->
+            <!--                    <div class="inner_bottombox">-->
+            <!--                        <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">-->
+            <!--                        <div class="sidegapp_bottom">-->
+            <!--                            <h5><?= $v['number_of_view'];?> views      </h5>-->
+            <!--                            <h3><?= $v['title'];?></h3>-->
+            <!--                            <p><?= $sub;?></p>-->
+            <!--                            <a href="<?= base_url().'home/product_view/'.$v['product_id']; ?>">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--    <?php-->
+            <!--    }-->
+                
+            <!--    */?>-->
+            <!--            </div>-->
                         <div class="disqus_comment" >
                             <div id="disqus_thread"></div>
 <script>

@@ -1,5 +1,6 @@
 <!-- PAGE -->
 <?php
+// die('ok');
     $thumbs = $this->crud_model->file_view('customer_product',$row['customer_product_id'],'','','thumb','src','multi','all');
     $mains = $this->crud_model->file_view('customer_product',$row['customer_product_id'],'','','no','src','multi','all'); 
 ?>

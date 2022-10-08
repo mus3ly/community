@@ -1,6 +1,6 @@
 <div id="content-container">
 	<div id="page-title">
-		<h1 class="page-header text-overflow"><?php echo translate('manage_bussniuss_package');?></h1>
+		<h1 class="page-header text-overflow"><?php echo translate('manage_social_media');?></h1>
 	</div>
 	<div class="tab-base">
 		<div class="panel">
@@ -8,8 +8,8 @@
 				<div class="tab-content">
 					<div class="col-md-12" style="border-bottom: 1px solid #ebebeb;padding:10px;">
 						<button class="btn btn-primary btn-labeled fa fa-plus-circle pull-right" 
-                        	onclick="ajax_modal('add','<?php echo translate('add_brand_(_physical_product_)'); ?>','<?php echo translate('successfully_added!');?>','brand_add','')">
-								<?php echo translate('create_package');?>
+                        	onclick="ajax_modal('add','<?php echo translate('add_social_media'); ?>','<?php echo translate('successfully_added!');?>','brand_add','')">
+								<?php echo translate('create_social_media');?>
 						</button>
 					</div>
 					<div class="tab-pane fade active in" id="list" 

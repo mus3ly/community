@@ -1,3 +1,89 @@
+<style>
+.btn1{
+    
+    outline: 0!important;
+    border: none;
+    background: transparent;
+}
+btn1 .fa{
+    font-size: 25px;
+    color: #cecece;
+}
+.form h4{
+    font-size:14px;
+}
+.form .btn{
+    background-color: white;
+    border: 1px dashed #cecece;
+}
+.drop_box {
+  margin: 10px 0;
+  padding: 30px;
+  display: flex;
+  background-color: #ededed;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 2px dashed #cecece;
+  border-radius: 5px;
+  width:150px;
+}
+.form input {
+  margin: 10px 0;
+  width: 100%;
+  background-color: #e2e2e2;
+  border: none;
+  outline: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+}
+.flip-card {
+  background-color: transparent;
+  width: 300px;
+    height: 110px;
+        margin: 10px 0;
+  perspective: 1000px;
+}
+.flip-card-front:active{
+ border: 1px solid #000;
+}
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateX(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.flip-card-back p{
+      padding: 50px 0 50px;
+}
+.flip-card-front i{
+    font-size: 25px;
+    padding: 8px 9px;
+    margin-top: 25px;
+    border-radius: 40px;
+}
+
+.flip-card-back {
+  background-color: black;
+  color: white;
+  transform: rotateX(180deg);
+}
+</style>
 <div class="row">
     <div class="col-md-12">
 		<?php
@@ -50,6 +136,7 @@
                            <div class="row" id="cat_res">
                                 
                                  <?php
+                                 $brands = $this->db->get('category')->result_array();
                             foreach($brands as $k => $v){
                                 if(get_cat_level($v['category_id']) == 1)
                                 {
@@ -609,79 +696,84 @@
         );
         set_summer();
     });
-    
     function next_tab(){
-        var mid = $('.nav-tabs li.active').find('a').attr('href')+' .required';
-        var find = 0;
-        var size_option = $('#size_type').val();
-        if($('.nav-tabs li.active').find('a').attr('href') == '#product_details')
-        {
-        }
-        else
-        {
-            form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
-            return 0;
-        }
-        $(mid).each(function(){
-            var here = $(this);
-            if(here.val() == ''){
-                console.log(here.attr('name'));
-                find = 1;
-                if(true){
-                    find = 1;
-                    here.css({borderColor: 'red'});
-                    if(here.attr('type') == 'number'){
-                        txt = '*'+mbn;
-                    }
-                    
-                    if(here.closest('div').find('.require_alert').length){
-
-                    } else {
-                        sound('form_submit_problem');
-                        find = 1;
-                        var take = '';
-                        var txt = 'Required';
-                        here.closest('div').append(''
-                            +'  <span id="'+take+'" class="label label-danger require_alert" >'
-                            +'      '+txt
-                            +'  </span>'
-                        );
-                    }
-                }
-            }//if empty
-        });
-        if(find == 0)
-        {
-            if($('.nav-tabs li.active').find('a').attr('href') == '#product_details')
-        {
-            
-                     $('.sizes').each(function(i, obj) {
-                console.log($(this).attr('class'));
-    if($(this).hasClass('size_'+size_option))
-    {
-        
-    }
-    else
-    {
-        $(this).remove();
-    }
-});
-        }
-            $('#next_btn').text('upload');
-            $('#next_btn').addClass('btn-success');
-            $('#next_btn').addClass('enterer');
-            $('#next_btn').removeClass('btn-purple');
         $('.nav-tabs li.active').next().find('a').click();                    
-        }
-        else
-        {
-            alert("Please fill required field");
-            return  0;
-        }
     }
     function previous_tab(){
         $('.nav-tabs li.active').prev().find('a').click();                     
     }
+//     function next_tab(){
+//         var mid = $('.nav-tabs li.active').find('a').attr('href')+' .required';
+//         var find = 0;
+//         var size_option = $('#size_type').val();
+//         if($('.nav-tabs li.active').find('a').attr('href') == '#product_details')
+//         {
+//         }
+//         else
+//         {
+//             form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+//             return 0;
+//         }
+//         $(mid).each(function(){
+//             var here = $(this);
+//             if(here.val() == ''){
+//                 console.log(here.attr('name'));
+//                 find = 1;
+//                 if(true){
+//                     find = 1;
+//                     here.css({borderColor: 'red'});
+//                     if(here.attr('type') == 'number'){
+//                         txt = '*'+mbn;
+//                     }
+                    
+//                     if(here.closest('div').find('.require_alert').length){
+
+//                     } else {
+//                         sound('form_submit_problem');
+//                         find = 1;
+//                         var take = '';
+//                         var txt = 'Required';
+//                         here.closest('div').append(''
+//                             +'  <span id="'+take+'" class="label label-danger require_alert" >'
+//                             +'      '+txt
+//                             +'  </span>'
+//                         );
+//                     }
+//                 }
+//             }//if empty
+//         });
+//         if(find == 0)
+//         {
+//             if($('.nav-tabs li.active').find('a').attr('href') == '#product_details')
+//         {
+            
+//                      $('.sizes').each(function(i, obj) {
+//                 console.log($(this).attr('class'));
+//     if($(this).hasClass('size_'+size_option))
+//     {
+        
+//     }
+//     else
+//     {
+//         $(this).remove();
+//     }
+// });
+//         }
+//             $('#next_btn').text('upload');
+//             $('#next_btn').addClass('btn-success');
+//             $('#next_btn').addClass('enterer');
+//             $('#next_btn').removeClass('btn-purple');
+//         $('.nav-tabs li.active').next().find('a').click();                    
+//         }
+//         else
+//         {
+//             alert("Please fill required field");
+//             return  0;
+//         }
+//     }
+//     function previous_tab(){
+//         $('.nav-tabs li.active').prev().find('a').click();                     
+//     }
     
     $("#more_option_btn").click(function(){
         option_count('add');
@@ -774,8 +866,47 @@
             +'      </div>'
   		);
 // 		createColorpickers();
-    });		           
+    });	
+    
+function myMap() {
+var mapProp= {
+  center:new google.maps.LatLng(51.508742,-0.120850),
+  zoom:12,
+};
+var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+}
+function selecttype(id)
+{
+    if($('#category').val())
+    {
+        var pre = $('#category').val()+','+id;
+        // alert(pre);
+        $('#category').val(pre);
 
+    }
+    else{
+        $('#category').val(id);
+    }
+    var url  = base_url+'admin/product/sub_by_cat/'+id;
+        // alert(url);
+    $.ajax({
+  url: url,
+  cache: false,
+  success: function(html){
+    if(html == '0')
+    {
+        next_tab();
+
+    }
+    else
+    {
+    $("#cat_res").html(html);
+    }
+  }
+});
+
+    // get_cat(id,this);
+}
     $('body').on('click', '.rmc', function(){
         $(this).parent().parent().remove();
     });

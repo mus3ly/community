@@ -122,6 +122,7 @@
             });
         }
     }
+    
 
      $('.delete-div-wrap .close').on('click', function() { 
         var pid = $(this).closest('.delete-div-wrap').find('img').data('id'); 
@@ -197,7 +198,9 @@
         $('.demo-cs-multiselect').chosen({width:'100%'});
     }
     
+    
     $(document).ready(function() {
+        // alert('set_summer()');
         set_select();
         set_summer();
         createColorpickers();
@@ -372,10 +375,9 @@
             return false;
         });
     });
-    function cat_chnge(val e)
+    function cat_chnge(value)
     {
     $('#blod_cat').on('change', function(){
-            alert('ok');
         }); 
     }
 </script>

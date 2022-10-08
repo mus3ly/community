@@ -29,19 +29,9 @@
                                 </div>
                             </div>
                             <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-1">
-                                    <?php echo translate('price');?>
-                                        </label>
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('Image');?></label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="price" id="demo-hor-1" value="<?php echo $row['price']; ?>" placeholder="<?php echo translate('price');?>" class="form-control required">
-                                </div>
-                            </div>
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-1">
-                                    <?php echo translate('ads');?>
-                                        </label>
-                                <div class="col-sm-6">
-                                    <input type="text" name="ads" id="demo-hor-1" value="<?php echo $row['ads']; ?>" placeholder="<?php echo translate('price');?>" class="form-control required">
+                                    <input type="file" name="file_upload" id="demo-hor-1" placeholder="" value="$row['img']" class="form-control required">
                                 </div>
                             </div>
                             

@@ -1,5 +1,5 @@
 <?php
-if(isset($_REQUEST['dev_test']))
+/*if(isset($_REQUEST['dev_test']))
 {
     $cookie_name = "dev_test";
 $cookie_value = "1";
@@ -9,7 +9,7 @@ if(!isset($_COOKIE["dev_test"]))
 {
     include "come.html";
     exit();
-}
+}*/
 /**
  * CodeIgniter
  *
@@ -68,7 +68,7 @@ date_default_timezone_set('Europe/London');
 
 	include_once './application/libraries/vendor/autoload.php';
 
-	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 	//define('CFG_TIME_ZONE', 'Asia/Dacca');
 /*
  *---------------------------------------------------------------

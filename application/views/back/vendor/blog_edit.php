@@ -197,6 +197,7 @@
     }
     
     $(document).ready(function() {
+        // alert();
         set_select();
         set_summer();
         createColorpickers();

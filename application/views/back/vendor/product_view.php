@@ -1,5 +1,6 @@
 <!--CONTENT CONTAINER-->
 <?php 
+// die('nimra');
 		foreach($product_data as $row)
         { 
 ?>

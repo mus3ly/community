@@ -1,3 +1,7 @@
+$(".login_info a").click(function(){
+    $(".hovertext").toggle();
+});
+
 
  // Gallery image hover
 $( ".img-wrapper" ).hover(

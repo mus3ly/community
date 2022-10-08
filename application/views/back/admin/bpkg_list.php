@@ -5,8 +5,7 @@
 				<tr>
 					<th><?php echo translate('no');?></th>
 					<th><?php echo translate('name');?></th>
-					<th><?php echo translate('price');?></th>
-					<th><?php echo translate('ads');?></th>
+					<th><?php echo translate('Image');?></th>
 					<th class="text-right"><?php echo translate('options');?></th>
 				</tr>
 			</thead>
@@ -14,14 +13,21 @@
 			<tbody >
 			<?php
 				$i=0;
-            	foreach($all_brands as $row){
+					foreach($all_brands as $row){
             		$i++;
 			?>
                 <tr>
                     <td><?php echo $i; ?></td>
+					<?php
+									$img = '';
+					if($row['img'])
+					{
+					 $img = $this->crud_model->get_img($row['img'])->secure_url;
+				 } 
+
+					?>
                     <td><?php echo $row['name']; ?></td>
-                    <td><?php echo $row['price']; ?></td>
-                    <td><?php echo $row['ads']; ?></td>
+                    <td><img src="<?= $img;?>" class="img-sm" style="height:auto !important; border:1px solid #ddd;padding:2px; border-radius:2px !important;float: left;"></td>
                     <td class="text-right">
                         <a class="btn btn-success btn-xs btn-labeled fa fa-wrench" data-toggle="tooltip" 
                             onclick="ajax_modal('edit','<?php echo translate('edit_package'); ?>','<?php echo translate('successfully_edited!'); ?>','brand_edit','<?php echo $row['id']; ?>')" 

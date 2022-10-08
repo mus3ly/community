@@ -117,12 +117,12 @@ btn1 .fa{
 <div class="row" style="margin-right:20px;">
     <div class="col-md-12" style="border-bottom: 1px solid #ebebeb;padding: 5px;     margin-top:64px;">
                             <button class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" onclick="ajax_set_full('add','Add Product','Successfully Added!','product_add',''); proceed('to_list');" style="display: none;">Create Listings</button>
-                            <a href="<?= base_url('/vendor/product'); ?>" class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" style="" onclick="ajax_set_list();  proceed('to_add');">Back To Listings</a>
+                            <a href="<?= base_url('/admin/product'); ?>" class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" style="" onclick="ajax_set_list();  proceed('to_add');">Back To Listings</a>
                         </div>
     <div class="col-md-10"  style="margin-top: 52px;    margin-left: 244px;
 ">
         <?php
-            echo form_open(base_url() . 'vendor/product/update/'.$row['product_id'], array(
+            echo form_open(base_url() . 'admin/product/update/'.$row['product_id'], array(
                 'class' => 'form-horizontal',
                 'method' => 'post',
                 'id' => 'product_add',
@@ -703,7 +703,7 @@ btn1 .fa{
     }
     function delimg(id){
         var mid = '#gimg_'+id;
-        var url = base_url+'vendor/product/delimg/'+id+'?pid=<?= $row['product_id'] ?>';
+        var url = base_url+'admin/product/delimg/'+id+'?pid=<?= $row['product_id'] ?>';
         $.ajax({
         url: url,
         type: "get",
@@ -840,7 +840,7 @@ function selecttype(id)
     else{
         $('#category').val(id);
     }
-    var url  = base_url+'vendor/product/sub_by_cat/'+id;
+    var url  = base_url+'admin/product/sub_by_cat/'+id;
     $.ajax({
   url: url,
   cache: false,
@@ -975,7 +975,7 @@ function showPosition(position) {
                 marker.setPosition(latlng);
 }
         google.maps.event.addDomListener(window, 'load', initialize);
-        var user_type = 'vendor';
+        var user_type = 'admin';
     var module = 'product';
     var list_cont_func = 'list';
     var dlt_cont_func = 'delete';

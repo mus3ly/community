@@ -89,10 +89,10 @@ $img = '';
                 data-original-title="<?php if($this->crud_model->is_wished($product_id)=="yes"){ echo translate('added_to_wishlist'); } else { echo translate('add_to_wishlist'); } ?>">
                 <strong><i class="fa fa-heart"></i></strong>
             </span>
-            <span class="icon-view right " onclick="to_cart(<?php echo $product_id; ?>,event)" data-toggle="tooltip" 
-                data-original-title="<?php if($this->crud_model->is_added_to_cart($product_id)){ echo translate('added_to_cart'); } else { echo translate('add_to_cart'); } ?>">
-                <strong><i class="fa fa-shopping-cart"></i></strong>
-            </span>
+            <!--<span class="icon-view right " onclick="to_cart(<?php echo $product_id; ?>,event)" data-toggle="tooltip" -->
+            <!--    data-original-title="<?php if($this->crud_model->is_added_to_cart($product_id)){ echo translate('added_to_cart'); } else { echo translate('add_to_cart'); } ?>">-->
+            <!--    <strong><i class="fa fa-shopping-cart"></i></strong>-->
+            <!--</span>-->
         </div>
     </div>
 </div>

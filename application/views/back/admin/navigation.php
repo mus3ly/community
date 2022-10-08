@@ -960,10 +960,16 @@ $customer_product_check = $this->crud_model->get_type_name_by_id('general_settin
                                                     <?php echo translate('contact_page');?>
                                             </a>
                                         </li>
-                                         <li <?php if($tab == 'header'){ ?>class="active-link"<?php } ?> >
-                                            <a href="<?php echo base_url(); ?>admin/display_settings/header">
+                                        <!-- <li <?php if($tab == 'header'){ ?>class="active-link"<?php } ?> >-->
+                                        <!--    <a href="<?php echo base_url(); ?>admin/display_settings/header">-->
+                                        <!--        <i class="fa fa-circle fs_i"></i>-->
+                                        <!--            <?php echo translate('header');?>-->
+                                        <!--    </a>-->
+                                        <!--</li>-->
+                                        <li <?php if($tab == 'menu'){ ?>class="active-link"<?php } ?> >
+                                            <a href="<?php echo base_url(); ?>admin/bpkg1">
                                                 <i class="fa fa-circle fs_i"></i>
-                                                    <?php echo translate('header');?>
+                                                    <?php echo translate('menu');?>
                                             </a>
                                         </li>
                                         <li <?php if($tab == 'footer'){ ?>class="active-link"<?php } ?> >
@@ -1215,6 +1221,31 @@ $customer_product_check = $this->crud_model->get_type_name_by_id('general_settin
 						<?php
                             }
                         ?>
+                        <!--affliTE-->
+                        <li <?php if($page_name=="affliate" || $page_name=="compain" || $page_name=="withdraw_request"){?> class="active-link" <?php } ?>>
+                            <a href="#">
+                                <i class="fa fa-user"></i>
+                                <span class="menu-title">
+                                	Affiliate                                </span>
+                                <i class="fa arrow"></i>
+                            </a>
+
+                            <ul class="collapse" aria-expanded="false" style="height: 0px;">
+
+								                                <li <?php if($page_name == "compain"){?> class="active-link" <?php } ?>>
+                                    <a href="<?php echo base_url(); ?>admin/affliate">
+                                        <i class="fa fa-circle fs_i"></i>
+                                        	Marketing compains                                    </a>
+                                </li>
+
+								                                <li <?php if($page_name == "withdraw_request"){?> class="active-link" <?php } ?>>
+                                    <a href="<?php echo base_url(); ?>admin/withdraw_request">
+                                        <i class="fa fa-circle fs_i"></i>
+                                        	Withdraw Requests                                    </a>
+                                </li>
+                                                            </ul>
+                        </li>
+                        <!--affliTE-->
                         <?php
                             if($this->crud_model->admin_permission('seo')){
                         ?>
@@ -1236,7 +1267,7 @@ $customer_product_check = $this->crud_model->get_type_name_by_id('general_settin
                             <a href="<?php echo base_url(); ?>admin/bpkg">
                                 <i class="fa fa-search-plus"></i>
                                 <span class="menu-title">
-                                    Signup Packages
+                                    Social medias
                                 </span>
                             </a>
                         </li>

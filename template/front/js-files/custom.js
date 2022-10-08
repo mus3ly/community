@@ -18,10 +18,6 @@ $(document).ready(function(){
 
 
 
-
-
-
-
 $("[id^=carousel-thumbs]").carousel({
 	interval: false
 });

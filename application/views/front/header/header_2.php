@@ -2,103 +2,13 @@
     <img src="<?= base_url(); ?>template/front/images/doted-lines.png" alt="">
 </div>
 <div class="ellipse">
-    <img src="<?= base_url(); ?>template/front/images/headar_left.png" alt="">
+    <img src="<?= base_url(); ?>template/front/images/Ellipse.png" alt="">
 </div>
 <div class="lines_shape">
     <img src="<?= base_url(); ?>template/front/images/lines-shape.png" alt="">
 </div>
-<div class="rounded_box">
-    <img src="<?= base_url(); ?>template/front/images/headar_top.png" width="650px" alt="">
-</div>
-<style>.arrow-down:before, .arrow-down:after{
-   border-right: 2px solid;
-    content: '';
-    display: block;
-    height: 10px;
-    margin-top: 5px;
-    position: absolute;
-    transform: rotate(45deg);
-    left: 622px;
-    top: 17%;
-    width: 0;
-    color: #4D4D61;
-    font-weight: 300;
-}
-.arrow-down:after {
-    margin: 5px 0px 0px -6px;
-    transform: rotate(140deg);
-}
 
-/**Header des**/
 
-.ellipse, .dotted_lines, .rounded_box {
-    z-index: -1;
-}
-.ellipse,.rounded_box {
-    opacity: 0.5;
-}
-header.header_wrap {
-    background: linear-gradient(356deg, #7c2298ad, #1b1983a3);
-    padding-bottom: 10px;
-    border-bottom: 1px solid #0000004d;
-    box-shadow: 0px -1px 8px #00000094;
-}
-
-.header_wrap {
-    padding: 10px 0;
-}
-.navbar_box_items ul li > a {
-    color: white;
-    padding: 12px 0;
-    text-transform: uppercase;
-    font-weight: 600;
-}
-.navbar_box_items ul li b {
-    color: white;
-    font-weight: 600;
-    font-size: 16px;
-    text-transform: uppercase;
-    padding: 8px;
-    border-radius: 5px;
-}
-.navbar_box_items .add_listing {
-    background: #6544a0;
-    color: white;
-    display: inline-block;
-    font-size: 14px;
-    border-radius: 5px;
-    padding: 10px 18px 7px 18px;
-    border: 1px solid white;
-}
-.logobox a img {
-    background: #00000026;
-    border-radius: 5px;
-    padding: 6px 15px 9px 15px;
-}
-.container .row {
-    padding-top: 8px;
-}
-.col-sm-9.navbar_box_items {
-    margin-top: 7px;
-}
-.arrow-down:before, .arrow-down:after {
-    border-right: 2px solid;
-    color: #ffffff;
-    font-weight: 400;
-}
-.dropdowon_color {
-    background: linear-gradient(45deg, #5B449E, #A068B7);
-    z-index: 1;
-    border: 1px solid white;
-}
-.dropdown_box ul li .active, .dropdown_box ul li a:hover {
-    background: #684bc7;
-}
-.navbar_box_items ul li > a {
-    padding-left: 10px;
-}
-/**Header des**/
-</style>
 <header class="header_wrap">
     <div class="container">
         <div class="row">
@@ -113,44 +23,103 @@ header.header_wrap {
                     <i class="fa fa-close"></i>
                 </div>
                 <ul>
-                    <li><a href="<?= base_url('/directory'); ?>"><b>Directory</b></a></li>
-                    <li><a href="#">CHL</a></li>
-                    <li>
-                        <a href="#" class="arrow-down">Account</a>
-                        <div class="dropdown_box dropdowon_color">
+                    <?php
+                    $login = 'guest';
+                    
+                   
+                    if(isset($_SESSION['vendor_id'])){
+                        $login = 'vendor';
+                    }
+                    else if(isset($_SESSION['user_id']))
+                    {
+                        $login = 'customer';
+                    }
+                    else{
+                        $login = 'guest';
+                    }   
+                    $menu = $this->db->where('parent', '0')->order_by('sorting', 'asc')->get('menu')->result_array();
+                    
+                     foreach($menu as $k => $v){
+                        $perm = $v['permission']; 
+                        $p = explode(",", $perm);
+                        if(in_array($login, $p))
+                        {
+                          $menu1 = $this->db->where('parent', $v['id'])->order_by('sorting', 'asc')->get('menu')->result_array(); 
+                          ?>
+                          <li><a href="<?= base_url().$v['slug']; ?>"><b><?= $v['name']?></b> 
+                          <?php
+                          if(count($menu1) || $v['id'] == 12)
+                          {
+                          ?>
+                            <i class="fa fa-angle-down"></i></a>
+                          <?php    
+                          }
+                          ?>
+                          
+                            <?php
+                            if($menu1){
+                                // if($v['id'] == 12)
+                                // {
+                                //  var_dump($menu1);
+                                //  die();
+                                // }
+                            ?>
+                            <div class="dropdown_box dropdowon_color">
                             <ul>
-                                <li><a href="#">Education</a></li>
-                                <li><a class="active" href="#">Travel</a></li>
-                                <li><a href="#">Technology</a></li>
-                                <li><a href="#">Banking</a></li>
-                                <li><a href="#">Pharma</a></li>
+                                <?php
+                                foreach($menu1 as $k => $v){
+                                    $perm = $v['permission']; 
+                                    $p = explode(",", $perm);
+                                    if(in_array($login, $p))
+                                    {
+                                ?>
+                                <li><a href="<?= base_url().$v['slug']; ?>"><?= $v['name']?></a></li>
+                                <?php
+                                }
+                                }
+                                ?>
                             </ul>
                         </div>
+                        <?php
+                         }
+                        ?>
                     </li>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="<?= base_url('vendor_logup/registration'); ?>" class="add_listing">Add Listing <img src="<?= base_url(); ?>template/front/images/plus-icon.png" alt=""></a></li>
                     <?php
+                        }
+                     }
+                        ?>
+                    
+                    <?php
+                    if(!($_SESSION['vendor_id'])){
+                    ?>   
+                <li><a href="<?= base_url('vendor_logup/registration'); ?>" class="add_listing">Add Listing <img src="<?= base_url(); ?>template/front/images/plus-icon.png" alt=""></a></li>
+                <?php
+                }?>
+            <?php
                     if ($this->session->userdata('user_login') == "yes") {
                         
                         $user_id = $this->session->userdata('user_id');
                     ?>
                     <li class="padd_right"><a href="<?= base_url('/home/profile'); ?>"><img class="avatar_img" src="
-                    <?php 
-                                if(file_exists('uploads/user_image/user_'.$user_id.'.jpg')){ 
+                    <?php
+                           if(file_exists('uploads/user_image/user_'.$user_id.'.jpg')){ 
                                     
-                                    echo $this->crud_model->file_view('user',$user_id,'100','100','no','src','','','.jpg').'?t='.time();
-                                } else if(empty($row['fb_id']) !== true){ 
-                                    echo 'https://graph.facebook.com/'. $row['fb_id'] .'/picture?type=large';
-                                } else if(empty($row['g_id']) !== true ){
-                                    echo $row['g_photo'];
-                                } else {
-                                    echo base_url().'uploads/user_image/default.jpg';
-                                } 
-                            ?>
-                    " alt=""></a>
-                        <div class="dropdown_box" id="user_dropdonw">
+     echo $this->crud_model->file_view('user',$user_id,'100','100','no','src','','','.jpg').'?t='.time();
+     } else if(empty($row['fb_id']) !== true){
+         echo 'https://graph.facebook.com/'. $row['fb_id'] .'/picture?type=large';
+         
+     } else if(empty($row['g_id']) !== true ){
+         echo $row['g_photo'];
+         
+     } else {
+         echo base_url().'uploads/user_image/default.jpg';
+         } 
+         ?>
+         " alt=""></a>
+         <div class="dropdown_box" id="user_dropdonw">
                             <ul>
-                                <li><a href="<?= base_url('/home/Logout'); ?>">Settings</a></li>
+                                <li><a href="<?= base_url('/home/affliate'); ?>">Affliate</a></li>
+                                <li><a href="<?= base_url('/home/profile'); ?>">Settings</a></li>
                                 <li><a class="active" href="<?= base_url('/home/profile'); ?>">Profile</a></li>
                                 <li><a href="<?= base_url('/home/Logout'); ?>">Logout</a></li>
                             </ul>
@@ -160,11 +129,26 @@ header.header_wrap {
                     }
                     else
                     {
-                        ?>
-                        <li class="padd_right"><a href="<?= base_url('home/login_set/login'); ?>"><img class="avatar_img" src="<?= base_url(); ?>template/front/images/login.png" alt=""></a>
-                        <?php
+                    ?>
+                    <li class="padd_right"><a href="#"><img class="avatar_img" src="<?= base_url(); ?>template/front/images/login.png" alt=""></a>
+                    <div class="dropdown_box dropdowon_color">
+                            <ul>
+                                <li><a href="<?= base_url('login_set/login');?>"> Customer Login</a></li>
+                                <li><a href="<?= base_url('home/login_set/registration');?>"> Customer Sign-up</a></li>
+                                <li><a href="<?= base_url('vendor');?>"> Vendor Login</a></li>
+                                <li><a href="<?= base_url('vendor_logup/registration');?>"> Vender Sign-up</a></li>
+                                <li><a href="<?= base_url();?>"> Create Affiliate Marketing</a></li>
+                                <li><a href="<?= base_url();?>"> Join Affiliate Marketing</a></li>
+                                <li><a href="<?= base_url();?>"> Login to Affiliate Marketing</a></li>
+                                <li><a href="<?= base_url('home/login_set/login');?>">Join Community HubLand</a></li>
+                                
+                            </ul>
+                        </div>
+                    </li>
+                    <?php
                     }
                     ?>
+                   
                 </ul>
             </div>
         </div>

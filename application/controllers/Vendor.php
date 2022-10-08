@@ -458,7 +458,7 @@ class Vendor extends CI_Controller
         }
         
         if ($para1 == 'do_add') {
-                
+            die('ok');    
             $option              = $this->input->post('option');
             $options = array();
             $num_of_imgs = 0;
@@ -510,43 +510,13 @@ class Vendor extends CI_Controller
 
                     $this->db->insert('product', $data);
                     $id = $this->db->insert_id();
-                    // var_dump($this->db->last_query());
-                    // die('ok');
-                    if(true){
-                        $this->load->library('cloudinarylib');
-                        $total = count($_FILES['images']['name']);
-
-                        // Loop through each file
-                        for( $i=0 ; $i < $total ; $i++ ) {
-
-                          //Get the temp file path
-                          $tmpFilePath = $_FILES['images']['tmp_name'][$i];
-
-                          //Make sure we have a file path
-                          if ($tmpFilePath != ""){
-                            //Setup our new file path
-                            $k = $i +1;
-                            $newFilePath = "./uploads/product_image/product__".$k.".jpg";
-
-                            //Upload the file into the temp dir
-                            if(move_uploaded_file($tmpFilePath, $newFilePath)) {
-                                $data = \Cloudinary\Uploader::upload($newFilePath);
-                                            if(isset($data['public_id']))
-                                            {
-                                                $logo_id = $this->crud_model->add_img($newFilePath,$data);
-                                                if($logo_id)
-                                                {
-                                                   $in = array(
-                                                    'pid' =>$id,
-                                                    'img' =>$logo_id,
-                                                   );
-                                                   $this->db->insert('product_to_images',$in);
-                                               }
-                                            }
-
-                            }
-                          }
-                        }
+                    
+                    if(isset($_REQUEST['rand_id']) && !empty($_REQUEST['rand_id']))
+                    {
+                        $up = array('pid'=>$id);
+                        $ret = $this->db->where('pid',$_REQUEST['rand_id'])->update('product_to_images', $up);
+                        var_dump($ret);
+                        die();
                     }
                     $this->benchmark->mark_time();
                     $this->load->library('cloudinarylib');
@@ -618,7 +588,7 @@ class Vendor extends CI_Controller
             }
             $num                        = $this->crud_model->get_type_name_by_id('product', $para2, 'num_of_imgs');
             $download                   = $this->crud_model->get_type_name_by_id('product', $para2, 'download');
-
+            
             $data['seo_title']          = $this->input->post('seo_title');
             $data['seo_description']    = $this->input->post('seo_description');
             $data['title']              = $this->input->post('title');
@@ -655,62 +625,10 @@ class Vendor extends CI_Controller
             $data['info_desc']          = $this->input->post('info_desc');
             $data['info_button']        = $this->input->post('button_txt');
             $data['button_url']         = $this->input->post('button_url');
-            $data['facbook']            = $this->input->post('facebook');
-            $data['google']             = $this->input->post('google');
-            $data['twitter']            = $this->input->post('twitter');
-            $data['linkedin']           = $this->input->post('linkedin');
+            $data['social_media']       = json_encode($this->input->post('social'));
             $choice_titles              = $this->input->post('op_title');
             $choice_types               = $this->input->post('op_type');
             $choice_no                  = $this->input->post('op_no');
-            if(count($choice_titles ) > 0){
-                foreach ($choice_titles as $i => $row) {
-                    $choice_options         = $this->input->post('op_set'.$choice_no[$i]);
-                    $options[]              =   array(
-                                                    'no' => $choice_no[$i],
-                                                    'title' => $choice_titles[$i],
-                                                    'name' => 'choice_'.$choice_no[$i],
-                                                    'type' => $choice_types[$i],
-                                                    'option' => $choice_options
-                                                );
-                }
-            }
-            if(!demo() && $num_of_imgs){
-                $this->load->library('cloudinarylib');
-            $total = count($_FILES['images']['name']);
-
-            // Loop through each file
-            for( $i=0 ; $i < $total ; $i++ ) {
-
-              //Get the temp file path
-              $tmpFilePath = $_FILES['images']['tmp_name'][$i];
-
-              //Make sure we have a file path
-              if ($tmpFilePath != ""){
-                //Setup our new file path
-                $k = $i +1;
-                $newFilePath = "./uploads/product_image/product__".$k.".jpg";
-
-                //Upload the file into the temp dir
-                if(move_uploaded_file($tmpFilePath, $newFilePath)) {
-                    $data = \Cloudinary\Uploader::upload($newFilePath);
-                                if(isset($data['public_id']))
-                                {
-                                    $logo_id = $this->crud_model->add_img($newFilePath,$data);
-                                    if($logo_id)
-                                    {
-                                       $in = array(
-                                        'pid' =>$para2,
-                                        'img' =>$logo_id,
-                                       );
-                                       $this->db->insert('product_to_images',$in);
-                                   }
-                                }
-
-                }
-              }
-            }
-
-            }
 
             $this->db->where('product_id', $para2);
             $this->db->update('product', $data);
@@ -719,6 +637,7 @@ class Vendor extends CI_Controller
             $id = $para2;
             if($id && isset($_FILES['sneakerimg']['name']) && !empty($_FILES['sneakerimg']['name'])){
                     $path = 'uploads/product_image/product_' . time() . '.png';
+                    
                          move_uploaded_file($_FILES["sneakerimg"]['tmp_name'], $path);
                         $data = \Cloudinary\Uploader::upload($path);
                     if(isset($data['public_id']))
@@ -779,7 +698,7 @@ class Vendor extends CI_Controller
             ))->row();
             $page_data['row'] =(array) $sing;
             $page_data['brands'] =  $this->db->get('category')->result_array();
-            
+            $page_data['social_media']= $this->db->get('bpkg')->result_array();
             $page_data['page_name']   = ($sing->is_bpage)?"bpage_edit":"product_edit";
             $this->load->view('back/index', $page_data);
             
@@ -1000,10 +919,7 @@ class Vendor extends CI_Controller
             }
         } elseif ($para1 == 'sub_by_cat') {
             $brands = $this->db->where('pcat',$para2)->get('category')->result_array();
-            if(!$brands)
-            {
-                die('0');
-            }
+            
             $level = get_cat_level($para2);
             $breed = array();
             $cid = $para2;
@@ -1033,6 +949,15 @@ class Vendor extends CI_Controller
                     </ul>
                 </div>
                 <?php
+            }
+            if(!$brands)
+            {
+               echo $next = '
+                <div class="text-center justify-content-center"><h5>There are no more categories </h5>
+                <a onclick ="next_tab();"  style="margin-right:10px"><button type="button" class="btn btn-primary"> Click here </button></a>to move to next tab.
+                </div>
+                ';
+                exit();
             }
             
             foreach($brands as $k=>$v){
@@ -1064,15 +989,17 @@ class Vendor extends CI_Controller
         } elseif ($para1 == 'pur_by_pro') {
             echo $this->crud_model->get_type_name_by_id('product', $para2, 'purchase_price');
         } elseif ($para1 == 'add') {
-            if ($this->db->get_where('business_settings',array('type' => 'commission_set'))->row()->value == 'no') {
+            
+            if (true) {
                 $page_data = array();
                // $page_data['brand'] =  $this->db->get('brand')->result_array();
+               
                 if($this->crud_model->can_add_product($this->session->userdata('vendor_id'))){
-                    //echo "Here";
                     $page_data['brands'] =  $this->db->get('category')->result_array();
 
                     // $this->load->view('back/vendor/product_add', $page_data);
                     $page_data['page_name']   = "product_add";
+                    
             $this->load->view('back/index', $page_data);
                 } else {
                             $page_data['page_name']   = "product_limit";
@@ -1081,7 +1008,7 @@ class Vendor extends CI_Controller
                 }
             }
             elseif($this->db->get_where('business_settings',array('type' => 'commission_set'))->row()->value == 'yes'){
-                $this->load->view('back/vendor/product_add');
+                // $this->load->view('back/vendor/product_add');
             }
         } elseif ($para1 == 'srch') {
             if(isset($_GET['srh']))

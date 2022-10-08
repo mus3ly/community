@@ -42,6 +42,10 @@
 		var url = base_url+'admin/category/main_cat/'+id
 		ajax_load(url,id,'signup_cat');
 	}
+	function pegs(id){
+		var url = base_url+'admin/category/pegs/'+id
+		ajax_load(url,id,'signup_cat');
+	}
 	function signup_main_cat(id){
 		var url = base_url+'admin/category/signup_main_cat/'+id
 		ajax_load(url,id,'signup_cat');

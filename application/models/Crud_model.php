@@ -2041,6 +2041,8 @@ foreach($vendors as $kk=> $vv)
         $cur_membership = $vendor_cur->row()->membership;
         $cur_expire = $vendor_cur->row()->member_expire_timestamp;
         $membership_spec = $this->db->get_where('membership', array('membership_id' => $membership));
+        $timespan = 30;
+        if(isset($membership_spec->row()->timespan))
         $timespan = $membership_spec->row()->timespan;
         //$new_expire       = $cur_expire+($timespan*24*60*60);
         $new_expire = time() + ($timespan * 24 * 60 * 60);

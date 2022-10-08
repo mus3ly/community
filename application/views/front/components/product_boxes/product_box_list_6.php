@@ -1,9 +1,9 @@
 <?php
 $cat = $this->db->where('category_id',$category)->get('category')->row();
 $img = '';
-                        if($comp_cover)
+                        if($comp_logo)
                         {
-                            $img = $this->crud_model->get_img($comp_cover);
+                            $img = $this->crud_model->get_img($comp_logo);
                             if(isset($img->secure_url))
                             {
                                 $img = $img->secure_url;
@@ -107,6 +107,7 @@ $img = '';
                 ?>
                 <hr class="page-divider"/>
                 <div class="buttons">
+                    <?php/*?>
                     <span class="btn btn-add-to cart" onclick="to_cart(<?php echo $product_id; ?>,event)">
                         <i class="fa fa-shopping-cart"></i>
                         <?php if($this->crud_model->is_added_to_cart($product_id)){ 
@@ -116,6 +117,9 @@ $img = '';
                             } 
                         ?>
                     </span>
+                    <?php
+                    */
+                    ?>
                     <?php 
                         $wish = $this->crud_model->is_wished($product_id); 
                     ?>

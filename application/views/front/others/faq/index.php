@@ -1,8 +1,8 @@
 <!-- BREADCRUMBS -->
-<section class="page-section breadcrumbs">
+<section class="page-section breadcrumbs" style="background:#fff;">
     <div class="container">
         <div class="page-header">
-            <h2 class="section-title section-title-lg">
+            <h2 class="section-title section-title-lg" id="faq_box">
                 <span>
                     <?php echo translate('frequently_asked_questions');?>
                 </span>
@@ -15,8 +15,9 @@
 <!-- PAGE -->
 <section class="page-section">
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
+        <div class="row padd_btom">
+            <div class="col-sm-3"></div>
+            <div class="col-md-6">
             	<div class="panel-group accordion" id="faq-accordion" role="tablist" aria-multiselectable="true">
                 	<?php
                     	foreach($faqs as $i=>$row){
@@ -41,6 +42,7 @@
 					?>
                 </div>
             </div>
+            <div class="col-sm-3"></div>
         </div>
     </div>
 </section>

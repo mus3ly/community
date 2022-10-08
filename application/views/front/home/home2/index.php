@@ -38,7 +38,7 @@
                 <img src="<?= $img ?>" alt="">
             </div>
             <div class="col-sm-6 perfect_place">
-                <h5>Amet consectetur adipisicing New</h5>
+                <h5>Community HubLand - A Directory Site - Your Virtual Land</h5>
                 <h3>Find Your <b>Perfect Place.</b></h3>
                 <div class="search_bar">
                 <form action="<?= base_url('/home/text_search'); ?>"  onkeyup="submitForm(event)" id="srch_form" method="post">
@@ -54,6 +54,8 @@
                      <div class="owl-stage" style="transform: translate3d(-3002px, 0px, 0px); transition: all 0.25s ease 0s; width: 4804px;">
                         
                         <?php
+                        // die('come');
+                        $brands = $this->db->get('category')->result_array();
                 $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value,true);
                                             $result=array();
                                             foreach($categories as $row){
@@ -61,13 +63,11 @@
                                                     $result[]=$row;
                                                 }
                                             }
-                                            // var_dump($brands);
-                                            // die('OK');
 
                     foreach ($brands as $key => $value) {
                         if(in_array($value['category_id'], $result))
                         {
-                            // echo $value['category_id'];
+                            //  echo $value['category_id'];
                         ?>
                             <div class="owl-item " >
                            <div class="item">
@@ -348,16 +348,14 @@
 include "featured_products.php";
 ?>
 <div class="container">
-  <div class="row">
-    <div class="col-lg-12">
-      <center><a href="#"><button class="btn-lg" style="background-color:#F26122; color:white; border:none; margin-bottom:120px; font-family:Dosis!important; font-weight:200;">Join Community HubLand Affiliate Marketing</button></a></center>
-    </div>
+  <div class="joinbtnbox">
+    <a href="#">Join Community HubLand Affiliate Marketing</a>
   </div>
 </div>
 
-<script src="https://ads.strokedev.net/template/front/js-files/jquery-3.2.1.min.js"></script>
-<script src="https://ads.strokedev.net/template/front/js-files/owl.carousel.js"></script>
-<script src="https://ads.strokedev.net/template/front/js-files/custom.js"></script>
+<script src="<?= base_url('/'); ?>template/front/js-files/jquery-3.2.1.min.js"></script>
+<script src="<?= base_url('/'); ?>template/front/js-files/owl.carousel.js"></script>
+<script src="<?= base_url('/'); ?>template/front/js-files/custom.js"></script>
           <script type="text/javascript">
               (function($) {
     

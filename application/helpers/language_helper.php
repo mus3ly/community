@@ -22,7 +22,7 @@ function get_cat_level($id)
 	while ($parent) {
 		$l++;
 		$row1 = $ci->db->where('category_id', $parent)->get('category')->row();
-	$parent = $row1->pcat;
+		$parent = (isset($row1->pcat)?$row1->pcat:0);
 	}
 return $l;
 }

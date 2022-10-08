@@ -7,6 +7,7 @@ if(isset($_GET['test']))
 ?>
 <?php
 $pro = array();
+
 if(isset($product_data[0]))
 {
     $pro = $product_data[0];
@@ -51,7 +52,11 @@ if(isset($data->results[0]->formatted_address))
     }
 if(true)
                                             {
-                                                $logo = $this->crud_model->size_img($pro['comp_logo'],100,100);
+                                                $logo = $this->crud_model->get_img($pro['comp_logo']);
+                                                if(isset($logo->path))
+                                                {
+                                                    $logo = base_url().$logo->path;
+                                                }
                                             }
                                             $cover = '';
 if(true)
@@ -89,6 +94,8 @@ if(true)
 	.fa-google{color:#dc4e41}
 	.fa-linkedin-in{color:#0C63BC;}
 	.social_media{margin-left: 40%;}
+	.social_media img{    width: 50px;
+    height: 50px;}
 	.rating {direction: ltr!important;}
 </style>
 </head>
@@ -118,28 +125,34 @@ if(true)
                 </div>
                 <div class="col-sm-10 right_profilebox">
                     <h3><?= $pro['title'] ?> <a href="#"><img src="<?= base_url(); ?>template/front/images/Combined-Shape.png" alt=""></a></h3>
-                    <p>A stunning vision of tomorrow</p>
+                    <p><?= $pro['slogan'] ;?>
+                    
+                    </p>
 
                     <ul>
                         <li><a href="https://api.whatsapp.com/send?phone=<?= $pro['whatsapp_number']; ?>&text=Hello this is the starting message"  target = "_blank"><img src="<?= base_url(); ?>template/front/images/Chat.png" alt=""> Direct message</a></li>
-                        <li><a href="tel:<?= $pro['bussniuss_phone'];?>"><img src="<?= base_url(); ?>template/front/images/Call.png" alt=""> Call now</a></li>
-                        <li><a href="mailto:<?= $pro['bussniuss_email'];?>" class="active"><img src="<?= base_url(); ?>template/front/images/message.png" alt=""> Send an email</a></li>
-                        <li><a href="https://www.google.com/maps/?q=<?= $pro['lat'];?>,<?= $pro['lng'];?>"><img src="<?= base_url(); ?>template/front/images/Location-1.png" alt=""> Get directions</a></li>
+                        <li><a target = "_blank" href="tel:<?= $pro['bussniuss_phone'];?>"><img src="<?= base_url(); ?>template/front/images/Call.png" alt=""> Call now</a></li>
+                        <li><a target = "_blank" href="mailto:<?= $pro['bussniuss_email'];?> " class="active"><img src="<?= base_url(); ?>template/front/images/message.png" alt=""> Send an email</a></li>
+                        <li><a target = "_blank" href="https://www.google.com/maps/?q=<?= $pro['lat'];?>,<?= $pro['lng'];?>"><img src="<?= base_url(); ?>template/front/images/Location-1.png" alt="" > Get directions</a></li>
                             <?php
                     if ($this->session->userdata('user_login') == "yes") {
                         
                         $user_id = $this->session->userdata('user_id');
                     ?>
-                        <li><a href="<?php echo $this->crud_model->product_link($pro['product_id']); ?>?rate=1"><i class="fa-solid fa-star"></i> Write a review</a></li>
+                        <li><a target = "_blank" href="<?php echo $this->crud_model->product_link($pro['product_id']); ?>?rate=1"><i class="fa-solid fa-star"></i> Write a review</a></li>
+                        <li><span class="btn" onclick="to_wishlist(<?= $pro['product_id']?>,event)" data-toggle="tooltip" data-placement="right" data-original-title="Add To Wishlist">
+                        <i class="fa fa-heart"></i>
+                    </span></li>
                         <?php
                     }
                     else
                     {
                         ?>
-                        <li><a href="<?php echo base_url('home/login_set/login'); ?>"><i class="fa-solid fa-star"></i> Write a review</a></li>
+                        <li><a target = "_blank" href="<?php echo base_url('home/login_set/login'); ?>"><i class="fa-solid fa-star"></i> Write a review</a></li>
                         <?php
                     }
                         ?>
+                        
                     </ul>
                 </div>
             </div>
@@ -229,9 +242,11 @@ if(true)
 
 
 
-                    <div class="verify_head">
+                    <div class="container">
+                        <div class="verify_head " style="    padding: 10px 16px;">
                         <h3>Image Gallery</h3>
                         <p>You can now list your business in less than 5 minutes</p>
+                    </div>
                     </div>
                     <div class="gallerybox">
                         <div class="row">
@@ -300,9 +315,14 @@ if(true)
                             </div>
                     </div>
                     </div>
-                    <div class="verify_head">
+            <?php
+                    if($pro['text']){
+                    ?>
+                    <div class="container">
+                        <div class="verify_head" style="    padding: 10px 16px;">
                         <h3>Text Gallery</h3>
                         <p>You can now list your business in less than 5 minutes</p>
+                    </div>
                     </div>
                     <div class="icon_box_wrap">
     <div class="container">
@@ -354,7 +374,7 @@ if(true)
 
             <?php
 
-                                    }
+                     }               
             ?>
             
         </div>
@@ -362,40 +382,56 @@ if(true)
         
         </div>
     </div>
+    <?php
+    }
+    ?>
 </div>
 
 <div class="social_media">
     <div class="container">
        <?php
-       if(isset($pro['facbook']) && !empty($pro['facbook'])){
-       ?>
-        <span><a href="<?= $pro['facbook'];?>"><i class="fa-brands fa-facebook-f"></i></a></span>
-        <?php
-       }
-        ?>
-         <?php
-       if(isset($pro['twitter']) && !empty($pro['twitter'])){
-       ?>
-        <span><a href="<?= $pro['twitter'];?>"><i class="fa-brands fa-twitter"></i></a></span>
-         <?php
-       }
-        ?>
-         <?php
-       if(isset($pro['google']) && !empty($pro['google'])){
-       ?>
-        <span><a href="<?= $pro['google'];?>"><i class="fa-brands fa-google"></i></a></span>
-         <?php
-       }
-        ?>
-         <?php
-       if(isset($pro['linkedin']) && !empty($pro['linkedin'])){
-       ?>
-        <span><a href="<?= $pro['linkedin'];?>"><i class="fa-brands fa-linkedin-in"></i></a></span>
-         <?php
-       }
-        ?>
+       $img='';
+       $social_image = json_decode($pro['social_media']);
+            foreach($social_image as $k =>$v){
+                // var_dump($k);
+                $row = $this->db->where('id', $k)->get('bpkg')->row();
+                if($row->img){
+				$img = $this->crud_model->get_img($row->img)->secure_url;
+			                 } 
+            ?>
+            <a href="<?= $v; ?>" target="_blank"><img src="<?= $img; ?>"></a>
+            <?php
+           }
+            ?>
     </div>
 </div>
+ <?php
+                if($tags){?>
+   <div class="container">
+            <div class="inner_box_info" style="    padding: 10px 16px;">
+            <h2>Tags</h2>
+            <p>You can now list your</p>
+        </div>
+
+   </div>
+   <?php
+                }
+   ?>
+        <div class="tags_box">
+            <ul>
+                <?php
+                if($tags){
+                $tags = $pro['tag'];
+                $x = (explode(",",$tags));
+                foreach($x as $K => $v){
+                ?>
+                <li><a href="#"><img src="#" alt=""> <?=  $v;?></a></li>
+                <?php
+                }
+                }
+                ?>
+               </ul>
+        </div>
                     <div class="orange_pathwrap">
                         <div class="container">
                             <div class="iframe_box">
@@ -487,41 +523,52 @@ if(true)
                         </div>
                     </div>
                     <div class="container">
-                        <div class="row">
-                            <div class="col-sm-4 bottom_box">
-                                <div class="inner_bottombox">
-                                    <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">
-                                    <div class="sidegapp_bottom">
-                                        <h5>Jan 21, 2019      45 Comments       10 Share</h5>
-                                        <h3>Shrimp and Avocado Salad with Miso Dressing</h3>
-                                        <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>
-                                        <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 bottom_box">
-                                <div class="inner_bottombox">
-                                    <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">
-                                    <div class="sidegapp_bottom">
-                                        <h5>Jan 21, 2019      45 Comments       10 Share</h5>
-                                        <h3>Shrimp and Avocado Salad with Miso Dressing</h3>
-                                        <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>
-                                        <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4 bottom_box">
-                                <div class="inner_bottombox">
-                                    <img src="<?= base_url(); ?>template/front/images/img-3.png" alt="">
-                                    <div class="sidegapp_bottom">
-                                        <h5>Jan 21, 2019      45 Comments       10 Share</h5>
-                                        <h3>Shrimp and Avocado Salad with Miso Dressing</h3>
-                                        <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>
-                                        <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                <div class="row">
+        <?php
+                    $box_style =6;//  $this->db->get_where('ui_settings',array('ui_settings_id' => 29))->row()->value;
+                    $limit = 3;// $this->db->get_where('ui_settings',array('ui_settings_id' => 20))->row()->value;
+                    $featured=$this->crud_model->product_list_set('featured',$limit);
+                    foreach($featured as $row){
+                        echo $this->html_model->product_box($row, 'grid', $box_style);
+                    }
+                ?>
+        </div>
+
+                        <!--<div class="row">-->
+                        <!--    <div class="col-sm-4 bottom_box">-->
+                        <!--        <div class="inner_bottombox">-->
+                        <!--            <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">-->
+                        <!--            <div class="sidegapp_bottom">-->
+                        <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
+                        <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
+                        <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
+                        <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
+                        <!--            </div>-->
+                        <!--        </div>-->
+                        <!--    </div>-->
+                        <!--    <div class="col-sm-4 bottom_box">-->
+                        <!--        <div class="inner_bottombox">-->
+                        <!--            <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">-->
+                        <!--            <div class="sidegapp_bottom">-->
+                        <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
+                        <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
+                        <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
+                        <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
+                        <!--            </div>-->
+                        <!--        </div>-->
+                        <!--    </div>-->
+                        <!--    <div class="col-sm-4 bottom_box">-->
+                        <!--        <div class="inner_bottombox">-->
+                        <!--            <img src="<?= base_url(); ?>template/front/images/img-3.png" alt="">-->
+                        <!--            <div class="sidegapp_bottom">-->
+                        <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
+                        <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
+                        <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
+                        <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
+                        <!--            </div>-->
+                        <!--        </div>-->
+                        <!--    </div>-->
+                        <!--</div>-->
                         <div class="info_tooltip">
                             <a href="#"><img src="<?= base_url(); ?>template/front/images/info-orange.png" alt=""></a>
                         </div>
@@ -670,8 +717,11 @@ if(true)
                 
             </div>
 </div>
-<div class="disqus_comment" >
-                            <div id="disqus_thread"></div>
+<div class="container">
+    
+    <div class="disqus_comment" >
+                            <div id="disqus_thread"></div></div>
+</div>
 <script>
     /**
     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
@@ -729,7 +779,7 @@ var marker = new google.maps.Marker({
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=<?= $this->config->item('map_key'); ?>&callback=myMap"></script>
-<script src="https://ads.strokedev.net/template/front/js-files/custom.js"></script>
+<script src="<?= base_url();?>template/front/js-files/custom.js"></script>
 
 
 

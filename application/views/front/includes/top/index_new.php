@@ -251,8 +251,8 @@ include $asset_page.'.php';
     <meta name="distribution" content="global"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link id="favicon" rel="icon"  type="https://ads.strokedev.net/template/front/images/favicon.png" href="https://ads.strokedev.net/template/front/images/favicon.png">
-    <link type="text/css" rel="stylesheet" href="https://ads.strokedev.net/template/front/css-files/font-awesome.min.css" />
-    <link rel="stylesheet" href="https://ads.strokedev.net/template/front/css-files/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="https://ads.strokedev.net/template/front/css-files/style.css" />
-    <link type="text/css" rel="stylesheet" href="https://ads.strokedev.net/template/front/css-files/owl.carousel.css" />
+    <link id="favicon" rel="icon"  type="<?= base_url()?>template/front/images/favicon.png" href="<?= base_url()?>template/front/images/favicon.png">
+    <link type="text/css" rel="stylesheet" href="<?= base_url()?>template/front/css-files/font-awesome.min.css" />
+    <link rel="stylesheet" href="<?= base_url()?>template/front/css-files/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="<?= base_url()?>template/front/css-files/style.css" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url()?>template/front/css-files/owl.carousel.css" />

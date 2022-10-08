@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <?php
+    
     $home_style = $this->db->get_where('ui_settings', array('type' => 'home_page_style'))->row()->value;
     $vendor_system   =  $this->crud_model->get_settings_value('general_settings','vendor_system');
     $physical_system =  $this->crud_model->get_settings_value('general_settings','physical_product_activation');

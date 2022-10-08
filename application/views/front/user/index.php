@@ -1,3 +1,4 @@
+
 <script src="https://checkout.stripe.com/checkout.js"></script>
 <style>
     @media (min-width: 1200px){

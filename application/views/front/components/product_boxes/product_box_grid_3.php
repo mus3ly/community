@@ -34,15 +34,15 @@
             		data-toggle="tooltip" data-original-title="<?php if($this->crud_model->is_wished($product_id)=="yes"){ echo translate('added_to_wishlist'); } else { echo translate('add_to_wishlist'); } ?>">
             	<i class="fa fa-heart"></i>
             </span>
-            <span class="btn  btn-theme-transparent btn-icon-left" onclick="to_cart(<?php echo $product_id; ?>,event)">
-            	<i class="fa fa-shopping-cart"></i>
-            	<?php if($this->crud_model->is_added_to_cart($product_id)=="yes"){ 
+    <!--        <span class="btn  btn-theme-transparent btn-icon-left" onclick="to_cart(<?php echo $product_id; ?>,event)">-->
+    <!--        	<i class="fa fa-shopping-cart"></i>-->
+    <!--        	<?php/* if($this->crud_model->is_added_to_cart($product_id)=="yes"){ -->
 					// echo translate('added_to_cart');  
-					} else { 
+				<!--	} else { -->
 					// echo translate('add_to_cart');  
-					} 
-				?>
-            </span>
+				<!--	} -->
+				<!--*/?>-->
+    <!--        </span>-->
             <span class="btn  btn-theme-transparent btn-compare" onclick="do_compare(<?php echo $product_id; ?>,event)"
             		data-toggle="tooltip" data-original-title="<?php if($this->crud_model->is_compared($product_id)=="yes"){ echo translate('compared'); } else { echo translate('compare'); } ?>">
             	<i class="fa fa-exchange"></i>

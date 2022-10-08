@@ -20,30 +20,30 @@
 
                         <div id="bpkg_details" class="tab-pane fade active in">
         
-                            <div class="form-group btm_border">
+                          
+						  <!--<div class="form-group btm_border">
                                 <h4 class="text-thin text-center"><?php echo translate('packge_details'); ?></h4>                            
-                            </div>
-
+                            </div>-->
                             <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('packge_title');?></label>
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('social_media_title');?></label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="name" id="demo-hor-1" placeholder="<?php echo translate('packge_title');?>" class="form-control required">
+                                    <input type="text" name="name" id="demo-hor-1" placeholder="<?php echo translate('social_media_title');?>" class="form-control required">
                                 </div>
                             </div>
 
                             <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('price');?></label>
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('Image');?></label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="price" id="demo-hor-1" placeholder="<?php echo translate('price');?>" class="form-control required">
+                                    <input type="file" name="file_upload" id="demo-hor-1" placeholder="" class="form-control required">
                                 </div>
                             </div>
 
-                            <div class="form-group btm_border">
+                           <!-- <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('ads');?></label>
                                 <div class="col-sm-6">
                                     <input type="text" name="ads" id="demo-hor-1" placeholder="<?php echo translate('ads');?>" class="form-control required">
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>

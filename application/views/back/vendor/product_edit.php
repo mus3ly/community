@@ -2,7 +2,7 @@
 <style>
     #mainnav-container{
         left :0px !important;
-    }
+    }ima
     .gallary_images{}
     .gallary_images ul{
         list-style: none;
@@ -114,6 +114,7 @@ btn1 .fa{
   transform: rotateX(180deg);
 }
 </style>
+
 <div class="row" style="margin-right:20px;">
     <div class="col-md-12" style="border-bottom: 1px solid #ebebeb;padding: 5px;     margin-top:64px;">
                             <button class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" onclick="ajax_set_full('add','Add Product','Successfully Added!','product_add',''); proceed('to_list');" style="display: none;">Create Listings</button>
@@ -214,7 +215,7 @@ btn1 .fa{
                                 <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('tags');?></label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="tag" value="<?= $row['tag']; ?>" data-role="tagsinput" placeholder="<?php echo translate('tags');?>" class="form-control">
+                                    <input type="text" name="tag" value="<?= $row['tag']; ?>" data-role="tagsinput" placeholder="<?php echo translate('enter comma (,) to add more');?>" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group btm_border">
@@ -479,18 +480,30 @@ btn1 .fa{
 
                         </div>
                         <div id="location" class="tab-pane fade ">
-                        <input id="searchTextField" type="text" size="50" placeholder="Enter a location" autocomplete="on" runat="server" />
+                        <input  style="width: 186px;
+    padding: 0 16px;
+    height: 34px;
+    border: 2px solid #ccc;
+    margin: 0 0 13px;"  id="searchTextField" type="text" size="50" placeholder="Enter a location" autocomplete="on" runat="server" />
                             
-                            <div id="googleMap" style="width:100%;height:400px;"></div>
+                            <div id="googleMap" style="margin:0 0 20px;width:95%;height:400px;"></div>
                                                         
                                 Or Enter Cordinates
                                         <div>
-                                    <label>Latitude</label>
-                                    <input type="text" id="cityLat" value="<?= $row['lat']; ?>" name="lat" />
+                                    <label  style="margin:15px 0 0;display:block;">Latitude</label>
+                                    <input style="    width: 186px;
+    padding: 0 16px;
+    height: 34px;
+    border: 2px solid #ccc;
+    margin: 0 0 13px;" type="text" id="cityLat" value="<?= $row['lat']; ?>" name="lat" />
                              </div>
                             <div>
-                                <label>Longitude</label>
-                                <input type="text" id="cityLng" value="<?= $row['lng']; ?>" name="lng" />
+                                <label  style="margin:0 0 0;display:block;">Longitude</label>
+                                <input style="    width: 186px;
+    padding: 0 16px;
+    height: 34px;
+    border: 2px solid #ccc;
+    margin: 0 0 13px;" type="text" id="cityLng" value="<?= $row['lng']; ?>" name="lng" />
                             </div>
                         </div>
                         <div id="event_images" class="tab-pane fade ">
@@ -632,14 +645,46 @@ btn1 .fa{
     window.preview = function (input) {
         if (input.files && input.files[0]) {
             $("#previewImg").html('');
+            
             $(input.files).each(function () {
                 var reader = new FileReader();
                 reader.readAsDataURL(this);
                 reader.onload = function (e) {
-                    $("#previewImg").append("<div style='float:left;border:4px solid #303641;padding:5px;margin:5px;'><img height='80' src='" + e.target.result + "'></div>");
+                    console.log(e.target.result);
+                    upload_img(e.target.result);
+                    // $("#previewImg").append("<div style='float:left;border:4px solid #303641;padding:5px;margin:5px;'><img height='80' src='" + e.target.result + "'></div>");
                 }
             });
+            
+            
         }
+    }
+    
+    function upload_img(img){
+        var old_txt = $('#gimgs_txt').text();
+
+        // $('#gimgs_txt').text('Uploading ...');
+        var settings = {
+  "url": "<?= base_url(); ?>/vendor/gupload",
+  "method": "POST",
+  "timeout": 0,
+  "headers": {
+    "Content-Type": "application/x-www-form-urlencoded"
+  },
+  "data": {
+    "img": img,
+    "pid": "<?= $row['product_id'] ?>"
+  }
+};
+var imgUrl = '<?= base_url(); ?>/vendor/product/rimg/<?= $row['product_id'] ?>';
+
+$.ajax(settings).done(function (response) {
+    // alert(response);
+    // $('#gimgs_txt').text(old_txt);
+    $('.gallary_images').load(imgUrl);
+  console.log(response);
+});
+
     }
 
     function other_forms(){}

@@ -82,7 +82,7 @@
 				} else if(type=='other') {
 					other();
 				} else if(type == 'signup_cat'){
-					var noty = 'Csategory update successfully!';
+					var noty = 'Category update successfully!';
 					$.activeitNoty({
 						type: 'success',
 						icon : 'fa fa-check',
@@ -92,7 +92,20 @@
 					});
 					
 					sound('done');
-					ajax_set_list();
+				// 	ajax_set_list();
+				} else if(type == 'pegs'){
+					var noty = 'Pegs update successfully!';
+					$.activeitNoty({
+						type: 'success',
+						icon : 'fa fa-check',
+						message : noty,
+						container : 'floating',
+						timer : 3000
+					});
+					
+					sound('done');
+				// 	alert();
+				//  	ajax_set_list();
 				}
 			},
 			error: function(e) {
@@ -392,10 +405,12 @@
 
 
 	function form_submit(form_id,noty,e){
-		
+		// alert($(this).text());
 		var alerta = $('#form'); // alert div for show alert message
+
 		var form = $('#'+form_id);
 		var can = '';
+
 		if(!extra){
 			var extra = '';
 		}
@@ -496,6 +511,9 @@
 			 
 
 			 }
+			 var buttonp = $('.enterer');
+			 var old = buttonp.html();
+			 
 				$.ajax({
 					url: act, // form action url
 					type: form.attr('method'), // form submit method get/post
@@ -508,9 +526,14 @@
 						var buttonp = $('.enterer');
 						buttonp.addClass('disabled');
 						buttonp.html(working);
+						
 					},
 					success: function(data) {
-					    
+					    	if(form_id == 'compain_update')
+		{
+		 ajax_set_list();
+		}
+						
 						
 						if(form_id == 'vendor_approval'){
 							noty = enb_ven;
@@ -520,12 +543,13 @@
 						    $('#list').html(data);
 						    return false;
 						}
-						if(form_id == 'get_var')
+						if(form_id == 'get_var'|| form_id == 'blog_edit' || form_id == 'blog_add')
 						{
-						    $('.modal-footer button').removeClass('disabled');
-						    $('.modal-footer .enterer').text('Save');
-						    $('#form').html(data);
-						    return false;
+						    $('.enterer').removeClass('disabled');
+						    $('.enterer').text(old);
+						    $('#form').html(old);
+						    $('.fa-refresh').show();
+						    //return false;
 						}
 						if(form_id == 'product_add')
 						{
@@ -567,6 +591,7 @@
 				var ih = $('.require_alert').last().closest('.tab-pane').attr('id');
 				$("[href=#"+ih+"]").click();
 			}
+		
 // 			$('body').scrollTo('#scroll');
 			return false;
 		}
@@ -1246,7 +1271,7 @@
 			var string = pdf.output('datauristring');
 			$('.preview-pane').attr('src', string);
 			//pdf.save(name+'.pdf');
-		});
+		});blog_edit
 		*/
 	}
 

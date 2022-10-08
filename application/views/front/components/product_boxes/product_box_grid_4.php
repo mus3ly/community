@@ -38,17 +38,17 @@
                 <span itemprop="price"><?php echo currency($sale_price); ?></span>
             <?php }?>
         </div>
-        <div class="add-cart-btn">
-            <span class="btn" onclick="to_cart(<?php echo $product_id; ?>,event)">
-                <i class="fa fa-shopping-cart"></i>
-                <?php if($this->crud_model->is_added_to_cart($product_id)=="yes"){ 
-                    echo translate('added_to_cart');  
-                    } else { 
-                    echo translate('add_to_cart');  
-                    } 
-                ?>
-            </span>
-        </div>
+        <!--<div class="add-cart-btn">-->
+        <!--    <span class="btn" onclick="to_cart(<?php echo $product_id; ?>,event)">-->
+        <!--        <i class="fa fa-shopping-cart"></i>-->
+        <!--        <?php/* if($this->crud_model->is_added_to_cart($product_id)=="yes"){ -->
+        <!--            echo translate('added_to_cart');  -->
+        <!--            } else { -->
+        <!--            echo translate('add_to_cart');  -->
+        <!--            } -->
+        <!--        */?>-->
+        <!--    </span>-->
+        <!--</div>-->
     </div>
 </div>
 

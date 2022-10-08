@@ -73,14 +73,14 @@
                 <?php echo $this->crud_model->product_by($product_id,'with_link'); ?>
             </div>
         <?php endif ?>
-        <div class="cart">
-            <span class="btn btn-block btn-theme btn-icon-left" data-toggle="tooltip" 
-            	data-original-title="<?php if($this->crud_model->is_added_to_cart($product_id)){ echo translate('added_to_cart'); } else { echo translate('add_to_cart'); } ?>" 
-            		data-placement="left"
-                 		onclick="to_cart(<?php echo $product_id; ?>,event)" style="padding: 5px">
-                    		<i class="fa fa-shopping-cart"></i> 
-            </span>
-        </div>
+        <!--<div class="cart">-->
+        <!--    <span class="btn btn-block btn-theme btn-icon-left" data-toggle="tooltip" -->
+        <!--    	data-original-title="<?php if($this->crud_model->is_added_to_cart($product_id)){ echo translate('added_to_cart'); } else { echo translate('add_to_cart'); } ?>" -->
+        <!--    		data-placement="left"-->
+        <!--         		onclick="to_cart(<?php echo $product_id; ?>,event)" style="padding: 5px">-->
+        <!--            		<i class="fa fa-shopping-cart"></i> -->
+        <!--    </span>-->
+        <!--</div>-->
     </div>
 </div>
 <!-- <style>

@@ -10,17 +10,111 @@ class Home extends CI_Controller
      *  Active Supershop eCommerce CMS
      *  http://codecanyon.net/user/activeitezone
      */
+     function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
+    $output = NULL;
+    if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE) {
+        $ip = $_SERVER["REMOTE_ADDR"];
+        if ($deep_detect) {
+            if (filter_var(@$_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP))
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            if (filter_var(@$_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP))
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+        }
+    }
+    $purpose    = str_replace(array("name", "\n", "\t", " ", "-", "_"), NULL, strtolower(trim($purpose)));
+    $support    = array("country", "countrycode", "state", "region", "city", "location", "address");
+    $continents = array(
+        "AF" => "Africa",
+        "AN" => "Antarctica",
+        "AS" => "Asia",
+        "EU" => "Europe",
+        "OC" => "Australia (Oceania)",
+        "NA" => "North America",
+        "SA" => "South America"
+    );
+    if (filter_var($ip, FILTER_VALIDATE_IP) && in_array($purpose, $support)) {
+        $ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $ip));
+        if (@strlen(trim($ipdat->geoplugin_countryCode)) == 2) {
+            switch ($purpose) {
+                case "location":
+                    $output = array(
+                        "city"           => @$ipdat->geoplugin_city,
+                        "state"          => @$ipdat->geoplugin_regionName,
+                        "country"        => @$ipdat->geoplugin_countryName,
+                        "country_code"   => @$ipdat->geoplugin_countryCode,
+                        "continent"      => @$continents[strtoupper($ipdat->geoplugin_continentCode)],
+                        "continent_code" => @$ipdat->geoplugin_continentCode
+                    );
+                    break;
+                case "address":
+                    $address = array($ipdat->geoplugin_countryName);
+                    if (@strlen($ipdat->geoplugin_regionName) >= 1)
+                        $address[] = $ipdat->geoplugin_regionName;
+                    if (@strlen($ipdat->geoplugin_city) >= 1)
+                        $address[] = $ipdat->geoplugin_city;
+                    $output = implode(", ", array_reverse($address));
+                    break;
+                case "city":
+                    $output = @$ipdat->geoplugin_city;
+                    break;
+                case "state":
+                    $output = @$ipdat->geoplugin_regionName;
+                    break;
+                case "region":
+                    $output = @$ipdat->geoplugin_regionName;
+                    break;
+                case "country":
+                    $output = @$ipdat->geoplugin_countryName;
+                    break;
+                case "countrycode":
+                    $output = @$ipdat->geoplugin_countryCode;
+                    break;
+            }
+        }
+    }
+    return $output;
+}
 
     function __construct()
     {
         parent::__construct();
-        //$this->output->enable_profiler(TRUE);
+        //$this->output->enable_profile r(TRUE);
         $this->load->database();
         $this->load->library('spreadsheet');
         $this->load->library('paypal');
         $this->load->library('twoCheckout_Lib');
         $this->load->library('vouguepay');
         $this->load->library('pum');
+        //add affliate log
+        if(isset($_GET['aff_id']))
+        {
+            setcookie('aff_id',$_GET['aff_id'],strtotime( '+7 days' ));
+
+            $ip = $_SERVER['REMOTE_ADDR'];
+            $key = base64_decode($_GET['aff_id']);
+            $exp = explode('-',$key);
+            $country = $this->ip_info("Visitor", "Country Code");
+            if( count($exp) == 2)
+            {
+                $wh = array(
+                    'ip' => $ip,
+                    'aff_id' =>$exp[0],
+                    'comp_id' =>$exp[1],
+                    'country' =>$country,
+                
+                );
+                $row = $this->db->where($wh)->get('aff_log')->row();
+                $wh['expire_at'] =  date("Y-m-d H:i:s", strtotime( '+7 days' ));
+                if($row)
+                {
+                    $this->db->where('id',$row->id)->update('aff_log',$wh);
+                }
+                else
+                {
+                    $this->db->insert('aff_log',$wh);
+                }
+            }
+        }
         /*cache control*/
         //ini_set("user_agent","My-Great-Marketplace-App");
         $cache_time = $this->db->get_where('general_settings', array('type' => 'cache_time'))->row()->value;
@@ -611,6 +705,378 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $this->session->set_userdata('wallet_id', '');
         $this->session->set_flashdata('alert', 'payment_cancel');
         redirect(base_url() . 'home/profile/part/wallet/', 'refresh');
+    }
+
+    /* FUNCTION: Affliate dashboard */
+    public function affliate($para1 = "", $para2 = "", $para3 = "")
+    {
+        $type = '';
+        if ($this->session->userdata('user_login') != "yes" && $this->session->userdata('vendor_login') != 'yes') {
+          if($para2 == "ticket" || $para2 == "message_to_vendor"){
+              redirect(base_url() . 'home/login_set/login', 'refresh');
+          }
+          else{
+            redirect(base_url(), 'refresh');
+          }
+        }
+        $uid = 0;
+        if($this->session->userdata('user_login') == 'yes')
+        {
+            $uid = $this->session->userdata('user_id');
+            $type = 'user';
+        }
+        elseif($this->session->userdata('vendor_login') == 'yes')
+        {
+            $uid = $this->session->userdata('vendor_id');
+            $type = 'vendor';
+        }
+        $page_data= array();
+        if($uid)
+        {
+            $already = $this->db->where('type',$type)->where('uid',$uid)->get('affliate_user')->row();
+            if(!$already)
+            {
+                //add new account
+                $in = array(
+                    'type' => $type,
+                    'uid' => $uid
+                    );
+                    $r = $this->db->insert('affliate_user', $in);
+                    $page_data['affliate_id'] = $uid = $this->db->insert_id();
+
+            }
+            else
+            {
+                $page_data['affliate_id'] = $uid =  $already->id;
+            }
+        }
+        
+        // die('affliate');
+        if ($para1 == "info") {
+            $page_data['user_info'] = $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->result_array();
+            $this->load->view('front/user/profile', $page_data);
+        } elseif ($para1 == "wishlist") {
+            $page_data['log'] = $this->db->get('aff_log')->result_array();
+            $this->load->view('front/affliate/wishlist',$page_data); 
+        } elseif ($para1 == "affiliation_point_earnings") {
+            
+            $page_data['compain'] = $this->db->get('compain')->result_array();
+            $this->load->view('front/affliate/affiliation_point_earnings',$page_data);
+        } elseif ($para1 == "uploaded_products") {
+            $this->load->view('front/user/uploaded_products');
+        } elseif ($para1 == "uploaded_product_status") {
+            $page_data['customer_product_id'] = $para2;
+            $this->load->view('front/user/uploaded_product_status', $page_data);
+        } elseif ($para1 == "update_prod_status") {
+            $data['is_sold'] = $this->input->post('is_sold');
+            $this->db->where('customer_product_id', $para2);
+            $this->db->update('customer_product', $data);
+            redirect(base_url() . 'home/profile/part/uploaded_products', 'refresh');
+        } elseif ($para1 == "package_payment_info") {
+            $this->load->view('front/user/package_payment_info');
+        } elseif ($para1 == "view_package_details") {
+            $info = $this->db->get_where('package_payment', array('package_payment_id' => $para2))->row();
+            $page_info['det']['status'] = $info->payment_status;
+            $page_info['id'] = $para2;
+            $page_info['payment_details'] = $info->payment_details;
+            $this->load->view('front/user/view_package_details', $page_info);
+        } elseif ($para1 == "package_set_info") {
+            $data['payment_status'] = 'pending';
+            $data['payment_details'] = $this->input->post('payment_details');
+            $data['payment_timestamp'] = time();
+            if (!empty($this->input->post('payment_details'))) {
+                $this->db->where('package_payment_id', $para2);
+                $this->db->update('package_payment', $data);
+            }
+
+            echo 'done';
+        } elseif ($para1 == "wallet") {
+            
+            if ($para2 == "add_view") {
+                // die();
+                $this->load->view('front/affliate/wallet');
+            } else if ($para2 == "withdraw_request") {
+                $format = "%Y-%m-%d %h:%i %A";
+                $time = mdate($format);
+                $uid = 0;
+        if($this->session->userdata('user_login') == 'yes')
+        {
+            $uid = $this->session->userdata('user_id');
+            $type = 'user';
+        }
+        elseif($this->session->userdata('vendor_login') == 'yes')
+        {
+            $uid = $this->session->userdata('vendor_id');
+            $type = 'vendor';
+        }
+        $page_data= array();
+        if($uid)
+        {
+            $already = $this->db->where('type',$type)->where('uid',$uid)->get('affliate_user')->row();
+            if(!$already)
+            {
+                //add new account
+                $in = array(
+                    'type' => $type,
+                    'uid' => $uid
+                    );
+                    $r = $this->db->insert('affliate_user', $in);
+                    $page_data['affliate_id'] = $uid = $this->db->insert_id();
+
+            }
+            else
+            {
+                $page_data['affliate_id'] = $uid =  $already->id;
+            }
+        }
+                $data = array(
+                    'paypal' => $_GET['email'],
+                    'amount' => $_GET['amount'],
+                    'status' => '0',
+                    'vcreate_at' => $time,
+                    'uid' => $uid
+                    );
+                $this->db->insert('withdraw_request', $data);
+                // $this->load->view('front/user/wallet_info');
+            } else if ($para2 == "info_view") {
+                $info = $this->db->get_where('wallet_load', array('wallet_load_id' => $para3))->row();
+                $page_info['det']['status'] = $info->status;
+                //$page_info['det']['status'] = $info->status;
+                $page_info['id'] = $para3;
+                $page_info['payment_info'] = $info->payment_details;
+                $this->load->view('front/user/wallet_info', $page_info);
+            } else if ($para2 == "set_info") {
+                $data['status'] = 'pending';
+                $data['payment_details'] = $this->input->post('payment_info');
+                $data['timestamp'] = time();
+                $this->db->where('wallet_load_id', $para3);
+                $this->db->update('wallet_load', $data);
+                // $this->email_model->wallet_email('customer_set_payment_info_to_admin', $para3);
+                echo 'done';
+            } else {
+                $row = $this->db->where('id',$uid)->get('affliate_user')->row();
+                
+                $data['blc']  = $row->wallet;
+                $data['wallt']  = $this->db->where('aff_id', $uid)->get('aff_log')->row_array();
+                 $data['us']  = $this->db->where('uid', $uid)->get('withdraw_request')->row_array();
+                //  var_dump( $data );
+                $this->load->view('front/affliate/wallet', $data);
+            }
+        } elseif ($para1 == "order_history") {
+            $this->load->view('front/user/order_history');
+        } elseif ($para1 == "downloads") {
+            $this->load->view('front/user/downloads');
+        } elseif ($para1 == "update_profile") {
+            $page_data['user_info'] = $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->result_array();
+            $this->load->view('front/user/update_profile', $page_data);
+        } elseif ($para1 == "ticket") {
+            $this->load->view('front/user/ticket');
+        } elseif ($para1 == "message_box") {
+            $page_data['ticket'] = $para2;
+            $this->crud_model->ticket_message_viewed($para2, 'user');
+            $this->load->view('front/user/message_box', $page_data);
+        } elseif ($para1 == "message_view") {
+            $page_data['ticket'] = $para2;
+            $page_data['message_data'] = $this->db->get_where('ticket', array(
+                'ticket_id' => $para2
+            ))->result_array();
+            $this->crud_model->ticket_message_viewed($para2, 'user');
+            $this->load->view('front/user/message_view', $page_data);
+        }
+        elseif ($para1 == "message_to_vendor_box") {
+            $page_data['message_thread'] = $para2;
+            $this->crud_model->message_to_vendor_viewed($para2, 'user');
+            $this->load->view('front/user/message_to_vendor_box', $page_data);
+        }
+        elseif ($para1 == "message_to_vendor_view") {
+            $page_data['message_thread'] = $para2;
+            $page_data['message_data'] = $this->db->get_where('message_thread', array(
+                'message_thread_id' => $para2
+            ))->result_array();
+            $this->crud_model->message_to_vendor_viewed($para2, 'user');
+            $this->load->view('front/user/message_to_vendor_view', $page_data);
+        }
+
+        elseif ($para1 == "order_tracing") {
+            $sale_data = $this->db->get_where('sale', array(
+                'sale_code' => $this->input->post('sale_code')
+            ));
+            if ($sale_data->num_rows() >= 1) {
+                $page_data['status'] = 'done';
+                $page_data['sale_datetime'] = $sale_data->row()->sale_datetime;
+                $page_data['delivery_status'] = json_decode($sale_data->row()->delivery_status, true);
+            } else {
+                $page_data['status'] = '';
+            }
+            $this->load->view('front/user/order_tracing', $page_data);
+        } elseif ($para1 == "post_product") {
+            $this->load->view('front/user/post_product');
+        } elseif ($para1 == "post_product_bulk") {
+
+            /*if ($this->session->userdata('user_login') != "yes") {
+                redirect(base_url() . 'home/login_set/login', 'refresh');
+            }*/
+
+            $physical_categories = $this->db->where('digital', null)->or_where('digital', '')->get('category')->result_array();
+            $physical_sub_categories = $this->db->where('digital', null)->or_where('digital', '')->get('sub_category')->result_array();
+            $digital_categories = $this->db->where('digital', 'ok')->get('category')->result_array();
+            $digital_sub_categories = $this->db->where('digital', 'ok')->get('sub_category')->result_array();
+            $brands = $this->db->get('brand')->result_array();
+
+            $page_data['page_name'] = "customer_product_bulk_upload";
+            $page_data['page_title'] = translate('Bulk upload');
+
+            $page_data['upload_amount'] = $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->row()->product_upload;
+
+
+            $page_data['physical_categories'] = $physical_categories;
+            $page_data['physical_sub_categories'] = $physical_sub_categories;
+            $page_data['digital_categories'] = $digital_categories;
+            $page_data['digital_sub_categories'] = $digital_sub_categories;
+            $page_data['brands'] = $brands;
+
+            $this->load->view('front/user/post_product_bulk', $page_data);
+
+        } elseif ($para1 == "do_post_product") {
+            $upload_amount = $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->row()->product_upload;
+            if ($upload_amount > 0) {
+                $this->load->library('form_validation');
+
+                $this->form_validation->set_rules('title', 'Title', 'required');
+                $this->form_validation->set_rules('category', 'Category', 'required');
+                $this->form_validation->set_rules('sub_category', 'Sub Category', 'required');
+                $this->form_validation->set_rules('prod_condition', 'Condition', 'required');
+                $this->form_validation->set_rules('sale_price', 'Price', 'required');
+                $this->form_validation->set_rules('location', 'Location', 'required');
+                $this->form_validation->set_rules('description', 'Description', 'required');
+
+                if ($this->form_validation->run() == FALSE) {
+                    echo '<br>' . validation_errors();
+                } else {
+                    $options = array();
+                    if ($_FILES["images"]['name'][0] == '') {
+                        $num_of_imgs = 0;
+                    } else {
+                        $num_of_imgs = count($_FILES["images"]['name']);
+                    }
+                    $data['seo_title']          = $this->input->post('seo_title');
+                    $data['seo_description']    = $this->input->post('seo_description');
+                    $data['title'] = $this->input->post('title');
+                    $data['category'] = $this->input->post('category');
+                    $data['sub_category'] = $this->input->post('sub_category');
+                    $data['brand'] = $this->input->post('brand');
+                    $data['prod_condition'] = $this->input->post('prod_condition');
+                    $data['sale_price'] = $this->input->post('sale_price');
+                    $data['location'] = $this->input->post('location');
+                    $data['description'] = $this->input->post('description');
+                    $data['add_timestamp'] = time();
+                    $data['status'] = 'ok';
+                    $data['admin_status'] = 'ok';
+                    $data['is_sold'] = 'no';
+                    $data['rating_user'] = '[]';
+                    $data['num_of_imgs'] = $num_of_imgs;
+                    $data['front_image'] = 0;
+                    $additional_fields['name'] = json_encode($this->input->post('ad_field_names'));
+                    $additional_fields['value'] = json_encode($this->input->post('ad_field_values'));
+                    $data['additional_fields'] = json_encode($additional_fields);
+                    $data['added_by'] = $this->session->userdata('user_id');
+
+                    $this->db->insert('customer_product', $data);
+                    // echo $this->db->last_query();
+                    $id = $this->db->insert_id();
+                    $this->benchmark->mark_time();
+                    if(!demo()){
+                        $this->crud_model->file_up("images", "customer_product", $id, 'multi');
+                    }
+                    $this->crud_model->set_category_data(0);
+                    recache();
+
+                    // Package Info subtract code
+                    $data1['product_upload'] = $upload_amount - 1;
+                    $this->db->where('user_id', $this->session->userdata('user_id'));
+                    $this->db->update('user', $data1);
+
+                    echo "done";
+                }
+            } else {
+                echo "failed";
+            }
+        }
+        elseif ($para1 == "message_to_vendor") {
+            $msg_page_data['check'] = "";
+            if($para2 != null){
+                $msg_page_data['seller_id'] = $para2;
+            }
+            $this->load->view('front/user/message_to_vendor', $msg_page_data );
+        }
+        else {
+            $page_data['part'] = 'info';
+            if ($para2 == "info") {
+                $page_data['part'] = 'info';
+            } elseif ($para2 == "wallet") {
+                if ($this->crud_model->get_type_name_by_id('general_settings', '84', 'value') !== 'ok') {
+                    redirect(base_url() . 'home');
+                } else {
+                    $page_data['part'] = 'wallet';
+                }
+
+            } elseif ($para2 == "wishlist") {
+                $page_data['part'] = 'wishlist';
+            } elseif ($para2 == "uploaded_products") {
+                $page_data['part'] = 'uploaded_products';
+            } elseif ($para2 == "order_history") {
+                $page_data['part'] = 'order_history';
+            } elseif ($para2 == "downloads") {
+                $page_data['part'] = 'downloads';
+            } elseif ($para2 == "update_profile") {
+                $page_data['part'] = 'update_profile';
+            } elseif ($para2 == "ticket") {
+                $page_data['part'] = 'ticket';
+            } elseif ($para2 == "post_product") {
+                $page_data['part'] = 'post_product';
+            }
+            elseif ($para2 == "message_to_vendor") {
+                $page_data['part']                = 'message_to_vendor';
+                $page_data['product_added_by_id'] = $para3;
+            }
+            elseif ($para2 == "post_product_bulk") {
+                $page_data['part'] = 'post_product_bulk';
+
+                $physical_categories = $this->db->where('digital', null)->or_where('digital', '')->get('category')->result_array();
+                $physical_sub_categories = $this->db->where('digital', null)->or_where('digital', '')->get('sub_category')->result_array();
+                $digital_categories = $this->db->where('digital', 'ok')->get('category')->result_array();
+                $digital_sub_categories = $this->db->where('digital', 'ok')->get('sub_category')->result_array();
+                $brands = $this->db->get('brand')->result_array();
+
+                $page_data['page_name'] = "customer_product_bulk_upload";
+                $page_data['page_title'] = translate('Bulk upload');
+
+                $page_data['upload_amount'] = $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->row()->product_upload;
+
+
+                $page_data['physical_categories'] = $physical_categories;
+                $page_data['physical_sub_categories'] = $physical_sub_categories;
+                $page_data['digital_categories'] = $digital_categories;
+                $page_data['digital_sub_categories'] = $digital_sub_categories;
+                $page_data['brands'] = $brands;
+            } elseif ($para2 == "uploaded_products") {
+                $page_data['part'] = 'uploaded_products';
+            } elseif ($para2 == "payment_info") {
+                $page_data['part'] = 'package_payment_info';
+            }
+
+            $page_data['user_info'] = $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->result_array();
+            $page_data['page_name'] = "affliate";
+            $page_data['asset_page'] = "user_profile";
+            $page_data['page_title'] = translate('affliate');
+            $this->load->view('front/index', $page_data);
+        }
+        /*$page_data['all_products'] = $this->db->get_where('user', array(
+            'user_id' => $this->session->userdata('user_id')
+        ))->result_array();
+        $page_data['user_info']    = $this->db->get_where('user', array(
+            'user_id' => $this->session->userdata('user_id')
+        ))->result_array();*/
     }
 
     /* FUNCTION: Loads Customer Profile Page */
@@ -1662,6 +2128,30 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $this->load->view('front/user/order_listed', $page_data);
     }
 
+    function log_listed($para2 = 0)
+    {
+        $this->load->library('Ajax_pagination');
+        $uid = 0;
+        if($this->session->userdata('user_login') == 'yes')
+        {
+            $uid = $this->session->userdata('user_id');
+            $type = 'user';
+        }
+        elseif($this->session->userdata('vendor_login') == 'yes')
+        {
+            $uid = $this->session->userdata('vendor_id');
+            $type = 'vendor';
+        }
+        $wh = array('uid'=>$uid,'type'=> $type);
+        $row = $this->db->where($wh)->get('affliate_user')->row();
+        if(isset($row->id))
+        {
+            $uid = $row->id;
+        }
+        $page_data['query'] = $this->db->where('aff_id',$uid)->get('aff_log')->result_array();
+        $this->load->view('front/affliate/wish_listed', $page_data);
+    }
+
     function wish_listed($para2 = '')
     {
         $this->load->library('Ajax_pagination');
@@ -1817,10 +2307,41 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     {
         $this->load->library('Ajax_pagination');
 
-        $id = $this->session->userdata('user_id');
-        $this->db->where('user', $id);
+        // $id = $this->session->userdata('user_id');
+         $uid = 0;
+        if($this->session->userdata('user_login') == 'yes')
+        {
+            $uid = $this->session->userdata('user_id');
+            $type = 'user';
+        }
+        elseif($this->session->userdata('vendor_login') == 'yes')
+        {
+            $uid = $this->session->userdata('vendor_id');
+            $type = 'vendor';
+        }
+        $page_data= array();
+        if($uid)
+        {
+            $already = $this->db->where('type',$type)->where('uid',$uid)->get('affliate_user')->row();
+            if(!$already)
+            {
+                //add new account
+                $in = array(
+                    'type' => $type,
+                    'uid' => $uid
+                    );
+                    $r = $this->db->insert('affliate_user', $in);
+                    $page_data['affliate_id'] = $uid = $this->db->insert_id();
 
-        $config['total_rows'] = $this->db->count_all_results('wallet_load');;
+            }
+            else
+            {
+                $page_data['affliate_id'] = $uid =  $already->id;
+            }
+        }
+        $this->db->where('uid', $uid);
+
+        $config['total_rows'] = $this->db->count_all_results('withdraw_request');
         $config['base_url'] = base_url() . 'home/wallet_listed/';
         $config['per_page'] = 5;
         $config['uri_segment'] = 5;
@@ -1857,9 +2378,9 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $config['num_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
         $config['num_tag_close'] = '</a></li>';
         $this->ajax_pagination->initialize($config);
-        $this->db->order_by('wallet_load_id', 'DESC');
-        $this->db->where('user', $id);
-        $page_data['query'] = $this->db->get('wallet_load', $config['per_page'], $para2)->result_array();
+        // $this->db->order_by('wallet_load_id', 'DESC');
+        $this->db->where('uid', $uid);
+        $page_data['query'] = $this->db->get('withdraw_request', $config['per_page'], $para2)->result_array();
         $this->load->view('front/user/wallet_listed', $page_data);
     }
 
@@ -2691,6 +3212,10 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         {
             $type = 'bpage';
         }
+        if(isset($_REQUEST['other1']))
+        {
+            $type = 'other1';
+        }
         $page_data['product_details'] = $this->db->get_where('product', array('product_id' => $para1))->result_array();
         $page_data['vendors'] = $vendors;
         $page_data['page_name'] = "product_view/" . $type . "/page_view";
@@ -3019,8 +3544,9 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         }
         else
         {
-            $pack = $this->db->where('def',1)->get('bpkg')->row();
+            $pack = $this->db->where('amount',0)->get('package')->row();
             $this->process_pack($id,0);
+            return 0;
         }
         //bpage
     }
@@ -3029,7 +3555,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $order = $this->db->where('sale_id',$id)->get('sale')->row();
         $cart = json_decode($order->product_details);
         $sing = array();
-        $i = 0;
+        $i = 0; 
         foreach ($cart as $key => $value) {
             if($i == 0)
             {
@@ -3045,19 +3571,6 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     function process_pack($vid, $pid)
     {
         $this->crud_model->upgrade_membership($vid,$pid);
-        /*
-        $pack = $this->db->where('membership_id',$pid)->get('membership')->row();
-        // var_dump($pack);
-        $date = date('Y-m-d H:i:s');
-        $days = ($pid)?$pack->timespan:30;
-        $limit = ($pid)?$pack->product_limit:$this->db->get_where('general_settings',array('type'=>'default_member_product_limit'))->row()->value;
-        $exp = date('Y-m-d H:i:s', strtotime($date. ' + '.$pack->days.' days')); 
-        $up = array(
-            'exp_date' => $exp,
-            'membership_id' => $pid,
-            'listings' => $limit,
-        );
-        $this->db->where('vendor_id',$vid)->update('vendor', $up);*/
 
     }
     function vendor_logup($para1 = "", $para2 = "")
@@ -3136,7 +3649,9 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                                 }
                             }
                             $this->vendor_page($this->db->insert_id());
-                            // echo $msg;
+                            $msg = 'done_and_sent';
+                            echo $msg;
+                            exit();
                         } else {
                             echo translate('please_fill_the_captcha');
                         }
@@ -3167,6 +3682,9 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                             // print_r($this->db->last_query());    
                             // die();
                             $this->vendor_page($this->db->insert_id());
+                            $msg = 'done_and_sent';
+                            echo $msg;
+                            exit();
 
                             $msg = 'done';
                             if ($this->email_model->account_opening('vendor', $data['email'], $password) == true) {
@@ -5534,6 +6052,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
             $r = $this->db->update('membership_payment', $data);
             $type = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->membership;
             $vendor = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->vendor;
+            $this->package_affliate($invoice_id);
             $this->crud_model->upgrade_membership($vendor,$type);
         }
             // $sale_id = 256;
@@ -5563,6 +6082,50 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
         $this->session->set_flashdata('alert', 'payment_cancel');
         redirect(base_url() . 'home/cart_checkout/', 'refresh');
     }
+    function package_affliate($id)
+    {
+        
+        $ip =$_SERVER['REMOTE_ADDR'];
+        $this->db->order_by("create_at", "desc");
+
+        $row = $this->db->where('ip',$ip)->get('aff_log')->row();
+        if($row && $id && isset($row->status) && $row->status == 0)
+        {
+            $aff_id = $row->aff_id;
+            $comp_id = $row->comp_id;
+            $compain = $this->db->where('compain_id',$comp_id)->get('compain')->row();//compain
+            $user = $this->db->where('id',$aff_id)->get('affliate_user')->row();//compain
+            $inv = $this->db->where('membership_payment_id',$id)->get('membership_payment')->row();//compain
+            $am = ($compain->percentage/100)* $inv->amount;
+            
+            $expiry = $row->expire_at;
+            $today = date("Y-m-d");
+$expire = $expiry; //from database
+
+$today_time = strtotime($today);
+$expire_time = strtotime($expire);
+
+            if(isset($user->wallet) && $am && $today_time < $expire_time )
+            {
+                $earn = $am + $user->wallet;
+                $up = array(
+                    'wallet' => $earn
+                    );
+                $r = $this->db->where('id',$aff_id)->update('affliate_user',$up);
+                if($r)
+                {
+                    $up = array(
+                        'status' => 1,
+                        'earn' => $am,
+                        );
+                    $this->db->where('id',$row->id)->update('aff_log',$up);
+                }
+                return true;
+            }
+            
+        }
+    }
+    
 
     /* FUNCTION: Loads after successful paypal payment*/
     function paypal_success($sale_id = 0)
@@ -5587,6 +6150,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
             $r = $this->db->update('membership_payment', $data);
             $type = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->membership;
             $vendor = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->vendor;
+            $this->package_affliate($invoice_id);
             $this->crud_model->upgrade_membership($vendor,$type);
         }
         

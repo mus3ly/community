@@ -5,6 +5,10 @@
 	.fa-twitter{background-color:#55acee;}
 	.fa-google{background-color:#dc4e41}
 	.fa-linkedin-in{background-color:#0C63BC;}
+	.social_image img{
+	    width:25px;
+	    height:auto;
+	}
     #mainnav-container{
         left :0px !important;
     }
@@ -121,6 +125,7 @@ btn1 .fa{
 </style>
 
 <div class="row" style="margin-right:20px;">
+
     <div class="col-md-12" style="border-bottom: 1px solid #ebebeb;padding: 5px;     margin-top:64px;">
                             <button class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" onclick="ajax_set_full('add','Add Product','Successfully Added!','product_add',''); proceed('to_list');" style="display: none;">Create Product                            </button>
                             <a href="<?= base_url('/vendor/product'); ?>" class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" style="" onclick="ajax_set_list();  proceed('to_add');">Back To Product List                            </a>
@@ -220,6 +225,12 @@ btn1 .fa{
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('business_title');?></label>
                                 <div class="col-sm-6">
                                     <input type="text" name="title" id="demo-hor-1" value="<?php echo $row['title']; ?>" placeholder="<?php echo translate('business_title');?>" class="form-control required">
+                                </div>
+                            </div>
+							    <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('tags');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="tag" value="<?= $row['tag']; ?>" data-role="tagsinput" placeholder="<?php echo translate('enter comma (,) to add more');?>" class="form-control">
                                 </div>
                             </div>
                             <div class="form-group btm_border">
@@ -492,55 +503,37 @@ btn1 .fa{
 
                         </div>
                         <div id="social_media" class="tab-pane fade ">
-                        <div class="form-group btm_border">
-                                <div class="col-sm-4"></div>
-                                <div class="col-sm-8"><small>*<?php echo translate('Enter link of your Facebook page')?></small></div>
-                                <div class="col-sm-4 control-label" for="">
-                                    <i class="fa-brands fa-facebook-f"></i>
-                                    </div>
-                                <div class="col-sm-6">
-                                    <input type="text" name="facebook" value="<?php echo $row['facbook']; ?>"
-                                           class="form-control ">
-                                </div>
-                                <div class="col-sm-2"></div>
-                            </div>
-                            <div class="form-group btm_border">
-                                <div class="col-sm-4"></div>
-                                <div class="col-sm-8"><small>*<?php echo translate('Enter link of your Twitter page')?></small></div>
-                                <div class="col-sm-4 control-label" for="">
-                                    <i class="fa-brands fa-twitter"></i>
-                                    </div>
-                                <div class="col-sm-6">
-                                    <input type="text" name="twitter" value="<?php echo $row['twitter']; ?>"
-                                           class="form-control ">
-                                </div>
-                                <div class="col-sm-2"></div>
-                            </div>
-                            <div class="form-group btm_border">
-                                <div class="col-sm-4"></div>
-                                <div class="col-sm-8"><small>*<?php echo translate('Enter link of your Google')?></small></div>
-                                <div class="col-sm-4 control-label" for="">
-                                    <i class="fa-brands fa-google"></i>
-                                    </div>
-                                <div class="col-sm-6">
-                                    <input type="text" name="google" value="<?php echo $row['google']; ?>"
-                                           class="form-control ">
-                                </div>
-                                <div class="col-sm-2"></div>
-                            </div>
-                            <div class="form-group btm_border">
-                                <div class="col-sm-4"></div>
-                                <div class="col-sm-8"><small>*<?php echo translate('Enter link of your LinkedIn')?></small></div>
-                                <div class="col-sm-4 control-label" for="">
-                                    <i class="fa-brands fa-linkedin-in"></i>
-                                    </div>
-                                <div class="col-sm-6">
-                                    <input type="text" name="linkedin" value="<?php echo $row['linkedin']; ?>"
-                                           class="form-control ">
-                                </div>
-                                <div class="col-sm-2"></div>
-                            </div>
+                        <div class="form-group btm_border ">
+                            <?php
+                            $old = $row['social_media'];
+                            $old = json_decode($old,true);
+                            // var_dump($social_media);
+                            $img ='';
+                            foreach($social_media as $k => $v){
+                                $id = $v['id'];
+                                // var_dump( $id);
+                                // var_dump( $old);
+                                
+                            if($v['img']){
+					           $img = $this->crud_model->get_img($v['img'])->secure_url;
+			                 } 
 
+                            ?>
+                            <div class="row">
+                                <div class="col-sm-4 control-label social_image" for="">
+                                    <img src="<?= $img?>" >
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" name="social[<?php echo $v['id']; ?>]" value="<?= isset($old[$v['id']])?$old[$v['id']]:''; ?>" placeholder="<?php echo $v['name']; ?>"
+                                           class="form-control ">
+                                </div>
+                                <div class="col-sm-2"></div>
+                                </div>
+                                <?php
+                                }
+                                ?>
+                            </div>
+                            
                         </div>
                         <div id="info_section" class="tab-pane fade ">
                         <div class="form-group btm_border">

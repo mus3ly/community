@@ -24,9 +24,16 @@
                 </li>                                                 
                 <?php
                     $all_category = $this->db->get('category')->result_array();
-                    foreach($all_category as $row)
+                    $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 86))->row()->value,true);
+                                            $result=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result[]=$row;
+                                                } 
+                                            }
+                    foreach($all_category as $key => $row)
                     {
-						if($this->crud_model->if_publishable_category($row['category_id']) && get_cat_level($row['category_id']) == 1){
+						if($this->crud_model->if_publishable_category($row['category_id']) && in_array($row['category_id'], $result)){
                 ?>
                 <li onclick="load_sub(<?= $row['category_id'] ?>)">
                     <span class="arrow search_cat search_cat_click" data-cat="<?php echo $row['category_id']; ?>" 
@@ -56,15 +63,15 @@
     </div>
     <!-- /widget shop categories -->
     <!-- widget price filter -->
-    <div class="widget widget-filter-price">
-        <h4 class="widget-title">
-            <?php echo translate('price');?>
-        </h4>
-        <div class="widget-content">
-            <div id="slider-range"></div>
-            <input type="text" id="amount" style="width:100%;text-align:center;" disabled />
-        </div>
-    </div>
+    <!--<div class="widget widget-filter-price">-->
+    <!--    <h4 class="widget-title">-->
+    <!--        <?php echo translate('price');?>-->
+    <!--    </h4>-->
+    <!--    <div class="widget-content">-->
+    <!--        <div id="slider-range"></div>-->
+    <!--        <input type="text" id="amount" style="width:100%;text-align:center;" disabled />-->
+    <!--    </div>-->
+    <!--</div>-->
     <!-- /widget price filter -->
     <br>
     <div class="row hidden-sm hidden-xs">

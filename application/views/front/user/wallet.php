@@ -8,9 +8,9 @@
                         <div class="media-link">
                             <div class="caption">
                                 <div class="caption-wrapper div-table">
+                                   
                                     <div class="caption-inner div-cell">
-                                        <h1 style="text-align: center; color: white;">
-                                            <?php echo currency($this->wallet_model->user_balance()); ?>
+                                        <h1 style="text-align: center; color: white;"><?= $wallt['earn'];?>
                                         </h1>
                                     </div>
                                 </div>
@@ -22,9 +22,15 @@
         </div>
         <div class="row" >
             <div class="col-md-12" style="margin-top:2px;" >
+                 <?php
+                                    if( $wallt['earn'] >= '5'){
+                                    ?>
                 <div class="btn btn-theme btn-theme-sm btn-block" onclick="wallet('<?php echo base_url(); ?>home/profile/wallet/add_view')">
                     <?php echo translate('deposit_to_wallet'); ?>
                 </div>
+                <?php
+                    }
+                ?>
             </div>
         </div>
         <input type="hidden" id="state" value="normal" />

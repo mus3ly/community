@@ -23,12 +23,6 @@
                 <th data-field="item" colspan="2" data-align="right" data-sortable="true">
                     <?php echo translate('item');?>
                 </th>
-                <th data-field="min_price" data-align="center" data-sortable="true">
-                    <?php echo translate('min_price');?>
-                </th>
-                <th data-field="max_price" data-align="center" data-sortable="true">
-                    <?php echo translate('max_price');?>
-                </th>
                 <?php if ($this->db->get_where('general_settings', array('general_settings_id' => '58'))->row()->value == 'ok'): ?>
                 <th data-field="added_by" data-sortable="true">
                     <?php echo translate('added_by');?>
