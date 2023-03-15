@@ -22,6 +22,15 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                 </span>
                             </a>
                         </li>
+                        <li 
+                        	style="border-top:1px solid rgba(69, 74, 84, 0.7);">
+                            <a target="_blank" href="<?php echo base_url(); ?>home/affiliate">
+                                <i class="fa fa-dashboard"></i>
+                                <span class="menu-title">
+									<?php echo translate('affiliate_panel');?>
+                                </span>
+                            </a>
+                        </li>
 
             			<?php
 						if($physical_check == 'ok' && $digital_check == 'ok'){
@@ -77,7 +86,19 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                             <li <?php if($page_name=="product"){?> class="active-link" <?php } ?> >
                                                 <a href="<?php echo base_url(); ?>vendor/product">
                                                     <i class="fa fa-circle fs_i"></i>
-                                                        <?php echo translate('all_listings');?>
+                                                        <?php echo translate('all_listings');?> 
+                                                </a>
+                                            </li>
+                                            <li <?php if($page_name=="product" && isset($_GET['is_blog'])){?> class="active-link" <?php } ?> >
+                                                <a href="<?php echo base_url(); ?>vendor/product?is_blog=1">
+                                                    <i class="fa fa-circle fs_i"></i>
+                                                        <?php echo translate('blog_listings');?>
+                                                </a>
+                                            </li>
+                                            <li <?php if($page_name=="product" && isset($_GET['is_product'])){?> class="active-link" <?php } ?> >
+                                                <a href="<?php echo base_url(); ?>vendor/product?is_product=1">
+                                                    <i class="fa fa-circle fs_i"></i>
+                                                        <?php echo translate('product_listings');?>
                                                 </a>
                                             </li>
                                         <?php
@@ -148,12 +169,24 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
 
 									<?php if($this->crud_model->vendor_permission('product')) {
                                         ?>
-                                        <li <?php if ($page_name == "product") { ?> class="active-link" <?php } ?> >
+                                        <li <?php if ($page_name == "product" && !isset($_GET['is_event']) && !isset($_GET['is_job']) && !isset($_GET['is_product'])) { ?> class="active-link" <?php } ?> >
                                             <a href="<?php echo base_url(); ?>vendor/product">
                                                 <i class="fa fa-circle fs_i"></i>
                                                 <?php echo translate('all_listings'); ?>
                                             </a>
                                         </li>
+                                             <li <?php if($page_name=="product" && isset($_GET['is_blog'])){?> class="active-link" <?php } ?> >
+                                                <a href="<?php echo base_url(); ?>vendor/product?is_blog=1">
+                                                    <i class="fa fa-circle fs_i"></i>
+                                                        <?php echo translate('blog_listings');?>
+                                                </a>
+                                            </li>
+                                            <li <?php if($page_name=="product" && isset($_GET['is_product'])){?> class="active-link" <?php } ?> >
+                                                <a href="<?php echo base_url(); ?>vendor/product?is_product=1">
+                                                    <i class="fa fa-circle fs_i"></i>
+                                                        <?php echo translate('product_listings');?>
+                                                </a>
+                                            </li>
 									<?php
 										}
 									?>
@@ -195,7 +228,7 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
 							}
 						?>
                         <!----------------Blog-------------->
-                    	<?php
+                    	<?php /*
 							if($this->crud_model->vendor_permission('sale')){
 						?>
                         <!--Menu list item-->
@@ -207,8 +240,9 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                     </span>
                             </a>
                         </li>
-                        <?php
+                        <?php 
 							}
+						*/	
 						?>
 
                         <!--  Payment from Admin -->
@@ -276,6 +310,38 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                         <?php
                             }
                         ?>
+                        <?php
+                            if($this->crud_model->vendor_permission('site_settings')){
+                        ?>
+                        <!--Menu list item-->
+                        <li <?php if($page_name=="site_settings"){?> class="active-link" <?php } 
+
+                        ?> >
+                        <?php
+                        $vend = $this->db->where('vendor_id',$this->session->userdata('vendor_id'))->get('vendor')->row();
+                        ?>
+                            <a href="<?php echo $this->crud_model->product_link($vend->bpage); ?>?edit=1" target="_blank">
+                                <i class="fa fa-wrench"></i>
+                                    <span class="menu-title">
+                                        <?php echo translate('business_page_live_edit');?>
+                                    </span>
+                            </a>
+                        </li>
+                        <li <?php if($page_name=="site_settings"){?> class="active-link" <?php } 
+
+                        ?> >
+                        
+                            <a href="<?php echo base_url('vendor/brand');?>" target="_blank">
+                                <i class="fa fa-wrench"></i>
+                                    <span class="menu-title">
+                                        <?php echo translate('text_gallery');?>
+                                    </span>
+                            </a>
+                        </li>
+                        <!--Menu list item-->
+                        <?php
+                            }
+                        ?>
 
                         <?php
                             if($this->crud_model->vendor_permission('business_settings')){
@@ -301,6 +367,12 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                 </span>
                             </a>
                         </li>
+                        <li><a href="<?php echo base_url(); ?>vendor/affiliate/">
+                             <i class="fa fa-lock"></i>
+                                <span class="menu-title">
+                                	<?php echo translate('Affiliates');?>
+                                </span>
+                        </a></li>
                 </div>
             </div>
         </div>

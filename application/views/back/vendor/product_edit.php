@@ -1,4 +1,6 @@
-
+<?php
+$row = (array) $product_data;
+?>
 <style>
     #mainnav-container{
         left :0px !important;
@@ -15,6 +17,10 @@
     width: 100%;
     overflow:hidden;
   }
+  .error{
+        border-color: red !important;
+
+}
     .del_icon
     {
     position: absolute;
@@ -24,6 +30,11 @@
     .del_icon i{
         float: right;
     }
+    #add_amn{
+    max-height: 150px;
+    min-width: 0px;
+    overflow-y: scroll;
+}
     .gallary_images ul li img{}
 .btn1{
     
@@ -115,13 +126,12 @@ btn1 .fa{
 }
 </style>
 
-<div class="row" style="margin-right:20px;">
-    <div class="col-md-12" style="border-bottom: 1px solid #ebebeb;padding: 5px;     margin-top:64px;">
+<div class="row">
+    <div class="col-md-12 top_head">
                             <button class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" onclick="ajax_set_full('add','Add Product','Successfully Added!','product_add',''); proceed('to_list');" style="display: none;">Create Listings</button>
                             <a href="<?= base_url('/vendor/product'); ?>" class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" style="" onclick="ajax_set_list();  proceed('to_add');">Back To Listings</a>
                         </div>
-    <div class="col-md-10"  style="margin-top: 52px;    margin-left: 244px;
-">
+    <div class="col-md-12 newsidebar">
         <?php
             echo form_open(base_url() . 'vendor/product/update/'.$row['product_id'], array(
                 'class' => 'form-horizontal',
@@ -131,55 +141,169 @@ btn1 .fa{
             ));
         ?>
             <!--Panel heading-->
-            <div class="panel-heading">
-                <div class="panel-control" style="float: left;">
+            <div class="row">
+                <div class="col-sm-2 sidebar">
+                    <div class="panel-heading">
+                <div class="panel-control1">
                     <ul class="nav nav-tabs">
-                        <li class="active">
+                       <?php
+                        $gen = 0;
+                        if(isset($_GET['is_job']) || isset($_GET['is_event']))
+                        {
+                            $gen = 1;
+                        }
+                        ?>
+                        <?php
+                        if(!$gen)
+                        {
+                        ?>
+                        <li class="active" onclick="go_tab('customer_choice_options')">
                             <a data-toggle="tab" href="#customer_choice_options"><?php echo translate('business_type'); ?></a>
                         </li>
-                        
-                        <li >
+                        <?php
+                        }
+                        ?>
+                        <li class="<?= ($gen)?"active":""; ?>"  onclick="go_tab('top_banner')">
                             <a data-toggle="tab" href="#top_banner"><?php echo translate('general'); ?></a>
                         </li>
-                        
-                        <li >
+                              <li id="car_show" style="display:none" onclick="go_tab('xtra_info')">
+                            <a data-toggle="tab" href="#xtra_info"><?php echo translate('extra_car_info'); ?></a>
+                        </li>  
+                       <li id="property_show" style="display:none"  onclick="go_tab('xtra_property_info')">
+                            <a data-toggle="tab" href="#xtra_property_info"><?php echo translate('extra_property_info'); ?></a>
+                        </li>  
+                        <?php
+                        if(isset($_GET['is_event'])){
+                        ?>
+                        <li id="event_show"  onclick="go_tab('xtra_event_info')">
+                            <a data-toggle="tab" href="#xtra_event_info"><?php echo translate('extra_event_info'); ?></a>
+                        </li> 
+                        <?php 
+                            
+                        }else{
+                        ?>
+                         <li id="event_show" style="display:none"  onclick="go_tab('xtra_event_info')">
+                            <a data-toggle="tab" href="#xtra_event_info"><?php echo translate('extra_event_info'); ?></a>
+                        </li> 
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if(isset($_GET['is_job'])){
+                        ?>
+                        <li id="job_show"  onclick="go_tab('xtra_job_info')">
+                            <a data-toggle="tab" href="#xtra_job_info"><?php echo translate('extra_job_info'); ?></a>
+                        </li> 
+                        <?php 
+                            
+                        }else{
+                        ?>
+                           <li id="job_show" style="display:none" onclick="go_tab('xtra_job_info')">
+                            <a data-toggle="tab" href="#xtra_job_info"><?php echo translate('extra_job_info'); ?></a>
+                        </li> 
+                        <?php
+                        }
+                        ?>
+                      
+                       <li onclick="go_tab('event_images')">
                             <a data-toggle="tab" href="#event_images"><?php echo translate('images_gallary'); ?></a>
                         </li>
-
-                        <li >
-                            <a data-toggle="tab" href="#first_section"><?php echo translate('Desciptive_section'); ?></a>
+                        <li onclick="go_tab('custom_attributes_0')">
+                            <a data-toggle="tab" href="#custom_attributes_0"><?php echo translate('checkboxs_information'); ?></a>
+                        </li>
+                        <li  onclick="go_tab('amenitys')">
+                            <a data-toggle="tab" href="#amenitys"><?php echo translate('Amenities'); ?></a>
+                        </li>
+                       <li  onclick="go_tab('first_section')">
+                            <a data-toggle="tab" href="#first_section"><?php echo translate('Desrciptive_section'); ?></a>
+                        </li>
+                       <li onclick="go_tab('custom_attributes_1')">
+                            <a data-toggle="tab" href="#custom_attributes_1"><?php echo translate('accordion_information'); ?></a>
                         </li>
 
-                        
-                        </li>
-                        <li>
+                         <li onclick="go_tab('location')">
                             <a data-toggle="tab" href="#location"><?php echo translate('location'); ?></a>
                         </li>
-                        </li>
-                        <li>
+                  
+                       
+                      <li onclick="go_tab('seo_section')">
                             <a data-toggle="tab" href="#seo_section"><?php echo translate('seo_section'); ?></a>
                         </li>
                         
                     </ul>
                 </div>
             </div>
-            <div class="panel-body">
+                </div>
+
+                <div class="col-sm-10 right_content_box">
+                    <div class="panel-body">
                 <div class="tab-base">
                     <!--Tabs Content-->                    
                     <div class="tab-content">
-                    <div id="customer_choice_options" class="tab-pane fade active in">
-                        <input type="hidden" id="category" name="category"/>
+                        
+                   <div id="customer_choice_options" class="tab-pane fade <?= (!$gen)?"active in":""; ?>">
+                        <input type="hidden" id="category" value="<?= ($row['category'])?$row['category']:""; ?>" name="category"/>
                            <div class="row" id="cat_res">
-                                
+                                  <div class="breaddcum">
+                    <ul>
+                        <?php
+                         $carr = explode(',',$row['category']);
+                         $para2 = $carr[count($carr)-1];
+                         $sing = $this->db->where('category_id',$para2)->get('category')->row();
+                          $level = $sing->level;
+       
+            $breed = array();
+            
+            $cid = $para2;
+            for ($i=1; $i <= $level; $i++) { 
+             
+                 $srow = $this->db->where('category_id',$cid)->get('category')->row_array();
+               if(isset($srow) && !empty($srow)){
+                   $breed[] = $cid;
+                 $cid = $srow['pcat'];
+                //  var_dump($cid);
+               }
+            }
+            if($breed)
+            {
+                ?>
+                <div class="breaddcum">
+                    <ul>
+                        <?php
+                        $cat = array();
+                        foreach(array_reverse($breed) as $k=> $v)
+                        {
+                            $cat[] = $v;
+                            $crow = $this->db->where('category_id',$v)->get('category')->row();
+                            ?>
+                            <li onclick="selecttype('<?= implode(',',$cat);?>',<?= $v;?>,1)"><?= $crow->category_name;?></li>
+                            <?php
+                        }
+                        ?>
+
+
+                    </ul>
+                </div>
+                <?php
+            }
+            
+            ?>
+            
+
+
+                    </ul>
+                </div> 
                                  <?php
                             foreach($brands as $k=>$v){
-                                if(get_cat_level($v['category_id']) == 1)
+                                if($v['level'] == 1)
                                 {
                             ?>
                                 <div class="col-md-4 col-sm-12 col-xs-12 <?= ($product_data->category == $v['category_id'])?"active":"" ?>" onclick="selecttype('<?= $v['category_id'];?>')" >
                                     <a href="#"><div class="flip-card ">
                                   <div class="flip-card-inner">
-                                    <div class="flip-card-front <?= ($product_data->category == $v['category_id'])?"active":"" ?>">
+                                      <?php
+                                      ?>
+                                    <div class="flip-card-front <?= (in_array($v['category_id'],$carr))?"active":"" ?>">
                                         <i class="fa <?= $v['fa_icon'];?>" aria-hidden="true"></i>
                                         <br>
                                         <p><?= $v['category_name'];?></p>
@@ -197,7 +321,7 @@ btn1 .fa{
                                 <div class="col-md-4 col-sm-12 col-xs-12"></div>
                             </div>
                         </div>
-                        <div id="top_banner" class="tab-pane fade ">
+                        <div id="top_banner" class="tab-pane fade">
                             <h4 class="text-thin text-center"><?php echo translate('top_banner'); ?></h4> 
                             <div class="form-group btm_border">
                             <div class="form-group btm_border">
@@ -259,7 +383,7 @@ btn1 .fa{
                                     <label class="col-sm-4 control-label" for="demo-hor-12">Cover Image</label>
                                     <div class="col-sm-6">
                                         <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
-                                            <input type="file" name="sideimg" onchange="preview2(this);" id="demo-hor-inputpass" class="form-control">
+                                            <input type="file" name="sideimg" onchange="preview2(this);" id="demo-hor-inputpass" class="form-control <?= (empty($row['comp_cover']))?"required":""; ?>">
                                         </span>
                                         <br><br>
                                         <span id="previewImg2" >
@@ -450,6 +574,168 @@ btn1 .fa{
                                     </div>
                                     </div>
                         </div>
+                   <div id="custom_attributes_0" class="tab-pane fade ">
+                      <div class="form-group btm_border">
+                          <?php
+                          if(isset($row['additional_fields'])){
+                        //   $attr = $row['additional_fields'];
+                        //   $exp = (explode(",",$attr));
+                        //   var_dump($exp);
+                        $exp = json_decode($row['additional_fields']);
+                        $ex = json_decode($exp->name);
+                        $values = json_decode($exp->value);
+                        
+                          foreach($ex as $k => $v){
+                              
+                          ?>
+                                              <div class="form-group">
+                                 <div class="col-sm-4">
+                                 <input type="text" name="ad_field_names[]" class="form-control required" value="<?= $v?>"  placeholder="<?php echo translate('field_name'); ?>">
+                                 </div>
+                                 <div class="col-sm-5">
+                                 <input type="text" rows="9"  class="form-control" data-height="100" name="ad_field_values[]" value="<?= $values[$k]; ?>">
+                                </div>
+                                <div class="col-sm-2">
+                                <span class="remove_it_v rms btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>
+                                </div>
+                                </div>
+                                <?php
+                                              }
+                                              }
+                                ?>
+                                <div id="more_additional_fields"></div>
+                                <div class="col-sm-12">
+                                    <h4 class="pull-left">
+                                        <i><?php echo translate('if_you_need_more_field_for_your_product_,_please_click_here_for_more...');?></i>
+                                    </h4>
+                                       <div id="more_btn" class="btn btn-mint btn-labeled fa fa-plus pull-right">
+                                    <?php echo translate('add_more_fields');?></div>
+                                </div>
+                                 
+                            </div>
+                             
+                        </div>
+                         <div id="amenitys" class="tab-pane fade ">
+                     <div class="form-group btm_border">
+                                    <label class="col-sm-4 control-label" for="demo-hor-1">Select Amenities</label>
+                                    <div class="col-sm-6">
+                                                                                
+                             <input type="text" class="amnty form-control" id="amnty">
+                             <button type="button" class="btn btn-primary" id="amn_btn">Add</button>
+                            <div id="add_amn"></div>
+                            <hr>
+                            <!--<div id="select_amn">-->
+                                
+                            <!--</div>-->
+                            <select name="listingamenities[]" id="select_amn" class="form-control js-example-basic-single" multiple="multiple">
+                                <!--<option></option>-->
+                                
+                            </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="custom_attributes_1" class="tab-pane fade ">
+                            
+                            <?php
+                                if(isset($row['additional_fields_new']) && !empty($row['additional_fields_new'])){
+                                    $exp1 = json_decode($row['additional_fields_new']);
+                                    // var_dump($exp1);
+                                    $ex1 =$exp1->name;
+                                    $values1 = $exp1->value;
+                                    foreach($ex1 as $k => $v){
+                                        ?>
+                                    <div class="form-group">
+                                        <div class="col-sm-4">
+                                            <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>" value="<?= $v?>">
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values_custom[]"><?= $values1[$k]; ?></textarea>
+                                        </div>
+                                
+                                    </div>
+                                <?php
+                                    }
+                                    }else{
+                                ?>
+                        <div class="form-group">
+                         <div class="col-sm-4">
+                        <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>" value="<?php echo translate('requirements'); ?>">
+                        </div>
+                        <div class="col-sm-5">
+                         <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values_custom[]" ></textarea>
+                            </div>
+                    
+                        </div>
+                        <div class="form-group">
+                         <div class="col-sm-4">
+                        <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>" value="<?php echo translate('benefits'); ?>">
+                        </div>
+                        <div class="col-sm-5">
+                         <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values_custom[]" ></textarea>
+                            </div>
+                    
+                        </div>
+                        <?php
+                                    }
+                        ?>
+                        <div id="more_fields"></div>
+                         <div id="more_btn_attr" class="btn btn-mint btn-labeled fa fa-plus pull-right">
+                                    <?php echo translate('add_more_fields');?>
+                        </div>    
+                        </div>
+                              <div id="xtra_info" class="tab-pane fade ">
+                                   <?php
+                            $this->db->order_by("sort", "asc");
+                            // var_dump($row['product_id']);
+                            $fileds = $this->db->where('category',807)->get('list_fields')->result_array();
+                            foreach($fileds as $k=> $v)
+                            {
+                                $v['pid'] = $row['product_id'];
+                                $this->load->view('vendor_fields',$v);
+                            }
+                            ?>
+                            </div>
+                          
+                            <div id="xtra_property_info" class="tab-pane fade ">
+                                <?php
+                            $this->db->order_by("sort", "asc");
+
+                            $fileds = $this->db->where('category',808)->get('list_fields')->result_array();
+                            foreach($fileds as $k=> $v)
+                            {
+                                $v['pid'] = $row['product_id'];
+                                $this->load->view('vendor_fields',$v);
+                            }
+                            ?>
+                         
+                           
+                        </div>
+                        <div id="xtra_event_info" class="tab-pane fade ">
+                         <?php
+                            $this->db->order_by("sort", "asc");
+
+                            $fileds = $this->db->where('category',917)->get('list_fields')->result_array();
+                            foreach($fileds as $k=> $v)
+                            {
+                                $v['pid'] = $row['product_id'];
+                                $this->load->view('vendor_fields',$v);
+                            }
+                            ?>
+                        </div>
+                        <div id="xtra_job_info" class="tab-pane fade ">
+                            
+                        <?php
+                            $this->db->order_by("sort", "asc");
+
+                            $fileds = $this->db->where('category',78)->get('list_fields')->result_array();
+                            foreach($fileds as $k=> $v)
+                            {
+                                $v['pid'] = $row['product_id'];
+                                $this->load->view('vendor_fields',$v);
+                            }
+                            ?>
+                         
+                        </div>
                         <div id="seo_section" class="tab-pane fade ">
                         <div class="form-group btm_border">
                                 <div class="col-sm-4"></div>
@@ -478,6 +764,59 @@ btn1 .fa{
                                 <div class="col-sm-2"></div>
                             </div>
 
+                        </div>  
+                        <div id="xtra_info" class="tab-pane fade ">
+                           
+  <div class="form-group btm_border" style="padding-top:30px;"> Extra Info
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
+                                <div class="col-sm-6">
+                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="extra_info" class="checkbox_class" <?= (in_array('extra_info',$checks))?"checked":""; ?>/>
+                                </div>
+                            </div>
+                        <div class="form-group btm_border">
+                                    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('section_heading');?></label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="extra_section_heading" id="demo-hor-1" value="<?php echo $row['extra_section_heading']; ?>" placeholder="<?php echo translate('extra_section_heading');?>" class="form-control">
+                                    </div>
+                                </div>
+                        <div class="form-group btm_border">
+                                    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('number_of_column');?></label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control exra_chnge"  name="number_of_column">
+                                        <?php
+                                        for($i = 1;$i<=3;$i++)
+                                        {
+                                            ?>
+                                            <option value="<?= $i; ?>" <?= (isset($row['number_of_column']) && $row['number_of_column'] == $i)?"selected":""; ?> ><?= $i ?><?= ($i== 1)?"column":"columns" ?></option>
+                                            <?php
+                                        }
+                                        ?>    
+                                        </select>
+                                        
+                                </div>
+                                </div>
+                                <?php
+                                $content = json_decode($row['etra_content'],true);
+                                // var_dump($content);
+                                ?>
+                               <div class="form-group btm_border" id="col1_div">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('colum1_Details'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" name="info_desc"  class="summernotes" data-height="200" data-name="etra_content[]"><?= (isset($content[0]))?$content[0]:"" ?></textarea>
+                                </div>
+                                </div>
+                                 <div class="form-group btm_border" id="col2_div" style="display:none;">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('colum2_Details'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" name="info_desc"  class="summernotes" data-height="200" data-name="etra_content[]"><?= (isset($content[1]))?$content[1]:"" ?></textarea>
+                                </div>
+                                </div>
+                                 <div class="form-group btm_border" id="col3_div" style="display:none;">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('colum3_Details'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" name="info_desc"  class="summernotes" data-height="200" data-name="etra_content[]"><?= (isset($content[3]))?$content[3]:"" ?></textarea>
+                                </div>
+                                </div>
                         </div>
                         <div id="location" class="tab-pane fade ">
                         <input  style="width: 186px;
@@ -507,6 +846,7 @@ btn1 .fa{
                             </div>
                         </div>
                         <div id="event_images" class="tab-pane fade ">
+                            I m here
                         <div class="form-group btm_border">
                                 <h4 class="text-thin text-center"><?php echo translate('gallary_images'); ?></h4>                            
                             </div>
@@ -582,7 +922,7 @@ btn1 .fa{
                                 <div class="col-sm-6">
                                     <?php 
                                         $images = $this->crud_model->file_view('product',$row['product_id'],'','','thumb','src','multi','all');
-                                        var_dump();
+                                        // var_dump();
                                         if($images && $num_of_imgs){
                                             foreach ($images as $row1){
                                                 $a = explode('.', $row1);
@@ -607,15 +947,19 @@ btn1 .fa{
                         </div>
                             </div>
                         </div>
-                        
                             <span class="btn btn-purple btn-labeled fa fa-hand-o-right pull-right" onclick="next_tab()"><?php echo translate('next'); ?></span>
-                <span class="btn btn-purple btn-labeled fa fa-hand-o-left pull-right" onclick="previous_tab()"><?php echo translate('previous'); ?></span>
+                            <span class="btn btn-purple btn-labeled fa fa-hand-o-left pull-right" onclick="previous_tab()"><?php echo translate('previous'); ?></span>
                             
                         </div>
                     </div>
                 </div>
         
             </div>
+                </div>
+
+            </div>
+            
+            
     
             <div class="panel-footer">
                 <div class="row">
@@ -626,7 +970,7 @@ btn1 .fa{
                     </div>
                     
                     <div class="col-md-1">
-                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');" ><?php echo translate('upload');?></span>
+                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="validate_listing();" ><?php echo translate('upload');?></span>
                     </div>
                     
                 </div>
@@ -642,6 +986,9 @@ btn1 .fa{
 <input type="hidden" id="option_count" value="-1">
 
 <script>
+function activaTab(tab){
+    $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+};
     window.preview = function (input) {
         if (input.files && input.files[0]) {
             $("#previewImg").html('');
@@ -802,7 +1149,7 @@ $.ajax(settings).done(function (response) {
             +'        <input type="text" name="ad_field_names[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>">'
             +'    </div>'
             +'    <div class="col-sm-5">'
-            +'        <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values[]"></textarea>'
+            +'        <input type="text" rows="9"  class="form-control" data-height="100" name="ad_field_values[]">'
             +'    </div>'
             +'    <div class="col-sm-2">'
             +'        <span class="remove_it_v rms btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>'
@@ -811,12 +1158,75 @@ $.ajax(settings).done(function (response) {
         );
         set_summer();
     });
-    
-    function next_tab(){
-        $('.nav-tabs li.active').next().find('a').click();                    
+    $("#more_btn_attr").click(function(){
+        $("#more_fields").append(''
+            +'<div class="form-group">'
+            +'    <div class="col-sm-4">'
+            +'        <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>">'
+            +'    </div>'
+            +'    <div class="col-sm-5">'
+            +'        <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values_custom[]"></textarea>'
+            +'    </div>'
+            +'    <div class="col-sm-2">'
+            +'        <span class="remove_it_v rms btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>'
+            +'    </div>'
+            +'</div>'
+        );
+        set_summer();
+    });
+     var tabs = [
+        'customer_choice_options',
+        'top_banner',
+        'event_images',
+        'custom_attributes_0',
+        'amenitys',
+        'first_section',
+        'custom_attributes_1',
+        'location',
+        'seo_section',
+        
+    ];
+    function go_tab(ctab1 = ''){
+        ctab = ctab1;
+        if(ctab)
+        {
+            $('.nav-tabs li').each(function( index ) {
+                var loop_name = $( this ).children('a').attr('href');
+                // console.log(loop_name);
+                if(loop_name.match(ctab))
+                {
+                    $(this).addClass('active');
+                    $(loop_name).addClass('active');
+                    $(loop_name).addClass('in');
+                    // alert(loop_name);
+                }
+                else
+                {
+                    $(this).removeClass('active');
+                    $(loop_name).removeClass('active');
+                    $(loop_name).removeClass('in');
+                }
+            });
+        }
+        
     }
-    function previous_tab(){
-        $('.nav-tabs li.active').prev().find('a').click();                     
+    var ctab = 'customer_choice_options';
+    function next_tab(){
+        
+        //find next here
+        var cindex  = tabs.indexOf(ctab); 
+        var nindex = cindex+1;
+        ctab = tabs[nindex];
+        go_tab(ctab);     
+    }
+   function previous_tab(){
+        var cindex  = tabs.indexOf(ctab); // 0
+        // alert(cindex+ctab);
+        var nindex = cindex-1;
+        ctab = tabs[nindex];
+        // alert(ctab);
+        go_tab(ctab);
+        return ctab;
     }
     
     $('body').on('click', '.rmo', function(){
@@ -868,14 +1278,210 @@ $.ajax(settings).done(function (response) {
         $("form").submit(function(e){
             event.preventDefault();
         });
-    });
+ 
     
+    function selecttype(id,nid= 0,type = 1)
+{
     
-  
+    if(type)
+    {
+        alert(id);
+        $('#category').val(id);
+    }
+    else
+    {
+        if($('#category').val())
+        {
+            var pre = $('#category').val()+','+id;
+            // alert(pre);
+            $('#category').val(pre);
+        }
+        else{
+            $('#category').val(id);
+        }
+    }
+    show_rel_fields();
+    if(nid)
+    {
+        id=nid;
+    }
+    alert(id);
+
+    var url  = base_url+'vendor/product/sub_by_cat/'+id;
+    $.ajax({
+  url: url,
+  cache: false,
+  success: function(html){
+    if(html == '0')
+    {
+        next_tab();
+
+    }
+    else
+    {
+    $("#cat_res").html(html);
+    }
+  }
+});
+
+    // get_cat(id,this);
+}
+
+ 
+   });
+   $(document).ready(function(){
+       show_rel_fields();
+   });
+    function show_rel_fields()
+{
+    
+    var property_cat = '<?= $this->config->item('property_cat') ?>';
+    var car_cat = '<?= $this->config->item('car_cat') ?>';
+    var event_cat = '<?= $this->config->item('event_cat') ?>';
+    var job_cat = '<?= $this->config->item('job_cat') ?>';
+    var cats = $('#category').val();
+    // alert(cats);
+    
+    const myArray = cats.split(",");
+    // alert(myArray.indexOf(car_cat));
+    if(myArray.indexOf(car_cat) != -1)
+{  
+    tabs = [
+        'customer_choice_options',
+        'top_banner',
+        'xtra_info',
+        'event_images',
+        'custom_attributes_0',
+        'amenitys',
+        'first_section',
+        'custom_attributes_1',
+        'location',
+        'seo_section',
+        
+    ];
+    ctab = 'customer_choice_options';
+   $('#car_show').css({'display':'block'});
+}
+else
+{
+   $('#car_show').css({'display':'none'});
+}
+    if(myArray.indexOf(property_cat) != -1)
+{ tabs = [
+        'customer_choice_options',
+        'top_banner',
+        'xtra_property_info',
+        'event_images',
+        'custom_attributes_0',
+        'amenitys',
+        'first_section',
+        'custom_attributes_1',
+        'location',
+        'seo_section',
+        
+    ];
+    ctab = 'customer_choice_options';
+    
+   $('#property_show').css({'display':'block'});
+}
+else
+{
+   $('#property_show').css({'display':'none'});
+}
+if(myArray.indexOf(event_cat) != -1)
+{  
+    tabs = [
+        'customer_choice_options',
+        'top_banner',
+        'xtra_event_info',
+        'event_images',
+        'custom_attributes_0',
+        'amenitys',
+        'first_section',
+        'custom_attributes_1',
+        'location',
+        'seo_section',
+        
+    ];
+    ctab = 'customer_choice_options';
+   $('#event_show').css({'display':'block'});
+}
+else
+{
+    $('#event_show').css({'display':'none'});
+}
+if(myArray.indexOf(job_cat) != -1)
+{  tabs = [
+        'customer_choice_options',
+        'top_banner',
+        'xtra_job_info',
+        'event_images',
+        'custom_attributes_0',
+        'amenitys',
+        'first_section',
+        'custom_attributes_1',
+        'location',
+        'seo_section',
+        
+    ];
+    ctab = 'customer_choice_options';
+   $('#job_show').css({'display':'block'});
+}
+else
+{
+    $('#job_show').css({'display':'none'});
+}
+}
+   $(document).ready(function(){
+       show_rel_fields();
+   });
 let file;
 var filename;
-function selecttype(id)
+function selecttype(id,nid= 0,type = 1)
 {
+    // alert(nid);
+    if(type)
+    {
+        $('#category').val(id);
+    }
+    else
+    {
+        if($('#category').val())
+        {
+            var pre = $('#category').val()+','+id;
+            // alert(pre);
+            $('#category').val(pre);
+        }
+        else{
+            $('#category').val(id);
+        }
+    }
+    show_rel_fields();
+    if(nid)
+    {
+        id=nid;
+    }
+    // alert(id);
+
+    var url  = base_url+'vendor/product/sub_by_cat/'+id;
+    $.ajax({
+  url: url,
+  cache: false,
+  success: function(html){
+    if(html == '0')
+    {
+        next_tab();
+
+    }
+    else
+    {
+    $("#cat_res").html(html);
+    }
+  }
+});
+
+    // get_cat(id,this);
+}{
     if($('#category').val())
     {
         var pre = $('#category').val()+','+id;
@@ -885,6 +1491,7 @@ function selecttype(id)
     else{
         $('#category').val(id);
     }
+    show_rel_fields();
     var url  = base_url+'vendor/product/sub_by_cat/'+id;
     $.ajax({
   url: url,
@@ -1083,6 +1690,234 @@ function showPosition(position) {
     }
     </script>
     <script>
+         function validate_listing(){
+        var property_cat = '<?= $this->config->item('property_cat') ?>';
+        
+    var car_cat = '<?= $this->config->item('car_cat') ?>';
+    var event_cat = '<?= $this->config->item('event_cat') ?>';
+    var job_cat = '<?= $this->config->item('job_cat') ?>';
+    var cats = $('#category').val();
+    if(!cats)
+    {
+        alert("Please select atleast 1 category");
+        return 0;
+    }
+    const myArray = cats.split(",");
+    if(myArray.indexOf(car_cat) != -1)
+{  
+    car_cat = 1;
+}
+else
+{
+   car_cat = 0;
+}
+    if(myArray.indexOf(property_cat) != -1)
+{ 
+    
+   property_cat = 1;
+}
+else
+{
+   property_cat = 0;
+}
+if(myArray.indexOf(event_cat) != -1)
+{  
+   event_cat = 1;
+}
+else
+{
+    event_cat = 0
+}
+if(myArray.indexOf(job_cat) != -1)
+{  
+   job_cat = 1;
+}
+else
+{
+    job_cat = 0;
+}
+                    var car_error = 0;
+                    var property_error = 0;
+                    var event_error = 0;
+                    var job_error = 0;
+        if(car_cat == 1)
+        {
+            var focus = '';
+            $('.required1').each(function(i, obj) {
+                if(!$(this).val() || $(this).val() == 0)
+                {
+                    car_error = 1;
+                    
+                    $(this).addClass('error');
+                    // console.log($(this).attr('class'));
+                }
+                else
+                {
+                    $(this).removeClass('error');                    
+                }
+                console.log($(this).attr('name'));
+            });
+            if(car_error == 1)
+            {
+                var fdone = 0;
+                $('.required1').each(function(i, obj) {
+                if(!$(this).val() && fdone == 0)
+                {
+                    fdone = 1;
+                    $(this).focus();
+                }
+                console.log($(this).attr('name'));
+            });
+                alert("Please fill required field");
+                $('.tab-pane').each(function(i, obj) {
+                    $(this).removeClass('active');
+                    $(this).removeClass('in');
+                
+                });
+                $('#xtra_info').addClass("active in");
+                $('#car_show').addClass("active");
+            }
+            else
+            {
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+            }
+        }
+        else if(property_cat == 1)
+        {
+            var focus = '';
+            $('.required2').each(function(i, obj) {
+                if(!$(this).val() || $(this).val() == 0)
+                {
+                    property_error = 1;
+                    
+                    $(this).addClass('error');
+                    // console.log($(this).attr('class'));
+                }
+                else
+                {
+                    $(this).removeClass('error');                    
+                }
+                console.log($(this).attr('name'));
+            });
+            if(property_error == 1)
+            {
+                var fdone = 0;
+                $('.required2').each(function(i, obj) {
+                if(!$(this).val() && fdone == 0)
+                {
+                    fdone = 1;
+                    $(this).focus();
+                }
+                console.log($(this).attr('name'));
+            });
+                alert("Please fill required field");
+                $('.tab-pane').each(function(i, obj) {
+                    $(this).removeClass('active');
+                    $(this).removeClass('in');
+                
+                });
+                $('#xtra_property_info').addClass("active in");
+                $('#property_show').addClass("active");
+            }
+            else
+            {
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+            }
+        }
+        else if(event_cat == 1)
+        {
+            var focus = '';
+            $('.required3').each(function(i, obj) {
+                if(!$(this).val() || $(this).val() == 0)
+                {
+                    event_error = 1;
+                    
+                    $(this).addClass('error');
+                    // console.log($(this).attr('class'));
+                }
+                else
+                {
+                    $(this).removeClass('error');                    
+                }
+                console.log($(this).attr('name'));
+            });
+            // alert(event_error);
+            if(event_error == 1)
+            {
+                var fdone = 0;
+                $('.required3').each(function(i, obj) {
+                if(!$(this).val() && fdone == 0)
+                {
+                    fdone = 1;
+                    $(this).focus();
+                }
+                console.log($(this).attr('name'));
+            });
+                alert("Please fill required field");
+                $('.tab-pane').each(function(i, obj) {
+                    $(this).removeClass('active');
+                    $(this).removeClass('in');
+                
+                });
+                $('#xtra_event_info').addClass("active in");
+                $('#event_show').addClass("active");
+            }
+            else
+            {
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+            }
+        }
+        else if(job_cat == 1)
+        {
+            var focus = '';
+            $('.required4').each(function(i, obj) {
+                if(!$(this).val() || $(this).val() == 0)
+                {
+                    job_error = 1;
+                    
+                    $(this).addClass('error');
+                    // console.log($(this).attr('class'));
+                }
+                else
+                {
+                    $(this).removeClass('error');                    
+                }
+                console.log($(this).attr('name'));
+            });
+            if(job_error == 1)
+            {
+                var fdone = 0;
+                $('.required4').each(function(i, obj) {
+                if(!$(this).val() && fdone == 0)
+                {
+                    fdone = 1;
+                    $(this).focus();
+                }
+                console.log($(this).attr('name'));
+            });
+                alert("Please fill required field");
+                $('.tab-pane').each(function(i, obj) {
+                    $(this).removeClass('active');
+                    $(this).removeClass('in');
+                
+                });
+                $('#xtra_job_info').addClass("active in");
+                $('#job_show').addClass("active");
+            }
+            else
+            {
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+            }
+        }
+        else
+        {
+            form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+        }
+        return 0;
+        // 
+    }
+    </script>
+    <script>
     var button = 0;
     <?php
     if($btns)
@@ -1116,8 +1951,92 @@ function showPosition(position) {
                                        $('#button_div').append(html);
         }
     }
-    </script>
+    
+$(document).ready(function(){
 
+    var num = parseInt( $('.exra_chnge').val());
+    for(var i = 1;i <=3 ;i++)
+    {
+        var mid = "#col"+i+"_div";
+        if(i<= num)
+        {
+        $(mid).show();
+        }
+        else
+        {
+            $(mid).hide();
+        }
+    }
+});
+$('.exra_chnge').change(function(){
+    var num = parseInt( $(this).val());
+    for(var i = 1;i <=3 ;i++)
+    {
+        var mid = "#col"+i+"_div";
+        if(i<= num)
+        {
+        $(mid).show();
+        }
+        else
+        {
+            $(mid).hide();
+        }
+    }
+});
+    </script>
+<script type="text/javascript">
+    $(document).ready(function() {
+    $(".js-example-basic-single").select2();
+    });
+    
+    $('#amnty').on('keyup', function(){
+        var url = '<?= base_url('vendor/getAmenties')?>';
+        var value = $(this).val();
+          $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: {add:1,value:value },
+        success: function (data) {
+           $('#add_amn').html(data);
+        },
+        error: function (xhr, exception) {
+           
+        }
+    });  
+    });
+    $('#amn_btn').on('click', function(){
+        var url = '<?= base_url('vendor/getAmenties')?>';
+        var value = $('#amnty').val();
+
+          $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: {add_to_table:1,value:value },
+        success: function (data) {
+           $('#select_amn').append(data);
+        },
+        error: function (xhr, exception) {
+           
+        }
+    });  
+    });
+    
+    function selectamn(id){
+         var url = '<?= base_url('vendor/getAmenties');?>';
+      $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { select:1,sid:id},
+        success: function (data) {
+        //   alert(data);select_amn
+        $('#select_amn').append(data);
+        },
+    });
+    }
+</script>
 
 <style>
     .btm_border{

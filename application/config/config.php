@@ -22,8 +22,8 @@ $root.= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME
 // $root = 'https://marketplace.hypeplug.paris/';
 $config['base_url'] = $root;
 // $config['base_url'] = '';
-//$config['shippo_token'] = 'shippo_test_52bf877b99c795c0e3a73a8dd2483c417db6f730';
- $config['shippo_token'] = 'shippo_live_e6a934d119a9d004a9aa6ab16172fbaea6f2e135';
+$config['shippo_token'] = 'shippo_test_52bf877b99c795c0e3a73a8dd2483c417db6f730';
+//  $config['shippo_token'] = 'shippo_live_e6a934d119a9d004a9aa6ab16172fbaea6f2e135';
 $config['demo'] = false;
 
 /*
@@ -38,6 +38,12 @@ $config['demo'] = false;
 */
 $config['lat'] = '51.509865';
 $config['lng'] = '-0.118092';
+$config['charity_cat'] = '134';
+$config['property_cat'] = '80';
+$config['event_cat'] = '917';
+$config['job_cat'] = '78';
+$config['car_cat'] = '807';
+$config['places_cat'] = '81';
 $config['index_page'] = 'index.php';
 $key = 'QUl6YVN5QjZxZ2pVeU1Temx1MDhNU0FJVHFjYzI2T3ltcFUwM3ZR';
 $config['map_key'] = base64_decode($key);
@@ -450,6 +456,10 @@ $config['csrf_expire'] 			= 7200;
 $config['csrf_regenerate'] 		= FALSE;
 $config['csrf_exclude_uris'] 	= array('home/paypal_success',
 									'admin/product/api_add',
+									'home/contactus',  
+									'vendor/login',  
+									'home/upload_bpage',  
+									'home/delete_gallery',  
 									'home/paypal_ipn',
 									'admin/paypal_success',
 									'admin/paypal_ipn',
@@ -462,27 +472,34 @@ $config['csrf_exclude_uris'] 	= array('home/paypal_success',
 									'home/ticket_message_add',
 									'vendor/gupload',
 									'home/text_search',
+									'home/email',
 									'home/add_rate',
 									'admin/display_settings',
 									'home/twocheckout_success',
 									'admin/twocheckout_success',
 									'vendor/twocheckout_success',
+									'vendor/blog_cat',
 									'home/vouguepay_success',
 									'home/vouguepay_ipn',
 									'admin/vouguepay_ipn',
 									'admin/vouguepay_success',
 									'vendor/vouguepay_ipn',
+									'vendor/getAmenties',
 									'vendor/vouguepay_success',
 									'home/wallet_paypal_success',
 									'home/wallet_paypal_ipn',
 									'home/wallet_paypal_cancel',
 									'home/pum_success',
 									'home/pum_failure',
+									'admin/category/delete',
 									'home/wallet_pum_success',
 									'home/wallet_pum_failure',
+									'admin/product_bulk_upload',
 									'admin/vendor_pum_success',
 									'admin/vendor_pum_failure',
+									'admin/cat_child',
 									'vendor/vendor_pum_success',
+									'vendor/productslug',
 									'vendor/vendor_pum_failure',
 									'home/cus_pum_success',
 									'home/cus_pum_failure',
@@ -500,9 +517,12 @@ $config['csrf_exclude_uris'] 	= array('home/paypal_success',
 									'vendor/vendor_sslcommerz_cancel',
                                     'admin/product_bulk_upload_save',
                                     'vendor/product_bulk_upload_save',
+                                    'Admin/category_bulk_upload',
                                     'home/customer_product_bulk_upload_save',
                                     'home/ajax_post_user_rating',
 									'home/message_to_seller_reply/[0-9]+',
+									'home/update_product+',
+									'webhook/payment_webhook',
 								);
 /*
 |--------------------------------------------------------------------------

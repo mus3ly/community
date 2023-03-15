@@ -1,7 +1,14 @@
-<div class="modal fade popup-cart" id="popup-cart" tabindex="-1" role="dialog" aria-hidden="true">
+<!-- <div class="modal fade popup-cart" id="popup-cart" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="container">
-            <div class="cart-items">
+            
+        </div>
+    </div>
+</div> -->
+
+<div class="cart_totaloverlay"></div>
+<div class="model___cart" id="popup-cart" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="cart-items">
                 <div class="cart-items-inner">
                     <span class="top_carted_list">
                     </span>
@@ -16,7 +23,7 @@
                     <div class="media">
                         <div class="media-body">
                             <div>
-                                <span class="btn btn-theme-dark" data-dismiss="modal">
+                                <span class="btn btn-theme-dark closebtn" data-dismiss="modal">
                                     <?php echo translate('close');?>
                                 </span><!--
                                 -->
@@ -28,6 +35,5 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 </div>
+

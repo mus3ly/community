@@ -10,7 +10,7 @@
 <section class="page-section">
     <div class="wrap container">
         <!-- <div id="profile-content"> -->
-            <div class="row profile">
+            <div class="row profile mb_-120">
                 <div class="col-lg-3 col-md-3">
                     <input type="hidden" id="state" value="normal" />
                     <div class="widget account-details">
@@ -36,11 +36,14 @@
                             <?php if($this->crud_model->get_type_name_by_id('general_settings','58','value') == 'ok'){ ?>
                               <a class="pnav_message_to_vendor" href="#"><li><?php echo translate('support_ticket_to_vendor');?></li></a>
                             <?php }  ?>
+                            <?php if($this->crud_model->get_type_name_by_id('general_settings','58','value') == 'ok'){ ?>
+                              <a class="" href="<?= base_url('home/affliate');?>"><li><?php echo translate('Affiliates');?></li></a>
+                            <?php }  ?>
                             <?php if($this->crud_model->get_type_name_by_id('general_settings','83','value') == 'ok'){ ?>
                                 <a class="pnav_post_product" href="#"><li><?php echo translate('post_product');?></li></a>
                                 <a class="pnav_post_product_bulk" href="#"><li><?php echo translate('post_product_bulk');?></li></a>
                             <?php } ?>
-
+                   
                         </ul>
                     </div>
                 </div>

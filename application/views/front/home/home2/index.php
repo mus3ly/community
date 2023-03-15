@@ -18,14 +18,17 @@
     <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/owl.carousel.css" />
 
 </head>
+<style>
+    .scroll::-webkit-scrollbar {
+            display: none;
+        }
+</style>
 <body id="page-name">
-
-
 
 <div class="main_warp">
     <div class="container">
-        <div class="row">
-            <div class="col-sm-6 graphic_img">
+        <div class="row align-items-center">
+            <div class="col-sm-4 graphic_img">
 
 <?php
                                             $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '62'))->row();
@@ -37,14 +40,25 @@
                                         ?>
                 <img src="<?= $img ?>" alt="">
             </div>
-            <div class="col-sm-6 perfect_place">
+            <div class="col-sm-8 perfect_place">
                 <h5>Community HubLand - A Directory Site - Your Virtual Land</h5>
                 <h3>Find Your <b>Perfect Place.</b></h3>
                 <div class="search_bar">
                 <form action="<?= base_url('/home/text_search'); ?>"  onkeyup="submitForm(event)" id="srch_form" method="post">
                     <img src="<?= base_url(); ?>template/front/images/Location.png" alt="Search">
-                    <input type="text" placeholder="Find Your  Place"  name="query" alt="" onkeyup="submitForm(event)">
+                    <input type="text" placeholder="tacos, cheap dinner, Max’s" id="left_box"  name="query" alt="" />
+                     <input type="text" id="loc_box"  onkeyup="search_location()" placeholder="Location"  name="" alt="" >
+                     <div id="map_search" style="
+    z-index: 9999999999999999;
+    position: absolute;
+">
+                         <img id="loader" style="display:none" src="<?= base_url('/map-loader.gif'); ?>" />
+                         <div id="result"></div>
+                     </div>
+                     <input type="hidden" id="place_id" name="place_id" />
                     <button type="submit">Search</button>
+                    
+    <div id="map"></div>
                 </form>
                 </div>
 
@@ -188,9 +202,10 @@
             <img src="<?= base_url(); ?>template/front/images/business_graphic-clipart.png" alt="">
         </div>
         <div class="row">
-            <div class="col-sm-6 communitybox every_business">
+            <div class="col-sm-7 communitybox every_business">
                 
                 <h3><?= $this->crud_model->get_type_name_by_id('ui_settings','69','value'); ?></h3>
+                <div class="scroll" id="scrol_9sec">
                 <p><?= $this->crud_model->get_type_name_by_id('ui_settings','68','value'); ?></p>
                 
                 <ul>
@@ -208,7 +223,8 @@
                 <b>Price?</b>
                 <h5>Less than a the cost of a breakfast a month</h5>
             </div>
-            <div class="col-sm-6 business_graphic">
+            </div>
+            <div class="col-sm-5 business_graphic">
                 <?php
                                     $img = '';
                                             $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '67'))->row();
@@ -293,7 +309,7 @@
     </div>
     <div class="container">
         <div class="row" id="advertise_info">
-            <div class="col-sm-6 business_graphic">
+            <div class="col-sm-5 business_graphic">
             <?php
                                     $img = '';
                                             $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '85'))->row();
@@ -308,9 +324,10 @@
                         <img src="<?= base_url(); ?>template/front/images/purple.png" alt="">
                     </div>
             </div>
-            <div class="col-sm-6 communitybox">
+            <div class="col-sm-7 communitybox">
                 <b><?= $this->crud_model->get_type_name_by_id('ui_settings','79','value'); ?></b>
                 <h3><?= $this->crud_model->get_type_name_by_id('ui_settings','80','value'); ?></h3>
+                <div id="scrol_9sec" class="scroll">
                 <p><?= $this->crud_model->get_type_name_by_id('ui_settings','82','value'); ?></p>
                 <ul>
                     <?php
@@ -329,6 +346,7 @@
                     }
                     ?>
                 </ul>
+                </div>
                 <div class="learn_more_btns">
                 <a href="<?= $this->crud_model->get_type_name_by_id('ui_settings','84','value'); ?>" class="our_projects"><?= $this->crud_model->get_type_name_by_id('ui_settings','83','value'); ?></a>
                     <!--<div class="purple_dot">-->
@@ -394,6 +412,40 @@ include "featured_products.php";
  // ___Owl-carousel-icons
 
 })(jQuery);
+function search_location()
+{
+    
+    var str = $('#loc_box').val();
+    // 
+    if(str.length >= 2 )
+    {
+        $('#map_search #loader').show();
+        $('#map_search #result').hide();
+        $.ajax({
+        url: "<?= base_url('home/srch_loc'); ?>?str="+str,
+        type: 'GET',
+        // dataType: 'json', // added data type
+        success: function(res) {
+            $('#map_search #loader').hide();
+            $('#map_search #result').show();
+            $('#map_search #result').html(res);
+            // alert(res);
+        }
+    });
+       
+    }
+    else
+    {
+        $('#map_search #result').hide();
+    }
+}
+function select_place(place,txt)
+{
+    $('#loc_box').val(txt);
+    $('#place_id').val(place);
+    $('#map_search #result').hide();
+    
+}
           </script>
 
 

@@ -5,6 +5,13 @@
     #order_place_btn{
         position: absolute;
     }
+    .ellipse{display: none;}
+    #new_checkout .col-md-8{padding: 0;}
+    #new_checkout .col-md-12{padding: 0 0 12px;}
+#new_checkout .btn-theme-dark{
+    background: #f26122;
+    margin: 0 9px 0 0;
+}
 </style>
 <?php
 echo form_open(base_url() . 'home/cart_finish/go', array(
@@ -16,29 +23,29 @@ echo form_open(base_url() . 'home/cart_finish/go', array(
 ?>
 <script src="https://checkout.stripe.com/checkout.js"></script>
 <!-- PAGE -->
-<section class="page-section color">
-
-    <div class="container box_shadow">
+<section class="page-section color" id="new_checkout">>
+    <input type="hidden" name="r_id" id="r_id" />
+    <div class="container box_shadow" >
         <h3 class="block-title alt">
-            <i class="fa fa-angle-down"></i>
+            <i style=" padding: 1px 5px;" class="fa fa-angle-down"></i>
             <?php echo translate('1');?>.
-            <?php echo translate('orders');?>
-        </h3>
-        <div class="row orders">
-
-        </div>
-        <h3 class="block-title alt">
-            <i class="fa fa-angle-down"></i>
-            <?php echo translate('2');?>.
             <?php echo translate('customer_information');?>
         </h3>
         <div action="#" class="form-delivery delivery_address">
+        </div
+        <h3 class="block-title alt">
+            <i class="fa fa-angle-down" style=" padding: 1px 5px;"></i>
+            <?php echo translate('2');?>.
+            <?php echo translate('orders');?>
+        </h3>
+        <div class="row orders" id="cart_checkout">
+
         </div>
 
         
 
         <h3 class="block-title alt">
-            <i class="fa fa-angle-down"></i>
+            <i style=" padding: 1px 5px;" class="fa fa-angle-down"></i>
             <?php echo translate('3');?>.
             <?php echo translate('payments_options');?>
         </h3>
@@ -89,10 +96,11 @@ function other(){
 		var top = Number(200);
 // 		alert("Here84");
 		$('.orders').hide();
-		$('.delivery_address').html(' ');
+// 		$('.delivery_address').html(' ');
         var state = check_login_stat('state');
         state.success(function (data) {
-            load_orders();
+            load_address_form();
+            
             // load_payments();
             // return false;
             // if(data == 'hypass'){
@@ -104,10 +112,10 @@ function other(){
     });
     function load_smethods(){
         
-        if(find == 0)
+        if(true)
         {
-        $('.shipping_methods').show();
-        $('.shipping_methods').html('<div style="text-align:center;width:100%;height:'+(top*2)+'px; position:relative;top:'+top+'px;"><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>');
+        $('.orders').show();
+        $('.orders').html('<div style="text-align:center;width:100%;height:'+(top*2)+'px; position:relative;top:'+top+'px;"><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>');
         var param = {
           'firstname'  : jQuery( "[name='firstname']" ).val(),
           'lastname'  : jQuery( "[name='lastname']" ).val(),
@@ -115,14 +123,15 @@ function other(){
           'email'  : jQuery( "[name='email']" ).val(),
           'country'  : jQuery( "[name='country']" ).val(),
           'state'  : jQuery( "[name='state']" ).val(),
+          'city'  : jQuery( "[name='city']" ).val(),
           'zip'  : jQuery( "[name='zip']" ).val(),
           'phone'  : jQuery( "[name='phone']" ).val(), 
         };
         console.log(param);
         $.get('<?php echo base_url(); ?>home/cart_checkout/cal_shipping',param,
   function(data, status){
-    $('.delivery_address').hide();
-    $('.shipping_methods').html(data);
+      $('#r_id').val(data);
+    load_orders();
   });
         }
     }
@@ -250,10 +259,12 @@ function other(){
     }
 
     function ship_check(id){
+        alert(id);
         $('.smclass').each(function(){
            $(this).prop( "checked", false ); 
         });
         $( "#"+id ).prop( "checked", true );
         jQuery( "[name='shipping_type']" ).val(id);
+        load_orders();
     }
 </script>

@@ -4,7 +4,9 @@
             <?php echo translate('your_order_history');?>
         </div>
         <div class="details-wrap">                                    
-            <div class="details-box orders">
+            <div class="details-box orders" style="    background: #fff;
+    padding: 8px;
+    border: 1px solid #ccc;">
                 <table class="table">
                     <thead>
                         <tr>
@@ -13,7 +15,7 @@
                             <th><?php echo translate('amount');?></th>
                             <th><?php echo translate('payment_status');?></th>
                             <th><?php echo translate('delivery_status');?></th>
-                            <th><?php echo translate('invoice');?></th>
+                           <!-- <th><?php //echo translate('invoice');?></th>-->
                         </tr>
                     </thead>
                     <tbody id="result2">

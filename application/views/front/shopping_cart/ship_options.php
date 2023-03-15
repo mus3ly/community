@@ -31,16 +31,16 @@
         foreach($methods as $k=> $v){ ?>
             <div class="cc-selector col-sm-3">
                 <input id="<?php echo $v['slug'];?>" type="radio" style="display:block;" <?= ($k == 0)?"checked":""; ?> name="shipping_type" value="<?php echo $v['slug'];?>"/>
-                <label class="drinkcard-cc smclass" style="margin-bottom:0px; width:100%; overflow:hidden; " for="<?php echo $v['slug'];?>" onclick="ship_check(<?php echo $v['slug'];?>)">
+                <label class="drinkcard-cc smclass" style="margin-bottom:0px; width:100%; overflow:hidden; " for="<?php echo $v['slug'];?>" onclick="ship_check('<?php echo $v['slug'];?>')">
                     <img src="<?php echo $v['logo'];?>" width="100%" height="100%" style=" text-align-last:center;" alt="<?php echo $v['name'];?>" />
-                    <div class="shup_price"><?= currency() . $v['price'];?></div>
+                    <div class="shup_price"><?= currency() . $v['amount'];?></div>
 
                 </label>
             </div>
     <?php }
     ?>
     <div class="col-md-12">
-        <span class="btn btn-theme-dark" onclick="load_orders();">
+        <span class="btn btn-theme-dark" onclick="load_payments();">
             <?php echo translate('next');?>
         </span>
     </div>

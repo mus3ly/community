@@ -1,8 +1,9 @@
 <?php
+// die('ok');
 $img = '';
-                        if($comp_cover)
+                        if($comp_logo)
                         {
-                            $img = $this->crud_model->get_img($comp_cover);
+                            $img = $this->crud_model->get_img($comp_logo);
                             if(isset($img->secure_url))
                             {
                                 $img = $img->secure_url;
@@ -15,10 +16,10 @@ $img = '';
 
                         }
                         ?>
-<div class="thumbnail box-style-1 no-padding" itemscope itemtype="http://schema.org/Product">
+<div class="thumbnail box-style-1 no-padding" itemscope itemtype="http://schema.org/Product" id="list__viewss">
     <div class="media">
         <div class="cover"></div>
-        <div class="media-link image_delay" data-src="<?php echo $img; ?>" style="background-image:url('<?php echo img_loading(); ?>');background-size:cover;">
+        <div class="media-link image_delay" data-src="<?php echo $img; ?>" style="width: 100%;height: 200px;background-image:url('<?php echo $img; ?>');background-size:cover;">
             <?php
                 if($this->crud_model->get_type_name_by_id('product',$product_id,'current_stock') <=0 && !$this->crud_model->is_digital($product_id)){ 
             ?>
@@ -89,10 +90,38 @@ $img = '';
                 data-original-title="<?php if($this->crud_model->is_wished($product_id)=="yes"){ echo translate('added_to_wishlist'); } else { echo translate('add_to_wishlist'); } ?>">
                 <strong><i class="fa fa-heart"></i></strong>
             </span>
-            <!--<span class="icon-view right " onclick="to_cart(<?php echo $product_id; ?>,event)" data-toggle="tooltip" -->
-            <!--    data-original-title="<?php if($this->crud_model->is_added_to_cart($product_id)){ echo translate('added_to_cart'); } else { echo translate('add_to_cart'); } ?>">-->
-            <!--    <strong><i class="fa fa-shopping-cart"></i></strong>-->
-            <!--</span>-->
+            <span class="icon-view right " onclick="to_cart(<?php echo $product_id; ?>,event)" data-toggle="tooltip" 
+                data-original-title="<?php if($this->crud_model->is_added_to_cart($product_id)){ echo translate('added_to_cart'); } else { echo translate('add_to_cart'); } ?>">
+                <strong><i class="fa fa-shopping-cart"></i></strong>
+            </span>
+            <?php 
+                    $user = $this->session->userdata('user_id');
+                    if($is_affiliate && $user)
+                    {
+                        $vid = 0;
+                        $added_by = json_decode($added_by, true);
+                        if(isset($added_by['type']) && $added_by['type'] == 'vendor')
+                        {
+                            $vid = $added_by['id'];
+                        }
+                        
+                        $wish = $this->crud_model->is_aff($product_id); 
+                    ?>
+                    <button class="btn btn-add-to <?php if($wish == 'yes'){ echo 'wished';} else{ echo 'wishlist';} ?>" onclick="to_affliate(<?php echo $vid; ?>,event)">
+                        <i class="fa fa-heart"></i>
+                        <span class="hidden-sm hidden-xs">
+							<?php if($wish == 'yes'){ 
+                                echo translate('_added_to_affliate'); 
+                                } else { 
+                                echo translate('_add_to_affliate');
+                                } 
+                            ?>
+                        
+                        </span>
+                    </button>
+                    <?php
+                    }
+                    ?>
         </div>
     </div>
 </div>

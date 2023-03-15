@@ -1,4 +1,22 @@
+<style>
+    
+    .next_btnn{
+        float: right;
+    color: white;
+    background: #f26122;
+    padding: 1px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 2px;
+}
+</style>
 <?php  
+
+$vid = $this->session->userdata('vendor_id') ;
+$vendor = $this->db->where('vendor_id',$vid)->get('vendor')->row_array();
+$venodrcountry = $this->db->where('countries_id',$vendor['country'])->get('countries')->row_array();
+// var_dump();
+$currency = $venodrcountry['currency_symbol'];
 $rid = time();
 ?>
 <style>
@@ -15,9 +33,18 @@ btn1 .fa{
 .form h4{
     font-size:14px;
 }
+.error{
+        border-color: red !important;
+
+}
 .form .btn{
     background-color: white;
     border: 1px dashed #cecece;
+}
+#add_amn{
+    max-height: 150px;
+    min-width: 0px;
+    overflow-y: scroll;
 }
 .drop_box {
   margin: 10px 0;
@@ -88,12 +115,11 @@ btn1 .fa{
 }
 </style>
 <div class="row">
-       <div class="col-md-12" style="border-bottom: 1px solid #ebebeb;padding: 5px;     margin-top:64px;">
+       <div class="col-md-12 top_head" >
                             <button class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" onclick="ajax_set_full('add','Add Product','Successfully Added!','product_add',''); proceed('to_list');" style="display: none;">Create Product                            </button>
                             <a href="<?= base_url('/vendor/product'); ?>" class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" style="" onclick="ajax_set_list();  proceed('to_add');">Back To Product List                            </a>
                         </div>
-    <div class="col-md-10"  style="margin-top: 52px;    margin-left: 283px;
-">
+    <div class="col-md-12 newsidebar"  >
         <?php
             echo form_open(base_url() . 'vendor/product/do_add/', array(
                 'class' => 'form-horizontal',
@@ -103,50 +129,126 @@ btn1 .fa{
             ));
         ?>
         <input type="hidden" name="rand_id" value="<?= $rid ?>" />
+        <?php
+        $cat = 0;
+        if(isset($_GET['is_job']) || isset($_GET['is_event']))
+        {
+            $name = (isset($_GET['is_job'])?"is_job":"is_event");
+            $cat = (isset($_GET['is_job'])?"78":"426");
+            ?>
+            <input type="hidden" name="<?= $name ?>" value="1" />
+            <?php
+        }
+        ?>
             <!--Panel heading-->
-            <div class="panel-heading">
-                <div class="panel-control" style="float: left;">
+           <div class="row">
+               <div class="col-sm-2 sidebar">
+                    <div class="panel-heading">
+                <div class="panel-control1">
                     <ul class="nav nav-tabs">
-                        <li class="active">
+                        <?php
+                        $gen = 0;
+                        if(isset($_GET['is_job']) || isset($_GET['is_event']))
+                        {
+                            $gen = 1;
+                        }
+                        ?>
+                        <?php
+                        if(!$gen)
+                        {
+                        ?>
+                        <li class="active" onclick="go_tab('customer_choice_options')">
                             <a data-toggle="tab" href="#customer_choice_options"><?php echo translate('business_type'); ?></a>
                         </li>
+                        <?php
+                        }
+                        ?>
                         
-                        <li >
+                        <li class="<?= ($gen)?"active":""; ?>"  onclick="go_tab('top_banner')">
                             <a data-toggle="tab" href="#top_banner"><?php echo translate('general'); ?></a>
                         </li>
-                        
-                        <li >
+                          <li id="car_show" style="display:none" onclick="go_tab('xtra_info')">
+                            <a data-toggle="tab" href="#xtra_info"><?php echo translate('car_info'); ?></a>
+                        </li>  
+                        <li id="property_show" style="display:none"  onclick="go_tab('xtra_property_info')">
+                            <a data-toggle="tab" href="#xtra_property_info"><?php echo translate('extra_property_info'); ?></a>
+                        </li>  
+                        <?php
+                        if(isset($_GET['is_event'])){
+                        ?>
+                        <li id="event_show"  onclick="go_tab('xtra_event_info')">
+                            <a data-toggle="tab" href="#xtra_event_info"><?php echo translate('extra_event_info'); ?></a>
+                        </li> 
+                        <?php 
+                            
+                        }else{
+                        ?>
+                          <li id="event_show" style="display:none"  onclick="go_tab('xtra_event_info')">
+                            <a data-toggle="tab" href="#xtra_event_info"><?php echo translate('extra_event_info'); ?></a>
+                        </li> 
+                        <?php
+                        }
+                        ?>
+                        <?php
+                        if(isset($_GET['is_job'])){
+                        ?>
+                        <li id="job_show"  onclick="go_tab('xtra_job_info')">
+                            <a data-toggle="tab" href="#xtra_job_info"><?php echo translate('extra_job_info'); ?></a>
+                        </li> 
+                        <?php 
+                            
+                        }else{
+                        ?>
+                          <li id="job_show" style="display:none" onclick="go_tab('xtra_job_info')">
+                            <a data-toggle="tab" href="#xtra_job_info"><?php echo translate('extra_job_info'); ?></a>
+                        </li> 
+                        <?php
+                        }
+                        ?>
+                        <li onclick="go_tab('event_images')">
                             <a data-toggle="tab" href="#event_images"><?php echo translate('images_gallary'); ?></a>
                         </li>
-
-                        <li >
-                            <a data-toggle="tab" href="#first_section"><?php echo translate('Desciptive_section'); ?></a>
+                        <li onclick="go_tab('custom_attributes_0')">
+                            <a data-toggle="tab" href="#custom_attributes_0"><?php echo translate('Top_information'); ?></a>
                         </li>
-
+                        <li onclick="go_tab('checkbox_information')">
+                            <a data-toggle="tab" href="#checkbox_information"><?php echo translate('Checkbox_information'); ?></a>
+                        </li>
+                        <li  onclick="go_tab('amenitys')">
+                            <a data-toggle="tab" href="#amenitys"><?php echo translate('Amenities'); ?></a>
+                        </li>
+                        <li  onclick="go_tab('first_section')">
+                            <a data-toggle="tab" href="#first_section"><?php echo translate('Descriptive_section'); ?></a>
+                        </li>
+                        <li onclick="go_tab('custom_attributes_1')">
+                            <a data-toggle="tab" href="#custom_attributes_1"><?php echo translate('accordion_information'); ?></a>
+                        </li>
                         
-                        </li>
-                        <li>
+                        <li onclick="go_tab('location')">
                             <a data-toggle="tab" href="#location"><?php echo translate('location'); ?></a>
                         </li>
-                        </li>
-                        <li>
+                      
+                        <li onclick="go_tab('seo_section')">
                             <a data-toggle="tab" href="#seo_section"><?php echo translate('seo_section'); ?></a>
                         </li>
                         
                     </ul>
                 </div>
+                
             </div>
-<div class="panel-body">
+               </div>
+               <div class="col-sm-10 right_content_box">
+                    <div class="panel-body">
                 <div class="tab-base">
                     <!--Tabs Content-->                    
                     <div class="tab-content">
-                    <div id="customer_choice_options" class="tab-pane fade active in">
-                        <input type="hidden" id="category" name="category"/>
+                    <div id="customer_choice_options" class="tab-pane fade <?= (!$gen)?"active in":""; ?>">
+                        <input type="hidden" id="category" value="<?= ($cat)?$cat:""; ?>" name="category"/>
                            <div class="row" id="cat_res">
                                 
                                  <?php
                             foreach($brands as $k=>$v){
-                                if(get_cat_level($v['category_id']) == 1)
+                                if($v['level'] == 1 || true)
                                 {
                             ?>
                                 <div class="col-md-4 col-sm-12 col-xs-12 <?= ($product_data->category == $v['category_id'])?"active":"" ?>" onclick="selecttype('<?= $v['category_id'];?>')" >
@@ -170,7 +272,7 @@ btn1 .fa{
                                 <div class="col-md-4 col-sm-12 col-xs-12"></div>
                             </div>
                         </div>
-                        <div id="top_banner" class="tab-pane fade ">
+                        <div id="top_banner" class="tab-pane fade <?= ($gen)?"active in":""; ?>">
                             <h4 class="text-thin text-center"><?php echo translate('top_banner'); ?></h4> 
                             <div class="form-group btm_border">
                             <div class="form-group btm_border">
@@ -232,7 +334,7 @@ btn1 .fa{
                                     <label class="col-sm-4 control-label" for="demo-hor-12">Cover Image</label>
                                     <div class="col-sm-6">
                                         <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
-                                            <input type="file" name="sideimg" onchange="preview2(this);" id="demo-hor-inputpass" class="form-control">
+                                            <input type="file" name="sideimg" onchange="preview2(this);" id="demo-hor-inputpass" class="form-control required">
                                         </span>
                                         <br><br>
                                         <span id="previewImg2" >
@@ -255,7 +357,7 @@ btn1 .fa{
                                     <label class="col-sm-4 control-label" for="demo-hor-12">section Image</label>
                                     <div class="col-sm-6">
                                         <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
-                                            <input type="file" name="firstImg" onchange="preview3(this);" id="demo-hor-inputpass" class="form-control">
+                                            <input type="file" name="firstImg" onchange="preview3(this);" id="demo-hor-inputpass" class="form-control ">
                                         </span>
                                         <br><br>
                                         <span id="previewImg3">
@@ -423,8 +525,545 @@ btn1 .fa{
                                     </div>
                                     </div>
                         </div>
+                        <div id="custom_attributes_0" class="tab-pane fade ">
+                      <div class="form-group btm_border">
+                          <div class="form-group"> 
+                          <div class="col-sm-4">    
+                            <input type="text" name="ad_field_names[]" class="form-control required" placeholder="Field Name">    
+                            </div>   
+                            <div class="col-sm-5">    
+                            <input type="text" rows="9" class="form-control" data-height="100" name="ad_field_values[]">    </div>   
+                            <div class="col-sm-2">  
+                            </div>
+                            </div>
+                         <div id="more_additional_fields"></div>                                
+                                <div class="col-sm-12">
+                                    <h4 class="pull-left">
+                                        <i><?php echo translate('if_you_need_more_field_for_your_product_,_please_click_here_for_more...');?></i>
+                                    </h4>
+                                    <div id="more_btn" class="btn btn-mint btn-labeled fa fa-plus pull-right">
+                                    <?php echo translate('add_more_fields');?></div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div id="checkbox_information" class="tab-pane fade ">
+                      <div class="form-group btm_border">
+                          <div class="form-group"> 
+                          <div class="col-sm-9">    
+                            <input type="text" name="checkboxinfo[]" class="form-control required" placeholder="Field Name">    
+                            </div>   
+                            <div class="col-sm-2">  
+                            </div>
+                            </div>
+                         <div id="more_checkbox_fields"></div>                                
+                                <div class="col-sm-12">
+                                    <h4 class="pull-left">
+                                        <i><?php echo translate('if_you_need_more_field_for_your_product_,_please_click_here_for_more...');?></i>
+                                    </h4>
+                                    <div id="more_field_btn" class="moredata btn btn-mint btn-labeled fa fa-plus pull-right">
+                                    <?php echo translate('add_more_fields');?></div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div id="amenitys" class="tab-pane fade ">
+                     <div class="form-group btm_border">
+                                    <label class="col-sm-4 control-label" for="demo-hor-1">Select Amenities</label>
+                                    <div class="col-sm-6">
+                                                                                
+                             <input type="text" class="amnty form-control" id="amnty">
+                             <button type="button" class="btn btn-primary" id="amn_btn">Add</button>
+                            <div id="add_amn"></div>
+                            <hr>
+                            <!--<div id="select_amn">-->
+                                
+                            <!--</div>-->
+                            <select name="listingamenities[]" id="select_amn" class="form-control js-example-basic-single" multiple="multiple">
+                                <!--<option></option>-->
+                                
+                            </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="custom_attributes_1" class="tab-pane fade ">
+                        <div class="form-group">
+                         <div class="col-sm-4">
+                        <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>" value="<?php echo translate('requirements'); ?>">
+                        </div>
+                        <div class="col-sm-5">
+                         <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values_custom" ></textarea>
+                            </div>
+                    
+                        </div>
+                        <div class="form-group">
+                         <div class="col-sm-4">
+                        <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>" value="<?php echo translate('benefits'); ?>">
+                        </div>
+                        <div class="col-sm-5">
+                         <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values" name="requirmnts[]"></textarea>
+                            </div>
+                    
+                        </div>
+                        <div id="more_fields"></div>
+                         <div id="more_btn_attr" class="btn btn-mint btn-labeled fa fa-plus pull-right">
+                                    <?php echo translate('add_more_fields');?>
+                        </div>    
+                        </div>
+                        <div id="xtra_info" class="tab-pane fade ">
+                            <?php
+                            $this->db->order_by("sort", "asc");
+
+                            $fileds = $this->db->where('category',807)->get('list_fields')->result_array();
+                            foreach($fileds as $k=> $v)
+                            {
+                                $v['pid'] = 0;
+                                $this->load->view('vendor_fields',$v);
+                            }
+                            ?>
+                            <?php
+                            /*
+                            ?>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('make');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <select name="make" placeholder="<?php echo translate('car_make')?>"
+                                           class="form-control required1 ">
+                                        <?php
+                                        $make = $this->db->get('makes')->result_array();
+                                        foreach($make as $k => $v){
+                                        ?>
+                                        <option value="<?= $v['id']; ?>"><?= $v['name']; ?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                        </select>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('model');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="model" 
+                                           placeholder="<?php echo translate('model')?>"
+                                           class="form-control required1">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                             <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('no_of_seats');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="no_of_seats" 
+                                           placeholder="<?php echo translate('no_of_seats')?>"
+                                           class="form-control required1">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('price');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="carprice" value="<?php echo $row['seo_title']; ?>"
+                                           placeholder="<?php echo translate('price')?>"
+                                           class="form-control required1">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('currency');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="currency" value="<?= $currency; ?>"
+                                           placeholder="<?php echo translate('price')?>"
+                                           class="form-control required1" readonly>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                          
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('date_posted');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="date" name="cardate_posted" value="<?php echo $row['seo_title']; ?>"
+                                           placeholder="<?php echo translate('date_posted')?>"
+                                           class="form-control ">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                             <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('MOT/Warranty');?>
+                                </label>
+                                <div class="col-sm-6">
+                                     <select name="warranty" placeholder="<?php echo translate('MOT/Warranty')?>"
+                                           class="form-control ">
+                                        <option value="0">Select</option>
+                                        <option value="Full">Full</option>
+                                        <option value="Need">Need</option>
+                                        <option value="Failed">Failed</option>
+                                        
+                                    </select>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('transmission');?>
+                                </label>
+                                <div class="col-sm-6">
+                                     <select name="transmission" placeholder=""
+                                           class="form-control required1">
+                                        <option value="0" >Select transmission type</option>
+                                        <option value="Manual">Manual</option>
+                                        <option value="Auto">Auto</option>
+                                        
+                                    </select>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label required1" for="">
+                                    <?php echo translate('fuel');?>
+                                </label>
+                                <div class="col-sm-6">
+                                     <select name="fuel" placeholder=""
+                                           class="form-control required1"> 
+                                        <option value="0">Select fuel type</option>
+                                        <option value="CNG">CNG</option>
+                                        <option value="Petrol">Petrol</option>
+                                        
+                                    </select>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('condition');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <select name="carcondition" placeholder="<?php echo translate('condition')?>"
+                                           class="form-control required1">
+                                          <option value="0">Select</option>
+                                        <option value="new">New</option>
+                                        <option value="used">Used</option>
+                                        <option value="parts">Parts</option>
+                                        
+                                    </select>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('distance');?>
+                                </label>
+                                <div class="col-sm-6" style="display:flex;">
+                                    <input type="number" name="distance"  class="form-control required1">
+                                    <select name="cardistance"
+                                           class="form-control ">
+                                          <option value="0">Select</option>
+                                        <option value="miles">Miles</option>
+                                        <option value="km">Km</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                             <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('purchase_requirements');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="car_require" 
+                                           placeholder="<?php echo translate('purchase_requirements')?>"
+                                           class="form-control ">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('what_you_must_know');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="xtraacarr" 
+                                           placeholder="<?php echo translate('what_you_must_know')?>"
+                                           class="form-control ">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('about_us');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="about_us" 
+                                           placeholder="<?php echo translate('about_us')?>"
+                                           class="form-control ">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                          <?php
+                            */
+                            ?>
+                        </div>
+                        <div id="xtra_property_info" class="tab-pane fade ">
+                              <?php
+                            $this->db->order_by("sort", "asc");
+
+                            $fileds = $this->db->where('category',808)->get('list_fields')->result_array();
+                            foreach($fileds as $k=> $v)
+                            {
+                                $v['pid'] = 0;
+                                $this->load->view('vendor_fields',$v);
+                            }
+                            ?>
+                            <?php
+                            /*
+                            ?>
+                        <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label " for="">
+                                    <?php echo translate('property_type');?>
+                                </label>
+                                   <div class="col-sm-6">
+                                    <select name="property_type" class="form-control required2">
+                                          <option value="0">Select</option>
+                                        <option value="detached">Detached </option>
+                                        <option value="apartment ">Apartment </option>
+                                        <option value="house">House</option>
+                                        <option value="rent">Rent</option>
+                                        <option value="sale">Sale</option>
+                                        <option value="furnished">Furnished</option>
+                                        <option value="unfurnished">Unfurnished</option>
+                                        </select>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('location');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="prop_location" value=""
+                                           placeholder="<?php echo translate('location')?>"
+                                           class="form-control required2">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                                   
+                           
+                             <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('main_fetaures');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="main_fetaures" value="<?php echo $row['seo_title']; ?>"
+                                           placeholder="<?php echo translate('main_fetaures')?>"
+                                           class="form-control required2">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                         
+                           <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('no_of_bedrooms');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="no_of_bedrooms"
+                                           placeholder="<?php echo translate('no_of_bedrooms')?>"
+                                           class="form-control required2">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                           <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label " for="">
+                                    <?php echo translate('available_from_date');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="date" name="available_from_date"
+                                           placeholder="<?php echo translate('date_posted')?>"
+                                           class="form-control required2">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                  
+                           <?php
+                            */
+                            ?>
+                           
+                        </div>
+                        <div id="xtra_event_info" class="tab-pane fade ">
+          
+                             <?php
+                            $this->db->order_by("sort", "asc");
+
+                            $fileds = $this->db->where('category',917)->get('list_fields')->result_array();
+                            foreach($fileds as $k=> $v)
+                            {
+                                $v['pid'] = 0;
+                                $this->load->view('vendor_fields',$v);
+                            }
+                            /*
+                            ?>
+                            
+                            
+                                   
+                             <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('date');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="date" name="event_date" placeholder="<?php echo translate('event_date')?>"
+                                           class="form-control required3">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('time');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="time" name="event_time"
+                                           placeholder="<?php echo translate('event_time')?>"
+                                           class="form-control required3">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                         
+                           <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('type');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <select name="event_type" class="form-control required3">
+                                          <option value="0">Select</option>
+                            <option value="wedding">Wedding</option>
+                            <option value="festival">Festival</option>
+                            <option value="concert">Concert</option>
+                            <option value="party">Party</option>
+                            <option value="get_to_gether">Get To Gether</option>
+                            <option value="music">Music</option>
+                        </select>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                           <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('age_restrictions');?>
+                                </label>
+                                <div class="col-sm-6">
+                               <select name="event_age_restriction" id="age_restriction" class="form-control required3">
+                                     <option value="0">Select</option>
+                                   <option>Age Restrictions</option>
+                                    <option value="family">Family Friendly</option>
+                                    <option value="kids">Kids Friendly</option>
+                                    <option value="18+">18+</option>
+                                    <option value="12+">12+</option>
+                                    <option value="all_ages">All Ages</option>
+                                   
+                                </select>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                           <?php
+                            */
+                            ?>
+                        </div>
+                        <div id="xtra_job_info" class="tab-pane fade ">
+                               <?php
+                            $this->db->order_by("sort", "asc");
+
+                            $fileds = $this->db->where('category',78)->get('list_fields')->result_array();
+                            foreach($fileds as $k=> $v)
+                            {
+                                $v['pid'] = 0;
+                                $this->load->view('vendor_fields',$v);
+                            }
+                            /*
+                            ?>
+                            
+                        <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('job_id');?>
+                                </label>
+                                <div class="col-sm-6">
+                            <input type="text" name="job_id" id="job_id" class="form-control required4" placeholder="Job ID">
+                            </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('Hours');?>
+                                </label>
+                                <div class="col-sm-6">
+                            <select name="select_job_hours" id="select_job_hours" class="form-control required4">
+                                  <option value="0">Select</option>
+                                <option value="fulltime">Full Time</option>
+                                <option value="parttime ">Part Time</option>
+                                <option value="rotation ">Rotation</option>
+                                <option value="two_years ">Two Years</option>
+                               
+                            </select>                    
+                            </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('job_type');?>
+                                </label>
+                                <div class="col-sm-6">
+                                 <select name="select_job_type" id="select_job_type" class="form-control required4">
+                                       <option value="0">Select</option>
+                                    <option value="paermanent">Permanent</option>
+                                    <option value="temporary">Temporary</option>
+                                    <option value="contract">Contract</option>
+                                    <option value="volunteer">Volunteer</option>
+                                    <option value="apprenticeship ">Apprenticeship</option>
+                                    <option value="internship ">Internship</option>
+                                   
+                                </select>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                                   
+                             <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('posted_date');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="date" name="job_posted_date" 
+                                           class="form-control required4">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                        <?php
+                            */
+                            ?>
+                        </div>
                         <div id="seo_section" class="tab-pane fade ">
                         <div class="form-group btm_border">
+                                <div class="col-sm-4"></div>
+                                <div class="col-sm-8"></div>
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('slug');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" id="slug" name="slug" value="<?php echo $row['seo_title']; ?>"
+                                           placeholder="<?php echo translate('productslug')?>"
+                                           class="form-control required">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
                                 <div class="col-sm-4"></div>
                                 <div class="col-sm-8"><small>*<?php echo translate('Write an seo friendly title within 60 characters')?></small></div>
                                 <label class="col-sm-4 control-label" for="">
@@ -448,6 +1087,7 @@ btn1 .fa{
                                                   placeholder="<?php echo translate('Ex. New Yamaha Sports bike in 2020 from Japan')?>"
                                                   class="form-control required" rows='4' ><?php echo $row['seo_description']; ?></textarea>
                                 </div>
+                                
                                 <div class="col-sm-2"></div>
                             </div>
 
@@ -580,11 +1220,14 @@ btn1 .fa{
                         </div>
                             </div>
                         </div>
-                        
-                            <span class="btn btn-purple btn-labeled fa fa-hand-o-right pull-right" onclick="next_tab()"><?php echo translate('next'); ?></span>
-                <span class="btn btn-purple btn-labeled fa fa-hand-o-left pull-right" onclick="previous_tab()"><?php echo translate('previous'); ?></span>
+                        <span class="btn btn-purple btn-labeled fa fa-hand-o-left pull-right" onclick="previous_tab()"><?php echo translate('previous'); ?></span>
+                            <span class="next_btnn" onclick="next_tab()" ><?php echo translate('next'); ?></span>
+                
                             
-                        </div>    
+                        </div>
+                </div>
+           </div>
+    
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-md-11">
@@ -594,7 +1237,7 @@ btn1 .fa{
                     </div>
                     
                     <div class="col-md-1">
-                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');"><?php echo translate('upload');?></span>
+                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="validate_listing();"><?php echo translate('upload');?></span>
                     </div>
                     
                 </div>
@@ -610,6 +1253,235 @@ btn1 .fa{
 <input type="hidden" id="option_count" value="-1">
 
 <script>
+function activaTab(tab){
+    $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+};
+    function validate_listing(){
+        var property_cat = '<?= $this->config->item('property_cat') ?>';
+        
+    var car_cat = '<?= $this->config->item('car_cat') ?>';
+    var event_cat = '<?= $this->config->item('event_cat') ?>';
+    var job_cat = '<?= $this->config->item('job_cat') ?>';
+    var cats = $('#category').val();
+    if(!cats)
+    {
+        alert("Please select atleast 1 category");
+        return 0;
+    }
+    const myArray = cats.split(",");
+    if(myArray.indexOf(car_cat) != -1)
+{  
+    car_cat = 1;
+}
+else
+{
+   car_cat = 0;
+}
+    if(myArray.indexOf(property_cat) != -1)
+{ 
+    
+   property_cat = 1;
+}
+else
+{
+   property_cat = 0;
+}
+if(myArray.indexOf(event_cat) != -1)
+{  
+   event_cat = 1;
+}
+else
+{
+    event_cat = 0
+}
+if(myArray.indexOf(job_cat) != -1)
+{  
+   job_cat = 1;
+}
+else
+{
+    job_cat = 0;
+}
+                    var car_error = 0;
+                    var property_error = 0;
+                    var event_error = 0;
+                    var job_error = 0;
+        if(car_cat == 1)
+        {
+            var focus = '';
+            $('.required1').each(function(i, obj) {
+                if(!$(this).val() || $(this).val() == 0)
+                {
+                    car_error = 1;
+                    
+                    $(this).addClass('error');
+                    // console.log($(this).attr('class'));
+                }
+                else
+                {
+                    $(this).removeClass('error');                    
+                }
+                console.log($(this).attr('name'));
+            });
+            if(car_error == 1)
+            {
+                var fdone = 0;
+                $('.required1').each(function(i, obj) {
+                if(!$(this).val() && fdone == 0)
+                {
+                    fdone = 1;
+                    $(this).focus();
+                }
+                console.log($(this).attr('name'));
+            });
+                alert("Please fill required field");
+                $('.tab-pane').each(function(i, obj) {
+                    $(this).removeClass('active');
+                    $(this).removeClass('in');
+                
+                });
+                $('#xtra_info').addClass("active in");
+                $('#car_show').addClass("active");
+            }
+            else
+            {
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+            }
+        }
+        else if(property_cat == 1)
+        {
+            var focus = '';
+            $('.required2').each(function(i, obj) {
+                if(!$(this).val() || $(this).val() == 0)
+                {
+                    property_error = 1;
+                    
+                    $(this).addClass('error');
+                    // console.log($(this).attr('class'));
+                }
+                else
+                {
+                    $(this).removeClass('error');                    
+                }
+                console.log($(this).attr('name'));
+            });
+            if(property_error == 1)
+            {
+                var fdone = 0;
+                $('.required2').each(function(i, obj) {
+                if(!$(this).val() && fdone == 0)
+                {
+                    fdone = 1;
+                    $(this).focus();
+                }
+                console.log($(this).attr('name'));
+            });
+                alert("Please fill required field");
+                $('.tab-pane').each(function(i, obj) {
+                    $(this).removeClass('active');
+                    $(this).removeClass('in');
+                
+                });
+                $('#xtra_property_info').addClass("active in");
+                $('#property_show').addClass("active");
+            }
+            else
+            {
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+            }
+        }
+        else if(event_cat == 1)
+        {
+            var focus = '';
+            $('.required3').each(function(i, obj) {
+                if(!$(this).val() || $(this).val() == 0)
+                {
+                    event_error = 1;
+                    
+                    $(this).addClass('error');
+                    // console.log($(this).attr('class'));
+                }
+                else
+                {
+                    $(this).removeClass('error');                    
+                }
+                console.log($(this).attr('name'));
+            });
+            // alert(event_error);
+            if(event_error == 1)
+            {
+                var fdone = 0;
+                $('.required3').each(function(i, obj) {
+                if(!$(this).val() && fdone == 0)
+                {
+                    fdone = 1;
+                    $(this).focus();
+                }
+                console.log($(this).attr('name'));
+            });
+                alert("Please fill required field");
+                $('.tab-pane').each(function(i, obj) {
+                    $(this).removeClass('active');
+                    $(this).removeClass('in');
+                
+                });
+                $('#xtra_event_info').addClass("active in");
+                $('#event_show').addClass("active");
+            }
+            else
+            {
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+            }
+        }
+        else if(job_cat == 1)
+        {
+            var focus = '';
+            $('.required4').each(function(i, obj) {
+                if(!$(this).val() || $(this).val() == 0)
+                {
+                    job_error = 1;
+                    
+                    $(this).addClass('error');
+                    // console.log($(this).attr('class'));
+                }
+                else
+                {
+                    $(this).removeClass('error');                    
+                }
+                console.log($(this).attr('name'));
+            });
+            if(job_error == 1)
+            {
+                var fdone = 0;
+                $('.required4').each(function(i, obj) {
+                if(!$(this).val() && fdone == 0)
+                {
+                    fdone = 1;
+                    $(this).focus();
+                }
+                console.log($(this).attr('name'));
+            });
+                alert("Please fill required field");
+                $('.tab-pane').each(function(i, obj) {
+                    $(this).removeClass('active');
+                    $(this).removeClass('in');
+                
+                });
+                $('#xtra_job_info').addClass("active in");
+                $('#job_show').addClass("active");
+            }
+            else
+            {
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+            }
+        }
+        else
+        {
+            form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+        }
+        return 0;
+        // 
+    }
     window.preview = function (input) {
         if (input.files && input.files[0]) {
             $("#previewImg").html('');
@@ -751,7 +1623,7 @@ $.ajax(settings).done(function (response) {
         
     }
     function get_sub_res(id){}
-
+ 
     $(".unit").on('keyup',function(){
         $(".unit_set").html($(".unit").val());
     });
@@ -771,7 +1643,7 @@ $.ajax(settings).done(function (response) {
             +'        <input type="text" name="ad_field_names[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>">'
             +'    </div>'
             +'    <div class="col-sm-5">'
-            +'        <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values[]"></textarea>'
+            +'        <input type="text" rows="9"  class="form-control" data-height="100" name="ad_field_values[]">'
             +'    </div>'
             +'    <div class="col-sm-2">'
             +'        <span class="remove_it_v rms btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>'
@@ -780,12 +1652,99 @@ $.ajax(settings).done(function (response) {
         );
         set_summer();
     });
+    $("#more_field_btn").click(function(){
+        var k = 0;
+        $('.moredata').each(function(i, e) {
+           k = $('.moredata').length;
+            });
+    if(k >=6){
+        alert('You can add only 6 fields');
+    }
+    else{
+        $("#more_checkbox_fields").append(''
+            +'<div class="form-group">'
+            +'    <div class="col-sm-9">'
+            +'        <input type="text" name="checkboxinfo[]" class="moredata form-control required"  placeholder="<?php echo translate('field_name'); ?>">'
+            +'    </div>'
+            +'    <div class="col-sm-2">'
+            +'        <span class="remove_it_v rms btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>'
+            +'    </div>'
+            +'</div>'
+        );
+        set_summer();
+    }
+    });
+    
+      $("#more_btn_attr").click(function(){
+        $("#more_fields").append(''
+            +'<div class="form-group">'
+            +'    <div class="col-sm-4">'
+            +'        <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>">'
+            +'    </div>'
+            +'    <div class="col-sm-5">'
+            +'        <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values_custom[]"></textarea>'
+            +'    </div>'
+            +'    <div class="col-sm-2">'
+            +'        <span class="remove_it_v rms btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>'
+            +'    </div>'
+            +'</div>'
+        );
+        set_summer();
+    });
+    var tabs = [
+        'customer_choice_options',
+        'top_banner',
+        'event_images',
+        'custom_attributes_0',
+        'checkbox_information',
+        'amenitys',
+        'first_section',
+        'custom_attributes_1',
+        'location',
+        'seo_section',
+        
+    ];
+    function go_tab(ctab1 = ''){
+        ctab = ctab1;
+        if(ctab)
+        {
+            $('.nav-tabs li').each(function( index ) {
+                var loop_name = $( this ).children('a').attr('href');
+                // console.log(loop_name);
+                if(loop_name.match(ctab))
+                {
+                    $(this).addClass('active');
+                    $(loop_name).addClass('active');
+                    $(loop_name).addClass('in');
+                    // alert(loop_name);
+                }
+                else
+                {
+                    $(this).removeClass('active');
+                    $(loop_name).removeClass('active');
+                    $(loop_name).removeClass('in');
+                }
+            });
+        }
+        
+    }
+    var ctab = 'customer_choice_options';
     
     function next_tab(){
-        $('.nav-tabs li.active').next().find('a').click();                    
+        //find next here
+        var cindex  = tabs.indexOf(ctab); // 0
+        var nindex = cindex+1;
+        ctab = tabs[nindex];
+        go_tab(ctab);     
     }
     function previous_tab(){
-        $('.nav-tabs li.active').prev().find('a').click();                     
+        var cindex  = tabs.indexOf(ctab); // 0
+        // alert(cindex+ctab);
+        var nindex = cindex-1;
+        ctab = tabs[nindex];
+        // alert(ctab);
+        go_tab(ctab);
+        return ctab;
     }
     
     $('body').on('click', '.rmo', function(){
@@ -867,7 +1826,108 @@ var mapProp= {
 };
 var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
 }
-function selecttype(id)
+function show_rel_fields()
+{
+    var property_cat = '<?= $this->config->item('property_cat') ?>';
+    var car_cat = '<?= $this->config->item('car_cat') ?>';
+    var event_cat = '<?= $this->config->item('event_cat') ?>';
+    var job_cat = '<?= $this->config->item('job_cat') ?>';
+    var cats = $('#category').val();
+    const myArray = cats.split(",");
+    if(myArray.indexOf(car_cat) != -1)
+{  tabs = [
+        'customer_choice_options',
+        'top_banner',
+        'xtra_info',
+        'event_images',
+        'custom_attributes_0',
+        'checkbox_information',
+        'amenitys',
+        'first_section',
+        'custom_attributes_1',
+        'location',
+        'seo_section',
+        
+    ];
+    ctab = 'customer_choice_options';
+    
+   $('#car_show').css({'display':'block'});
+}
+else
+{
+   $('#car_show').css({'display':'none'});
+}
+    if(myArray.indexOf(property_cat) != -1)
+{ 
+    tabs = [
+        'customer_choice_options',
+        'top_banner',
+        'xtra_property_info',
+        'event_images',
+        'custom_attributes_0',
+        'checkbox_information',
+        'amenitys',
+        'first_section',
+        'custom_attributes_1',
+        'location',
+        'seo_section',
+        
+    ];
+    ctab = 'customer_choice_options';
+   $('#property_show').css({'display':'block'});
+}
+else
+{
+   $('#property_show').css({'display':'none'});
+}
+if(myArray.indexOf(event_cat) != -1)
+{  
+    tabs = [
+        'customer_choice_options',
+        'top_banner',
+        'xtra_event_info',
+        'event_images',
+        'custom_attributes_0',
+        'checkbox_information',
+        'amenitys',
+        'first_section',
+        'custom_attributes_1',
+        'location',
+        'seo_section',
+        
+    ];
+    ctab = 'customer_choice_options';
+   $('#event_show').css({'display':'block'});
+}
+else
+{
+    $('#event_show').css({'display':'none'});
+}
+if(myArray.indexOf(job_cat) != -1)
+{  
+    tabs = [
+        'customer_choice_options',
+        'top_banner',
+        'xtra_job_info',
+        'event_images',
+        'custom_attributes_0',
+        'checkbox_information',
+        'amenitys',
+        'first_section',
+        'custom_attributes_1',
+        'location',
+        'seo_section',
+        
+    ];
+    ctab = 'customer_choice_options';
+   $('#job_show').css({'display':'block'});
+}
+else
+{
+    $('#job_show').css({'display':'none'});
+}
+}
+function selecttype(id,ajax= 0)
 {
     if($('#category').val())
     {
@@ -879,8 +1939,14 @@ function selecttype(id)
     else{
         $('#category').val(id);
     }
+    if(ajax)
+    {
+        $('#category').val(id);
+    }
+    show_rel_fields();
     var url  = base_url+'vendor/product/sub_by_cat/'+id;
         // alert(url);
+        $("#cat_res").html('Loading ...');
     $.ajax({
   url: url,
   cache: false,
@@ -946,8 +2012,9 @@ function preview2(input) {
         padding-bottom: 15px;   
     }
 </style>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?= $this->config->item('map_key') ?>&libraries=places"></script>
-    <script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?= $this->config->item('map_key') ?>&libraries=places"> 
+</script>
+<script type="text/javascript">
         var mylat = '';
         var marker;
         var map;
@@ -996,6 +2063,9 @@ map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
   }
 }
 
+$(document).ready(function() {
+    $('.js-example-basic-multiple').select2();
+});
 function showPosition(position) {
     var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
     map.setCenter({lat: position.coords.latitude, lng:position.coords.longitude});
@@ -1007,11 +2077,8 @@ function showPosition(position) {
         google.maps.event.addDomListener(window, 'load', initialize);
         var user_type = 'vendor';
     var module = 'product';
-    var list_cont_func = 'list';
+    var list_cont_func = 'list?is_job=1';
     var dlt_cont_func = 'delete';
-     
-    </script>
-    <script>
      var feature = 0;
     <?php
     if($feature)
@@ -1103,7 +2170,98 @@ function showPosition(position) {
                                        $('#button_div').append(html);
         }
     }
+  
     </script>
+    <script>
+        $('#slug').on('keyup',function(){
+            var val = $(this).val();
+            var url='<?= base_url('vendor/productslug') ?>';
+              $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { value:val},
+        success: function (data) {
+           if(data == 'error'){
+               $('#slug').addClass('error');
+           }
+        },
+        error: function (xhr, exception) {
+            var msg = "";
+            if (xhr.status === 0) {
+                msg = "Not connect.\n Verify Network." + xhr.responseText;
+            } else if (xhr.status == 404) {
+                msg = "Requested page not found. [404]" + xhr.responseText;
+            } else if (xhr.status == 500) {
+                msg = "Internal Server Error [500]." +  xhr.responseText;
+            } else if (exception === "parsererror") {
+                msg = "Requested JSON parse failed.";
+            } else if (exception === "timeout") {
+                msg = "Time out error." + xhr.responseText;
+            } else if (exception === "abort") {
+                msg = "Ajax request aborted.";
+            } else {
+                msg = "Error:" + xhr.status + " " + xhr.responseText;
+            }
+           
+        }
+    });
+        });
+        
+    </script>
+<script type="text/javascript">
+    $(document).ready(function() {
+    $(".js-example-basic-single").select2();
+    });
+    
+    $('#amnty').on('keyup', function(){
+        var url = '<?= base_url('vendor/getAmenties')?>';
+        var value = $(this).val();
+          $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: {add:1,value:value },
+        success: function (data) {
+           $('#add_amn').html(data);
+        },
+        error: function (xhr, exception) {
+           
+        }
+    });  
+    });
+    $('#amn_btn').on('click', function(){
+        var url = '<?= base_url('vendor/getAmenties')?>';
+        var value = $('#amnty').val();
+
+          $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: {add_to_table:1,value:value },
+        success: function (data) {
+           $('#select_amn').append(data);
+        },
+        error: function (xhr, exception) {
+           
+        }
+    });  
+    });
+    
+    function selectamn(id){
+         var url = '<?= base_url('vendor/getAmenties');?>';
+      $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { select:1,sid:id},
+        success: function (data) {
+        //   alert(data);select_amn
+        $('#select_amn').append(data);
+        },
+    });
+    }
+</script>
 
 <!--Bootstrap Tags Input [ OPTIONAL ]-->
 

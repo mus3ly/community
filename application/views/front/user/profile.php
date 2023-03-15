@@ -1,10 +1,21 @@
+<style>
+    .terms_and_conditions{
+         margin-bottom:10px;
+    } 
+    .terms_and_conditions label{
+        padding-right:100px;
+       
+    }
+</style>
 <?php
+// die('nimra');
 	foreach($user_info as $row)
 	{
     ?>
+    
         <div class="information-title" style="margin-bottom: 0px;"><?php echo translate('profile_information');?></div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 " style="background:#fff;padding:10px;">
                 <div class="recent-post" style="background: #fff;border: 1px solid #e0e0e0;">
                     <div class="media">
                         <a class="pull-left media-link" href="#" style="height: 124px;">
@@ -72,6 +83,25 @@
                 </div>
             </div>
             <div class="col-md-12">
+                <div class="row terms_and_conditions">
+                    <?php 
+                    if(isset($row['TOC']) && $row['TOC'] == 'ok'){
+                    ?>
+                    <input type="checkbox" value="" checked disabled><label>Terms & Conditions</label>
+                    <?php
+                    }if(isset($row['add_affilite']) && $row['add_affilite'] == 'yes'){
+                    ?>
+                    <input type="checkbox" disabled value="" checked><label>Join Affiliates</label>
+                    <?php
+                    }if(isset($row['aff_TOC']) && $row['aff_TOC'] == 'ok'){
+                    ?>
+                    <input type="checkbox" disabled value="" checked><label>Affiliates Terms Of Use</label>
+                    <?php 
+                    }
+                    ?>
+                </div>
+            </div>
+                    <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-4">
                         <h3 class="block-title"><span><?php echo translate('purchase_summary');?></span></h3>

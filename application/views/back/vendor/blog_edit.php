@@ -1,16 +1,20 @@
-<?php
-    foreach($blog_data as $row){
-?>
+
 <div class="row">
+     <?php
+     
+    //  foreach($product_data as $row){
+    //     var_dump($row);
+        ?>
     <div class="col-md-12">
-        <?php
-			echo form_open(base_url() . 'vendor/blog/update/' . $row['blog_id'], array(
-				'class' => 'form-horizontal',
-				'method' => 'post',
-				'id' => 'blog_edit',
-				'enctype' => 'multipart/form-data'
-			));
-		?>
+     <?php
+            echo form_open(base_url() . 'vendor/product/update/'.$row['product_id'], array(
+                'class' => 'form-horizontal',
+                'method' => 'post',
+                'id' => 'product_add',
+                'enctype' => 'multipart/form-data'
+            ));
+        ?>
+ 
             <!--Panel heading-->
             <div class="panel-body">
                 <div class="tab-base">
@@ -27,32 +31,55 @@
                                 </div>
                             </div>
                             
+                            <!--<div class="form-group btm_border">-->
+                            <!--    <label class="col-sm-4 control-label" for="demo-hor-2"><?php echo translate('category');?></label>-->
+                            <!--    <div class="col-sm-6">-->
+                            <!--        <?php echo $this->crud_model->select_html('blog_category','blog_category','name','edit','demo-chosen-select required',$row['category'],'','','get_cat'); ?>-->
+                            <!--    </div>-->
+                            <!--</div>-->
+                     
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-2"><?php echo translate('category');?></label>
                                 <div class="col-sm-6">
-                                    <?php echo $this->crud_model->select_html('blog_category','blog_category','name','edit','demo-chosen-select required',$row['blog_category'],'','','get_cat'); ?>
-                                </div>
+                                    <select name="category" class="form-control demo-chosen-select" id="blog_cat">
+                                        <?php
+                                       foreach($brandss as $k => $v){
+                                        ?>
+                                        <option value="<?= $v['category_id'];?>"   <?= (isset($row['category']) && $row['category'] == $v['category_id'] )? 'selected' : '' ?>><?= $v['category_name'];?></option>
+                                        <?php
+                                       }
+                                        ?>
+                                        </select>
+                                    </div>
                             </div>
                             
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-12"><?php echo translate('images');?></label>
                                 <div class="col-sm-6">
                                     <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
-                                        <input type="file" name="img" onchange="preview(this);" id="demo-hor-inputpass" class="form-control">
-                                    </span>
+                                            <input type="file" value="<?= ($row['sneakerimg'])?$row['sneakerimg']:""; ?>" name="sneakerimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control">
+                                        </span>
                                     <br><br>
-                                    <span id="previewImg" >
-                                        <img class="img-responsive" width="100" src="<?php echo $this->crud_model->file_view('blog',$row['blog_id'],'','','thumb','src','',''); ?>" alt="User_Image" >
-                                    </span>
+                                    <span id="previewImg1" >
+                                            
+                                            <?php
+                                                if($row['comp_logo'])
+                                                {
+                                                    $img = $this->crud_model->size_img($row['comp_logo'],100,100);
+                                                    ?>
+                                                    <img class="img-responsive" width="100" src="<?= $img;?>" data-id="_paris/uploads/product" alt="Feature Image"><?php
+                                                }
+                                            ?>
+                                        </span>
                                 </div>
                             </div>
                             
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-14">
-                                    <?php echo translate('summery');?>
+                                    <?php echo translate('summary');?>
                                         </label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" class="summernotes" data-height="200" data-name="summery"><?php echo $row['summery']; ?></textarea>
+                                    <textarea rows="9" class="summernotes" data-height="200" data-name="main_heading"><?php echo $row['main_heading']; ?></textarea>
                                 </div>
                             </div>
                             
@@ -68,17 +95,29 @@
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('author');?></label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="author" value="<?php echo $row['author']; ?>" id="demo-hor-1" placeholder="<?php echo translate('author');?>" class="form-control ">
+                                    <input type="text" name="author" value="<?php echo $row['author_name']; ?>" id="demo-hor-1" placeholder="<?php echo translate('author');?>" class="form-control ">
                                 </div>
                             </div>
 
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('date');?></label>
                                 <div class="col-sm-6">
-                                    <input type="date" name="date" value="<?php echo $row['date']; ?>" id="demo-hor-1" class="form-control">
+                                    
+                                    <input type="date" name="date" value="<?php echo date('Y-m-d', strtotime($row['posted_date'])); ?>" id="demo-hor-1" class="form-control">
                                 </div>
                             </div>
-                            
+                             <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('time');?></label>
+                                <div class="col-sm-6">
+                                    <input type="time" name="openig_time" value="<?php echo time('H:i:s', strtotime($row['openig_time'])); ?>" id="demo-hor-1" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('slug');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="slug" id="slug" value="<?php echo $row['slug']; ?>" class="form-control" required>
+                                </div>
+                            </div>
                             
                         </div>
 
@@ -90,24 +129,62 @@
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-md-11">
-                    	<span class="btn btn-purple btn-labeled fa fa-refresh pro_list_btn pull-right" 
-                            onclick="ajax_set_full('edit','<?php echo translate('edit_blog'); ?>','<?php echo translate('successfully_edited!'); ?>','blog_edit','<?php echo $row['blog_id']; ?>') "><?php echo translate('reset');?>
+                        <span class="btn btn-purple btn-labeled fa fa-refresh pro_list_btn pull-right" 
+                            onclick="ajax_set_full('add','<?php echo translate('add_product'); ?>','<?php echo translate('successfully_added!'); ?>','product_add',''); "><?php echo translate('reset');?>
                         </span>
-                     </div>
-                     <div class="col-md-1">
-                     	<span class="btn btn-success btn-md btn-labeled fa fa-wrench pull-right enterer" onclick="form_submit('blog_edit','<?php echo translate('successfully_edited!'); ?>');proceed('to_add');" ><?php echo translate('Save');?></span> 
-                     </div>
+                    </div>
+                    
+                    <div class="col-md-1">
+                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');" ><?php echo translate('upload');?></span>
+                    </div>
+                    
                 </div>
             </div>
         </form>
     </div>
 </div>
 <?php
-    }
+    //}
 ?>
 <!--Bootstrap Tags Input [ OPTIONAL ]-->
 <script src="<?php echo base_url(); ?>template/back/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
-
+  <script>
+        $('#slug').on('keyup',function(){
+            var val = $(this).val();
+            var url='<?= base_url('vendor/productslug') ?>';
+              $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { value:val},
+        success: function (data) {
+           if(data == 'error'){
+               $('#slug').addClass('error');
+           }
+        },
+        error: function (xhr, exception) {
+            var msg = "";
+            if (xhr.status === 0) {
+                msg = "Not connect.\n Verify Network." + xhr.responseText;
+            } else if (xhr.status == 404) {
+                msg = "Requested page not found. [404]" + xhr.responseText;
+            } else if (xhr.status == 500) {
+                msg = "Internal Server Error [500]." +  xhr.responseText;
+            } else if (exception === "parsererror") {
+                msg = "Requested JSON parse failed.";
+            } else if (exception === "timeout") {
+                msg = "Time out error." + xhr.responseText;
+            } else if (exception === "abort") {
+                msg = "Ajax request aborted.";
+            } else {
+                msg = "Error:" + xhr.status + " " + xhr.responseText;
+            }
+           
+        }
+    });
+        });
+        
+    </script>
 <script type="text/javascript">
     window.preview = function (input) {
         if (input.files && input.files[0]) {
@@ -370,6 +447,11 @@
 			event.preventDefault();
 		});
 	});
+	       var user_type = 'vendor';
+    var module = 'product';
+    var list_cont_func = 'list';
+    var dlt_cont_func = 'delete';
+    var feature = 0;
 </script>
 <style>
 	.btm_border{

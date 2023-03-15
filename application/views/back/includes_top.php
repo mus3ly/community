@@ -43,7 +43,10 @@
 
 	<!--Bootstrap Select [ OPTIONAL ]-->
 	<link href="<?php echo base_url(); ?>template/back/plugins/bootstrap-select/bootstrap-select.min.css" rel="stylesheet">
+    <!--select2-->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+    <!--select2-->
 	<!--Summernote [ OPTIONAL ]-->
 	<link href="<?php echo base_url(); ?>template/back/plugins/summernote/summernote.min.css" rel="stylesheet">
 
@@ -97,6 +100,30 @@
 	
 	<?php $ext =  $this->db->get_where('ui_settings',array('type' => 'fav_ext'))->row()->value;?>
 	<link rel="shortcut icon" href="<?php echo base_url(); ?>uploads/others/favicon.<?php echo $ext; ?>">
+	<style>
+	    .child_cat_row .col-sm-2{
+	            margin: 10px 0;
+    margin-right: 5px;
+    background: #f4f4f4;
+    width: 102px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+	    } 
+	    .child_cat_row{
+	            display: flex;
+
+	    }
+	    .modal-dialog-centered{
+	        position:relative;
+	        top:-19%;
+	    }
+	    .child_cat_row .cat_del_btn{
+	            color:red;
+	            cursor:pointer;
+
+	    }
+	</style>
 	<script>
 	<?php
 		$volume = $this->crud_model->get_type_name_by_id('general_settings','46','value');

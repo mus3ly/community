@@ -1,5 +1,5 @@
 <?php
-
+// die('ok');
 $cat = $this->db->where('category_id',$category)->get('category')->row();
 $brand = $this->db->where('brand_id',$brand)->get('brand')->row();
 

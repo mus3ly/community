@@ -1,3 +1,15 @@
+<style type="text/css">
+	form{
+		padding: 0 16px;
+	}
+	    .terms_and_conditions{
+         margin-bottom:10px;
+    } 
+    .terms_and_conditions label{
+        padding-right:100px;
+       
+    }
+</style>
 
 <div id="content-container">
     <div id="page-title">
@@ -13,6 +25,8 @@
 								'vendor_id' => $this->session->userdata('vendor_id')
 							))->result_array();
 							foreach ($vendor_data as $row) {
+							 //   var_dump($row);
+							 //   die('nimra');
 						?>
                         <div class="panel-heading">
                             <h3 class="panel-title"><?php echo translate('manage_details');?></h3>
@@ -23,97 +37,180 @@
                                 'method' => 'post'
                             ));
                         ?>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="demo-hor-1">
-                                    	<?php echo translate('name');?>
+
+                        	<div class="row">
+                        		<div class="col-sm-3 sidegap_box">
+                        			<div class="form-group">
+                                    <label class="control-label" for="demo-hor-1">
+                                    	<?php echo translate('first_name');?>
+                                    	</label>
+                                    	<input type="text" name="name" value="<?php echo $row['name']; ?>" id="demo-hor-1" class="form-control ">
+	                                </div>
+                        		</div>
+                        			<div class="col-sm-3 sidegap_box">
+                        			<div class="form-group">
+                                    <label class="control-label" for="demo-hor-1">
+                                    	<?php echo translate('middle_name');?>
                                         	</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" name="name" value="<?php echo $row['name']; ?>" id="demo-hor-1" class="form-control required">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="demo-hor-1">
+	                                        <input type="text" name="display_name" value="<?php echo $row['middle_name']; ?>" id="demo-hor-1" class="form-control ">
+	                                    
+	                                </div>
+                        		</div>
+                        		<div class="col-sm-3 sidegap_box">
+                        			<div class="form-group">
+                                    <label class="control-label" for="demo-hor-1">
+                                    	<?php echo translate('last_name');?>
+                                        	</label>
+	                                        <input type="text" name="l_name" value="<?php echo $row['last_name']; ?>" id="demo-hor-1" class="form-control ">
+	                                    
+	                                </div>
+                        		</div>
+                        		<div class="col-sm-3 sidegap_box">
+                        			<div class="form-group">
+                                    <label class="control-label" for="demo-hor-1">
                                     	<?php echo translate('company');?>
-                                        	</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" name="company" value="<?php echo $row['company']; ?>" id="demo-hor-1" class="form-control required">
+                                        </label>
+	                                      <input type="text" name="company" value="<?php echo $row['company']; ?>" id="demo-hor-1" class="form-control ">
+	                                </div>
+                        		</div>
+                        	
+                        		
+                        	</div>
+                        	<div class="row">
+                                <div class="col-sm-3 sidegap_box">
+                                    <div class="form-group" style="padding-top: 7px">
+                                       <label> <?php echo translate('email');?>
+                                            </label>
+                                            <input type="email" name="email" value="<?php echo $row['email']; ?>" id="demo-hor-2" class="form-control " readonly>
+                                        
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="demo-hor-1">
-                                    	<?php echo translate('display_name');?>
-                                        	</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" name="display_name" value="<?php echo $row['display_name']; ?>" id="demo-hor-1" class="form-control required">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="demo-hor-2">
-										<?php echo translate('email');?>
-                                        	</label>
-                                    <div class="col-sm-6">
-                                        <input type="email" name="email" value="<?php echo $row['email']; ?>" id="demo-hor-2" class="form-control required">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="demo-hor-3">
+                                
+                        		<div class="col-sm-3 sidegap_box">
+                        			<div class="form-group">
+                                    <label class="control-label" for="demo-hor-3">
 										<?php echo translate('phone');?>
-                                        	</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" name="phone" value="<?php echo $row['phone']; ?>" id="demo-hor-3" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="demo-hor-4">
+	                                        	</label>
+	                                        <input type="text" name="phone" value="<?php echo $row['phone']; ?>" id="demo-hor-3" class="form-control">
+	                                    
+	                                </div>
+                        		</div>
+                        		<div class="col-sm-3 sidegap_box">
+                        			<div class="form-group">
+                                    <label class="control-label" for="demo-hor-4">
 										<?php echo translate('address_line_1');?>
                                         	</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" name="address1" value="<?php echo $row['address1']; ?>" id="demo-hor-4" class="form-control address" onblur="set_cart_map('iio');">
-                                    </div>
-                                </div>ac
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="demo-hor-4">
+	                                        <input type="text" name="address1" value="<?php echo $row['address1']; ?>" id="demo-hor-4" class="form-control address" onblur="set_cart_map('iio');">
+	                                    
+	                                </div>
+                        		</div>
+                        		<div class="col-sm-3 sidegap_box">
+                        			<div class="form-group">
+                                    <label class="control-label" for="demo-hor-4">
 										<?php echo translate('address_line_2');?>
                                         	</label>
-                                    <div class="col-sm-6">
                                         <input type="text" name="address2" value="<?php echo $row['address2']; ?>" id="demo-hor-4" class="form-control address" onblur="set_cart_map('iio');">
-                                    </div>
+                                    
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="demo-hor-4">
-										<?php echo translate('country');?>
-                                        	</label>
-                                    <div class="col-sm-6">
-                                        <?php echo $this->crud_model->select_html('countries','country','name','edit','demo-chosen-select required select_country',$row['country'],'',NULL,'select_country'); ?>
+                        		</div>
+                        		
+                        		
+                        	</div>
+                        	<div class="row">
+                                <div class="col-sm-3 sidegap_box">
+                                    <div class="form-group">
+                                    <label class="control-label" for="demo-hor-4">
+                                        <?php 
+                                        echo translate('country');?>
+                                            </label>
+                                        <?php echo $this->crud_model->select_html('countries','country','name','edit','demo-chosen-select  select_country',$row['country'],'',NULL,'select_country'); ?>
                                         <input type="text" name="country-old" value="<?php echo 
                                         $row['country']; ?>" id="demo-hor-4" class="form-control address d-none hidden" onblur="set_cart_map('iio');">
-                                    </div>
+                                    
                                 </div>
-                                <div class="form-group" id="stats">
-                                    <label class="col-sm-3 control-label" for="demo-hor-4">
-										<?php echo translate('state');?>
+                                </div>
+                        		<div class="col-sm-3 sidegap_box">
+                        			<div class="form-group" 
+                        			id="stats">
+                                    <label class="control-label" for="demo-hor-4">
+										<?php 
+										 
+										echo translate('state');?>
                                         	</label>
-                                    <div class="col-sm-6"  id="stats_select">
-                                        <?php echo $this->crud_model->select_html('states','state','name','edit','select_state demo-chosen-select required',$row['state'],'',NULL,'select_state'); ?>
+                                    <div  id="stats_select">
+                                        <?php echo $this->crud_model->select_html('states','state','name','edit','select_state demo-chosen-select ',$row['state'],'',NULL,'select_state'); ?>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="demo-hor-4">
+                                <!--city_select-->
+                        		</div>
+                        		<div class="col-sm-3 sidegap_box">
+                        			<div class="form-group">
+                                    <label class="control-label" for="demo-hor-4">
 										<?php echo translate('city');?>
                                     </label>
-                                    <div class="col-sm-6" id="city_select">
-                                        <?php echo $this->crud_model->select_html('cities','city','name','edit','select_city demo-chosen-select ',$row['city'],'',NULL,'select_city'); ?>
+                                 <div  id="city_select">
+                                        <?php  //echo $this->crud_model->select_html('cities','city','name','edit','select_city demo-chosen-select' ,'','',$row['city'],'',NULL,'select_city'); ?>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label" for="demo-hor-4">
+                        		</div>
+                        		<div class="col-sm-3 sidegap_box">
+                        			<div class="form-group">
+                                    <label class="control-label" for="demo-hor-4">
 										<?php echo translate('zip');?>
                                         	</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" name="zip" value="<?php echo $row['zip']; ?>" id="demo-hor-4" class="form-control address" onblur="set_cart_map('iio');">
-                                    </div>
+                                        <input type="text" name="zip" value="<?php echo $row['zip']; ?>" id="demo-hor-4" class="form-control ">
+                                    
                                 </div>
+                        		</div>
+                        		             
+                        	
+                        
+                        	</div>
+                        	<div class="row">
+                                <div class="col-sm-3 sidegap_box">
+                            <?php
+                            // var_dump($row);
+                            ?>
+                                <label class="control-label" for="demo-hor-2"><?php echo translate('bussniss_type');?></label>
+                                <div>
+                                    <?php echo $this->crud_model->select_html('category','buss_type','category_name','signup_cat','demo-chosen-select',$row['cat1'],'digital',NULL,''); ?>
+                                </div>
+                            </div>
+                                <div class="col-sm-3 sidegap_box">
+                                <label class="control-label" for="demo-hor-2"><?php echo translate('main_Business_Category');?></label>
+                                <div>
+                                    <?php echo $this->crud_model->select_html('category','sub_category','category_name','signup_main_cat','demo-chosen-select',$row['cat2'],'digital',NULL); ?>
+                                </div>
+                            </div>
+                                <div class="col-sm-3 sidegap_box">
+                                <label class="control-label" for="demo-hor-2"><?php echo translate('industry_category');?></label>
+                                <div>
+                                    <?php echo $this->crud_model->select_html('category','sub3_category','category_name','ind_main_cat','demo-chosen-select',$row['cat3'],'digital',NULL); ?>
+                                </div>
+                            </div>
+                              <div class="col-md-12">
+                <div class="row terms_and_conditions">
+                    <?php 
+                    if(isset($row['TOC']) && $row['TOC'] == 'ok'){
+                    ?>
+                    <input type="checkbox" value="" checked disabled><label>Terms & Conditions</label>
+                    <?php
+                    }if(isset($row['add_affilite']) && $row['add_affilite'] == 'yes'){
+                    ?>
+                    <input type="checkbox" disabled value="" checked><label>Join Affiliates</label>
+                    <?php
+                    }if(isset($row['aff_TOC']) && $row['aff_TOC'] == 'ok'){
+                    ?>
+                    <input type="checkbox" disabled value="" checked><label>Affiliates Terms Of Use</label>
+                    <?php 
+                    }
+                    ?>
+                </div>
+            </div>              
+                            </div>
+                
+                            <div class="panel-body" style="display:none;">
+
                                 
                                 <section class="col-md-8" id="lnlat" style="display:none;">
                                     <label class="input">
@@ -129,7 +226,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" style="display:none;">
                                     <label class="col-sm-3 control-label" for="demo-hor-4">
 										<?php echo translate('about');?>
                                         	</label>
@@ -137,12 +234,12 @@
                                         <textarea name="details" rows="10" class="form-control"><?php echo $row['details']; ?></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" style="display:none;">
                                     <label class="col-sm-3 control-label" for="demo-hor-inputemail">
                                         <?php echo translate('description'); ?>
                                     </label>
                                     <div class="col-sm-6">
-                                            <textarea name="description" class="form-control required" rows='8' ><?php echo $row['description']; ?></textarea>
+                                            <textarea name="description" class="form-control " rows='8' ><?php echo $row['description']; ?></textarea>
                                     </div>
                                 </div>
 
@@ -164,41 +261,43 @@
                                 ));
                             ?>
                                 <div class="panel-body">
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="demo-hor-5">
-                                        	<?php echo translate('current_password');?>
-                                            	</label>
-                                        <div class="col-sm-6">
-                                            <input type="password" name="password" value="" id="demo-hor-5" class="form-control required">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="demo-hor-6">
-                                        	<?php echo translate('new_password*');?>
-                                            	</label>
-                                        <div class="col-sm-6">
-                                            <input type="password" name="password1" value="" id="demo-hor-6" class="form-control pass pass1 required">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label" for="demo-hor-7">
-                                        	<?php echo translate('confirm_password');?>
-                                            	</label>
-                                        <div class="col-sm-6">
-                                            <input type="password" name="password2" value="" id="demo-hor-7" class="form-control pass pass2 required">
-                                        </div>
-                                        <div id="pass_note">
-                                        </div>
-                                    </div>
+                                    <div class="row">
+                                <div class="col-sm-3 sidegap_box">
+                            <?php
+                            // var_dump($row);
+                            ?>
+                                <label class="control-label" for="demo-hor-2">
+                                            <?php echo translate('current_password');?>
+                                                </label>
+                                <input type="password" name="password" value="" id="demo-hor-5" class="form-control ">
+                            </div>
+                                <div class="col-sm-3 sidegap_box">
+                                <label class="control-label" for="demo-hor-2">
+                                            <?php echo translate('new_password*');?>
+                                                </label>
+                                 <input type="password" name="password1" value="" id="demo-hor-6" class="form-control pass pass1 ">
+                            </div>
+                                <div class="col-sm-3 sidegap_box">
+                                <label class="control-label" for="demo-hor-2"><?php echo translate('confirm_password');?></label>
+                                 <input type="password" name="password2" value="" id="demo-hor-7" class="form-control pass pass2 ">
+                            </div>
+                            <div class="col-sm-3 sidegap_box" style="margin:30px 0 30px;">
+                              <span class="btn btn-info pass_chng disabled enterer" disabled='disabled' data-ing='<?php echo translate('updating..'); ?>' data-msg='<?php echo translate('password_updated!'); ?>'>
+                                        <?php echo translate('update_password');?>
+                                            </span>
+                            </div>
+                              
+                            </div>
+
+                                    
+                                    
+                                    
                                 </div>
-                                <div class="panel-footer text-right">
-                                    <span class="btn btn-info pass_chng disabled enterer" disabled='disabled' data-ing='<?php echo translate('updating..'); ?>' data-msg='<?php echo translate('password_updated!'); ?>'>
-                                    	<?php echo translate('update_password');?>
-                                    		</span>
-                                </div>
+                                
                         	</form>
                         <?php
                             }
+                            
                         ?>
                     </div>
                 </div>
@@ -225,7 +324,7 @@
 	
 	$('.pass_chng').on('click', function() {
 	
-		//alert('vdv');
+// 		alert('vdv');
 		var here = $(this); // alert div for show alert message
 		var form = here.closest('form');
 		var can = '';
@@ -242,7 +341,7 @@
 		var a = 0;
 		var take = '';
 		form.find(".required").each(function() {
-			var txt = '*<?php echo translate('required'); ?>';
+			var txt = '*<?php echo translate(''); ?>';
 			a++;
 			if (a == 1) {
 				take = 'scroll';
@@ -287,6 +386,7 @@
 					here.html(ing); // change submit button text
 				},
 				success: function(data) {
+				    // alert(data);
 					here.fadeIn();
 					here.html(prv);
 					if (data == 'updated') {
@@ -308,6 +408,7 @@
 					}
 				},
 				error: function(e) {
+				    // alert('ok');
 					console.log(e)
 				}
 			});

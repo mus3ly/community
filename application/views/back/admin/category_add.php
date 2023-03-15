@@ -76,5 +76,8 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
-Li
+$(document).ready(function(){
+        $('.demo-chosen-select').chosen();
+        $('.demo-cs-multiselect').chosen({width:'100%'});
+    });
 </script>

@@ -15,7 +15,7 @@
 
 
 <?php
-
+if(file_exists('meta/'.$asset_page.'.php'))
 include 'meta/'.$asset_page.'.php';
 
 ?>
@@ -239,6 +239,7 @@ $font =  $this->db->get_where('ui_settings',array('type' => 'font'))->row()->val
 
 
 <?php
+if(file_exists($asset_page.'.php'))
 include $asset_page.'.php';
 
 ?>

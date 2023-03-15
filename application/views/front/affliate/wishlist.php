@@ -1,13 +1,13 @@
 							<div class="information-title">
-                            	<?php echo translate('your_compain_log');?></div>
+                            	<?php echo translate('your_campagin_log');?></div>
                             <div class="wishlist">
                                 <table class="table" style="background: #fff;">
                                     <thead>
                                         <tr>
                                             <th>#</th>
                                             <th><?php echo translate('location');?></th>
-                                            <th><?php echo translate('compain');?></th>
-                                            <th><?php echo translate('vist_date');?></th>
+                                            <th><?php echo translate('campaign');?></th>
+                                            <th><?php echo translate('visit_date');?></th>
                                         <th><?php echo translate('expire_at');?></th>
                                         <th><?php echo translate('status');?></th>
                                         <th><?php echo translate('earning');?></th>

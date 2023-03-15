@@ -3,6 +3,7 @@
 <head>
     <?php
     
+    
     $home_style = $this->db->get_where('ui_settings', array('type' => 'home_page_style'))->row()->value;
     $vendor_system   =  $this->crud_model->get_settings_value('general_settings','vendor_system');
     $physical_system =  $this->crud_model->get_settings_value('general_settings','physical_product_activation');
@@ -14,9 +15,10 @@
     $system_title    =  $this->crud_model->get_settings_value('general_settings','system_title');
     $map_api_key     =  $this->crud_model->get_settings_value('general_settings','api_key');
     $revisit_after   =  $this->crud_model->get_settings_value('general_settings','revisit_after');
-
+    
     $page_title      =  ucfirst(str_replace('_',' ',$page_title));
-    $this->crud_model->check_vendor_mambership();
+    // $this->crud_model->check_vendor_mambership();
+    
     if($this->router->fetch_method() == 'product_view' || $this->router->fetch_method() == 'customer_product_view'){
         $keywords    = $product_tags;
         $description = $page_description;
@@ -28,11 +30,28 @@
     }
     ?>
     <title><?php echo $page_title; ?> | <?php echo $system_title; ?></title>
+    <link rel="stylesheet" href="<?= base_url(); ?>/bangla.css" > 
     <?php
     if($home_style != 2 && !isset($new))
     {
         ?>
          <style href="<?= base_url(); ?>/template/front/css/socialmedia9_style.css" ></style>   
+           
+        <?php
+    }
+    ?>
+    <?php
+    if(isset($ng)  && $ng)
+    {
+        ?>
+         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+         <script>
+var app = angular.module('<?= $ng ?>', []);
+app.controller('myCtrl', function($scope) {
+  $scope.firstName = "John";
+  $scope.lastName = "Doe";
+});
+</script>
         <?php
     }
     ?>
@@ -41,6 +60,10 @@
     <?php
      include 'includes/top/index_new.php';
     ?>
+    <!-- include summernote css/js -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
 </head>
 <body id="home" class="wide">
 <!-- PRELOADER -->
@@ -64,6 +87,7 @@ include 'preloader.php';
     <?php
     $header = $home_style;
     include 'header/header_'.$header.'.php';
+    // die("load_iamges");
     ?>
     <!-- /HEADER -->
 
@@ -195,6 +219,7 @@ include 'preloader.php';
                 $('.home-switch').removeClass('active');
             }
         });
+    
     });
 
 </script>
@@ -202,7 +227,13 @@ include 'preloader.php';
 
 <!-- for demo only -->
 
-
+<script>
+        $(document).on('click','.owl-item', function (e) {
+        var simg=$('img',this).attr('src');
+        console.log(simg)
+        $('.big_imgmove img').attr('src',simg)
+        });
+</script>
 
 </body>
 </html>

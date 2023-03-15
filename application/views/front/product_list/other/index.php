@@ -1,6 +1,49 @@
+<?php
+$address = '';
+$lat = $this->config->item('lat');
+$lng = $this->config->item('lng');
+        if(isset($_GET['place_id']) && isset($_GET['place_id']))
+        {
+            //place_id
+            $det = place_details($_GET['place_id']);
+            if(isset($det['result']))
+            {
+            if(isset($det['result']['formatted_address']))
+            {
+                $address = $det['result']['formatted_address'];
+            }
+            if(isset($det['result']['geometry']))
+            {
+                $address = $det['result']['geometry'];
+                if(isset($address['location']['lat']))
+                {
+                    $lat = $address['location']['lat'];
+                }
+                if(isset($address['location']['lng']))
+                {
+                    $lng = $address['location']['lng'];
+                }
+                
+            }
+            }
+
+        }
+?>
 <style>
 .shop-sorting .btn-theme-sm {
     padding:6px 4px 0 !important;
+}
+
+.sort-item .widget-search button {
+    line-height: 26px;
+    background: #f26122;
+    color: #fff;
+    border: none;
+    padding: 5px 9px;
+    display: inline-block;
+    vertical-align: middle;
+    position: absolute;
+    right: 32px;
 }
     .ellipse{
         display:none;
@@ -44,7 +87,7 @@
         left:0px;
         opacity:1;
     }
-    .gm-style-iw img{
+    .gm-style-iw img{.gm-style .gm-style-iw-c
         width: 50px;height: 50px;
     }
     .gm-style-iw {
@@ -58,12 +101,50 @@
     top: 15px !important;
     width: 150px !important;
 }
+.gm-style .gm-style-iw-c {
+    position: absolute;
+    box-sizing: border-box;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    transform: translate3d(-50%,-100%,0);
+    background-color: white;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 7px 1px rgb(0 0 0 / 30%);
+    width: 256px !important;
+    max-width: initial !important;
+}
+.white_map_dot img{
+        width: 100%;
+    height: 190px;
+}
+.white_map_dot h4{
+    color: #000;
+    padding: 12px 0 0;
+}
+.rating_boxes {
+    padding: 9px 0 9px 27px;
+    text-align: center;
+}
+.rating_boxes i {
+    color: #fff;
+    background: #f26122;
+    border-radius: 2px;
+    width: 20px;
+    height: 20px;
+    padding: 5px 0 0;
+    font-size: 11px;
+    cursor: pointer;
+    margin: 0 1px 0 5px;
+}
+
     @media(max-width: 991px) {
         .sidebar.open{
             opacity:1;
             position: fixed;
             z-index: 9999;
-            top: -30px;
+            top: 0px;
             background: #f5f5f5;
             height: 100vh;
             overflow-y: auto;
@@ -72,15 +153,183 @@
         }
         .sidebar.close_now{
             position: fixed;
-            left:-500px;
-            opacity:0;
+            left:-550px;
+            opacity:1;
         }
         .view_select_btn{
             margin-top: 10px !important;
         }
+        #map_div{flex: 0 0 33.333333%;
+    max-width: 33.333333%;}
+    
+    .sidebar{-webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.25, 0.1, 0.22, 0.51);
+    top: 0;
+    padding-top: 50px;width: 300px;}
+    
     }
 </style>
-
+<section class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <!-- widget price filter -->
+               <?php
+            if(isset($_GET['is_listing']) && ($_GET['is_listing'] == 'shop_listing' || $_GET['is_listing'] == 'car_listing')){
+                    ?>
+            <div class="widget widget-filter-price">
+                <div class="Amenities">
+                 <h3>Filter Your Search</h3>
+                </div>
+                <div class="range_slider">
+                    <div class="row">
+                        <div class="col-sm-12">
+                          <div id="slider-range"></div>
+                        </div>
+                    </div>
+                    <div class="row slider-labels">
+                        <div class="col-xs-6 p-0 caption">
+                          <strong>Min:</strong> <span id="slider-range-value1"></span>
+                        </div>
+                        <div class="col-xs-6 p-0 text-right caption">
+                          <strong>Max:</strong> <span id="slider-range-value2"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
+            }
+            else
+            {
+                ?>
+            <div class="widget widget-filter-price">
+                <div class="Amenities">
+                 <h3>Distance Range</h3>
+                </div>
+                <div class="range_slider">
+                    <div class="row">
+                        <div class="col-sm-12">
+                          <div id="slider-range"></div>
+                        </div>
+                    </div>
+                    <div class="row slider-labels">
+                        <div class="col-xs-6 caption">
+                          <strong>Min:</strong> <span id="slider-range-value1"></span>
+                        </div>
+                        <div class="col-xs-6 text-right caption">
+                          <strong>Max:</strong> <span id="slider-range-value2"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
+            }
+            ?>
+        </div>
+        <div class="col-md-8">
+            <!-- shop-sorting -->
+                        <div class="shop-sorting">
+                            <div class="row">
+                                    <div class="col-sm-12">
+                                            <div class="" id="location_search">
+                                            <div class="widget-search search_bar">
+                                                <img src="<?= base_url('/template/front/images/Location.png'); ?>" alt="Search">
+                                                <input class="form-control set-shadow-none" style="border-right: 1px solid #cccccc82 !important;border-radius:0;" type="text" id="texted" value="<?php echo make_proper($text); ?>" placeholder="<?php echo translate('search'); ?>">
+                                                <input type="text" value="<?php echo make_proper($address); ?>" id="loc_box"  onkeyup="search_location()"  placeholder="location" name="" alt="">
+                                                <button onclick="do_product_search('0')" class="on_click_search txt_src_btn">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            <div id="map_search" style="
+                                        z-index: 9999999999999999;
+                                        position: absolute;
+                                    ">
+                                                             <img id="loader" style="display:none" src="<?= base_url('/map-loader.gif'); ?>" />
+                                                             <div id="result_loc"></div>
+                                                         </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                     
+                                     
+                                    </div>
+                            <div class="row" id="width-100">
+                                <div class="col-md-12 col-sm-12 col-xs-12 sort-item">
+                                    
+                                    <div class="row align-items-center">
+                                        <div class="col-sm-12 radio_listing set-list-more-icon">
+                                            <?php
+                                            ?>
+                                        
+                                                <ul>
+                                                    <li>
+                                                    <a  href="<?= base_url('directory?is_listing=directory_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'directory_listing')?"active":"" ?>"><?php echo translate('directory'); ?></a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="<?= base_url('directory?is_listing=buss_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'buss_listing')?"active":"" ?>"><?php echo translate('business'); ?></a>
+                                                     </li>
+                                                    <li>
+                                                        <a href="<?= base_url('directory?is_listing=affliate_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'affliate_listing')?"active":"" ?>"><?php echo translate('affliate'); ?></a>
+                                                     </li>
+                                                     <li>
+                                                        <a href="<?= base_url('directory/76?is_listing=shop_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'shop_listing')?"active":"" ?>"><?php echo translate('shop'); ?></a>
+                                                     </li>
+                                                     <li>
+                                                        <a href="<?= base_url('directory/353?is_listing=blog_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'blog_listing')?"active":"" ?>"><?php echo translate('Blogs'); ?></a>
+                                                     </li>
+                                                     <li>
+                                                        <a href="<?= base_url('directory/1069?is_listing=event_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'event_listing')?"active":"" ?>"><?php echo translate('events'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <a href="<?= base_url('directory/82?is_listing=jobs_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'jobs_listing')?"active":"" ?>"><?php echo translate('jobs'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <a href="<?= base_url('directory/87?is_listing=places_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'places_listing')?"active":"" ?>"><?php echo translate('places'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <a href="<?= base_url('directory/80?is_listing=car_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'car_listing')?"active":"" ?>"><?php echo translate('cars'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <a href="<?= base_url('directory/808?is_listing=property_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'property_listing')?"active":"" ?>"><?php echo translate('Property'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <a href="<?= base_url('directory/134?is_listing=charity_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'charity_listing')?"active":"" ?>"><?php echo translate('charity'); ?></a>
+                                                     </li>
+                                                     <li>
+                                                        <a href="<?= base_url('directory/353?is_listing=news_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'news_listing')?"active":"" ?>"><?php echo translate('news'); ?></a>
+                                                     </li>
+                                                </ul>
+                                                <!--<input type="radio" value="directory_listing" name="group1" id="val2" ><label for="val2"></label>-->
+                                                <!--<input type="radio" value="affliate_listing" name="group1" id="val3" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'affliate_listing')?"checked":"" ?>><label for="val3"><?php echo translate('affliate_listing'); ?></label>-->
+                                                <!--<input type="radio" value="shop_listing" name="group1" id="val4" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'shop_listing')?"checked":"" ?>><label for="val4"><?php echo translate('shop_listing'); ?></label>-->
+                                                <!--<input type="radio" value="blog" name="group1" id="val5" url="<?= base_url('home/blog'); ?>"><label for="val5" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'blog')?"checked":"" ?>><?php echo translate('Blogs'); ?></label>-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="col-md-2 col-sm-12 col-xs-12 text-right view_select_btn">-->
+                                <!--    <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="open_sidebar();">-->
+                                <!--        <i class="fa fa-bars"></i>-->
+                                <!--    </span>-->
+                                <!--    <a class="btn btn-theme-transparent btn-sort" href="#"><img src="<?php echo base_url(); ?>template/front/img/sort.png" alt=""width="20px;"/></a>-->
+                                <!--    <a class="btn btn-theme-transparent btn-theme-sm grid" onClick="set_view('grid')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-grid.png" alt=""/></a>-->
+                                <!--    <a class="btn btn-theme-transparent btn-theme-sm list" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-list.png" alt=""/></a>-->
+                                <!--</div>-->
+                            </div>
+                        </div>
+                        <!-- /shop-sorting -->
+        </div>
+        
+    </div>
+    
+</section>
 <section class="banner_listing">
     <div class="menu_items align" id="menuitems">
         <div class="container menu_list_bg">
@@ -124,77 +373,53 @@
 
 
  <!-- PAGE WITH SIDEBAR -->
- 
+ <div class="container">
+ <div class="middle_bar">
+                        <div class="menuss_icon">
+                            <div class="push_left">
+           <!-- <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="open_sidebar();">
+                <i class="fa fa-bars"></i>
+            </span>-->
+            <a class="btn btn-theme-transparent btn-theme-sm grid" onClick="set_view('grid')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-grid.png" alt=""/></a>
+            <a class="btn btn-theme-transparent btn-theme-sm list" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-list.png" alt=""/></a>
+        </div>
+                       
+                        <div class="push_right">
+                            <a class="btn btn-theme-transparent btn-sort" href="#" id="btn__sort"><img src="<?php echo base_url(); ?>template/front/img/sort.png" alt="" width="20px;"/></a>
+                <ul class="selectpicker input-price sorter_search" data-live-search="true" data-width="100%"
+                                                       data-toggle="tooltip" title="Select" onClick="delayed_search()" id="sorter_search">
+                    <li value="rating_num"><?php echo translate('top_rated'); ?></li>
+                    <li value="distance"><?php echo translate('near_by'); ?></li>
+                    <li value="rating_num"><?php echo translate('popularity'); ?></li>
+                    <li value="condition_old"><?php echo translate('oldest'); ?></li>
+                    <li value="condition_new"><?php echo translate('newest'); ?></li>
+                    <li value="most_viewed"><?php echo translate('most_viewed'); ?></li>
+                </ul>
+                        </div>
+                     </div>  
+                      </div>
+                     </div>  
  
 <section class="page-section with-sidebar">
     <div class="container_side section_bg">
         <div class="container listAndProducts">
-        <div class="row">
+            <!--id="top_fixedc"-->
+        <div class="row" >
             <!-- SIDEBAR -->
             <?php 
                 include 'sidebar.php';
             ?>
             <!-- /SIDEBAR -->
             <!-- CONTENT -->
-                    <div class="col-md-6 col-sm-12 col-xs-12 content" id="content">
-                        <!-- shop-sorting -->
-                        <div class="shop-sorting">
-                            <div class="row" id="width-100">
-                                <div class="col-md-10 col-sm-12 col-xs-12 sort-item">
-                                    <div class="form-inline">
-                                        <div class="form-group selectpicker-wrapper">
-                                            <select class="selectpicker input-price sorter_search" data-live-search="true" data-width="100%"
-                                                data-toggle="tooltip" title="Select" onChange="delayed_search()">                                  
-                                                    <option value=""><?php echo translate('sort_by'); ?></option>
-                                                    <option value="price_low"><?php echo translate('price_low_to_high'); ?></option>
-                                                    <option value="price_high"><?php echo translate('price_high_to_low'); ?></option>
-                                                    <option value="condition_old"><?php echo translate('oldest'); ?></option>
-                                                    <option value="condition_new"><?php echo translate('newest'); ?></option>
-                                                    <option value="most_viewed"><?php echo translate('most_viewed'); ?></option>
-                                            </select>
-                                        </div>
-                                        <?php
-                                        if ($this->crud_model->get_type_name_by_id('general_settings','68','value') == 'ok') {
-                                        ?>
-                                        <div class="form-group selectpicker-wrapper set_brand" style="display:none;">
-                                        </div>
-                                        <?php
-                                        }
-                                        ?>
-                                        <?php
-                                        if ($this->crud_model->get_type_name_by_id('general_settings','58','value') == 'ok') {
-                                        ?>
-                                        <div class="form-group selectpicker-wrapper set_vendor" style="display:none;">
-                                        </div>
-                                        <?php
-                                        }
-                                        ?>
-                                        <div class="form-group widget hidden-xs">
-                                            <div class="widget-search">
-                                                <input class="form-control" type="text" id="texted" value="<?php echo make_proper($text); ?>" placeholder="<?php echo translate('search'); ?>">
-                                                <button class="on_click_search txt_src_btn">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 col-sm-12 col-xs-12 text-right view_select_btn">
-                                    <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="open_sidebar();">
-                                        <i class="fa fa-bars"></i>
-                                    </span>
-                                    <a class="btn btn-theme-transparent btn-theme-sm grid" onClick="set_view('grid')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-grid.png" alt=""/></a>
-                                    <a class="btn btn-theme-transparent btn-theme-sm list" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-list.png" alt=""/></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /shop-sorting -->
+                    <div class="col-md-8 col-sm-12 col-xs-12 content" id="content">
+                        
+                        
                         <div id="result" style="min-height:300px;">
                         
                         </div>
 
                     </div>
-                <div class="col-sm-3" style="padding:0;"> <div id="map" style="    width: 100%;
+                <div class="col-sm-2" id="map_div" style="padding:0;"> <div id="map" style="    width: 100%;
     height: 800px;" class="map_style "></div></div>
 
             <!-- /CONTENT -->
@@ -218,46 +443,88 @@
         $('.sidebar').removeClass('open');
         $('.sidebar').addClass('close_now');
     }
+    
+    
+    
+$(window).on('scroll', function() { 
+	var scrollTop = $(window).scrollTop(); 
+	if(scrollTop > 300) { 
+		$('#top_fixedc').css('position', 'fixed');
+		$('#top_fixedc').css('z-index', '999999');
+		$('#top_fixedc').css('top', '0');
+		$('#top_fixedc').css('left', '0');
+		$('#top_fixedc').css('right', '0');
+		
+		$('#top_fixedc').css('padding', '30px 67px');
+		$('#top_fixedc .products.list,#top_fixedc .products.grid').css('height', '400px');
+		$('#top_fixedc .products.list,#top_fixedc .products.grid').css('overflow-y', 'auto');
+		$('#top_fixedc').css('background', '#fff');
+	}
+	else { 
+		$('#top_fixedc').css('position', 'static'); 
+		$('#top_fixedc').css('padding', '0');
+			$('#top_fixedc .products.list,#top_fixedc .products.grid,#sidebar').css('height', 'auto');
+} })
+
+
+
 </script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
  
 <script>
+function rate_html(rate)
+    {
+        rate = Math.ceil(rate);
+        var tot = 5;
+        var html = '';
+        for(i= 1; i<=tot;i++)
+        {
+            if(i <= rate)
+            {
+                html += '<i class="fa fa-star"></i>';
+            }
+            else
+            {
+                html += '<i class="fa fa-star-o" ></i>';
+            }
+        }
+        return html;
+    }
     var markers = [];
+    var  map = '';
 function initMap() {
-  const uluru = { lat: <?= $this->config->item('lat'); ?>, lng: <?= $this->config->item('lng'); ?> };
-  const map = new google.maps.Map(document.getElementById("map"), {
-    zoom: 4,
+  const uluru = { lat: <?= $lat; ?>, lng: <?= $lng; ?> };
+   map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 12,
     center: uluru,
   });
+  console.log(markers);
     for (var i = 0; i < markers.length; i++) {
-        console.log(markers[i]);
+        // console.log('336');
+        // console.log(markers[i]['title']);
         if(markers[i].lat)
         {
+            console.log(markers[i].rate);
         var num = i+1;
         var contentString =
-    '<div id="content">' +
+    '<div id="content'+i+'">' +
     '<div id="siteNotice">' +
-    "</div>" +
-    '<h1 id="firstHeading" class="firstHeading">'+markers[i]['title']+'</h1>' +
-    '<div id="bodyContent"><img src="'+markers[i]['img']+'" />' +
-    "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " +
-    "sandstone rock formation in the southern part of the " +
-    "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " +
-    "south west of the nearest large town, Alice Springs; 450&#160;km " +
-    "(280&#160;mi) by road. Kata Tjuta and Uluru are the two major " +
-    "features of the Uluru - Kata Tjuta National Park. Uluru is " +
-    "sacred to the Pitjantjatjara and Yankunytjatjara, the " +
-    "Aboriginal people of the area. It has many springs, waterholes, " +
-    "rock caves and ancient paintings. Uluru is listed as a World " +
-    "Heritage Site.</p>" +
-    '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-    "https://en.wikipedia.org/w/index.php?title=Uluru</a> " +
-    "(last visited June 22, 2009).</p>" +
-    "</div>" +
+    "</div>";
+    contentString = '<div class="white_map_dot">';
+   contentString += '<img src="'+markers[i]['img']+'" alt="">';
+   contentString += '<h4> '+markers[i]['title']+'</h4>';
+   contentString += '<div class="rating_boxes">'+rate_html(markers[i].rate);
+      contentString += '<span>1701</span>';
+   contentString += '</div>';
+   contentString += '<p>Bakeries, Patisserie/Cake Shop, Coffee & Tea</p>';
+contentString += '</div>';
+    
+    contentString+= "</div>" +
     "</div>";
     var icon_lat = markers[i].lat;
     var icon_lng = markers[i].lng;
+    num = markers[i].id;
          generateIcon(num, function(src) {
             // alert(icon_lat);
         var uluru = { lat: parseFloat(icon_lat), lng: parseFloat(icon_lng) };
@@ -265,7 +532,7 @@ function initMap() {
     position: uluru,
     map,
     icon: src,
-    title: 'Testing',
+    title: markers[i]['title'],
   });
 
   marker.addListener("click", () => {
@@ -275,14 +542,29 @@ function initMap() {
       shouldFocus: false,
 
     });
-  });      
+  });
+  marker.addListener('mouseover', function() {
+    // infowindow.open(map, this);
+});
+
+// assuming you also want to hide the infowindow when user mouses-out
+marker.addListener('mouseout', function() {
+    // infowindow.close();
+});
+// Zoom to 9 when clicking on marker
+google.maps.event.addListener(marker,'click',function() {
+  map.setZoom(9);
+  infowindow.open(map, this);
+  map.setCenter(marker.getPosition());
+});
     });
+    const infowindow = new google.maps.InfoWindow({
+    content: contentString,
+  });
 }//if checkes
 }
    
-  const infowindow = new google.maps.InfoWindow({
-    content: contentString,
-  });
+  
   
 }
 

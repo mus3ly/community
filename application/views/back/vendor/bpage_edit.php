@@ -1,5 +1,17 @@
 
 <style>
+.breaddcum li {
+    cursor: pointer;
+}
+.feature_single .summernotes{
+    height: 32px;
+    border: 1px solid #cccccc70;
+    padding: 7px 13px;
+    width: 51.8% !important;
+}
+.btn-labeled:not(.btn-block):not(.form-icon) {
+    margin-top: 13px;
+}
     .fa-brands{color: white;font-size: 12px;border-radius: 70%;padding: 10px;margin-top: -8px;}
     .fa-facebook-f{padding: 10px 12px;background-color:#3b5998;}
 	.fa-twitter{background-color:#55acee;}
@@ -123,39 +135,56 @@ btn1 .fa{
   transform: rotateX(180deg);
 }
 </style>
+ 
+<div class="row">
 
-<div class="row" style="margin-right:20px;">
-
-    <div class="col-md-12" style="border-bottom: 1px solid #ebebeb;padding: 5px;     margin-top:64px;">
+    <div class="col-md-12 top_head" >
                             <button class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" onclick="ajax_set_full('add','Add Product','Successfully Added!','product_add',''); proceed('to_list');" style="display: none;">Create Product                            </button>
                             <a href="<?= base_url('/vendor/product'); ?>" class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" style="" onclick="ajax_set_list();  proceed('to_add');">Back To Product List                            </a>
                         </div>
-    <div class="col-md-10"  style="margin-top: 52px;    margin-left: 244px;
-">
+    <div class="col-md-12 newsidebar" >
 
         <?php
+        
+     $s = json_decode($row['added_by']);
+    // var_dump($s->id);
+    // die();
+    $q = $this->db->where('vendor_id',$s->id)->get('vendor')->row_array();
             echo form_open(base_url() . 'vendor/product/update/'.$row['product_id'], array(
                 'class' => 'form-horizontal',
                 'method' => 'post',
                 'id' => 'product_add',
                 'enctype' => 'multipart/form-data'
             ));
+    $checks = json_decode($row['enable_checks']);
+    // var_dump($row);
         ?>
+
+
+
             <!--Panel heading-->
-            <div class="panel-heading">
-                <div class="panel-control" style="float: left;">
+            <div class="row">
+                <div class="col-sm-2 sidebar">
+                    <div class="panel-heading">
+                <div class="panel-control1" >
                     <ul class="nav nav-tabs">
                         <li class="active">
-                            <a data-toggle="tab" href="#customer_choice_options"><?php echo translate('business_type'); ?></a>
+                            <a data-toggle="tab" href="#profile_detail"><?php echo translate('Proﬁle_Details'); ?></a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#customer_choice_options"><?php echo translate('business_categories'); ?></a>
                         </li>
                         <li >
-                            <a data-toggle="tab" href="#top_banner"><?php echo translate('top_bannner'); ?></a>
+                            <a data-toggle="tab" href="#top_banner"><?php echo translate('top_banner'); ?></a>
                         </li>
 
                         <li >
-                            <a data-toggle="tab" href="#first_section"><?php echo translate('Desciptive_section'); ?></a>
+                            <a data-toggle="tab" href="#first_section"><?php echo translate('Service_Description'); ?></a>
                         </li>
-
+                         <li >
+                            <a data-toggle="tab" href="#info_section1"><?php echo translate('More_detail'); ?></a>
+                        </li>
+              
                         <li >
                             <a data-toggle="tab" href="#event_images"><?php echo translate('images_gallary'); ?></a>
                         </li>
@@ -169,11 +198,15 @@ btn1 .fa{
                             <a data-toggle="tab" href="#general"><?php echo translate('general'); ?></a>
                         </li> -->
                         <li >
-                            <a data-toggle="tab" href="#location"><?php echo translate('contact'); ?></a>
+                            <a data-toggle="tab" href="#about"><?php echo translate('about_us'); ?></a>
                         </li>
                         <li >
+                            <a data-toggle="tab" href="#location"><?php echo translate('contact_us'); ?></a>
+                        </li>
+                         <li >
                             <a data-toggle="tab" href="#info_section"><?php echo translate('More_Info'); ?></a>
                         </li>
+                       
                         <li>
                             <a data-toggle="tab" href="#seo_section"><?php echo translate('SEO'); ?></a>
                         </li>
@@ -184,17 +217,153 @@ btn1 .fa{
                     </ul>
                 </div>
             </div>
-            <div class="panel-body">
+                </div>
+                <div class="col-sm-10 right_content_box">
+                    <div class="panel-body">
                 <div class="tab-base">
                     <!--Tabs Content-->                    
                     <div class="tab-content">
-                    <div id="customer_choice_options" class="tab-pane fade active in">
+                        
+                    <div id="profile_detail" class="tab-pane fade active in">
+                        
+                        <div class="row">
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('Name');?></label>
+                                    <input type="text" name="name1" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('name');?>" value="<?= $q['name'];?>" class="form-control ">
+                                </div>
+                            </div>
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('display_name');?></label>
+                                    <input type="text" name="company" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('display_name');?>" value="<?= $q['company'];?>" class="form-control ">
+                                </div>
+                            </div>
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('phone');?></label>
+                                    <input type="text" name="pphone" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('phone');?>" value="<?= $q['phone'];?>" class="form-control ">
+                                </div>
+                            </div>
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('email');?></label>
+                                    <input type="email" name="email1" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('email');?>" value="<?= $q['email'] ?>" class="form-control ">
+                                </div>
+                            </div>
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('address1');?></label>
+                                    <input type="text" name="address" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('address');?>" value="<?= $q['address1'] ?>" class="form-control ">
+                                </div>
+                            </div>
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('address2');?></label>
+                                    <input type="text" name="address2" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('address2');?>" value="<?= $q['address2'] ?>" class="form-control ">
+                                </div>
+                            </div>
+                              <?php
+                               /*
+                                ?>
+                             <div class="col-sm-3 sidegap_box">
+                                <label class="control-label" for="demo-hor-2"><?php echo translate('bussniss_type');?></label>
+                                <div>
+                                    <?php
+                           $coun = $this->db->where('category_id',$q['cat1'] )->get('category')->row(); 
+                           ?>
+                                   <input type="text" value="<?= $coun->category_name; ?>" class="form-control" disabled>
+                                </div>
+                            </div>
+              
+                             <div class="col-sm-3 sidegap_box">
+                                <label class="control-label" for="demo-hor-2"><?php echo translate('main_Business_Category');?></label>
+                              <div>
+                                    <?php
+                           $coun = $this->db->where('category_id',$q['cat2'] )->get('category')->row(); 
+                           ?>
+                                   <input type="text" value="<?= $coun->category_name; ?>" class="form-control" disabled>
+                                </div>
+                            </div>
+                        
+                             <div class="col-sm-3 sidegap_box">
+                                <label class="control-label" for="demo-hor-2"><?php echo translate('industry_category');?></label>
+                                <div>
+                                    <?php
+                           $coun = $this->db->where('category_id',$q['cat3'] )->get('category')->row(); 
+                           ?>
+                                   <input type="text" value="<?= $coun->category_name; ?>" class="form-control" disabled>
+                                </div>
+                            </div>
+                              <?php
+                */
+                ?>
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                    <?php
+                    $coun = $this->db->where('countries_id',$q['country'] )->get('countries')->row();
+                    // var_dump($coun->name);
+                    ?>
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('country');?></label>
+                                     <?php echo $this->crud_model->select_html('countries','country','name','edit','demo-chosen-select  select_country',$q['country'],'',NULL,'select_country'); ?>
+                                </div>
+                            </div>
+                             <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('state');?></label>
+                                <div  id="stats_select">
+                                        <?php echo $this->crud_model->select_html('states','state','name','edit','select_state demo-chosen-select ',$row['state'],'',NULL,'select_state'); ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('city');?></label>
+                                    <input type="text" name="city" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('city');?>" value="<?= $q['city'] ?>" class="form-control ">
+                                </div>
+                            </div>
+                           
+                      
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('zip_code');?></label>
+                                    <input type="text" name="zip_code" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('zip_code');?>" value="<?= $q['zip'] ?>" class="form-control ">
+                                </div>
+                            </div>
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('Default tab');?></label>
+                                    <select name="default_tab" class="form-control ">
+                                        <option value="tab_1">Profile</option>
+                                        <option value="tab_3">Blog</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                      
+                             
+                            <!--<div class="form-group btm_border">-->
+                            <!--    <label class="col-sm-4 control-label" for="demo-hor-6"><?php echo translate('business_type');?></label>-->
+                            <!--    <div class="col-sm-4">-->
+                            <!--        <input type="text" name="btype" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('business_type');?>" value="<?= $q['buss_type'] ?>" class="form-control ">-->
+                                  
+                            <!--    </div>-->
+                            <!--</div>-->
+                             
+                             
+                            
+                            
+                            
+                            
+                        </div>
+                        
+                        <div id="customer_choice_options" class="tab-pane fade in">
                         <input type="hidden" id="category" name="category"/>
                            <div class="row" id="cat_res">
                                 
                                  <?php
                             foreach($brands as $k=>$v){
-                                if(get_cat_level($v['category_id']) == 1)
+                                if($v['level'] == 1)
                                 {
                             ?>
                                 <div class="col-md-4 col-sm-12 col-xs-12 <?= ($product_data->category == $v['category_id'])?"active":"" ?>" onclick="selecttype('<?= $v['category_id'];?>')" >
@@ -219,45 +388,60 @@ btn1 .fa{
                             </div>
                         </div>
                         <div id="top_banner" class="tab-pane fade ">
-                            <h4 class="text-thin text-center"><?php echo translate('top_banner'); ?></h4> 
-                            <div class="form-group btm_border">
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('business_title');?></label>
-                                <div class="col-sm-6">
-                                    <input type="text" name="title" id="demo-hor-1" value="<?php echo $row['title']; ?>" placeholder="<?php echo translate('business_title');?>" class="form-control required">
+                            <div class="row">
+                                <div class="col-sm-3 sidegap_box">
+                                    <div class="form-group btm_border" style="padding:25px 0 0;">
+                                        <label class="control-label" for="demo-hor-6"><?php echo translate('check_this_to_show_on_front');?> <input type="checkbox" id="demoCheckbox" name="checks[]" value="banner_section" class="checkbox_class"  <?= (in_array('banner_section',$checks))?"checked":""; ?>/></label>
+                                        
+                                    </div>
                                 </div>
-                            </div>
-							    <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('tags');?></label>
-                                <div class="col-sm-6">
-                                    <input type="text" name="tag" value="<?= $row['tag']; ?>" data-role="tagsinput" placeholder="<?php echo translate('enter comma (,) to add more');?>" class="form-control">
+                                <div class="col-sm-3 sidegap_box">
+                                    <div class="form-group btm_border">
+                                        <label class="control-label" for="demo-hor-6"><?php echo translate('business_title');?></label>
+                                         <input type="text" name="title" id="demo-hor-1" value="<?php echo $row['title']; ?>" placeholder="<?php echo translate('business_title');?>" class="form-control ">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-6"><?php echo translate('whatsapp_number');?></label>
-                                <div class="col-sm-4">
-                                    <input type="number" name="whatsapp_number" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('whatsapp_number');?>" value="<?= $row['whatsapp_number'] ?>" class="form-control ">
+                                <div class="col-sm-3 sidegap_box">
+                                    <div class="form-group btm_border">
+                                        <label class="control-label" for="demo-hor-6"><?php echo translate('Business Motto');?></label>
+                                         
+                                    <input type="text" name="slog" id="demo-hor-1" value="<?php echo $row['slog']; ?>" placeholder="<?php echo translate('Catchphrase or slogan');?>" class="form-control ">
+                                
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-6"><?php echo translate('business_email');?></label>
-                                <div class="col-sm-4">
-                                    <input type="email" name="bussniuss_email" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('business_email');?>" value="<?= $row['bussniuss_email'] ?>" class="form-control ">
+                                <div class="col-sm-3 sidegap_box">
+                                    <div class="form-group btm_border">
+                                        <label class="control-label" for="demo-hor-6"><?php echo translate('whatsapp_number');?></label>
+                                         
+                                     <input type="text" name="whatsapp_number" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('whatsapp_number');?>" value="<?= $row['whatsapp_number'] ?>" class="form-control " onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                                
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-6"><?php echo translate('business_phone');?></label>
-                                <div class="col-sm-4">
-                                    <input type="number" name="bussniuss_phone" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('business_phone');?>" value="<?= $row['bussniuss_phone'] ?>" class="form-control ">
+                                <div class="col-sm-3 sidegap_box">
+                                    <div class="form-group btm_border">
+                                        <label class="control-label" for="demo-hor-6"><?php echo translate('business_email');?></label>
+                                         
+                                      <input type="email" name="bussniuss_email" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('business_email');?>" value="<?= $row['bussniuss_email'] ?>" class="form-control ">
+                                
+                                    </div>
                                 </div>
-                            </div>
-                                    <label class="col-sm-4 control-label" for="demo-hor-12">Feature image</label>
-                                    <div class="col-sm-6">
-                                        <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
-                                            <input type="file" value="<?= ($row['sneakerimg'])?$row['sneakerimg']:""; ?>" name="sneakerimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control">
+                                <div class="col-sm-3 sidegap_box">
+                                    <div class="form-group btm_border">
+                                        <label class="control-label" for="demo-hor-6"><?php echo translate('business_phone');?></label>
+                                         
+                                       <input type="text" name="bussniuss_phone" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('business_phone');?>" value="<?= $row['bussniuss_phone'] ?>" class="form-control " disabled>
+                                
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 sidegap_box">
+                                    <div class="form-group btm_border">
+                                        <label class="control-label" style="display: block;
+    text-align: left;" for="demo-hor-6">Logo Image</label>
+                                         
+                                       <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
+                                            <input type="file" value="<?= ($row['sneakerimg'])?$row['sneakerimg']:""; ?>" name="sneakerimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control" >
                                         </span>
-                                        <br><br>
-                                        <span id="previewImg1" >
+                                    <span id="previewImg1" >
                                             
                                             <?php
                                                 if($row['comp_logo'])
@@ -270,13 +454,15 @@ btn1 .fa{
                                         </span>
                                     </div>
                                 </div>
-                                <div class="form-group btm_border">
-                                    <label class="col-sm-4 control-label" for="demo-hor-12">Cover Image</label>
-                                    <div class="col-sm-6">
+                                <div class="col-sm-3 sidegap_box">
+                                    <div class="form-group btm_border">
+                                        <label class="control-label" style="display: block;
+    text-align: left;" for="demo-hor-6">Cover Image</label>
+                                         
+                                      
                                         <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
                                             <input type="file" name="sideimg" id="gimgs" onchange="preview2(this);" id="demo-hor-inputpass" class="form-control">
                                         </span>
-                                        <br><br>
                                         <span id="previewImg2" >
                                             <?php
                                                 if($row['comp_cover'])
@@ -287,14 +473,23 @@ btn1 .fa{
                                                 }
                                             ?>
                                         </span>
+                                    
                                     </div>
                                 </div>
+                            </div>
+                            
+                            
                         
                         </div>
                         <div id="first_section" class="tab-pane fade ">
-                                
+                                 <div class="form-group btm_border" style="padding-top:30px;">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
+                                <div class="col-sm-6">
+                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="service_description" class="checkbox_class" <?= (in_array('service_description',$checks))?"checked":""; ?>/>
+                                </div>
+                            </div>
                                 <div class="form-group btm_border">
-                                    <label class="col-sm-4 control-label" for="demo-hor-12">section Image</label>
+                                    <label class="col-sm-4 control-label" for="demo-hor-12">Business Image of Flyer</label>
                                     <div class="col-sm-6">
                                         <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
                                             <input type="file" name="firstImg" onchange="preview3(this);" id="demo-hor-inputpass" class="form-control">
@@ -314,20 +509,20 @@ btn1 .fa{
                                     </div>
                                 </div>
                                 <div class="form-group btm_border">
-                                    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('slogan');?></label>
+                                    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('Brand Slogan');?></label>
                                     <div class="col-sm-6">
                                         <input type="text" name="slogan" id="demo-hor-1" value="<?php echo $row['slogan']; ?>" placeholder="<?php echo translate('slogan');?>" class="form-control ">
                                     </div>
                                 </div>
 
                                 <div class="form-group btm_border">
-                                    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('main_heading');?></label>
+                                    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('Business Descriptive Title');?></label>
                                     <div class="col-sm-6">
-                                        <input type="text" name="main_heading" id="demo-hor-1" value="<?php echo $row['main_heading']; ?>" placeholder="<?php echo translate('main_heading');?>" class="form-control required">
+                                        <input type="text" name="main_heading" id="demo-hor-1" value="<?php echo $row['main_heading']; ?>" placeholder="<?php echo translate('main_heading');?>" class="form-control ">
                                     </div>
                                 </div>
                                 <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('description'); ?></label>
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Business Descriptive Overview'); ?></label>
                                 <div class="col-sm-6">
                                     <textarea rows="9" name="description"  class="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>
                                 </div>
@@ -345,7 +540,8 @@ btn1 .fa{
                                                 {
                                                     ?>
                                                     <div class="feature_single" >
-                                                        <input type="text" class="form-control" value="<?= $value['fhead'] ?>" name="feature[0][fhead]" style="width:45%;float:left;" placeholder="Heading" />
+                                                        
+                                 <input type="text" class="form-control" value="<?= $value['fhead'] ?>" name="feature[0][fhead]" style="width:45%;float:left;" placeholder="Heading" />
                                                         <textarea class="form-control" name="feature[0][fdet]" style="width:45%;float:left;" placeholder="Details"><?= $value['fdet'] ?></textarea>
                                                         <button style="width:4px;" class="btn btn-success" onclick="add_feature()" >+</buuton>
                                                     </div>
@@ -392,8 +588,8 @@ btn1 .fa{
                                                 {
                                                     ?>
                                                     <div class="feature_single" >
-                                                        <input type="text" class="form-control" value="<?= $value['txt'] ?>" name="buttons[0][txt]" style="width:45%;float:left;" placeholder="Text" />
-                                                        <input type="text" class="form-control" value="<?= $value['url'] ?>" name="buttons[0][url]" style="width:45%;float:left;" placeholder="Url" />     
+                                                        <input type="text" class="form-control" value="<?= $value['txt'] ?>" name="buttons[0][txt]" style="width:45%;float:left;" placeholder="Button Name" />
+                                                        <input type="text" class="form-control" value="<?= $value['url'] ?>" name="buttons[0][url]" style="width:45%;float:left;" placeholder="Button Link" />     
                                                         <button style="width:4px;" class="btn btn-success" onclick="add_btn()" >+</button>
                                                     </div>
                                                     <?php
@@ -413,8 +609,8 @@ btn1 .fa{
                                         else
                                         {?>
                                         <div class="feature_single" >
-                                            <input type="text" class="form-control" name="feature[0][txt]" style="width:45%;float:left;" placeholder="Text" />
-                                            <input type="text" class="form-control" name="feature[0][url]" style="width:45%;float:left;" placeholder="Url" />
+                                            <input type="text" class="form-control" name="buttons[0][txt]" style="width:45%;float:left;" placeholder="Button Name" />
+                                            <input type="text" class="form-control" name="buttons[0][url]" style="width:45%;float:left;" placeholder="Button Link " />
                                             <button style="width:4px;" class="btn btn-success" onclick="add_btn()" >+</button>
                                         </div>
                                         <?php  
@@ -428,30 +624,81 @@ btn1 .fa{
 
                         </div>
                         <div id="text_gallary" class="tab-pane fade ">
-                        <div class="col-md-12">
+                             <div class="form-group btm_border" style="padding-top:30px;">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
+                                <div class="col-sm-6">
+                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="text_gallery" class="checkbox_class" <?= (in_array('text_gallery',$checks))?"checked":""; ?>/>
+                                </div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-12"><?php echo translate('Title');?></label>
+                                <div class="col-sm-6">
+                                   
+                                    <input type="text" name="gtitle1" id="demo-hor-1" value="<?php echo  $row['gtitle'];?>" placeholder="Gallery Title" class="form-control " >
+                                  
+                                   
+                                </div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-12"><?php echo translate('Description');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="gdesc1" id="demo-hor-1" value="<?php echo  $row['gdesc'];?>" placeholder="Gallery Description" class="form-control " >
+                                  
+                                   
+                                </div>
+                            </div>
+                        <div class="">
                                     <div id="text_div" >
                                     <?php
                                         if($row['text'])
                                         {
                                             $feature  = json_decode($row['text'],true);
+                                            $text_count = count($feature);
                                             foreach ($feature as $key => $value) {
                                                 if($key == 0)
                                                 {
                                                     ?>
-                                                    <div class="feature_single" >
-                                                        <input type="text" class="form-control" value="<?= $value['fhead'] ?>" name="text[0][fhead]" style="width:45%;float:left;" placeholder="Heading" />
-                                                        <textarea class="form-control" name="text[0][fdet]" style="width:45%;float:left;" placeholder="Details"><?= $value['fdet'] ?></textarea>
-                                                        <button style="width:4px;" class="btn btn-success" onclick="add_text()" >+</buuton>
-                                                    </div>
-                                                    <?php
-                                                }
-                                                else{
-                                                    ?>
-                                                    <div class="feature_single"  id="fid_<?= $key ?>">
-                                                        <input type="text" class="form-control" value="<?= $value['fhead'] ?>" name="text[<?= $key ?>][fhead]" style="width:45%;float:left;" placeholder="Heading" />
-                                                        <textarea class="form-control" name="text[<?= $key ?>][fdet]" style="width:45%;float:left;" placeholder="Details"><?= $value['fdet'] ?></textarea>
-                                                        <button style="width:4px;" class="btn btn-danger" onclick="remove_text('<?= $key; ?>')" >-</buuton>
-                                                    </div>
+
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <input style="margin-right:4px;" type="text" class="form-control" value="<?=$value['ficon'] ?>" name="text[0][ficon]" placeholder="icon" style="width:10%;">
+                            </div>
+                            <div class="col-sm-2">
+                                <input  style="margin-right:4px;" type="text" class="form-control" value="<?=$value['url'] ?>" name="text[0][url]" placeholder="image URL" style="width:10%;">
+                            </div>
+                            <div class="col-sm-2">
+                                 <input  style="margin-right:4px;" type="text" class="form-control" value="<?=$value['fhead'] ?>" name="text[0][fhead]" style="width:20%;float:left;" placeholder="Heading" />
+                            </div>
+                            <div class="col-sm-2">
+                                 <input  style="margin-right:4px;" type="text" class="form-control" value="<?=$value['phead'] ?>" name="text[0][phead]" style="width:20%;float:left;" placeholder="paragraph Heading" />
+                            </div>
+                            <div class="col-sm-4">
+                                 <textarea class="form-control" name="text[0][fdet]" placeholder="Details"><?= $value['fdet'] ?></textarea>
+                             
+                            </div>
+                            <div class="col-sm-1">
+                                <button style="width:auto;" class="btn btn-success" onclick="add_text()" >+</button>
+                            </div>
+                        </div>                            
+                      <div class="feature_single" style="display: flex;">
+                
+                
+               
+               
+               
+                </div>
+                <?php
+                }
+                else{
+                ?>
+                <div class="feature_single"  id="tid_<?= $key ?>" style="display: flex;">
+                  <input type="text" class="form-control"  value="<?= $value['ficon'] ?>" name="text[<?= $key ?>][ficon]" placeholder="icon" style="width:10%;">
+                  <input type="text" class="form-control"  value="<?= $value['url'] ?>" name="text[<?= $key ?>][url]" placeholder="Image URL" style="width:10%;">
+                <input type="text" class="form-control" value="<?= $value['fhead'] ?>" name="text[<?= $key ?>][fhead]" style="width:20%;float:left;" placeholder="Heading" />
+                <input type="text" class="form-control" value="<?= $value['phead'] ?>" name="text[<?= $key ?>][phead]" style="width:20%;float:left;" placeholder="paragraph Heading" />
+                <textarea class="form-control" name="text[<?= $key ?>][fdet]" style="width:45%;float:left;" placeholder="Details"><?= $value['fdet'] ?></textarea>
+                <button style="width:4px;" class="btn btn-danger" type="button" onclick="remove_text('<?= $key; ?>')" >-</button>
+            </div>
                                               
                                                     <?php
                                                 }
@@ -460,11 +707,11 @@ btn1 .fa{
                                         else
                                         {?>
                                         
-                                        <div class="feature_single" >
-                                            <input type="text" class="form-control" name="text[0][fhead]" style="width:45%;float:left;" placeholder="Heading" />
-                                            <textarea class="form-control" name="text[0][fdet]" style="width:45%;float:left;" placeholder="Details"></textarea>
-                                            <button style="width:4px;" class="btn btn-success" onclick="add_text()" >+</buuton>
-                                        </div>
+                    <div class="feature_single" >
+                        <input type="text" class="form-control" name="text[0][fhead]" style="width:45%;float:left;" placeholder="Heading" />
+                        <textarea class="form-control" name="text[0][fdet]" style="width:45%;float:left;" placeholder="Details"></textarea>
+                        <button style="width:4px;" class="btn btn-success" onclick="add_text()" >+</buuton>
+                    </div>
                                         <?php  
                                         }
                                         ?>
@@ -472,6 +719,116 @@ btn1 .fa{
 
                                     </div>
                                     </div>
+                        </div>
+                        <div id="about" class="tab-pane fade ">
+                             <div class="form-group btm_border" style="padding-top:30px;">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
+                                <div class="col-sm-6">
+                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="about" class="checkbox_class" <?= (in_array('about',$checks))?"checked":""; ?>/>
+                                </div>
+                            </div>
+                        <div class="form-group btm_border">
+                                <div class="col-sm-4"></div>
+                                <div class="col-sm-8"></div>
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('Title');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="about_title" value="<?php echo $row['about_title'];?>"
+                                           placeholder="<?php echo translate('About us')?>"
+                                           class="form-control ">
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <div class="col-sm-4"></div>
+                                <div class="col-sm-8"></div>
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate(' More Info');?>
+                                </label>
+                                <div class="col-sm-6">
+                                        <textarea  
+                                                  class="form-control" name="about_description" rows='4' ><?php echo $row['about_desc']; ?></textarea>
+                                </div> 
+                                <div class="col-sm-2"></div>
+                            </div>
+                             <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('Categories');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="cats" value="<?= $row['cats']; ?>" data-role="tagsinput" placeholder="<?php echo translate('enter comma (,) to add more');?>" class="form-control">
+                                </div>
+                            </div>
+                              <div class="form-group btm_border" >
+                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('Add_Amenities');?></label>
+                                <div class="col-sm-6">
+                                    <input type="checkbox" name="checkamenities" value="yes" class="" id="amen_check" <?= isset($row['amen_check']) && 
+                                    $row['amen_check'] == 'yes' ?'checked':'';
+                                    ?>>
+                                </div>
+                            </div>
+                            <div class="form-group btm_border" id="amenities" style="display:<?= isset($row['amen_check']) && 
+                                    $row['amen_check'] == 'yes' ?'block':'none';
+                                    ?>;">
+                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('Amenities');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="amenities" value="<?= $row['amenities']; ?>" data-role="tagsinput" placeholder="<?php echo translate('enter comma (,) to add more');?>" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <div class="col-sm-4"></div>
+                                <div class="col-sm-8"></div>
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate(' Address');?>
+                                </label>
+                                <div class="col-sm-6">
+                                        <textarea name="about_address"  placeholder="<?php echo translate('Ex. New Yamaha Sports bike in 2020 from Japan')?>"
+                                                  class="form-control" rows='4' ><?php echo $row['about_address']; ?></textarea>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                             
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('Opening Time');?></label>
+                                <div class="col-sm-6">
+                                    <input type="time" name="openig_time" value="<?= date("h:i:s", strtotime( $row['openig_time'])); ?>"  placeholder="<?php echo translate('opening');?>" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('Closing Time');?></label>
+                                <div class="col-sm-6">
+                                    <input type="time" name="closing_time" value="<?= date("h:i:s", strtotime( $row['closing_time'])); ?>" placeholder="<?php echo translate('closing');?>" class="form-control">
+                                </div>
+                            </div>
+             <div class="form-group btm_border ">
+                            <?php
+                            $old = $row['social_media'];
+                            $old = json_decode($old,true);
+                            // var_dump($social_media);
+                            $img ='';
+                            foreach($social_media as $k => $v){
+                                $id = $v['id'];
+                                // var_dump( $id);
+                                // var_dump( $old);
+                                
+                            if($v['img']){
+                               $img = $this->crud_model->get_img($v['img'])->secure_url;
+                             } 
+
+                            ?>
+                            <div class="row">
+                                <div class="col-sm-4 control-label social_image" for="">
+                                    <img src="<?= $img?>" >
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="text" name="social[<?php echo $v['id']; ?>]" value="<?= isset($old[$v['id']])?$old[$v['id']]:''; ?>" placeholder="<?php echo $v['name']; ?>"
+                                           class="form-control " readonly>
+                                </div>
+                                <div class="col-sm-2"></div>
+                                </div>
+                                <?php
+                                }
+                                ?>
+                            </div>
                         </div>
                         <div id="seo_section" class="tab-pane fade ">
                         <div class="form-group btm_border">
@@ -483,7 +840,7 @@ btn1 .fa{
                                 <div class="col-sm-6">
                                     <input type="text" name="seo_title" value="<?php echo $row['seo_title']; ?>"
                                            placeholder="<?php echo translate('Ex. Yamaha RT - Model 2020')?>"
-                                           class="form-control required">
+                                           class="form-control ">
                                 </div>
                                 <div class="col-sm-2"></div>
                             </div>
@@ -496,13 +853,24 @@ btn1 .fa{
                                 <div class="col-sm-6">
                                         <textarea name="seo_description"
                                                   placeholder="<?php echo translate('Ex. New Yamaha Sports bike in 2020 from Japan')?>"
-                                                  class="form-control required" rows='4' ><?php echo $row['seo_description']; ?></textarea>
+                                                  class="form-control " rows='4' ><?php echo $row['seo_description']; ?></textarea>
                                 </div>
                                 <div class="col-sm-2"></div>
                             </div>
-
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate(' SEO Tags');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="tag" value="<?= $row['tag']; ?>" data-role="tagsinput" placeholder="<?php echo translate('enter comma (,) to add more');?>" class="form-control">
+                                </div>
+                            </div>
                         </div>
                         <div id="social_media" class="tab-pane fade ">
+                             <div class="form-group btm_border" style="padding-top:30px;">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
+                                <div class="col-sm-6">
+                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="social_media" class="checkbox_class" <?= (in_array('social_media',$checks))?"checked":""; ?>/>
+                                </div>
+                            </div>
                         <div class="form-group btm_border ">
                             <?php
                             $old = $row['social_media'];
@@ -515,8 +883,8 @@ btn1 .fa{
                                 // var_dump( $old);
                                 
                             if($v['img']){
-					           $img = $this->crud_model->get_img($v['img'])->secure_url;
-			                 } 
+                               $img = $this->crud_model->get_img($v['img'])->secure_url;
+                             } 
 
                             ?>
                             <div class="row">
@@ -535,11 +903,71 @@ btn1 .fa{
                             </div>
                             
                         </div>
+                        <div id="info_section1" class="tab-pane fade ">
+                             <div class="form-group btm_border" style="padding-top:30px;">
+                                More Details
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
+                                <div class="col-sm-6">
+                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="extra_info" class="checkbox_class" <?= (in_array('extra_info',$checks))?"checked":""; ?>/>
+                                </div>
+                            </div>
+                        <div class="form-group btm_border">
+                                    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('section_heading');?></label>
+                                    <div class="col-sm-6">
+                                        <input type="text" name="extra_section_heading" id="demo-hor-1" value="<?php echo $row['extra_section_heading']; ?>" placeholder="<?php echo translate('extra_section_heading');?>" class="form-control ">
+                                    </div>
+                                </div>
+                        <div class="form-group btm_border">
+                                    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('number_of_column');?></label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control exra_chnge"  name="number_of_column">
+                                        <?php
+                                        for($i = 1;$i<=3;$i++)
+                                        {
+                                            ?>
+                                            <option value="<?= $i; ?>" <?= (isset($row['number_of_column']) && $row['number_of_column'] == $i)?"selected":""; ?> ><?= $i ?><?= ($i== 1)?"column":"columns" ?></option>
+                                            <?php
+                                        }
+                                        ?>    
+                                        </select>
+                                        
+                                </div>
+                                </div>
+                                <?php
+                                $content = json_decode($row['etra_content'],true);
+                                // var_dump($content);
+                                ?>
+                                 <div class="form-group btm_border" id="col1_div">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('column1_Details'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" name="info_desc" id="info_desc"  class="summernotes" data-height="200" data-name="etra_content[]"><?= (isset($content[0]))?$content[0]:"" ?></textarea>
+                                </div>
+                                </div>
+                                 <div class="form-group btm_border" id="col2_div" style="display:none;">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('column2_Details'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" name="info_desc"  class="summernotes" data-height="200" data-name="etra_content[]"><?= (isset($content[1]))?$content[1]:"" ?></textarea>
+                                </div>
+                                </div>
+                                 <div class="form-group btm_border" id="col3_div" style="display:none;">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('column3_Details'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" name="info_desc"  class="summernotes" data-height="200" data-name="etra_content[]"><?= (isset($content[3]))?$content[3]:"" ?></textarea>
+                                </div>
+                                </div>
+                             
+                        </div>
                         <div id="info_section" class="tab-pane fade ">
+                             <div class="form-group btm_border" style="padding-top:30px;">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
+                                <div class="col-sm-6">
+                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="more_info" class="checkbox_class" <?= (in_array('more_info',$checks))?"checked":""; ?>/>
+                                </div>
+                            </div>
                         <div class="form-group btm_border">
                                     <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('info_heading');?></label>
                                     <div class="col-sm-6">
-                                        <input type="text" name="info_head" id="demo-hor-1" value="<?php echo $row['info_head']; ?>" placeholder="<?php echo translate('main_heading');?>" class="form-control required">
+                                        <input type="text" name="info_head" id="demo-hor-1" value="<?php echo $row['info_head']; ?>" placeholder="<?php echo translate('main_heading');?>" class="form-control ">
                                     </div>
                                 </div>
                                  <div class="form-group btm_border">
@@ -548,6 +976,7 @@ btn1 .fa{
                                     <textarea rows="9" name="info_desc"  class="summernotes" data-height="200" data-name="info_desc"><?php echo $row['info_desc']; ?></textarea>
                                 </div>
                                 </div>
+                               
                                 <div class="form-group btm_border">
                                     <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('Button_text');?></label>
                                 <div class="col-sm-6">
@@ -558,25 +987,93 @@ btn1 .fa{
                                         <input type="text" class="form-control" value="<?= $row['button_url'] ?>" name="button_url" style="width:45%;float:left;" placeholder="Url" />     
                                     </div>
                                     </div>
+                          
                         </div>
                         <div id="location" class="tab-pane fade ">
-                        <input id="searchTextField" type="text" size="50" placeholder="Enter a location" autocomplete="on" runat="server" / style="height: 40px;margin-bottom: 10px;border: 1px solid;border-radius: 7px;padding: 10px;">
+                            <div class="row">
+                                <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border" style="padding:25px 0 0;">
+                                        <label class="control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
+                                         <input type="checkbox" id="demoCheckbox" name="checks[]" value="location" class="checkbox_class"  <?= (in_array('location',$checks))?"checked":""; ?>/>
+                                        
+                                    </div>
+                            </div>
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6">Enter location</label>
+                                    <input id="searchTextField" type="text" size="50" placeholder="Enter a location" autocomplete="on" runat="server"  style="height: 40px;margin-bottom: 10px;border: 1px solid;border-radius: 7px;padding: 10px;">
+                                </div>
+                            </div>
+                            </div>
+                             
+                             
+                        
                             
                             <div id="googleMap" style="width:100%;height:400px;"></div>
-                                                        
-                                <div class="row" style="font-size: 16px;margin-top: 22px;">
-                                     <div class="col-md-4"><p>Or Enter Cordinates</p></div>
-                                     <div class="col-md-4"><label>Latitude:</label>
-                                    <input type="text" id="cityLat" value="<?= $row['lat']; ?>" name="lat" / style="border: 1px solid;border-radius: 7px;padding: 5px;"></div>
-                                     <div class="col-md-4">
-                                          <label>Longitude:</label>
-                                <input type="text" id="cityLng" value="<?= $row['lng']; ?>" name="lng" / style="border: 1px solid;border-radius: 7px;padding: 5px;">
-                                     </div>
+                                      
+                                <div class="row" style="font-size: 16px;margin-top: 22px !important;    margin-bottom: 24px !important;">
+                                    <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border" style="padding:35px 0 0;">
+                                    <label class="control-label" for="demo-hor-6">Or Enter Cordinates</label>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6">Latitude:</label>
+                                    <input type="text" class="form-control " id="cityLat" value="<?= $row['lat']; ?>" name="lat" / style="border: 1px solid;border-radius: 7px;padding: 5px;"></div>
+                                    
+                                </div>
+                                <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6">Longitude:</label>
+                                    <input type="text" class="form-control "  id="cityLng" value="<?= $row['lng']; ?>" name="lng" / style="border: 1px solid;border-radius: 7px;padding: 5px;"></div>
+                                    
+                                </div>
+                            </div>
+                                  
+                                    
+
+                                 <div class="row">
+                                     <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('business_email');?></label>
+                                   <input type="email" name="bussniuss_email" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('business_email');?>" value="<?= $row['bussniuss_email'] ?>" class="form-control " disabled>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 sidegap_box">
+                                <div class="form-group btm_border">
+                                    <label class="control-label" for="demo-hor-6"><?php echo translate('business_phone');?></label>
+                                    <input type="text" name="bussniuss_phone" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('business_phone');?>" value="<?= $row['bussniuss_phone'] ?>" class="form-control " disabled>
+                                </div>
+                            </div>
+
                                  </div>
+                                   
+                            
                         </div>
                         <div id="event_images" class="tab-pane fade ">
-                        <div class="form-group btm_border">
-                                <h4 class="text-thin text-center"><?php echo translate('gallary_images'); ?></h4>                            
+                          <div class="form-group btm_border" style="padding-top:30px;">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
+                                <div class="col-sm-6">
+                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="event_images" class="checkbox_class" <?= (in_array('event_images',$checks))?"checked":""; ?>/>
+                                </div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-12"><?php echo translate('Title');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="gtitle" id="demo-hor-1" value="<?php echo  $row['gallery_lable'];?>" placeholder="Gallery Title" class="form-control " >
+                                  
+                                   
+                                </div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-12"><?php echo translate('Description');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="gdesc" id="demo-hor-1" value="<?php echo  $row['gallery_text'];?>" placeholder="Gallery Description" class="form-control " >
+                                  
+                                   
+                                </div>
                             </div>
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-12"><?php echo translate('images');?></label>
@@ -646,7 +1143,12 @@ btn1 .fa{
                         </div>-->
                         <div id="event_images" class="tab-pane fade ">
         
-                            
+                             <div class="form-group btm_border" style="padding-top:30px;">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
+                                <div class="col-sm-6">
+                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="gallery_image" class="checkbox_class" <?= (in_array('gallery_image', $checks))?"checked":""?>/>
+                                </div>
+                            </div>
 
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"></label>
@@ -686,6 +1188,10 @@ btn1 .fa{
                 </div>
         
             </div>
+                </div>
+            </div>
+            
+            
     
             <div class="panel-footer">
                 <div class="row">
@@ -696,7 +1202,7 @@ btn1 .fa{
                     </div>
                     
                     <div class="col-md-1">
-                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');" ><?php echo translate('upload');?></span>
+                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');" ><?php echo translate('upload');?></span>
                     </div>
                     
                 </div>
@@ -757,7 +1263,7 @@ function getCookie(name) {
 
         // $('#gimgs_txt').text('Uploading ...');
         var settings = {
-  "url": "https://ads.strokedev.net/vendor/gupload",
+  "url": "<?= base_url(); ?>/vendor/gupload",
   "method": "POST",
   "timeout": 0,
   "headers": {
@@ -890,7 +1396,7 @@ $.ajax(settings).done(function (response) {
         $("#more_additional_fields").append(''
             +'<div class="form-group">'
             +'    <div class="col-sm-4">'
-            +'        <input type="text" name="ad_field_names[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>">'
+            +'        <input type="text" name="ad_field_names[]" class="form-control "  placeholder="<?php echo translate('field_name'); ?>">'
             +'    </div>'
             +'    <div class="col-sm-5">'
             +'        <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values[]"></textarea>'
@@ -1143,14 +1649,15 @@ function showPosition(position) {
 
         feature = feature +1;
         var html = '<div class="feature_single" id="fid_'+ feature+'">';
-        html += '<input type="text" class="form-control" name="feature['+feature+'][fhead]" style="width:45%;float:left;" placeholder="Heading" />';
-        html += '<textarea class="form-control"  name="feature['+feature+'][fdet]" style="width:45%;float:left;" placeholder="Details"></textarea>';
+        html += '<input type="text" class="form-control" name="feature['+feature+'][fhead]" style="width:35%;float:left;" placeholder="Heading" />';
+        html += '<textarea class="summernotes"  name="feature['+feature+'][fdet]" style="width:45%;float:left;" placeholder="Details"></textarea>';
         html += '<button style="width:4px;" class="btn btn-danger" onclick="remove_feature('+feature+')" >-</buuton>';
                                        html+= '</div>';
                                        $('#feature_div').append(html);
         }
     }
-    var txt = 0;
+    var txt = <?= (isset($text_count)?$text_count:0); ?>;
+    
     function remove_text(item)
     {
         txt--;
@@ -1167,14 +1674,20 @@ function showPosition(position) {
         {
 
             txt = txt +1;
-        var html = '<div class="feature_single" id="tid_'+ txt+'">';
-        html += '<input type="text" class="form-control" name="text['+txt+'][fhead]" style="width:45%;float:left;" placeholder="Heading" />';
-        html += '<textarea class="form-control"  name="text['+txt+'][fdet]" style="width:45%;float:left;" placeholder="Details"></textarea>';
-        html += '<button style="width:4px;" class="btn btn-danger" onclick="remove_text('+txt+')" >-</buuton>';
+            // alert(txt);
+        var html = '<div class="row" id="tid_'+ txt+'">';
+        html += '<div class="col-sm-1"><input type="text" class="form-control" name="text['+txt+'][ficon]" style="margin-right:4px;" placeholder="icon" /></div>';
+        html += '<div class="col-sm-2"><input type="text" class="form-control" name="text['+txt+'][url]" style="margin-right:4px;" placeholder="Image URL" /></div>';
+        html += '<div class="col-sm-2"><input type="text" class="form-control" name="text['+txt+'][fhead]" style="margin-right:4px;" placeholder="Heading" /></div>';
+        html += '<div class="col-sm-2"><input type="text" class="form-control" name="text['+txt+'][phead]" style="margin-right:4px;" placeholder="paragraph Heading" /></div>';
+        
+        html += '<div class="col-sm-4"><textarea class="summernotes"  name="text['+txt+'][fdet]" placeholder="Details"></textarea></div>';
+        html += '<div class="col-sm-1"><button style="width:auto;;" class="btn btn-danger" type="button" onclick="remove_text('+txt+')" >-</buuton></div>';
                                        html+= '</div>';
                                        $('#text_div').append(html);
         }
     }
+    //<input type="text" class="form-control" value="<?=$value['url'] ?>" name="text[0][url]" placeholder="image URL" style="width:10%;">
     var button = 0;
     <?php
     if($btns)
@@ -1201,22 +1714,68 @@ function showPosition(position) {
 
             button = button +1;
         var html = '<div class="feature_single" id="bid_'+ button+'">';
-        html += '<input type="text" class="form-control" name="buttons['+button+'][txt]" style="width:45%;float:left;" placeholder="Text" />';
-        html += '<input type="text" class="form-control" name="buttons['+button+'][url]" style="width:45%;float:left;" placeholder="Url" />';
+        html += '<input type="text" class="form-control" name="buttons['+button+'][txt]" style="width:45%;float:left;" placeholder="Button Name" />';
+        html += '<input type="text" class="form-control" name="buttons['+button+'][url]" style="width:45%;float:left;" placeholder="Button Link" />';
         html += '<button style="width:4px;" class="btn btn-danger" onclick="remove_btn('+button+')" >-</buuton>';
                                        html+= '</div>';
                                        $('#button_div').append(html);
         }
     }
+//     $('.checkbox_class').on('change', function(){ // on change of state
+//   if(this.checked) // if changed state is "CHECKED"
+//     {
+//     alert();
+//     }
+// })
+$(document).ready(function(){
+    
+    <?php
+    if(isset($row['cat2']) && $row['cat2'])
+    {
+        ?>
+        selecttype('<?= $row['cat2'] ?>');
+        <?php
+    }
+    ?>
+    //selecttype('87')
+
+    var num = parseInt( $('.exra_chnge').val());
+    for(var i = 1;i <=3 ;i++)
+    {
+        var mid = "#col"+i+"_div";
+        if(i<= num)
+        {
+        $(mid).show();
+        }
+        else
+        {
+            $(mid).hide();
+        }
+    }
+});
+$('.exra_chnge').change(function(){
+    var num = parseInt( $(this).val());
+    for(var i = 1;i <=3 ;i++)
+    {
+        var mid = "#col"+i+"_div";
+        if(i<= num)
+        {
+        $(mid).show();
+        }
+        else
+        {
+            $(mid).hide();
+        }
+    }
+});
+
+$('#amen_check').on('change',function(){
+    $('#amenities').toggle();
+})
     </script>
 
 
-<style>
-    .btm_border{
-        border-bottom: 1px solid #ebebeb;
-        padding-bottom: 15px;   
-    }
-</style>
+
 
 
 <!--Bootstrap Tags Input [ OPTIONAL ]-->

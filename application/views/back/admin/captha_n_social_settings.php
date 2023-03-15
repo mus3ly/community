@@ -135,7 +135,7 @@
                                         <label class="col-sm-2 control-label" for="demo-hor-inputemail"><?php echo translate('status');?></label>
                                         <div class="col-sm-8">
                                             <div class="col-sm-">
-                                                <input id="fb_login_set" class='sw5' data-set='fb_login_set' type="checkbox" <?php if($fb_login_set == 'ok'){ ?>checked<?php } ?> />
+                                                <input id="fb_login_set" class='sw5' data-set='fb_login_set' name="fb-check" value="ok" type="checkbox" <?php if($fb_login_set == 'ok'){ ?>checked<?php } ?> />
                                             </div>
                                         </div>
                                     </div>
@@ -163,7 +163,7 @@
                                         <label class="col-sm-2 control-label" for="demo-hor-inputemail"><?php echo translate('status');?></label>
                                         <div class="col-sm-8">
                                             <div class="col-sm-">
-                                                <input id="g_login_set" class='sw5' data-set='g_login_set' type="checkbox" <?php if($g_login_set == 'ok'){ ?>checked<?php } ?> />
+                                                <input id="g_login_set" class='sw5' data-set='g_login_set' name="g-check" value="ok" type="checkbox" <?php if($g_login_set == 'ok'){ ?>checked<?php } ?> />
                                             </div>
                                         </div>
                                     </div>

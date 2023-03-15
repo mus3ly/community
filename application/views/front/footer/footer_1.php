@@ -209,7 +209,7 @@
 
             <li><a href="#">CommunityHubLand Shop</a></li>
 
-            <li><a href="https://marketplace.hypeplug.paris/home/contact">Contact Us</a></li>
+            <!--<li><a href="https://marketplace.hypeplug.paris/home/contact">Contact Us</a></li>-->
 
             <li><a href="https://marketplace.hypeplug.paris/home/about">About Us</a></li>
 

@@ -1,21 +1,16 @@
 <style>
     .ellipse{display:none;}
 </style>
-
-
 <link href="<?= base_url() ?>/template/back/plugins/chosen/chosen.min.css" rel="stylesheet">
 <div class="menulogin">
 <ul>
-    <li><a href="#">Customer Login</a></li>
-    <li><a href="#">Customer Sign-up</a></li>
-    <li><a href="#">Vendor Login </a></li>
-    <li><a href="#">Vender Sign-up</a></li>
-    <li><a href="#">Affiliate Marketer Login</a></li>
-    <li><a href="#">Affiliate Marketer Signup</a></li>
-    <li><a href="#">Affiliate Vendor Login</a></li>
-    <li><a href="#">Affiliate Vendor Signup </a></li>
+    <li><a href="<?php echo base_url('login_set/login');?>">Customer Login</a></li>
+    <li><a href="<?php echo base_url('home/login_set/registration');?>">Customer Sign-up</a></li>
+    <li><a href="<?php echo base_url('vendor');?>">Vendor Login </a></li>
+    <li><a href="<?php echo base_url('/vendor_logup/registration');?>">Vender Sign-up</a></li>
+
 </ul>
-<</div>
+</div>
 <section class="page-section color get_into">
     <div class="container">
         <div class="row">
@@ -35,25 +30,6 @@
                       <?php echo translate('customer_registration');?>
                   <!--      <div class="option">-->
                   <!--    	<?php echo translate('already_a_member_?_click_to_');?>-->
-                  <!--      <?php-->
-			               <!--      if ($this->crud_model->get_type_name_by_id('general_settings','58','value') !== 'ok') { ?>-->
-                  <!--            <a href="<?php echo base_url(); ?>login_set/login">-->
-                  <!--                <?php echo translate('login');?>!-->
-                  <!--            </a>-->
-                  <!--      <?php-->
-									         <!--}-->
-                  <!--         else { ?>-->
-                  <!--              <a href="<?php echo base_url(); ?>login_set/login">-->
-                  <!--                  <?php echo translate('login');?>! <?php echo translate('as_customer');?>-->
-                  <!--              </a>-->
-                  <!--            <?php echo translate('_or_');?>-->
-                  <!--              <a href="<?php echo base_url(); ?>vendor_logup/registration">-->
-                  <!--                  <?php echo translate('sign_up');?>! <?php echo translate('as_vendor');?>-->
-                  <!--              </a>-->
-                  <!--            <?php-->
-          								<!--	}-->
-          								<!--?>-->
-                  <!--      </div>-->
                   <div class="login_info">
                                     <p>Please include the texts also to help user understand how to navigate this section: Join Community HubLand or Login to your account as a Business or as a Customer. With a Business Account… more ( when more is clicked, it should show the rest of the texts which are: you can access all tools to list your ads,<a href="#">read more</a> </p>
                                     <div class="hovertext"><p>  create your own affiliate marketing portal to encourage affiliate marketers to market your business, bookmark your favourite listings, comment and more) With a Customer account… more (on click: you can bookmark your favourite businesses, comment in discussions and leave reviews) … - When they click Business Login or Business Sign-up, the text for business above should be on top of the form - When they click Customer Login or Customer Sign-up, the text for customer above should be on top of the form - Either form should have the other login and signup options available for them to change their mind and select another option ….. When the click on either of the affiliate logins or sign-ups the same follows and the texts are: - A Marketing Affiliate Account to will provide you options to earn as you share businesses on your social media accounts. Anyone joining Community HubLand or purchasing from businesses on Community HubLand via your shared links will provide you respective commissions from Community HubLand and/or the business purchase - A Business Affiliate Account will provide you a platform to host your marketing materials that affiliate marketers can access to share on the social media platforms. You can determine how much commission your affiliate marketers will earn.</p></div>
@@ -131,6 +107,18 @@
                             </div>
                         </div>
                         </div>
+                      <div class="col-md-12 terms">
+                         <input  name="affiliate" type="checkbox" value="yes" id="affiliates">
+                          <?php echo translate('Join Affiliates');?>
+                          </a>
+                      </div>
+                      <div class="col-md-12 terms" style="display:none;"  id="affiliate_terms_check" >
+                          <input  name="affiliate_terms_check" type="checkbox" value="ok">
+                          <?php echo translate('i_agree_with');?>
+                          <a href="<?php echo base_url();?>home/page/Affiliates_Terms_Of_Use" target="_blank">
+                              <?php echo translate('Affiliates_terms_of_use');?>
+                          </a>
+                      </div>
                       <div class="col-md-12 terms">
                           <input  name="terms_check" type="checkbox" value="ok" >
                           <?php echo translate('i_agree_with');?>
@@ -251,5 +239,14 @@ function other(){
     $(document ).ready(function() {
         // set_cart_map();
         other();
+    });
+    $('#affiliates').on('change',function(){
+        // alert();
+           if($('#affiliates').is(':checked')){
+          $('#affiliate_terms_check').show();
+        }
+        else{
+         $('#affiliate_terms_check').hide();
+        }
     });
 </script>

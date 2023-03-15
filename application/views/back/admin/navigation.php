@@ -329,8 +329,27 @@ $customer_product_check = $this->crud_model->get_type_name_by_id('general_settin
                                                                             <?php echo translate('3rd-level-category');?>
                                                                     </a>
                                                                 </li>
+                                                        
+                                                <?php
+                      										}
+                                          if($this->crud_model->admin_permission('amenity')){ ?>
+                                                                <li <?php if($page_name=="amenity"){?> class="active-link" <?php } ?> >
+                                                                    <a href="<?php echo base_url(); ?>admin/amenity">
+                                                                        <i class="fa fa-circle fs_i"></i>
+                                                                            <?php echo translate('amenities');?>
+                                                                    </a>
+                                                                </li>
                                                         <?php
                                                             }
+                                                            ?>
+                                                            <li <?php if($page_name=="makes"){?> class="active-link" <?php } ?> >
+                                                                    <a href="<?php echo base_url(); ?>admin/makes">
+                                                                        <i class="fa fa-circle fs_i"></i>
+                                                                            <?php echo translate('car_makes');?>
+                                                                    </a>
+                                                                </li>
+                                                            
+                                                            <?php
                                           if($this->crud_model->admin_permission('product')){ ?>
                           										<li <?php if($page_name=="product"){?> class="active-link" <?php } ?> >
                           											<a href="<?php echo base_url(); ?>admin/product">
@@ -1261,6 +1280,20 @@ $customer_product_check = $this->crud_model->get_type_name_by_id('general_settin
                             }
                         ?>
                         <?php
+                            if($this->crud_model->admin_permission('list_fields')){
+                        ?>
+                        <li <?php if($page_name=="list_fields"){?> class="active-link" <?php } ?> >
+                            <a href="<?php echo base_url(); ?>admin/list_fields">
+                                <i class="fa fa-search-plus"></i>
+                                <span class="menu-title">
+                                   Custom Fields
+                                </span>
+                            </a>
+                        </li>
+                        <?php
+                            }
+                        ?>
+                        <?php
                             if(true){
                         ?>
                         <li <?php if($page_name=="bpkg"){?> class="active-link" <?php } ?> >
@@ -1268,6 +1301,20 @@ $customer_product_check = $this->crud_model->get_type_name_by_id('general_settin
                                 <i class="fa fa-search-plus"></i>
                                 <span class="menu-title">
                                     Social medias
+                                </span>
+                            </a>
+                        </li>
+                        <?php
+                            }
+                        ?>
+                        <?php
+                            if($this->crud_model->admin_permission('defaultBusiness')){
+                        ?>
+                        <li <?php if($page_name=="default_business_list"){?> class="active-link" <?php } ?> >
+                            <a href="<?php echo base_url(); ?>admin/defaultBusiness">
+                                <i class="fa fa-language"></i>
+                                <span class="menu-title">
+                                    <?php echo translate('default_business');?>
                                 </span>
                             </a>
                         </li>

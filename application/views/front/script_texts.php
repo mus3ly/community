@@ -7,6 +7,7 @@
 	var quantity_exceeds = "<?php echo translate('product_quantity_exceed_availability!'); ?>";
 	var product_already = "<?php echo translate('product_already_added_to_cart!'); ?>";
 	var wishlist_add = "<?php echo translate('product_added_to_wishlist'); ?>";
+	var aff_add = "<?php echo translate('added_to_affliate_list'); ?>";
 	var wishlist_adding = "<?php echo translate('wishing..'); ?>";
 	var wishlist_remove = "<?php echo translate('product_removed_from_wishlist'); ?>";
 	var compare_add = "<?php echo translate('product_added_to_compared'); ?>";
@@ -557,6 +558,48 @@ if (keyCode == 13){
         });
     }
 
+	function to_affliate(id,e){	
+		e = e || window.event;
+		e = e.target || e.srcElement;
+		var state 		= check_login_stat('state');
+		var product 	= id;
+		var button 		= $(e);
+		var alread 		= button.html();
+		if(button.is("i")){
+			var alread_classes = button.attr('class');	
+		}		
+		state.success(function (data) {
+			if(data == 'hypass'){
+				$.ajax({
+					url: base_url+'home/affliates/add/'+product,
+					beforeSend: function() {
+						if(button.is("i")){
+							button.attr('class','fa fa-spinner fa-spin fa-fw');	
+						} else {
+							button.find('i').attr('class','fa fa-spinner fa-spin fa-fw');	
+						}	
+					},
+					success: function(data) {
+						if(data == ''){
+							notify(aff_add,'info','bottom','right');
+						} else {
+							notify(wishlist_already,'warning','bottom','right');
+						}
+						if(button.is("i")){
+							button.attr('class',alread_classes);	
+						} else {
+							button.html(alread);	
+						}
+					},
+					error: function(e) {
+						console.log(e)
+					}
+				});
+			} else {
+				signin();
+			}
+		});
+	}
 	function to_wishlist(id,e){	
 		e = e || window.event;
 		e = e.target || e.srcElement;
@@ -1160,7 +1203,7 @@ if (keyCode == 13){
 						setTimeout(
 							function() {
 								var url = window.location.href;
-								location.replace("<?php echo base_url(); ?>home/cart_checkout");
+								location.replace("<?php echo base_url(); ?>home/vendor_subscription");
 							}, 2000
 						);
 						//sound('successful_logup');  		

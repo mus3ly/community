@@ -61,17 +61,27 @@
                         </div>
                         <hr>
                         
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <input class="form-control required" name="name" type="text" placeholder="<?php echo translate('name');?>" data-toggle="tooltip" title="<?php echo translate('name');?>">
+                                <input class="form-control required" name="name" type="text" placeholder="<?php echo translate('first_name');?>" data-toggle="tooltip" title="<?php echo translate('first_name');?>">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input class="form-control required" name="middle_name" type="text" placeholder="<?php echo translate('middle_name');?>" data-toggle="tooltip" title="<?php echo translate('middle_name');?>">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input class="form-control required" name="last_name" type="text" placeholder="<?php echo translate('last_name');?>" data-toggle="tooltip" title="<?php echo translate('last_name');?>">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input class="form-control required" name="display_name" type="text" placeholder="<?php echo translate('display_name');?>" data-toggle="tooltip" title="<?php echo translate('display_name');?>">
+                                <input class="form-control required" name="company" type="text" placeholder="<?php echo translate('business_name');?>" data-toggle="tooltip" title="<?php echo translate('business_name');?>">
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <input class="form-control emails required" name="email" type="email" placeholder="<?php echo translate('email');?>" data-toggle="tooltip" title="<?php echo translate('email');?>">
                             </div>
@@ -79,7 +89,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input class="form-control pass1 required" type="password" name="password1" placeholder="<?php echo translate('password');?>" data-toggle="tooltip" title="<?php echo translate('password');?>">
+                                <input class="form-control pass1 required" type="password" id="password" onkeyup="checkPasswordStrength();" name="password1" placeholder="<?php echo translate('password');?>" data-toggle="tooltip" title="<?php echo translate('password');?>">
+                                <small id="password-strength-status" style="color:red;"></small>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -88,9 +99,14 @@
                             </div>
                             <div id='pass_note'></div> 
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <input class="form-control" name="company" type="text" placeholder="<?php echo translate('company');?>" data-toggle="tooltip" title="<?php echo translate('company');?>">
+                                <input class="form-control" name="phone" type="text" placeholder="<?php echo translate('phone');?>" data-toggle="tooltip" title="<?php  echo translate('phone');?>">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input class="form-control" name="wphone" type="text" placeholder="<?php echo translate('whatsapp_(optional)');?>" data-toggle="tooltip" title="<?php  echo translate('whatsapp');?>">
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -103,35 +119,44 @@
                                 <input class="form-control required" name="address2" type="text" placeholder="<?php echo translate('address_line_2');?>" data-toggle="tooltip" title="<?php echo translate('address_line_2');?>">
                             </div>
                         </div>
-
-                        <div class="col-md-6">
+                        
+                        <div class="col-md-4">
                                 <label class="control-label" for="demo-hor-2"><?php echo translate('bussniss_type');?></label>
                                 <div>
                                     <?php echo $this->crud_model->select_html('category','buss_type','category_name','signup_cat','demo-chosen-select required','','digital',NULL,''); ?>
                                 </div>
                             </div>
-                        <div class="col-md-6">
+                
+                        <div class="col-md-4">
                                 <label class="control-label" for="demo-hor-2"><?php echo translate('main_Business_Category');?></label>
                                 <div>
-                                    <?php echo $this->crud_model->select_html('category','buss_type','category_name','signup_main_cat','demo-chosen-select required','','digital',NULL,'get_cat'); ?>
+                                    <?php echo $this->crud_model->select_html('category','sub_category','category_name','signup_main_cat','demo-chosen-select required','','digital',NULL); ?>
                                 </div>
                             </div>
-                            <div class="col-md-6" id="scat" style="display: none;">
-                            <div class="form-group">
-                                <label><?php echo translate('sub-category');?></label>
-                                <span id="sub_cat" class="col-md-12">
-                                <input type="text" name="state" class="form-control" />
-                                </span>
+                        
+                            <div class="col-md-4">
+                                <label class="control-label" for="demo-hor-2"><?php echo translate('industry_category');?></label>
+                                <div>
+                                    <?php echo $this->crud_model->select_html('category','sub3_category','category_name','ind_main_cat','demo-chosen-select required','','digital',NULL); ?>
+                                </div>
                             </div>
-                        </div>
-                            <div class="col-md-6" id="s3cat" style="display: none;">
-                            <div class="form-group">
-                                <label><?php echo translate('level3-category');?></label>
-                                <span id="sub3_cat" class="col-md-12">
-                                <input type="text" name="state" class="form-control" />
-                                </span>
-                            </div>
-                        </div>
+                           
+                        <!--    <div class="col-md-6" id="scat" style="display: none;">-->
+                        <!--    <div class="form-group">-->
+                        <!--        <label><?php // echo translate('sub-category');?></label>-->
+                        <!--        <span id="sub_cat" class="col-md-12">-->
+                        <!--        <input type="text" name="state" class="form-control" />-->
+                        <!--        </span>-->
+                        <!--    </div>-->
+                        <!--</div>-->
+                        <!--    <div class="col-md-6" id="s3cat" style="display: none;">-->
+                        <!--    <div class="form-group">-->
+                        <!--        <label><?php // echo translate('level3-category');?></label>-->
+                        <!--        <span id="sub3_cat" class="col-md-12">-->
+                        <!--        <input type="text" name="state" class="form-control" />-->
+                        <!--        </span>-->
+                        <!--    </div>-->
+                        <!--</div>-->
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Country</label>
@@ -140,26 +165,36 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>State</label>
-                                <span id="stats_select" class="col-md-12">
-                                <input type="text" name="state" class="form-control" />
-                                </span>
+                                <label>Region</label>
+                                <div id="stats_select"></div>
+                                
                             </div>
                         </div>
                         <div class="col-md-12">
                         <div class="col-md-6" style="padding-left: 0;">
                             <div class="form-group">
                                 <label>City</label>
-                                <input class="form-control required" name="city" type="text" placeholder="<?php echo translate('city');?>" data-toggle="tooltip" title="<?php echo translate('city');?>">
+                                <div id="city_select"></div>
                             </div>
                         </div>
                         <div class="col-md-6" style="margin-top:0px">
                             <div class="form-group">
-                                <label>Zip code</label>
+                                <label>Post Code</label>
                                 <input class="form-control required" name="zip" type="text" placeholder="<?php echo translate('zip');?>" data-toggle="tooltip" title="<?php echo translate('zip');?>">
                             </div>
                         </div>
                         </div>
+                        <div class="col-md-12 terms">
+                            <input  name="affiliate" type="checkbox" value="yes" id="affiliates"> 
+                            <?php  echo translate('join_affiliates');?>
+                        </div>
+                        <div class="col-md-12 terms" style="display:none;"  id="affiliate_terms_check" >
+                          <input  name="affiliate_terms_check" type="checkbox" value="ok">
+                          <?php echo translate('i_agree_with');?>
+                          <a href="<?php echo base_url();?>home/page/Affiliates_Terms_Of_Use" target="_blank">
+                              <?php echo translate('Affiliates_terms_of_use');?>
+                          </a>
+                      </div>
                         <div class="col-md-12 terms">
                             <input  name="terms_check" type="checkbox" value="ok" > 
                             <?php echo translate('i_agree_with');?>
@@ -181,7 +216,7 @@
                             }
                         ?>
                         <div class="col-md-12">
-                            <span class="btn btn-theme-sm btn-block btn-theme-dark pull-right logup_btn" data-ing='<?php echo translate('registering..'); ?>' data-msg="">
+                            <span class="btn btn-theme-sm btn-block btn-theme-dark pull-right logup_btn" id="registerbtn" data-ing='<?php echo translate('registering..'); ?>' data-msg="">
                                 <?php echo translate('register');?>
                             </span>
                         </div>
@@ -256,4 +291,38 @@ function other(){
         ajax_load(base_url+'home/vendor_logup/sub3_by_cat/'+id,'sub3_cat','other');
         $('#s3cat').show('slow');
     }
+        $('#affiliates').on('change',function(){
+        // alert();
+        if($('#affiliates').is(':checked')){
+          $('#affiliate_terms_check').show();
+        }
+        else{
+         $('#affiliate_terms_check').hide();
+        }
+    });
+    // $('#password').each(function(){
+     function checkPasswordStrength() {
+	var number = /([0-9])/;
+	var alphabets = /([a-zA-Z])/;
+	var special_characters = /([~,!,@,#,$,%,^,&,*,-,_,+,=,?,>,<])/;
+	var password = $('#password').val().trim();
+	if (password.length < 8) {
+		$('#password-strength-status').removeClass();
+		$('#password-strength-status').addClass('weak-password');
+		$('#password-strength-status').html("Weak (should be atleast 8 characters.)");
+		$('#registerbtn').css({'display':'none'});
+	} else {
+		if (password.match(number) && password.match(alphabets) && password.match(special_characters)) {
+			$('#password-strength-status').css({'display':'none'});
+			$('#registerbtn').css({'display':'block'});
+		}
+		else {
+			$('#password-strength-status').removeClass();
+			$('#password-strength-status').addClass('medium-password');
+			$('#password-strength-status').html("Medium (should include alphabets, numbers and special characters.)");
+			$('#registerbtn').css({'display':'none'});
+		}
+	}
+}
+    // });
 </script>

@@ -1,5 +1,5 @@
 <?php
-
+// die($this->session->userdata('title').'/'.$page_name.'.php');
 	$system_name	 =  $this->db->get_where('general_settings',array('type' => 'system_name'))->row()->value;
 	$system_title	 =  $this->db->get_where('general_settings',array('type' => 'system_title'))->row()->value;
 ?>

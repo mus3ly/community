@@ -23,7 +23,7 @@
 			$("#loading").fadeOut(500);
 		});
 // 		load_iamges();
-		setTimeout(function(){ load_iamges(); }, 0.5000);
+		setTimeout(function(){ /*load_iamges();*/ }, 0.5000);
 
 	});
 </script>

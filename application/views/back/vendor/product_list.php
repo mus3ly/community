@@ -24,7 +24,13 @@
 </style>
 <script src="<?php echo base_url(); ?>template/back/plugins/bootstrap-table/extensions/export/bootstrap-table-export.js"></script>
 <div class="panel-body" id="demo_s">
-    <table id="events-table" class="table table-striped"  data-url="<?php echo base_url(); ?>vendor/product/list_data" data-side-pagination="server" data-pagination="true" data-page-list="[5, 10, 20, 50, 100, 200]"  data-show-refresh="true" data-search="true"  data-show-export="true" >
+    <?php
+    if($type)
+    {
+        $type = '?'.$type.'=1';
+    }
+    ?>
+    <table id="events-table" class="table table-striped"  data-url="<?php echo base_url(); ?>vendor/product/list_data<?=$type?>"  data-side-pagination="server" data-pagination="true" data-page-list="[5, 10, 20, 50, 100, 200]"  data-show-refresh="true" data-search="true"  data-show-export="true" >
         <thead>
             <tr>
                 <th data-field="item" data-align="right" data-sortable="true">

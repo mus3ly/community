@@ -57,7 +57,7 @@
             <?php
             if ($this->session->userdata('title') == 'vendor') {
             ?>
-            <div id="countdown">
+            <div id="countdown" style="display:none;">
     <ul>
       <li><span id="days"><b></b></span><br>Days</li>
       <li><span id="hours"></span><br>Hours</li>

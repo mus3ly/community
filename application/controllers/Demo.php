@@ -27,6 +27,11 @@ class Demo extends CI_Controller {
     }
 
 
+    public function category($l)
+    {
+        var_dump($l);
+        die();
+    }
     public function index()
     {
         //all at once

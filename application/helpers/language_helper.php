@@ -12,6 +12,135 @@
  * @since		Version 1.0
  * @filesource
  */
+ function get_product_meta($pid, $k= '')
+ {
+     $CI =& get_instance();
+     $r = $CI->db->where('pid',$pid)->where('meta_key',$k)->get('product_meta')->row(); 
+     if($r)
+     {
+         return $r->meta_value;
+              
+         
+     }
+     else
+     {
+         return '';
+     }
+ }
+ function update_product_meta($pid, $k= '', $v= '')
+ {
+     $CI =& get_instance();
+     $r = $CI->db->where('pid',$pid)->where('meta_key',$k)->get('product_meta')->row_array(); 
+     if($r)
+     {
+         //update
+         $up = array(
+             'pid' => $pid,
+             'meta_value' => $v,
+             );
+              return $CI->db->where('id',$r['id'])->update('product_meta',$up);
+              
+         
+     }
+     else
+     {
+         //add
+         $in = array(
+             'pid' => $pid,
+             'meta_key' => $k,
+             'meta_value' => $v,
+             );
+             $CI->db->insert('product_meta',$in);
+             return $CI->db->insert_id();
+     }
+ }
+ function excerpt($title, $cutOffLength) {
+     $title= strip_tags($title);
+    if (strlen($title) < $cutOffLength) {
+     return $title;
+} else {
+
+   $new = wordwrap($title, $cutOffLength-2);
+   $new = explode("\n", $new);
+
+   $new = $new[0] . '...';
+
+   return $new;
+}
+}
+ function slugify($text, string $divider = '-')
+{
+  // replace non letter or digits by divider
+  $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
+
+  // transliterate
+  $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+  // remove unwanted characters
+  $text = preg_replace('~[^-\w]+~', '', $text);
+
+  // trim
+  $text = trim($text, $divider);
+
+  // remove duplicate divider
+  $text = preg_replace('~-+~', $divider, $text);
+
+  // lowercase
+  $text = strtolower($text);
+
+  if (empty($text)) {
+    return 'n-a';
+  }
+
+  return $text;
+}
+function create_slug($id)
+{
+    $CI =& get_instance();
+    $v = $CI->db->where('product_id',$id)->get('product')->row_array(); 
+    if(isset($v['title']))
+         {
+             if($v['slug'])
+             {
+                 return $v['slug'];
+             }
+             $slug = slugify($v['title']);
+             
+             $pros_slg = $CI->db->where('slug',$slug)->get('product')->row();
+             if($pros_slg)
+             {
+                 $slug = $slug.'-'.time();
+             }
+             if($slug)
+             {
+                 $r = $CI->db->where('product_id',$v['product_id'])->update('product',array('slug'=>$slug));
+                //  var_dump($r);
+                //  var_dump($v['product_id']);
+                return  $slug;
+             }
+         }
+}
+function place_details($id)
+{
+    $CI =& get_instance();
+    $curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://maps.googleapis.com/maps/api/place/details/json?place_id='.$id.'&fields=geometry,formatted_address&key='.$CI->config->item('map_key'),
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'GET',
+));
+
+$response = curl_exec($curl);
+
+curl_close($curl);
+return  json_decode($response, true);
+}
 function get_cat_level($id)
 {
 	$l = 1;

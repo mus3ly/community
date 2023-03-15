@@ -22,8 +22,25 @@ class Html_model extends CI_Model
     
     function product_box($product_data = array(), $type = '', $style = '')
     {
+        $file = 'blog';
+        if(is_array($product_data) && isset($product_data['is_product']) && $product_data['is_product'])
+        {
+            $file = 'product';
+        }
+        else if(isset($product_data->is_product) && $product_data->is_product)
+        {
+            $file = 'product';
+        }
+     return $this->product_box1($product_data, $file.'_'.$type);
         //  die('front/components/product_boxes/product_box_'.$type.'_'.$style);
-        $this->load->view('front/components/product_boxes/product_box_'.$type.'_'.$style,$product_data);
+        $this->load->view('front/components/product_boxes/'.$type,$product_data);
+
+    }
+    function product_box1($product_data = array(), $file = '')
+    {
+     
+        //  die('front/components/product_boxes/product_box_'.$type.'_'.$style);
+        $this->load->view('front/components/product_boxes/'.$file,$product_data);
 
     }
 	

@@ -53,9 +53,9 @@
 				}
 			?>
 		</td>
-		<td class="add">
-			<a class="btn btn-theme btn-theme-xs" href="<?php echo base_url(); ?>home/invoice/<?php echo $row1['sale_id']; ?>"><?php echo translate('invoice');?></a>
-		</td>
+		<!--<td class="add">-->
+		<!--	<a class="btn btn-theme btn-theme-xs" href="<?php // echo base_url(); ?>home/invoice/<?php // echo $row1['sale_id']; ?>"><?php // echo translate('invoice');?></a>-->
+		<!--</td>-->
 	</tr>                                            
 <?php 
 	}

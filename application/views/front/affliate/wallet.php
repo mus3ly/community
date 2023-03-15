@@ -7,9 +7,9 @@
 <div class="row profile">
     <div class="col-lg-3 col-md-3 col-sm-4">
         <div class="col-md-12">
-            <div class="row">
+            
                 <div class="thumbnail no-border no-padding thumbnail-banner size-1x3" style="height:auto;">
-                    <div class="media">
+                    <div class="">
                         <div class="media-link">
                             <div class="caption">
                                 <div class="caption-wrapper div-table">
@@ -23,31 +23,29 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            
         </div>
-        <div class="row" >
+       
             <?php
             if($blc > 5)
             {
             ?>
-            <div class="col-md-12" style="margin-top:2px;" >
-                <div class="btn btn-theme btn-theme-sm btn-block" id="withdraw" onclick="wallet('<?php echo base_url(); ?>home/affliate/wallet/add_view')">
+            <div class="btn btn-theme btn-theme-sm btn-block" id="withdraw" onclick="wallet('<?php echo base_url(); ?>home/affliate/wallet/add_view')">
                     <?php echo translate('withdarw'); ?>
                 </div>
-            </div>
             <?php
             }else{
               ?>
                <div class="col-md-12" style="margin-top:2px;" >
                 <div type="button" disabled class="btn btn-theme btn-theme-sm btn-block" style="cursor:not-allowed;">
-                    <?php echo translate('withdarw'); ?>
+                    <?php echo translate('withdraw'); ?>
                 </div>
             </div>
               <?php
               
             }
             ?>
-        </div>
+       
         <input type="hidden" id="state" value="normal" />
     </div>
     
@@ -107,7 +105,7 @@
                     // alert( $('#page_num6').val(page));
                 }
                 var alerta = $('#result6');
-                alert('ok');
+                // alert('ok');
                 alerta.html('<td><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></td>');
                 alerta.load('<?php echo base_url();?>home/wallet_listed/'+page,
                     function(){

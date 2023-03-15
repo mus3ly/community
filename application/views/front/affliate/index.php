@@ -6,15 +6,16 @@
             width: 1290px;
         }
     }
+    .ellipse{display: none;}
 </style>
 <section class="page-section">
     <div class="wrap container">
         <!-- <div id="profile-content"> -->
-            <div class="row profile">
+            <div class="row profile" style="padding: 0 0 100px;">
                 <div class="col-lg-3 col-md-3">
                     <input type="hidden" id="state" value="normal" />
                     <div class="widget account-details">
-                    <div class="information-title" style="margin-bottom: 0px;"><?php echo translate('my_affliate');?></div>
+                    <div class="information-title" style="margin-bottom: 0px;"><?php echo translate('my_affiliates');?></div>
                         <ul class="pleft_nav">
 
                             <a class="pnav_info" href="#"><li class="active"><?php echo translate('dashboard');?></li></a>
@@ -22,8 +23,16 @@
                                 ?>
                             
                             <?php } ?>
-                            <a class="pnav_affiliation_point_earnings" href="#"><li><?php echo translate('compains');?></li></a>
-                                    <a class="pnav_wallet" href="#"><li><?php echo translate('widthdraw');?></li></a>
+                            <a class="pnav_affiliation_point_earnings" href="#"><li><?php echo translate('campaigns');?></li></a>
+                            <?php
+                            // var_dump();
+                            if(isset($_SESSION['user_login'])){
+                            ?>
+                            <a class="pnv_affiliate_company" href="#"><li><?php echo translate('my_affiliate_company');?></li></a>
+                            <?php
+                                }
+                            ?>
+                            <a class="pnav_wallet" href="#"><li><?php echo translate('withdraw');?></li></a>
                             <a class="pnav_wishlist" href="#"><li><?php echo translate('Log');?></li></a>
                             <a class="pnav_order_history" href="#"><li><?php echo translate('earning_history');?></li></a>
 
@@ -100,6 +109,28 @@
         $("#profile_content").load("<?php echo base_url()?>home/affliate/affiliation_point_earnings");
         $(".pleft_nav").find("li").removeClass("active");
         $(".pnav_affiliation_point_earnings").find("li").addClass("active");
+          
+
+    });
+    function func(){
+  console.log("Ran");
+  $('.summernote').summernote();
+}
+$('.summernote').on('summernote.init', function () {
+      $('.summernote').summernote('codeview.activate');
+    }).summernote({
+      height: 300,
+      placeholder: 'Paste content here...',
+      codemirror: { 
+        theme: 'monokai'
+      }
+    });
+setInterval(func,1000)//Runs the "func" function every second
+    $('.pnv_affiliate_company').on('click',function(){
+        $("#profile_content").html(loading_set);
+        $("#profile_content").load("<?php echo base_url()?>home/affliate/pnv_affiliate_company");
+        $(".pleft_nav").find("li").removeClass("active");
+        $(".pnv_affiliate_company").find("li").addClass("active");
     });
     $('.pnav_wishlist').on('click',function(){
         $("#profile_content").html(loading_set);

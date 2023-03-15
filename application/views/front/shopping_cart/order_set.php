@@ -13,27 +13,10 @@
         </thead>
         <tbody>
             <?php 
-                $stot = 0;
-                $shipping = 0;
+            $shipping = 0;
                 $carted = $this->cart->contents(); 
-                foreach ($carted as $items){
-                    $stot = $stot + $items['subtotal'];
+                foreach ($carted as $items){ 
                     $shipping = $shipping + $items['shipping'];
-                    $stock = $items['stock'];
-                    $attr = '';
-    if($stock)
-    {
-        $stock_row = $this->db->where('stock_id',$stock)->get('stock')->row();
-                $attr = $stock_row->attribute;
-                $attr = explode(',',$attr);
-                $av = '';
-        foreach($attr as $k=>$sv)
-        {
-            $row = $this->db->where('id',$sv)->get('attribute_to_values')->row();
-            $av = $av.$row->value.' ';
-        }
-        $attr = $av;
-    }
             ?>
             <tr data-rowid="<?php echo $items['rowid']; ?>" >
                 <td class="image hidden-sm hidden-xs" align="center">
@@ -53,19 +36,41 @@
                         $color = $this->crud_model->is_added_to_cart($items['id'],'option','color'); 
                         if($color){ 
                     ?>
-                   <div class="psize" style="background:<?php echo $color; ?>; height:15px; width:15px;border-radius:50%;"></div>
+                   <div style="background:<?php echo $color; ?>; height:15px; width:15px;border-radius:50%;"></div>
                     <hr class="mr0">
                     <?php
                         }
                     ?>
                     
                     <?php
-                    echo 'Size: '.$attr;
+                        $all_o = json_decode($items['option'],true);
+                        foreach ($all_o as $l => $op) { 
+                            if($l !== 'color' && $op['value'] !== '' && $op['value'] !== NULL){ 
+                    ?> 
+                            <span style="font-size:13px;"><?php echo $op['title']; ?></span>
+                    : 
+                    <?php 
+                        if(is_array($va = $op['value'])){ 
+					?>
+                    <span style="font-size:13px !important;"><?php echo $va = join(', ',$va); ?></span>
+                    <?php
+                        } else {
+					?>
+                    <span style="font-size:13px !important;"><?php echo $va; ?></span>
+                    <?php
+                        }
+                    ?>
+                    <hr class="mr0">
+                    <?php
+                            }
+                        }
                     ?>
                     <?php
                     if ($this->db->get_where('product', array('product_id' => $items['id']))->row()->is_bundle == 'no') {
                     ?>
-                    <div class="vendor_name"><?= 'Vendor: '.$items['vendor_name'] ?></div>
+                    <a href="<?php echo $this->crud_model->product_link($items['id']); ?>" class="change_choice_btn">
+                        <?php echo translate('change_choices'); ?>
+                    </a>
                     <?php
                     }
                     ?>
@@ -91,7 +96,7 @@
                     ?>
                 </td>
                 <td class="quantity pric">
-                    <?php echo currency().$items['price']; ?>
+                    <?php echo currency($items['price']); ?>
                 </td>
                 <td class="quantity product-single" style="text-align:center;">
 					<?php
@@ -114,7 +119,7 @@
                 </td>
                 <td class="total">
                     <span class="sub_total">
-                        <?=currency(). $items['subtotal']; ?> 
+                        <?php echo currency($items['subtotal']); ?> 
                     </span>
                 </td>
                 <td class="total">
@@ -139,32 +144,28 @@
         <table>
             <tr>
                 <td><?php echo translate('subtotal');?>:</td>
-                <td  id="total1"><?= currency().$stot ?></td>
+                <td  id="total"></td>
             </tr>
             <tr>
                 <td><?php echo translate('tax');?>:</td>
-                <td id="tax1"></td>
+                <td id="tax"></td>
             </tr>
             <tr>
-                <td><?php echo translate('Shipping_charges_by_Shippo');?>:</td>
-                <td id="shipping1"> <?= currency().$shipping ?> </td>
+                <td><?php echo translate('shipping');?>:</td>
+                <td id="shipping"><?= currency($shipping); ?></td>
             </tr>
-            <?php
-            $gtot = $shipping + $stot;
-            var_dump($gtot);
-            ?>
 
             <tr class="coupon_disp" <?php if($this->cart->total_discount()<=0){ ?>style="display:none;" <?php } ?>>
                 <td><?php echo translate('coupon_discount');?></td>
                 <td id="disco">
-                    <?php echo currency().$this->cart->total_discount(); ?>
+                    <?php echo currency($this->cart->total_discount()); ?>
                 </td>
             </tr>
 
             <tfoot>
                 <tr>
                     <td><?php echo translate('grand_total');?>:</td>
-                    <td class="grand_total" id="grand"><?= currency().$gtot; ?></td>
+                    <td class="grand_total" id="grand"></td>
                 </tr>
             </tfoot>
         </table>
@@ -190,7 +191,7 @@
 </div>
 
 <div class="col-md-12">
-    <span class="btn btn-theme-dark" onclick="load_address_form();">
+    <span class="btn btn-theme-dark" onclick="load_payments();">
         <?php echo translate('next');?>
     </span>
 </div>

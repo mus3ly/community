@@ -5,16 +5,13 @@
 
 <div class="menulogin">
 <ul>
-    <li><a href="#">Customer Login</a></li>
-    <li><a href="#">Customer Sign-up</a></li>
-    <li><a href="#">Vendor Login </a></li>
-    <li><a href="#">Vender Sign-up</a></li>
-    <li><a href="#">Affiliate Marketer Login</a></li>
-    <li><a href="#">Affiliate Marketer Signup</a></li>
-    <li><a href="#">Affiliate Vendor Login</a></li>
-    <li><a href="#">Affiliate Vendor Signup </a></li>
+    <li><a href="<?php echo base_url('login_set/login');?>">Customer Login</a></li>
+    <li><a href="<?php echo base_url('home/login_set/registration');?>">Customer Sign-up</a></li>
+    <li><a href="<?php echo base_url('vendor');?>">Vendor Login </a></li>
+    <li><a href="<?php echo base_url('/vendor_logup/registration');?>">Vender Sign-up</a></li>
+
 </ul>
-<</div>
+</div>
 
 <section class="page-section color get_into">
     <div class="container" id="login">
@@ -111,6 +108,27 @@
                                 }
                             }
                         ?>
+                        <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+                        <!--        <h2 class="login_divider"><span>or</span></h2>-->
+                        <!--    </div>-->
+                        <!--<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 ">-->
+                                  
+                        <!--              <a class="btn btn-theme btn-block btn-icon-left facebook" href="<?= $url ?>">-->
+                        <!--                  <i class="fa fa-facebook"></i>-->
+                        <!--                  <?php echo translate('sign_in_with_facebook');?>-->
+                        <!--              </a>-->
+                                  
+                        <!--      </div>-->
+                        <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 ">-->
+                                    
+                        <!--                <a class="btn btn-theme btn-block btn-icon-left google" style="background:#ce3e26" href="<?= $g_url ?>">-->
+                        <!--                    <i class="fa fa-google"></i>-->
+                        <!--                    <?php echo translate('sign_in_with_google');?>-->
+                        <!--                </a>-->
+                                   
+                                        
+                                    
+                        <!--        </div>-->
                     </div>
                 </form>
             </div>

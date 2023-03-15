@@ -13,10 +13,18 @@
         <div class="row">
         <?php
                     $box_style =6;//  $this->db->get_where('ui_settings',array('ui_settings_id' => 29))->row()->value;
-                    $limit = 3;// $this->db->get_where('ui_settings',array('ui_settings_id' => 20))->row()->value;
+                    $limit = 4;// $this->db->get_where('ui_settings',array('ui_settings_id' => 20))->row()->value;
                     $featured=$this->crud_model->product_list_set('featured',$limit);
                     foreach($featured as $row){
+                        ?>
+                        <div class="col-md-3">
+                        <?php
                         echo $this->html_model->product_box($row, 'grid', $box_style);
+                        
+                        
+                        ?>
+                        </div>
+                        <?php
                     }
                 ?>
         </div>

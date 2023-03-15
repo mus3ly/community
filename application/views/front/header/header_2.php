@@ -15,7 +15,7 @@
             <div class="col-sm-3 logobox">
                 <a href="<?= base_url(); ?>"><img src="<?= base_url(); ?>template/front/images/logo.png" alt=""></a>
             </div>
-            <div class="menubtn">
+            <div class="menubtn" onclick="open_sidebar();">
                 <i class="fa fa-bars"></i>
             </div>
             <div class="col-sm-9 navbar_box_items">
@@ -23,6 +23,36 @@
                     <i class="fa fa-close"></i>
                 </div>
                 <ul>
+                       <li class="padd_right set-pad-tb"><a href="#" class="this-padding">Community Pegs</a>
+                    <div class="dropdown_box dropdowon_color">
+           
+                            <ul>
+                                                   <?php
+                        // die('come');
+                        $brands = $this->db->get('category')->result_array();
+                $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 86))->row()->value,true);
+                                            $result=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result[]=$row;
+                                                }
+                                            }
+                                            
+                    foreach ($brands as $key => $value) {
+                        if(in_array($value['category_id'], $result))
+                        {
+                            //  echo $value['category_id'];
+                        ?>
+
+                                <li><a href="<?= base_url('home/category/'.$value['category_id']); ?>"><?= $value['category_name'] ?></a></li>
+                              <?php
+                        }
+                    }
+                              ?> 
+                                
+                            </ul>
+                        </div>
+                        
                     <?php
                     $login = 'guest';
                     
@@ -46,7 +76,7 @@
                         {
                           $menu1 = $this->db->where('parent', $v['id'])->order_by('sorting', 'asc')->get('menu')->result_array(); 
                           ?>
-                          <li><a href="<?= base_url().$v['slug']; ?>"><b><?= $v['name']?></b> 
+                          <li class="set-pad-tb"><a href="<?= base_url().$v['slug']; ?>" class="this-padding"><b><?= $v['name']?></b> 
                           <?php
                           if(count($menu1) || $v['id'] == 12)
                           {
@@ -124,33 +154,84 @@
                                 <li><a href="<?= base_url('/home/Logout'); ?>">Logout</a></li>
                             </ul>
                         </div>
+                        
                     </li>
                     <?php
                     }
                     else
                     {
                     ?>
-                    <li class="padd_right"><a href="#"><img class="avatar_img" src="<?= base_url(); ?>template/front/images/login.png" alt=""></a>
+                    <li class="padd_right set-pad-tb"><a href="#" class="this-padding"><img class="avatar_img" src="<?= base_url(); ?>template/front/images/login.png" alt=""></a>
                     <div class="dropdown_box dropdowon_color">
                             <ul>
                                 <li><a href="<?= base_url('login_set/login');?>"> Customer Login</a></li>
                                 <li><a href="<?= base_url('home/login_set/registration');?>"> Customer Sign-up</a></li>
                                 <li><a href="<?= base_url('vendor');?>"> Vendor Login</a></li>
-                                <li><a href="<?= base_url('vendor_logup/registration');?>"> Vender Sign-up</a></li>
-                                <li><a href="<?= base_url();?>"> Create Affiliate Marketing</a></li>
-                                <li><a href="<?= base_url();?>"> Join Affiliate Marketing</a></li>
-                                <li><a href="<?= base_url();?>"> Login to Affiliate Marketing</a></li>
-                                <li><a href="<?= base_url('home/login_set/login');?>">Join Community HubLand</a></li>
+                                <li><a href="<?= base_url('vendor_logup/registration');?>"> Vendor Sign-up</a></li>
+                               
                                 
                             </ul>
                         </div>
+                        
                     </li>
-                    <?php
+                         <?php
                     }
                     ?>
+                    <li>
+                        <div class="flex-col-6 flex-col-lg-auto text-right">
+                    <!-- Header shopping cart -->
+                    <div class="header-cart" id="cart_modelbox">
+                        <div class="cart-wrapper">
+                            <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart">
+                                <i class="fa fa-shopping-cart"></i> 
+                                <span class="hidden-xs"> 
+                                    <span class="cart_num"></span> 
+                                    <?php echo translate('item(s)'); ?>
+                                
+                                </span>  
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                            <!-- Mobile menu toggle button -->
+                            <!-- <a href="#" class="menu-toggle btn btn-theme-transparent"><i class="fa fa-bars"></i></a> -->
+                            <!-- /Mobile menu toggle button -->
+                        </div>
+                    </div>
+                    <!-- Header shopping cart -->
+                </div>
+                    </li>
+               
                    
                 </ul>
             </div>
+
+
+
+            <div id="mobile_layout">
+                <ul>
+                   
+                    <li>
+                        <div class="flex-col-6 flex-col-lg-auto text-right">
+                    <!-- Header shopping cart -->
+                    <div class="header-cart" id="cart_modelbox">
+                        <div class="cart-wrapper">
+                            <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart">
+                                <i class="fa fa-shopping-cart"></i> 
+                                <span class="hidden-xs"> 
+                                    <span class="cart_num"></span> 
+                                    <?php echo translate('item(s)'); ?>
+                                
+                                </span>  
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </div>
+                    </div>
+                    </div>
+                    </li>
+               
+                   
+                </ul>
+            </div>
+            
         </div>
     </div>
 </header>

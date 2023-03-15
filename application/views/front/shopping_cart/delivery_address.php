@@ -50,6 +50,14 @@ if($this->session->userdata('user_login')== "yes"){
                 <?php echo $this->crud_model->select_html('countries','country','name','edit','form-control demo-chosen-select required select_country',$country,'',NULL,'select_country','single','one'); ?>
                 
             </div>
+            <div class="col-md-3" id="stats_select">
+                <input type="text" name="state" placeholder="State" />
+                
+            </div>
+            <div class="col-md-3" id="city_select">
+                <input type="text" name="city" placeholder="City" />
+                
+            </div>
             <div class="col-md-3">
         <div class="form-group">
             <input class="form-control required"  name="zip" type="text" value="<?php echo $zip; ?>" placeholder="<?php echo translate('postcode/ZIP');?>">
@@ -87,7 +95,7 @@ if($this->session->userdata('user_login')== "yes"){
 
 
     <div class="col-md-12">
-        <span class="btn btn-theme-dark" onclick="load_payments();">
+        <span class="btn btn-theme-dark" onclick="load_smethods();">
             <?php echo translate('next');?>
         </span>
     </div>

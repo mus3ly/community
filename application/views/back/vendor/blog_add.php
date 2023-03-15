@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-md-12">
 		<?php
-// 		die('ok');
-            echo form_open(base_url() . 'vendor/blog/do_add/', array(
+	
+            echo form_open(base_url() . 'vendor/product/do_add/', array(
                 'class' => 'form-horizontal',
                 'method' => 'post',
-                'id' => 'blog_add',
+                'id' => 'product_add',
 				'enctype' => 'multipart/form-data'
             ));
         ?>
@@ -20,7 +20,7 @@
                     <div class="tab-content">
 
                         <div id="blog_details" class="tab-pane fade active in">
-        
+         <input type="hidden" name="is_blog" value="1" />
                             <div class="form-group btm_border">
                                 <h4 class="text-thin text-center"><?php echo translate('blog_details'); ?></h4>                            
                             </div>
@@ -35,26 +35,43 @@
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-2"><?php echo translate('category');?></label>
                                 <div class="col-sm-6">
-                                    <?php echo $this->crud_model->select_html('blog_category','blog_category','name','add','form-control demo-chosen-select required','','','','cat_chnge',''); ?>
-                                    <input type="text" name="other_cate" value="#" id="other_cat" class="form-control">
+                                    <select name="category" class="form-control demo-chosen-select" id="blog_cat">
+                                        <?php
+                                       foreach($brandss as $k => $v){
+                                        ?>
+                                        <option value="<?= $v['category_id'];?>"><?= $v['category_name'];?></option>
+                                        <?php
+                                       }
+                                        ?>
+                                        </select>
                                     </div>
                             </div>
-                            
+                            <div id="bcat"></div>
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-12"><?php echo translate('image');?></label>
                                 <div class="col-sm-6">
-                                <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
-                                    <input type="file" name="img" onchange="preview(this);" id="demo-hor-12" class="form-control required">
-                                    </span>
+                                  <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
+                                            <input type="file" value="<?= ($row['sneakerimg'])?$row['sneakerimg']:""; ?>" name="sneakerimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control">
+                                        </span>
                                     <br><br>
-                                    <span id="previewImg" ></span>
+                                     <span id="previewImg1" >
+                                            
+                                            <?php
+                                                if($row['comp_logo'])
+                                                {
+                                                    $img = $this->crud_model->size_img($row['comp_logo'],100,100);
+                                                    ?>
+                                                    <img class="img-responsive" width="100" src="<?= $img;?>" data-id="_paris/uploads/product" alt="Feature Image"><?php
+                                                }
+                                            ?>
+                                        </span>
                                 </div>
                             </div>
                             
                             <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('summery'); ?></label>
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('summary'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9"  class="summernotes" data-height="200" data-name="summery"></textarea>
+                                    <textarea rows="9"  class="summernotes" data-height="200" data-name="main_heading"></textarea>
                                 </div>
                             </div>
                             
@@ -78,6 +95,17 @@
                                     <input type="date" name="date" id="demo-hor-1" class="form-control">
                                 </div>
                             </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('time');?></label>
+                                <div class="col-sm-6">
+                                    <input type="time" name="openig_time" id="demo-hor-1" class="form-control">
+                                </div>
+                            </div> <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('slug');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="slug" id="slug" class="form-control" required>
+                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -87,18 +115,19 @@
             </div>
     
             <div class="panel-footer">
-                <div class="row">
-                	<div class="col-md-11">
+               <div class="row">
+                    <div class="col-md-11">
                         <span class="btn btn-purple btn-labeled fa fa-refresh pro_list_btn pull-right" 
-                            onclick="ajax_set_full('add','<?php echo translate('add_blog'); ?>','<?php echo translate('successfully_added!'); ?>','blog_add',''); "><?php echo translate('reset');?>
+                            onclick="ajax_set_full('add','<?php echo translate('add_product'); ?>','<?php echo translate('successfully_added!'); ?>','product_add',''); "><?php echo translate('reset');?>
                         </span>
                     </div>
                     
                     <div class="col-md-1">
-                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="form_submit('blog_add','<?php echo translate('blog_has_been_uploaded!'); ?>');proceed('to_add');" ><?php echo translate('upload');?></span>
+                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');"><?php echo translate('upload');?></span>
                     </div>
                     
                 </div>
+                
             </div>
     
         </form>
@@ -107,7 +136,43 @@
 
 <script src="<?php echo base_url(); ?>template/back/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js">
 </script>
-
+  <script>
+        $('#slug').on('keyup',function(){
+            var val = $(this).val();
+            var url='<?= base_url('vendor/productslug') ?>';
+              $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { value:val},
+        success: function (data) {
+           if(data == 'error'){
+               $('#slug').addClass('error');
+           }
+        },
+        error: function (xhr, exception) {
+            var msg = "";
+            if (xhr.status === 0) {
+                msg = "Not connect.\n Verify Network." + xhr.responseText;
+            } else if (xhr.status == 404) {
+                msg = "Requested page not found. [404]" + xhr.responseText;
+            } else if (xhr.status == 500) {
+                msg = "Internal Server Error [500]." +  xhr.responseText;
+            } else if (exception === "parsererror") {
+                msg = "Requested JSON parse failed.";
+            } else if (exception === "timeout") {
+                msg = "Time out error." + xhr.responseText;
+            } else if (exception === "abort") {
+                msg = "Ajax request aborted.";
+            } else {
+                msg = "Error:" + xhr.status + " " + xhr.responseText;
+            }
+           
+        }
+    });
+        });
+        
+    </script>
 <input type="hidden" id="option_count" value="-1">
 <script type="text/javascript">
     window.preview = function (input) {
@@ -157,7 +222,11 @@
         });
 
     function other_forms(){}
-    
+            var user_type = 'vendor';
+            var module = 'product';
+            var list_cont_func = 'list?is_blog=1';
+            var dlt_cont_func = 'delete';
+
     function set_summer(){
         $('.summernotes').each(function() {
             var now = $(this);
@@ -380,6 +449,24 @@
     $('#blod_cat').on('change', function(){
         }); 
     }
+</script>
+<script>
+    $('#blog_cat').on('change', function(){
+        var id = $(this).val();
+      
+         $.ajax({
+        url: '<?= base_url('vendor/blog_cat')?>',
+        type: "Post",
+        async: true,
+        data: { id:id},
+        success: function (data) {
+          if(data){
+              $('#bcat').html(data)
+          }
+     
+        },
+    });
+    })
 </script>
 <style>
     .btm_border{border-bottom: 1px solid #ebebeb;padding-bottom: 15px;}

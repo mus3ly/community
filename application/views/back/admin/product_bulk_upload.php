@@ -220,6 +220,63 @@
 
                                                 </div>
                                             </div>
+                                            <div class="panel mb-0">
+                                                <div class="panel-heading">
+                                                    <h3><?php echo translate("Upload your products") ?></h3>
+                                                </div>
+                                                <a class="btn btn-sm btn-primary btn-dark" target="_blank" download
+                                                           href="<?php echo base_url() . "uploads/bulk_skeletons/CHL_categories.xlsx" ?>"><?php echo translate('Download product bulk upload skeleton file'); ?></a>
+                                                        
+                                                <div class="panel-body">
+                                                    <?php /*
+                                                    echo form_open(base_url() . 'admin/category_bulk_upload', array(
+                                                        'class' => 'form',
+                                                        'method' => 'post',
+                                                        'id' => '',
+                                                        'enctype' => 'multipart/form-data'
+                                                    )); */
+                                                    ?>
+                                                    <form method="post" enctype="multipart/form-data" >
+                                                    <div class="form-group">
+                                                <span class="btn btn-default btn-file">
+                                                    <?php echo translate("Choose File") ?>
+                                                   <input type="file" id="file" name="file" />
+                                                </span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <button class="btn btn-mint btn-labeled fa fa-upload" type="button" id="cat_upload"><?php echo translate("Upload Products") ?></button>
+                                                    </div>
+                                                    </form>
+                                                   <div class="progress" style="display:none;">
+                                                        <div class="progress-bar progress-bar-success progress-bar-striped 
+                                                        active" role="progressbar"
+                                                        aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                                                        0%
+                                                        </div>
+                                                        </div>
+                                                    <?php // echo form_close() ?>
+
+
+                                                    <?php if ($this->session->flashdata('successes')) { ?>
+                                                        <div class="alert alert-success alert-dismissible show" role="alert">
+                                                            <?php echo $this->session->flashdata('success') ?>
+                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                    <?php } ?>
+                                                    <?php if ($this->session->flashdata('error')) { ?>
+                                                        <div class="alert alert-danger alert-dismissible show" role="alert">
+                                                            <?php echo $this->session->flashdata('error') ?>
+                                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                    <?php } ?>
+
+                                                </div>
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -234,6 +291,45 @@
 
 </div>
 <script>
+$('#cat_upload').on('click', function(e){
+    e.preventDefault();
+    var url = '<?= base_url('Admin/category_bulk_upload');?>';
+  var formData = new FormData();
+   formData.append('file', $('#file')[0].files[0]);
+$.ajax({
+            xhr: function() {
+            var xhr = new window.XMLHttpRequest();
+            
+            xhr.upload.addEventListener("progress", function(evt) {
+              if (evt.lengthComputable) {
+                  console.log(evt.loaded);
+                var percentComplete = evt.loaded / evt.total;
+                percentComplete = parseInt(percentComplete * 100);
+            
+                $('.progress-bar').width(percentComplete+'%');
+                $('.progress-bar').html(percentComplete+'%');
+            
+              }
+            }, false);
+            
+            return xhr;
+            },
+          url: url,
+          type: 'POST',
+          data: formData,
+          async: false,
+          cache: false,
+          contentType: false,
+          enctype: 'multipart/form-data',
+          processData: false,
+          success: function (response) {
+         
+             alert(response);
+          }
+       });
+});
+</script>
+<script>
     var base_url = '<?php echo base_url(); ?>';
     var timer = '<?php $this->benchmark->mark_time(); ?>';
     var user_type = 'admin';
@@ -245,4 +341,4 @@
 
     })
 
-</script>
+</script

@@ -41,6 +41,15 @@
                     <?php echo translate('days'); ?>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1">
+                    <?php echo translate('stripe_id');?>
+                        </label>
+                <div class="col-sm-6">
+                    <input type="text" name="stripe_id"  placeholder="<?php echo translate('stripe_id'); ?>" class="form-control required">
+                </div>
+              
+            </div>
             
             <div class="form-group">
                 <label class="col-sm-4 control-label" for="demo-hor-2"><?php echo translate('package_seal');?></label>

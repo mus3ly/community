@@ -51,12 +51,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'home';
 $route['login_set/registration'] = 'home/login_set/registration';
+$route['home/affiliate'] = 'home/affliate';
+$route['vendor/affiliate'] = 'vendor/affliate';
 $route['login_set/login'] = 'home/login_set/login';
 $route['vendor_logup/registration'] = 'home/vendor_logup/registration';
 $route['product/(:any)/(:any)'] = 'home/product_view/$1/$2';
 $route['profile'] = 'home/profile';
 $route['login'] = 'home/login';
 $route['directory'] = 'home/sneaker';
+$route['directory/(:any)'] = 'home/category/$1';
 $route['404_override'] = 'home/error';
 $route['sitemap.xml'] = 'home/sitemap';
 $route['translate_uri_dashes'] = FALSE;
+
+require_once( BASEPATH .'database/DB.php');
+$db =& DB();
+
+$query = $db->query("select * from product where slug != '' ")->result_array();
+foreach ($query as $v){
+    
+    $route[$v['slug']] = 'home/product_view/'.$v['product_id'];
+}

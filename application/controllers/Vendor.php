@@ -2,9 +2,9 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Vendor extends CI_Controller
+class Vendor extends CI_Controller 
 {
-    /*
+    /*n 
      *  Developed by: Active IT zone
      *  Date    : 14 July, 2015
      *  Active Supershop eCommerce CMS
@@ -29,6 +29,121 @@ class Vendor extends CI_Controller
             redirect(base_url(), 'refresh');
         }
     }
+    function productslug(){
+        $slug = $_REQUEST['value'];
+        $this->db->where('slug', $slug);
+        $query = $this->db->get('product');
+        $msg = '';
+        if($query->num_rows() > 0){
+          $msg = 'error';
+        }
+        else{
+           $msg = 'success';
+        }
+        echo $msg;
+    }
+    function brand($para1 = '', $para2 = '')
+    {
+        if ($para1 == 'do_add') {
+            $type                = 'brand';
+            $data['vid']        = $this->session->userdata('vendor_id');
+            $data['title']        = $this->input->post('name');
+            $data['icon']        = $this->input->post('fa_icon');
+            $data['detail']        = $this->input->post('description');
+            $data['sort']        = $this->input->post('sort');
+            $this->db->insert('textg', $data);
+            $id = $this->db->insert_id();
+            if(isset($_FILES['img']['name']))
+            {
+            $path = $_FILES['img']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+            $data_banner['img']         = demo() ? '' : 'textg_'.$id.'.'.$ext;
+            if(true){
+                
+                $r = $this->crud_model->file_up("img", "textg", $id, '', 'no', '.'.$ext);
+                if($r)
+                {
+                    $this->load->library('cloudinarylib');
+                    $data = \Cloudinary\Uploader::upload($r);
+                    if(isset($data['public_id']))
+                    {
+                        $logo_id = $this->crud_model->add_img($r,$data);
+                        //array_push($dataInfo,$logo_id);
+                        $r =$this->db->where('textg_id',$id)->update('textg',array('img'=>$logo_id));
+                        
+                        
+                    }
+                }
+            }
+            }
+            die($id);
+            $this->crud_model->set_category_data(0);
+            recache();
+        } elseif ($para1 == "update") {
+            $data['vid']        = $this->session->userdata('vendor_id');
+            $data['title']        = $this->input->post('name');
+            $data['icon']        = $this->input->post('fa_icon');
+            $data['detail']        = $this->input->post('description');
+            $data['sort']        = $this->input->post('sort');
+            $this->db->where('textg_id', $para2);
+            $this->db->update('textg', $data);
+           if(isset($_FILES['img']['name']))
+            {
+            $path = $_FILES['img']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+            $data_banner['img']         = demo() ? '' : 'textg_'.$id.'.'.$ext;
+            if(true){
+                
+                $r = $this->crud_model->file_up("img", "textg", $id, '', 'no', '.'.$ext);
+                if($r)
+                {
+                    $this->load->library('cloudinarylib');
+                    $data = \Cloudinary\Uploader::upload($r);
+                    if(isset($data['public_id']))
+                    {
+                        $logo_id = $this->crud_model->add_img($r,$data);
+                        //array_push($dataInfo,$logo_id);
+                        $r =$this->db->where('textg_id',$id)->update('textg',array('img'=>$logo_id));
+                        
+                        
+                    }
+                }
+            }
+            }
+            $this->crud_model->set_category_data(0);
+            recache();
+        } elseif ($para1 == 'delete') {
+            if(!demo()){
+                unlink("uploads/brand_image/" .$this->crud_model->get_type_name_by_id('brand',$para2,'logo'));
+                $this->db->where('textg_id', $para2);
+                $this->db->delete('textg');
+                $this->crud_model->set_category_data(0);
+                recache();
+            }
+        } elseif ($para1 == 'multi_delete') {
+            if(!demo()){
+                $ids = explode('-', $param2);
+                $this->crud_model->multi_delete('brand', $ids);
+            }
+        } else if ($para1 == 'edit') {
+            $page_data['brand_data'] = $this->db->get_where('textg', array(
+                'textg_id' => $para2
+            ))->result_array();
+            $this->load->view('back/vendor/brand_edit', $page_data);
+        } elseif ($para1 == 'list') {
+            $vid = $this->session->userdata('vendor_id');
+            $this->db->where('vid', $vid);
+            $this->db->order_by('sort', 'asc');
+            $page_data['all_brands'] = $this->db->get('textg')->result_array();
+            $this->load->view('back/vendor/brand_list', $page_data);
+        } elseif ($para1 == 'add') {
+            $this->load->view('back/vendor/brand_add');
+        } else {
+            $page_data['page_name']  = "brand";
+            $page_data['all_brands'] = $this->db->get('textg')->result_array();
+            $this->load->view('back/index', $page_data);
+        }
+    } 
     function get_state($id)
     {
         echo $this->crud_model->select_html('states','state','name','edit','select_state form-control demo-chosen-select required','','country_id',$id,'select_state','single');
@@ -65,6 +180,33 @@ class Vendor extends CI_Controller
             //     $colum = '';
             // }
         }
+    }
+    
+    public function getAmenties(){
+        if($_REQUEST['add'] == '1'){
+      $amn = $this->db->like('name',$_REQUEST['value'])->where('status',1)->get('amenity')->result_array();
+    //   var_dump($this->db->last_query());
+         echo '<ul>';
+          foreach($amn as $k => $row){
+              echo '<div class="col-sm-3>';
+              echo '<li class="" onclick="selectamn('.$row['amenity_id'].');">'.$row['name'].'</li>';
+              echo '</div>';
+          }
+          echo '</ul>';
+    }
+        if($_REQUEST['select'] == '1'){
+                  $amn = $this->db->where('amenity_id',$_REQUEST['sid'])->get('amenity')->row_array();
+                  echo '<option value="'.$amn['name'].'" selected>'.$amn['name'].'</option>';
+
+        } 
+        if($_REQUEST['add_to_table'] == '1'){
+              $this->db->insert('amenity', array('name'  => $_REQUEST['value']));
+              $id = $this->db->insert_id();
+              echo '<option selected value="'.$_REQUEST['value'].'">'.$_REQUEST['value'].'<option>';
+              
+
+        }
+        
     }
     public function gupload()
     {
@@ -441,12 +583,157 @@ class Vendor extends CI_Controller
         $page_data['page_name'] = "report_wish";
         $this->load->view('back/index', $page_data);
     }
+  function affliate($para1 = '', $para2 = '')
+            {
+                $page_data = array();
+        if ($para1 == 'preview') {
+            
+            $page_data['res'] = $sing = $this->db->where('compain_id',$para2)->get('compain')->row();
+            $html = '';
+            if($sing->compain_type == 'text_compain')
+            {
+                $html = '<a href="'.$sing->link.'" target="_blank">
+                    '.$sing->content.'
+                </a>';
+            }
+            else if($sing->compain_type == 'banner_compain')
+            {
+                $html = '<a href="'.$sing->link.'" target="_blank">
+                    <img src="'.$this->crud_model->get_img($sing->banner_img)->secure_url.'" />
+                </a>';
+            }
+            else if($sing->compain_type == 'video_compain')
+            {
+                $html = '<iframe width="560" height="315" src="'.$sing->video_link.'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><div style="display:table;clear:both;"></div><br><a style="-moz-box-shadow:inset 0 1px 0 0 #fff;-webkit-box-shadow:inset 0 1px 0 0 #fff;box-shadow:inset 0 1px 0 0 #fff;background:-webkit-gradient(linear,left top,left bottom,color-stop(.05,#f9f9f9),color-stop(1,#e9e9e9));background:-moz-linear-gradient(top,#f9f9f9 5%,#e9e9e9 100%);background:-webkit-linear-gradient(top,#f9f9f9 5%,#e9e9e9 100%);background:-o-linear-gradient(top,#f9f9f9 5%,#e9e9e9 100%);background:-ms-linear-gradient(top,#f9f9f9 5%,#e9e9e9 100%);background:linear-gradient(to bottom,#f9f9f9 5%,#e9e9e9 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#f9f9f9", endColorstr="#e9e9e9", GradientType=0);background-color:#f9f9f9;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;border:1px solid #dcdcdc;display:inline-block;cursor:pointer;color:#666;font-family:Arial;font-size:15px;font-weight:700;padding:6px 24px;text-decoration:none;text-shadow:0 1px 0 #fff" href="'.$sing->link.'">'. $sing->title.'</a>';
+            }
+    ?>
+    <?php
+    echo $html;
 
+            // die();
+            $this->load->view('back/vendor/compain_edit', $page_data);
+        }else if ($para1 == 'compain_do_add') {
+		  //  $check = $this->input->post('check');
+		      $this->db->where('product_id', $this->input->post('pro_id'));
+            $this->db->update('product',array(
+                'is_affiliate' => '1'
+                ));
+            $data = array(
+                'compain_type' => $this->input->post('compain_type'),
+                'title' => $this->input->post('title'),
+                'content' => $this->input->post('content'),
+                'video_link' => $this->input->post('video_link'),
+                'link' =>$this->input->post('link'),
+                'percentage' =>$this->input->post('percentage'),
+                'added_by' => json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id'))),
+                'pID' => $this->input->post('pro_id')
+                );
+            $this->db->insert('compain', $data);
+        
+            $id = $this->db->insert_id();
+            $this->load->library('cloudinarylib');
+            if($_FILES["banner_img"]['tmp_name']){
+                    if(!demo()){
+                        $path = 'uploads/compain'.time().'.jpg';
+                        move_uploaded_file($_FILES["banner_img"]['tmp_name'], $path);
+                        $data = \Cloudinary\Uploader::upload($path);
+						if(isset($data['public_id']))
+						{
+							$logo_id = $this->crud_model->add_img($path,$data);
+							if($logo_id)
+							{
+                             $this->db->where('compain_id', $id);
+                            $this->db->update('compain', array(
+                                'banner_img' => $logo_id
+                            ));
+						   }
+						}
+	//top_banner
+                    }
+                }
+                recache();
+		
+        } elseif ($para1 == "update") {
+            // die();
+		    $check = $this->input->post('check');
+           $data = array(
+                'compain_type' => $this->input->post('compain_type'),
+                'title' => $this->input->post('title'),
+                'content' => $this->input->post('content'),
+                'video_link' => $this->input->post('video_link'),
+                'link' =>$this->input->post('link'),
+                'percentage' =>$this->input->post('percentage')
+                );
+            $this->db->where('compain_id', $para2);
+            $this->db->update('compain', $data);
+        } elseif ($para1 == 'delete') {
+
+            if(!demo()){
+
+                // if($this->crud_model->get_type_name_by_id('menu',$para2,'img'))
+                // {
+                //     unlink("uploads/bpkg_image/" .$this->crud_model->get_type_name_by_id('menu',$para2,'img'));
+                // }
+                // var_dump($para2);
+                $this->db->where('compain_id', $para2);
+                $this->db->delete('compain');
+                recache();
+            }
+        } elseif ($para1 == 'multi_delete') {
+            if(!demo()){
+                $ids = explode('-', $param2);
+                $this->crud_model->multi_delete('compain', $ids);
+            }
+        } else if ($para1 == 'edit') {
+            $page_data['res'] =$this->db->get('compain')->result_array();
+            $page_data['data'] = $this->db->get_where('compain', array(
+                'compain_id' => $para2
+            ))->result_array();
+            $this->load->view('back/vendor/compain_edit', $page_data);
+        } elseif ($para1 == 'list') {
+
+            $this->db->order_by('compain_id', 'desc');
+           $page_data['all_brands'] = $this->db->where('added_by',json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id'))))->get('compain')->result_array();
+
+            // $page_data['all_brands'] = $this->db->get('compain')->result_array();
+            $this->load->view('back/vendor/compain_list', $page_data);
+        } elseif ($para1 == 'add') {
+            $data['res'] =$this->db->get('compain')->result_array();
+            $page_data['page_name'] = 'compain_add';
+            $this->load->view('back/index', $page_data);
+        } elseif ($para1 == 'compain') {
+            die("compain");
+            $data['res'] =$this->db->get('menu')->result_array();
+            $this->load->view('back/vendor/bpkg1_add', $data);
+        } else {
+            
+            if(!isset($page_data['page_name']))
+            {
+            $page_data['page_name']  = "compain";
+            }
+            $page_data['all_brands'] = $this->db->get('compain')->result_array();
+            
+            $this->load->view('back/index', $page_data);
+        }
+    } 
     /* Product add, edit, view, delete, stock increase, decrease, discount */
+    function blog_cat(){
+      $x =  $this->db->where('pcat', $_REQUEST['id'])->get('category')->result_array();
+
+      echo '<select name="blogcat">';
+      foreach($x as $k => $v){
+          echo '<option '.$v['category_id'].'>'.$v['category_name'].'</option>';
+      }
+      echo '</select>';
+    }
     function product($para1 = '', $para2 = '', $para3 = '')
     {
         
-        // die("PL");
+        
+         
+        $list_type = '';
+	    //is_job
+	     
         if($this->session->userdata('admin_login') != 'yes')
         {
         if (!$this->crud_model->vendor_permission('product') ) {
@@ -458,65 +745,138 @@ class Vendor extends CI_Controller
         }
         
         if ($para1 == 'do_add') {
-            die('ok');    
             $option              = $this->input->post('option');
             $options = array();
             $num_of_imgs = 0;
-
+                $cat = $this->input->post('category');
+               $cat2 = explode(',', $cat);
+             if (in_array("807", $cat2))
+                  {
+                $data['is_car'] = 1;
+                $data['make']               = $this->input->post('make');
+                $data['model']              = $this->input->post('model');
+                $data['seats']              = $this->input->post('no_of_seats');   
+                $data['pid']                = $this->input->post('car_id');
+                $data['purchase_price']     = $this->input->post('carprice');
+                $data['posted_date']        = $this->input->post('cardate_posted');
+                $data['about_desc']        = $this->input->post('about_us');
+                $data['mot']        = $this->input->post('about_us');
+                $data['car_condition']        = $this->input->post('carcondition');
+                $data['distance_covered']        = $this->input->post('distance');
+                $data['uom']        = $this->input->post('cardistance');
+                $data['xtra_car']        = $this->input->post('xtraacarr');
+                $data['purchase_requirements']        = $this->input->post('car_require');
+                $data['fuel']        = $this->input->post('fuel');
+                $data['transmission']        = $this->input->post('transmission');
+                $data['currency']        = $this->input->post('currency');
+                  }
+                  if (in_array("808", $cat2))
+                  {
+                $data['is_property'] = 1;
+                $data['propert_type']               = $this->input->post('property_type');
+                $data['no_of_bedroom']              = $this->input->post('no_of_bedrooms');
+                $data['available_from_date']        = $this->input->post('available_from_date');
+                  }
+                  if (in_array("917", $cat2) || isset($_REQUEST['is_event']))
+                  {
+                $data['is_event'] = 1;
+                $data['event_date']               = $this->input->post('event_date');
+                $data['event_type']               = $this->input->post('event_type');
+                $data['age_restriction_event']    = $this->input->post('event_age_restriction');
+                  }
+                  if (in_array("78", $cat2) || isset($_REQUEST['is_job']))
+                  {
+                $data['is_job'] = 1;
+                $data['job_hours']               = $this->input->post('select_job_hours');
+                $data['job_type']               = $this->input->post('select_job_type');
+                $data['pid']               = $this->input->post('job_id');
+                $data['posted_date'] = $this->input->post('date');
+                  }
+     
+            if(isset($_REQUEST['is_blog'])){
+                $data['is_blog'] = 1;
+                $data['author_name'] = $this->input->post('author');
+                $data['posted_date'] = $this->input->post('date');
+            }
+           
+            if(isset($_REQUEST['is_product']))
+            {
+            $data['is_product']          = 1;
+            $data['current_stock']      = $this->input->post('current_stock');
+            }
+            // var_dump($this->input->post('amenities'));
+            // die();
             $data['seo_title']          = $this->input->post('seo_title');
             $data['seo_description']    = $this->input->post('seo_description');
             $data['title']              = $this->input->post('title');
-            $data['slogan']             = $this->input->post('slogan');
-            $data['main_heading']       = $this->input->post('main_heading');
-            $data['bussniuss_email']    = $this->input->post('bussniuss_email');
-            $data['bussniuss_phone']    = $this->input->post('bussniuss_phone');
-            $data['whatsapp_number']    = $this->input->post('whatsapp_number');
-            $data['feature']            = ($this->input->post('feature'))?json_encode($this->input->post('feature')):'';
-            $data['buttons']            = ($this->input->post('buttons'))?json_encode($this->input->post('buttons')):'';
-            $data['category']           = $this->input->post('category');
-            $data['description']        = $this->input->post('description');
-            $data['sub_category']       = $this->input->post('sub_category');
-            $data['sale_price']         = $this->input->post('sale_price');
-            $data['whatsapp_number']    = $this->input->post('whatsapp_number');
-            $data['lat']                = $this->input->post('lat');
-            $data['lng']                = $this->input->post('lng');
-            $data['add_timestamp']      = time();
-            $data['download']           = NULL;
-            $data['featured']           = 'no';
-            $data['vendor_featured']    = 'no';
-            $data['is_bundle']          = 'no';
-            $data['status']             = 'ok';
-            $data['rating_user']        = '[]';
-            $data['tag']                = $this->input->post('tag');
-            $data['color']              = json_encode($option);
-            $data['num_of_imgs']        = $num_of_imgs;
-            $data['current_stock']      = $this->input->post('current_stock');
-            $data['front_image']        = 0;
-            $additional_fields['name']  = json_encode($this->input->post('ad_field_names'));
-            $additional_fields['value'] = json_encode($this->input->post('ad_field_values'));
-            $data['additional_fields']  = json_encode($additional_fields);
-            $data['brand']              = $this->input->post('brand');
-            $data['unit']               = $this->input->post('unit');
-            $option                     = $this->input->post('option');
-            $choice_titles              = $this->input->post('op_title');
-            $choice_types               = $this->input->post('op_type');
-            $choice_no                  = $this->input->post('op_no');
-            $data['added_by']           = json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id')));
-            
-            if ($this->db->get_where('business_settings',array('type' => 'commission_set'))->row()->value == 'no') {
+            $data['slogan']               = $this->input->post('slogan');
+            $data['main_heading']         = $this->input->post('main_heading');
+            $data['bussniuss_email']      = $this->input->post('bussniuss_email');
+            $data['bussniuss_phone']      = $this->input->post('bussniuss_phone');
+            $data['whatsapp_number']      = $this->input->post('whatsapp_number');
+            $data['feature']              = ($this->input->post('feature'))?json_encode($this->input->post('feature')):'';
+            $data['buttons']              = ($this->input->post('buttons'))?json_encode($this->input->post('buttons')):'';
+            $data['category']             = $this->input->post('category');
+            $data['description']          = $this->input->post('description');
+            $data['sub_category']         = $this->input->post('sub_category');
+            $data['sale_price']           = (isset($_POST['fields']['sale_price'])?$_POST['fields']['sale_price']:'0');
+            $data['whatsapp_number']      = $this->input->post('whatsapp_number');
+            $data['lat']                  = $this->input->post('lat');
+            $data['lng']                  = $this->input->post('lng');
+            $data['listing_amenities']    = json_encode($this->input->post('listingamenities'));
+             $additional_value['name']    = json_encode($this->input->post('ad_field_names_custom'));
+            $additional_value['value']    = json_encode($this->input->post('ad_field_values_custom'));
+            $data['additional_fields_new']= json_encode($additional_value);
+            $data['add_timestamp']        = time();
+            $data['download']             = NULL;
+            $data['featured']             = 'no';
+            $data['vendor_featured']      = 'no';
+            $data['is_bundle']            = 'no';
+            $data['status']               = 'ok';
+            $data['rating_user']          = '[]';
+            $data['tag']                  = $this->input->post('tag');
+            $data['color']                = json_encode($option);
+            $data['num_of_imgs']          = $num_of_imgs;
+            $data['current_stock']        = $this->input->post('current_stock');
+            $data['amenities']        = $this->input->post('amenities');
+            $data['front_image']          = 0;
+            $additional_fields['name']    = json_encode($this->input->post('ad_field_names'));
+            $additional_fields['value']   = json_encode($this->input->post('ad_field_values'));
+            /*--extra field---*/
+            $data['color']                = json_encode($this->input->post('color'));
+            $additional_fields['name']    = json_encode($this->input->post('ad_field_names'));
+            $additional_fields['value']   = json_encode($this->input->post('ad_field_values'));
+            $data['additional_fields']    = json_encode($additional_fields);
+            $data['brand']                = $this->input->post('brand');
+            $data['unit']                 = $this->input->post('unit');
+            $data['slug']                 = $this->input->post('slug');
+        
+            $choice_titles                = $this->input->post('op_title');
+            $choice_types                 = $this->input->post('op_type');
+            $choice_no                    = $this->input->post('op_no');
+          
+            $data['added_by']             = json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id')));
+    
+            if (true) {
                 
-                
-                if(true){
-
-                    $this->db->insert('product', $data);
-                    $id = $this->db->insert_id();
+               $this->db->insert('product', $data);
+            //   var_dump($this->db->last_query());
+            //   die();
+                $id = $this->db->insert_id();
+                if($id){
                     
+                    foreach($_POST['fields'] as $k=> $v)
+                    {
+                        $r = update_product_meta($id,$k, $v);
+                    }
+
+                    $this->crud_model->set_amenities($id);
+                    
+                    // var_dump($id);
                     if(isset($_REQUEST['rand_id']) && !empty($_REQUEST['rand_id']))
                     {
                         $up = array('pid'=>$id);
                         $ret = $this->db->where('pid',$_REQUEST['rand_id'])->update('product_to_images', $up);
-                        var_dump($ret);
-                        die();
                     }
                     $this->benchmark->mark_time();
                     $this->load->library('cloudinarylib');
@@ -528,27 +888,14 @@ class Vendor extends CI_Controller
                     {
                         $logo_id = $this->crud_model->add_img($sneakerimg,$data);
                         array_push($dataInfo,$logo_id);
-                        $this->db->where('product_id',$id)->update('product',array('comp_logo'=>$logo_id));
+                        $r =$this->db->where('product_id',$id)->update('product',array('comp_logo'=>$logo_id));
+                        // var_dump($r);
+                        die("logo");
                         
                         
                     }
-                }
-
-                    $this->load->library('cloudinarylib');
-                    if($id && isset($_FILES['firstImg']['name']) && !empty($_FILES['firstImg']['name'])){
                     
-                        $sneakerimg = $this->crud_model->file_up("sneakerimg", "product", 'firstImg_'.time());
-                    $data = \Cloudinary\Uploader::upload($sneakerimg);
-                    if(isset($data['public_id']))
-                    {
-                        $logo_id = $this->crud_model->add_img($sneakerimg,$data);
-                        array_push($dataInfo,$logo_id);
-                        $this->db->where('product_id',$id)->update('product',array('firstImg'=>$logo_id));
-                        
-                        
-                    }
                 }
-                    
                     if($id && isset($_FILES['sideimg']['name']) && !empty($_FILES['sideimg']['name'])){
                     
                         $sneakerimg = $this->crud_model->file_up("sideimg", "product", 'sideimg_'.time());
@@ -570,7 +917,7 @@ class Vendor extends CI_Controller
             elseif ($this->db->get_where('business_settings',array('type' => 'commission_set'))->row()->value == 'yes') {
                 $this->db->insert('product', $data);
                 $id = $this->db->insert_id();
-                $this->crud_model->_set_variation($id);
+                // $this->crud_model->_set_variation($id);
                 $this->benchmark->mark_time();
                 if(!demo()){
                     $this->crud_model->file_up("images", "product", $id, 'multi');
@@ -578,7 +925,7 @@ class Vendor extends CI_Controller
             }
             $this->crud_model->set_category_data(0);
             recache();
-        } else if ($para1 == "update") {
+        }  else if ($para1 == "update") {
             $option              = $this->input->post('option');
             $options = array();
             if ($_FILES["images"]['name'][0] == '') {
@@ -586,10 +933,72 @@ class Vendor extends CI_Controller
             } else {
                 $num_of_imgs = count($_FILES["images"]['name']);
             }
+            $pid =$this->db->where('product_id', $para2)->get('product')->row_array();
+            $this->crud_model->set_amenities($pid['product_id']);
+            //   var_dump($this->db->last_query());
+            $v_id = $pid['added_by'];
+            $vid = json_decode($v_id);
+          
+        // $vendor = array();
+        //  $this->db->where('vendor_id', $vid->id);
+        //     $this->db->update('vendor', $vendor);
             $num                        = $this->crud_model->get_type_name_by_id('product', $para2, 'num_of_imgs');
             $download                   = $this->crud_model->get_type_name_by_id('product', $para2, 'download');
-            
+                     $cat = $this->input->post('category');
+               $cat2 = explode(',', $cat);
+             if (in_array("807", $cat2))
+                  {
+                $data['is_car'] = 1;
+                $data['make']               = $this->input->post('make');
+                $data['model']              = $this->input->post('model');
+                $data['seats']              = $this->input->post('no_of_seats');   
+                $data['pid']                = $this->input->post('car_id');
+                $data['purchase_price']     = $_POST['carprice'];
+                $data['posted_date']        = $this->input->post('cardate_posted');
+                $data['about_desc']        = $this->input->post('about_us');
+                $data['mot']        = $this->input->post('about_us');
+                $data['car_condition']        = $this->input->post('carcondition');
+                $data['distance_covered']        = $this->input->post('distance');
+                $data['uom']        = $this->input->post('cardistance');
+                $data['xtra_car']        = $this->input->post('xtraacarr');
+                $data['purchase_requirements']        = $this->input->post('car_require');
+                $data['fuel']        = $this->input->post('fuel');
+                $data['transmission']        = $this->input->post('transmission');
+                $data['currency']        = $this->input->post('currency');
+                  }
+                  if (in_array("808", $cat2))
+                  {
+                $data['is_property'] = 1;
+                $data['propert_type']               = $this->input->post('property_type');   $data['available_from_date']        = $this->input->post('available_from_date');
+                $data['no_of_bedroom']               = $this->input->post('no_of_bedrooms');
+                  }
+                  if (in_array("917", $cat2) || isset($_REQUEST['is_event']))
+                  {
+                $data['is_event'] = 1;
+                $data['event_date']               = $this->input->post('event_date');
+                $data['event_type']               = $this->input->post('event_type');
+                $data['age_restriction_event']    = $this->input->post('event_age_restriction');
+                  }
+                  if (in_array("78", $cat2) || isset($_REQUEST['is_job']))
+                  {
+                $data['is_job'] = 1;
+                $data['job_hours']               = $this->input->post('select_job_hours');
+                $data['job_type']               = $this->input->post('select_job_type');
+                $data['pid']               = $this->input->post('job_id');
+                $data['posted_date'] = $this->input->post('date');
+                  }
+     
+          if(isset($_REQUEST['is_blog'])){
+                $data['is_blog'] = 1;
+                $data['author_name'] = $this->input->post('author');
+                $data['posted_date'] = $this->input->post('date');
+            }
+           
             $data['seo_title']          = $this->input->post('seo_title');
+            //extra info section
+        $data['etra_content']          = json_encode($this->input->post('etra_content'));
+        $data['number_of_column']          = $this->input->post('number_of_column');
+        //extra info end
             $data['seo_description']    = $this->input->post('seo_description');
             $data['title']              = $this->input->post('title');
             $data['slogan']             = $this->input->post('slogan');
@@ -597,6 +1006,7 @@ class Vendor extends CI_Controller
             $data['bussniuss_email']    = $this->input->post('bussniuss_email');
             $data['bussniuss_phone']    = $this->input->post('bussniuss_phone');
             $data['whatsapp_number']    = $this->input->post('whatsapp_number');
+            $data['enable_checks']      = json_encode($this->input->post('checks'));
             $data['feature']            = ($this->input->post('feature'))?json_encode($this->input->post('feature')):'';
             $data['buttons']            = ($this->input->post('buttons'))?json_encode($this->input->post('buttons')):'';
             $data['text']               = ($this->input->post('text'))?json_encode($this->input->post('text')):'';
@@ -605,36 +1015,104 @@ class Vendor extends CI_Controller
             $data['category']           = $this->input->post('category');
             $data['description']        = $this->input->post('description');
             $data['sub_category']       = $this->input->post('sub_category');
-            $data['sale_price']         = $this->input->post('sale_price');
+            $data['sale_price']           = (isset($_POST['fields']['sale_price'])?$_POST['fields']['sale_price']:'0');
+            if(!isset($data['purchase_price']) || !$data['purchase_price'])
             $data['purchase_price']     = $this->input->post('purchase_price');
             $data['tax']                = $this->input->post('tax');
+            $data['slog']                = $this->input->post('slog');
+            $data['default_tab']        = $this->input->post('default_tab');
             $data['discount']           = $this->input->post('discount');
             $data['discount_type']      = $this->input->post('discount_type');
             $data['tax_type']           = $this->input->post('tax_type');
             $data['shipping_cost']      = $this->input->post('shipping_cost');
+            $data['about_title']        = $this->input->post('about_title');
+            $data['about_desc']         = $this->input->post('about_description');
+            $data['extra_section_heading']      = $this->input->post('extra_section_heading');
+            $data['about_address']      = $this->input->post('about_address');
+            $data['listing_amenities']    = json_encode($this->input->post('listingamenities'));
             $data['tag']                = $this->input->post('tag');
             $data['color']              = json_encode($option);
             $data['num_of_imgs']        = $num + $num_of_imgs;
             $data['front_image']        = 0;
+            $additional_value['name']   = $this->input->post('ad_field_names_custom');
+            $additional_value['value']   = $this->input->post('ad_field_values_custom');
+            $data['additional_fields_new'] = json_encode($additional_value);
             $additional_fields['name']  = json_encode($this->input->post('ad_field_names'));
             $additional_fields['value'] = json_encode($this->input->post('ad_field_values'));
             $data['additional_fields']  = json_encode($additional_fields);
             $data['brand']              = $this->input->post('brand');
             $data['unit']               = $this->input->post('unit');
             $data['info_head']          = $this->input->post('info_head');
-            $data['info_desc']          = $this->input->post('info_desc');
+            $data['info_desc']          = $_POST['info_desc'];
+            $data['gallery_text']        = $this->input->post('gdesc');
+            $data['gallery_lable']      = $this->input->post('gtitle');
+            $data['gdesc']             = $this->input->post('gdesc1');
+            $data['gtitle']             = $this->input->post('gtitle1');
+            $data['cats']               = $this->input->post('cats');
             $data['info_button']        = $this->input->post('button_txt');
             $data['button_url']         = $this->input->post('button_url');
+            $data['amenities']         = $this->input->post('amenities');
+            $data['openig_time']         = $this->input->post('openig_time');
+            $data['closing_time']         = $this->input->post('closing_time');
             $data['social_media']       = json_encode($this->input->post('social'));
+            $data['name']                  = $this->input->post('name1');
+            $data['pemail']                  = $this->input->post('email1');
+            $data['ephonen']                  = $this->input->post('pphone');
+            $data['amen_check']                  = $this->input->post('checkamenities');
+            $data['address1']              = $this->input->post('address');
+            $data['address2']              = $this->input->post('address2');
+            $data['country']               = $this->input->post('country');
+            $data['city']                  = $this->input->post('city');
+            $data['state']                 = $this->input->post('state');
+            $data['zip']                   = $this->input->post('zip_code');
             $choice_titles              = $this->input->post('op_title');
             $choice_types               = $this->input->post('op_type');
             $choice_no                  = $this->input->post('op_no');
+            $data['current_stock']                = $this->input->post('current_stock');
+            /*--extra field---*/
+            $data['color']              = json_encode($this->input->post('color'));
+            $additional_fields['name']  = json_encode($this->input->post('ad_field_names'));
+            $additional_fields['value'] = json_encode($this->input->post('ad_field_values'));
+            $data['additional_fields']  = json_encode($additional_fields);
+            $data['brand']              = $this->input->post('brand');
+            $data['unit']               = $this->input->post('unit');
+            $choice_titles              = $this->input->post('op_title');
+            $choice_types               = $this->input->post('op_type');
+            $choice_no                  = $this->input->post('op_no');
+            $data['color']              = json_encode($this->input->post('color'));
+          
+            $choice_titles              = $this->input->post('op_title');
+            $choice_types               = $this->input->post('op_type');
+            $choice_no                  = $this->input->post('op_no');
+            if(count($choice_titles ) > 0){
+                foreach ($choice_titles as $i => $row) {
+                    $choice_options         = $this->input->post('op_set'.$choice_no[$i]);
+                    $options[]              =   array(
+                                                    'no' => $choice_no[$i],
+                                                    'title' => $choice_titles[$i],
+                                                    'name' => 'choice_'.$choice_no[$i],
+                                                    'type' => $choice_types[$i],
+                                                    'option' => $choice_options
+                                                );
+                }
+            }
+            $data['options']            = json_encode($options);
+            
 
             $this->db->where('product_id', $para2);
+            // var_dump($data);
+            // die();
             $this->db->update('product', $data);
     
             $this->load->library('cloudinarylib');
             $id = $para2;
+            if(isset($_POST['fields']) && $id)
+            {
+                foreach($_POST['fields'] as $k=> $v)
+                {
+                    $r = update_product_meta($id,$k, $v);
+                }
+            }
             if($id && isset($_FILES['sneakerimg']['name']) && !empty($_FILES['sneakerimg']['name'])){
                     $path = 'uploads/product_image/product_' . time() . '.png';
                     
@@ -690,22 +1168,34 @@ class Vendor extends CI_Controller
             $this->crud_model->set_category_data(0);
             recache();
         } else if ($para1 == 'edit') {
-            
             $sing = $this->db->where('product_id' , $para2)->get('product')->row();
+            $page_data['brandss'] =  $this->db->where('pcat', '369')->get('category')->result_array();
             $attrs = $this->db->where('product_id' , $para2)->get('attribute_to_values')->result_array();
             $page_data['product_data'] = $this->db->get_where('product', array(
                 'product_id' => $para2
             ))->row();
+           
+            $page_data['product_data1'] = $this->db->get_where('product', array(
+                'product_id' => $para2
+            ))->result_array();
             $page_data['row'] =(array) $sing;
             $page_data['brands'] =  $this->db->get('category')->result_array();
-            $page_data['social_media']= $this->db->get('bpkg')->result_array();
+             $page_data['social_media']= $this->db->get('bpkg')->result_array();
             $page_data['page_name']   = ($sing->is_bpage)?"bpage_edit":"product_edit";
+            if($sing->is_product)
+            {
+                $page_data['page_name']   = "product_edit1";
+            }
+            if($sing->is_blog)
+            {
+                $page_data['page_name']   = "blog_edit";
+            }
             $this->load->view('back/index', $page_data);
             
         } else if ($para1 == 'view') {
-            $page_data['product_data'] = $this->db->get_where('product', array(
+            $page_data['product_data'] = $this->db->where(array(
                 'product_id' => $para2
-            ))->result_array();
+            ))->get('product')->row_array();
             $this->load->view('back/vendor/product_view', $page_data);
         } elseif ($para1 == 'delete') {
             if(!demo()){
@@ -767,11 +1257,33 @@ class Vendor extends CI_Controller
                                         </ul>
             <?php
         } elseif ($para1 == 'list') {
+            
             $this->db->order_by('product_id', 'desc');
             $this->db->where('added_by',json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id'))));
             $this->db->where('download=',NULL);
             $this->db->where('is_bpage=',0);
             $page_data=array();
+            $page_data['type']='';
+            if(isset($_GET['is_product']))
+            {
+            $page_data['type']='is_product';
+            $page_data['is_product']=1;
+            }
+            if(isset($_GET['is_blog']))
+            {
+            $page_data['type']='is_blog';
+            $page_data['is_blog']=1;
+            }
+            if(isset($_GET['is_job']))
+            {
+            $page_data['type']='is_job';
+            $page_data['is_job']=1;
+            }
+            if(isset($_GET['is_event']))
+            {
+                $page_data['type']='is_event';
+            $page_data['is_event']=1;
+            }
             $page_data['all_product'] = $this->db->get('product')->result_array();
              $this->load->view('back/vendor/product_list', $page_data);
         } elseif ($para1 == 'list_data') {
@@ -783,8 +1295,26 @@ class Vendor extends CI_Controller
             if($search){
                 $this->db->like('title', $search, 'both');
             }
+            
             $this->db->where('download=',NULL);
             $this->db->where('added_by',json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id'))));
+            if(isset($_GET['is_job']))
+            {
+                $this->db->where('is_job',1);
+            }
+            if(isset($_GET['is_event']))
+            {
+                $this->db->where('is_event',1);
+            }
+            if(isset($_GET['is_product']))
+            {
+                $this->db->where('is_product',1);
+            }
+             if(isset($_GET['is_blog']))
+            {
+            $page_data['type']='is_blog';
+            $page_data['is_blog']=1;
+            }
             $total      = $this->db->get('product')->num_rows();
             $this->db->limit($limit);
             if($sort == ''){
@@ -795,10 +1325,31 @@ class Vendor extends CI_Controller
             if($search){
                 $this->db->like('title', $search, 'both');
             }
+            $added_by = '';
             $this->db->where('added_by',json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id'))));
             $this->db->where('download=',NULL);
             $this->db->where('is_bpage=',0);
+            if(isset($_GET['is_job']))
+            {
+                $this->db->where('is_job',1);
+            }
+            if(isset($_GET['is_event']))
+            {
+                $this->db->where('is_event',1);
+            }
+            if(isset($_GET['is_product']))
+            {
+                $this->db->where('is_product',1);
+            }
+            if(isset($_GET['is_blog']))
+            {
+                $this->db->where('is_blog',1);
+            }
             $products   = $this->db->get('product', $limit, $offset)->result_array();
+            // var_dump($this->db->last_query());
+            // die();
+
+
             $data       = array();
             foreach ($products as $row) {
 
@@ -889,6 +1440,10 @@ class Vendor extends CI_Controller
                 //                     ".translate('delete')."
                 //             </a>";
                 $res['options'] = "
+                            <a href='".base_url('vendor/affliate/add').'?pid='.$row['product_id']."'\"
+                                class=\"btn btn-success btn-xs btn-labeled fa fa-eye\" data-toggle=\"tooltip\" data-original-title=\"Delete\" data-container=\"body\"> 
+                                    ".translate('affliate')." 
+                            </a>
                             <a href='".base_url('home/product_view/').$row['product_id']."'\"
                                 class=\"btn btn-info btn-xs btn-labeled fa fa-eye\" data-toggle=\"tooltip\" data-original-title=\"Delete\" data-container=\"body\"> 
                                     ".translate('view')."
@@ -919,8 +1474,11 @@ class Vendor extends CI_Controller
             }
         } elseif ($para1 == 'sub_by_cat') {
             $brands = $this->db->where('pcat',$para2)->get('category')->result_array();
+            $sing = $this->db->where('category_id',$para2)->get('category')->row();
+            // var_dump($sing);
             
-            $level = get_cat_level($para2);
+            $level = $sing->level;
+            // var_dump($level);
             $breed = array();
             $cid = $para2;
             for ($i=1; $i <= $level; $i++) { 
@@ -930,17 +1488,20 @@ class Vendor extends CI_Controller
                 $cid = $row->pcat;
                 
             }
+            // var_dump($breed);
             if($breed)
             {
                 ?>
                 <div class="breaddcum">
                     <ul>
                         <?php
+                        $cat = array();
                         foreach(array_reverse($breed) as $k=> $v)
                         {
+                            $cat[] = $v;
                             $row = $this->db->where('category_id',$v)->get('category')->row();
                             ?>
-                            <li onclick="selecttype('<?= $row->pcat;?>')"><?= $row->category_name;?></li>
+                            <li onclick="selecttype('<?= implode(',',$cat);?>',1)"><?= $row->category_name;?></li>
                             <?php
                         }
                         ?>
@@ -990,15 +1551,37 @@ class Vendor extends CI_Controller
             echo $this->crud_model->get_type_name_by_id('product', $para2, 'purchase_price');
         } elseif ($para1 == 'add') {
             
-            if (true) {
+            if($this->crud_model->can_add_product($this->session->userdata('vendor_id'))){
                 $page_data = array();
-               // $page_data['brand'] =  $this->db->get('brand')->result_array();
+                $page_data['brand'] =  $this->db->get('brand')->result_array();
+                $page_data['brandss'] =  $this->db->where('pcat', '369')->get('category')->result_array();
                
                 if($this->crud_model->can_add_product($this->session->userdata('vendor_id'))){
-                    $page_data['brands'] =  $this->db->get('category')->result_array();
-
+                    $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value, true);
+                       $result=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result[]=$row;
+                                                }
+                                            }
+                    if($result)
+                    {
+                    $page_data['brands'] =  $this->db->where_in('category_id',$result)->get('category')->result_array();
+                    }
+                    else
+                    {
+                        $page_data['brands'] =  array();
+                    }
                     // $this->load->view('back/vendor/product_add', $page_data);
                     $page_data['page_name']   = "product_add";
+                    if(isset($_GET['is_product']))
+                    {
+                        $page_data['page_name']   = "product_add1";
+                    }
+                    if(isset($_GET['is_blog']))
+                    {
+                        $page_data['page_name']   = "blog_add";
+                    }
                     
             $this->load->view('back/index', $page_data);
                 } else {
@@ -1007,9 +1590,11 @@ class Vendor extends CI_Controller
                     // $this->load->view('back/vendor/product_limit');
                 }
             }
-            elseif($this->db->get_where('business_settings',array('type' => 'commission_set'))->row()->value == 'yes'){
-                // $this->load->view('back/vendor/product_add');
+            else{
+                $page_data['page_name'] = 'product_limit';
+                $this->load->view('back/index', $page_data);
             }
+            
         } elseif ($para1 == 'srch') {
             if(isset($_GET['srh']))
             $para2 = $_GET['srh'];
@@ -3015,23 +3600,25 @@ $price = $this->crud_model->getMainPrice($v['product_id']);
             $this->db->where('vendor_id', $this->session->userdata('vendor_id'));
             $this->db->update('vendor', array(
                 'name' => $this->input->post('name'),
-                'email' => $this->input->post('email'),
+                // 'email' => $this->input->post('email'),
                 'address1' => $this->input->post('address1'),
                 'address2' => $this->input->post('address2'),
                 'company' => $this->input->post('company'),
-                'display_name' => $this->input->post('display_name'),
+                'middle_name' => $this->input->post('display_name'),
+                'last_name' => $this->input->post('l_name'),
                 'city' => $this->input->post('city'),
                 'state' => $this->input->post('state'),
                 'country' => $this->input->post('country'),
                 'zip' => $this->input->post('zip'),
                 'description' => $this->input->post('description'),
-
                 'details' => $this->input->post('details'),
                 'phone' => $this->input->post('phone'),
-                'lat_lang' => $this->input->post('lat_lang')
+                'cat1' => $this->input->post('buss_type'),
+                'cat2' => $this->input->post('sub_category'),
+                'cat3' => $this->input->post('sub3_category'),
+                // 'lat_lang' => $this->input->post('lat_lang')
             ));
         } else {
-            
             $page_data['page_name'] = "manage_vendor";
             $this->load->view('back/index', $page_data);
         }

@@ -41,5 +41,39 @@
 	var gad = "<?php echo translate("google_analytics_disabled!"); ?>";
 	var enb_ven = "<?php echo translate("notification_email_sent_to_vendor!"); ?> ";
 	var working = "<?php echo translate("working..."); ?> ";
-	
+	function del_cat(id , pid,col= 0){
+       var url = '<?= base_url('admin/cat_child');?>';
+       var cid = id;
+       if(col)
+       {
+           var mid = '#col_'+pid;
+           $(mid).html('Loading');
+       }
+       var dta = { del:1,sid:id, id:cid, col:col};
+       console.log(dta);
+       
+      $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { del:1,sid:id, id:cid, col:col},
+        success: function (data) {
+           if(data){
+               
+               if(col)
+               {
+                   load_chids(pid,mid);
+               }
+               else
+               {
+                    load_chids(pid,0)       
+               }
+       
+            
+            //   $("#list_itemss").html(data);
+
+           }
+        },
+    });
+}
 </script>

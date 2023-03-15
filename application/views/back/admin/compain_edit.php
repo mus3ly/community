@@ -1,5 +1,6 @@
 <?php
 // die("ok");
+// var_dump($data);
     foreach($data as $row){
         
 ?>
@@ -42,7 +43,53 @@
                                     <input type="text" name="pg" id="demo-hor-1" placeholder="<?php echo translate('percentage');?>" class="form-control required" value="<?php echo $row['percentage']; ?>">
                                 </div>
                             </div>
-                            
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('compain_type');?></label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" name="compain_type" id="comp_type" onchange="select_type()"  required>
+                                        <option value="0">select compain type</option>
+                                        <option value="banner_compain" <?php if($row['compain_type'] == 'banner_compain'){echo 'selected="selected"';}?>>Banner Campaign</option>
+                                        <option value="text_compain" <?php if($row['compain_type'] == 'text_compain'){echo 'selected="selected"';}?>>Text Campaign</option>
+                                        <option value="video_compain"  <?php if($row['compain_type'] == 'video_compain'){echo 'selected="selected"';}?>>Video Campaign</option>
+                                    </select>
+                                </div>
+                            </div>
+                             <div class="row">
+                                <div class="comp_details" id="text_compain" style="display:none" >
+                                    
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('content');?></label>
+                                <div class="col-sm-6">
+                                    <textarea  name="content" class="form-control" placeholder="<?php echo translate('content');?>"><?=$row['content']?></textarea>
+                                </div>
+                            </div>
+                                    
+                                </div>
+                                <div class="comp_details" id="video_compain" style="display:none" >
+                                    <div class="form-group btm_border">
+                                    <label class="col-sm-4 control-label" for="demo-hor-12">Video link</label>
+                                    <div class="col-sm-6">
+                                        <textarea  name="video_link" class="form-control" value="" placeholder="<?php echo translate('video_link');?>"></textarea>
+                                    </div>
+                                </div>
+                                    
+                                </div>
+                                <div class="comp_details" id="banner_compain" style="display:none">
+                                    <div class="form-group btm_border">
+                                    <label class="col-sm-4 control-label" for="demo-hor-12">Banner Image</label>
+                                    <div class="col-sm-6">
+                                        <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
+                                            <input type="file" name="banner_img" onchange="preview2(this);" id="demo-hor-inputpass" class="form-control">
+                                        </span>
+                                        <br><br>
+                                        <span id="previewImg" >
+                                        </span>
+                                    </div>
+                                </div>
+                                    
+                                </div>
+                                
+                            </div>
                         </div>
 
 
@@ -192,8 +239,17 @@
 		});
 		
 	}
-	
-    
+	$( document ).ready(function() {
+	    function select_type()
+    {
+        var val = $('#comp_type').val();
+        var mid = '#'+val;
+        $('.comp_details').each(function(i, obj) {
+    $(this).hide();
+});
+        $(mid).show();
+    }
+	});
     $("#more_btn").click(function(){
         $("#more_additional_fields").append(''
             +'<div class="form-group">'

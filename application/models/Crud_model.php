@@ -16,6 +16,48 @@ class Crud_model extends CI_Model
         parent::__construct();
     }
     
+    public function rate_html($rate)
+    {
+        $rate = ceil($rate);
+        $tot = 5;
+        $html = '';
+        for($i= 1; $i<=$tot;$i++)
+        {
+            if($i <= $rate)
+            {
+                $html .= '<i class="fa fa-star"></i>';
+            }
+            else
+            {
+                $html .= '<i class="fa fa-star-o" ></i>
+';
+            }
+        }
+        return $html;
+    }
+    public function set_amenities($id)
+    {
+        $sing = $this->db->select('amenities')->where('product_id',$id)->get('product')->row();
+        if($sing->amenities)
+        {
+            $all = explode(',',$sing->amenities);
+            
+            foreach($all as $k=> $v)
+            {
+                $already = $this->db->where('name',$v)->where('status',0)->get('amenity')->row();
+                var_dump($already);
+                if(!$already)
+                {
+                    $add= array(
+                        'name' => $v
+                        );
+                        $r = $this->db->insert('amenity',$add);
+                        
+                }
+            }
+        }
+        
+    }
     public function size_img($id,$height, $width)
     {
         $public_id = 'default_sg7wzq';
@@ -111,6 +153,7 @@ foreach($vendors as $kk=> $vv)
     }
     public function _set_variation($para2)
     {
+        return true;
         $product = $this->db->where('product_id',$para2)->get('product')->row();
             $attributes = array();
             $price = array();
@@ -588,8 +631,8 @@ foreach($vendors as $kk=> $vv)
         if ($quick == 'quick') {
             return base_url() . 'home/quick_view/' . $product_id;
         } else {
-            $name = url_title($this->crud_model->get_type_name_by_id('product', $product_id, 'title'));
-            return base_url() . 'product/' . $product_id . '/' . $name;
+            $s = url_title($this->crud_model->get_type_name_by_id('product', $product_id, 'slug'));
+            return base_url() .$s;
         }
     }
 
@@ -687,6 +730,14 @@ foreach($vendors as $kk=> $vv)
                                                     $result1[]=$row;
                                                 }
                                             }
+                                            //signup category
+            $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 72))->row()->value,true);
+                                            $result2=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result2[]=$row;
+                                                }
+                                            }
 
             foreach ($all as $row):
                 if ($type == 'signup_cat') {
@@ -697,6 +748,12 @@ foreach($vendors as $kk=> $vv)
                 }
                 if ($type == 'signup_main_cat') {
                     if(in_array($row[$from . '_id'], $result1))
+                    {
+                        $return .= '<option value="' . $row[$from . '_id'] . '">' . $row[$field] . '</option>';
+                    }
+                }
+                if ($type == 'ind_main_cat') {
+                    if($row['level'] == 1)
                     {
                         $return .= '<option value="' . $row[$from . '_id'] . '">' . $row[$field] . '</option>';
                     }
@@ -1921,7 +1978,14 @@ foreach($vendors as $kk=> $vv)
         if ($membership == '0') {
             $max = $this->db->get_where('general_settings', array('type' => 'default_member_product_limit'))->row()->value;
         } else {
+            if($this->db->get_where('membership', array('membership_id' => $membership))->row())
+            {
             $max = $this->db->get_where('membership', array('membership_id' => $membership))->row()->product_limit;
+            }
+            else
+            {
+                $max = 0;
+            }
         }
 
         if ($expire > time() || $membership == '0') {
@@ -2123,6 +2187,46 @@ foreach($vendors as $kk=> $vv)
     }
 
     //ADDING PRODUCT TO WISHLIST
+    function add_aff($product_id)
+    {
+        $user = $this->session->userdata('user_id');
+        if ($this->get_type_name_by_id('user', $user, 'affliate') !== 'null') {
+            $wished = json_decode($this->get_type_name_by_id('user', $user, 'affliate'));
+        } else {
+            $wished = array();
+        }
+        if (true) {
+            array_push($wished, $product_id);
+            $this->db->where('user_id', $user);
+            $r = $this->db->update('user', array(
+                'affliate' => json_encode($wished)
+            ));
+            
+        }
+    }
+
+    //REMOVING PRODUCT FROM WISHLIST
+    function remove_aff($product_id)
+    {
+        $user = $this->session->userdata('user_id');
+        if ($this->get_type_name_by_id('user', $user, 'affliate') !== 'null') {
+            $wished = json_decode($this->get_type_name_by_id('user', $user, 'affliate'));
+        } else {
+            $wished = array();
+        }
+        $wished_new = array();
+        foreach ($wished as $row) {
+            if ($row !== $product_id) {
+                $wished_new[] = $row;
+            }
+        }
+        $this->db->where('user_id', $user);
+        $this->db->update('user', array(
+            'affliate' => json_encode($wished_new)
+        ));
+    }
+
+    //ADDING PRODUCT TO WISHLIST
     function add_wish($product_id)
     {
         $user = $this->session->userdata('user_id');
@@ -2175,6 +2279,27 @@ foreach($vendors as $kk=> $vv)
 
 
     //IF PRODUCT IS ADDED TO CURRENT USER'S WISHLIST
+    function is_aff($product_id)
+    {
+        if ($this->session->userdata('user_login') == 'yes') {
+            $user = $this->session->userdata('user_id');
+            //$wished = array('0');
+            if ($this->get_type_name_by_id('user', $user, 'affliate') !== '') {
+                $wished = json_decode($this->get_type_name_by_id('user', $user, 'affliate'));
+            } else {
+                $wished = array(
+                    '0'
+                );
+            }
+            if (in_array($product_id, $wished)) {
+                return 'yes';
+            } else {
+                return 'no';
+            }
+        } else {
+            return 'no';
+        }
+    }
     function is_wished($product_id)
     {
         if ($this->session->userdata('user_login') == 'yes') {

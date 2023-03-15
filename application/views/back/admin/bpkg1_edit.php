@@ -1,7 +1,13 @@
 <?php
-    // var_dump($res);
+    // var_dump($res)
+    // die();
     foreach($data as $row){
 ?>
+<style>
+    .modal-footer{
+        display:none;
+    }
+</style>
 <div class="row">
     <div class="col-md-12">
         <?php
@@ -99,13 +105,9 @@
             </div>
             <div class="panel-footer">
                 <div class="row">
-                    <!--<div class="col-md-11">-->
-                    <!--	<span class="btn btn-purple btn-labeled fa fa-refresh pro_list_btn pull-right" -->
-                    <!--        onclick="ajax_set_full('edit','<?php echo translate('edit_blog'); ?>','<?php echo translate('successfully_edited!'); ?>','blog_edit','<?php echo $row['blog_id']; ?>') "><?php echo translate('reset');?>-->
-                    <!--    </span>-->
-                    <!-- </div>-->
+                    
                      <div class="col-md-12">
-                     	<span class="btn btn-success btn-md btn-labeled fa fa-wrench pull-right enterer" onclick="form_submit('bpkg_edit','<?php echo translate('successfully_edited!'); ?>');proceed('to_add');" ><?php echo translate('edit');?></span> 
+                     	<span class="btn btn-success btn-md btn-labeled fa fa-wrench pull-right enterer" onclick="form_submit('bpkg_edit','<?php echo translate('successfully_edited!'); ?>');proceed('to_add');" ><?php echo translate('Save');?></span> 
                      </div>
                 </div>
             </div>

@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
 class Home extends CI_Controller
 {
 
-    /*
+    /*n
      *  Developed by: Active IT zone
      *  Date    : 14 July, 2015
      *  Active Supershop eCommerce CMS
@@ -15,7 +15,7 @@ class Home extends CI_Controller
     if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE) {
         $ip = $_SERVER["REMOTE_ADDR"];
         if ($deep_detect) {
-            if (filter_var(@$_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP))
+            if (filter_var(@$_SERVER['HTTP_X_FORWARDED _FOR'], FILTER_VALIDATE_IP))
                 $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
             if (filter_var(@$_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP))
                 $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -77,6 +77,7 @@ class Home extends CI_Controller
 
     function __construct()
     {
+        
         parent::__construct();
         //$this->output->enable_profile r(TRUE);
         $this->load->database();
@@ -148,8 +149,205 @@ class Home extends CI_Controller
         setcookie('curr', $this->session->userdata('currency'), time() + (86400), "/");
         //echo $_COOKIE['lang'];
     }
+       public function slugify($text, string $divider = '-')
+{
+  // replace non letter or digits by divider
+  $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
 
+  // transliterate
+  $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+  // remove unwanted characters
+  $text = preg_replace('~[^-\w]+~', '', $text);
+
+  // trim
+  $text = trim($text, $divider);
+
+  // remove duplicate divider
+  $text = preg_replace('~-+~', $divider, $text);
+
+  // lowercase
+  $text = strtolower($text);
+
+  if (empty($text)) {
+    return 'n-a';
+  }
+
+  return $text;
+}
     /* FUNCTION: Loads Homepage*/
+    public function update_slug()
+    {
+               $this->db->limit(15, 0);
+
+        $pros = $this->db->where('slug','')->get('product')->result_array();
+        foreach($pros as $k=> $v)
+        {
+            echo $v['product_id'].'<br>';
+         echo create_slug($v['product_id']).'<br>';
+        
+        //slugify
+        }
+    }
+    public function update_dire()
+    {
+        $place_id = $this->config->item('places_cat');
+        $places = $this->db->select('product_id')->where('is_place',0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
+        $pl_ids = array();
+        foreach($places as $k=> $v)
+        {
+            $pl_ids[] = $v['product_id'];
+        }
+        if($pl_ids)
+        $r = $this->db->where_in('product_id',$pl_ids)->update('product',array('is_place'=>1));
+        //for cars 
+        $place_id = $this->config->item('car_cat');
+        $places = $this->db->select('product_id')->where('is_car',0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
+        $pl_ids = array();
+        foreach($places as $k=> $v)
+        {
+            $pl_ids[] = $v['product_id'];
+        }
+        if($pl_ids)
+        $r = $this->db->where_in('product_id',$pl_ids)->update('product',array('is_car'=>1));
+        //for cars 
+        $place_id = $this->config->item('charity_cat');
+        $places = $this->db->select('product_id')->where('is_charity',0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
+        $pl_ids = array();
+        foreach($places as $k=> $v)
+        {
+            $pl_ids[] = $v['product_id'];
+        }
+        if($pl_ids)
+        $r = $this->db->where_in('product_id',$pl_ids)->update('product',array('is_charity'=>1));
+        //for property 
+        $place_id = $this->config->item('property_cat');
+        $places = $this->db->select('product_id')->where('is_property',0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
+        $pl_ids = array();
+        foreach($places as $k=> $v)
+        {
+            $pl_ids[] = $v['product_id'];
+        }
+        if($pl_ids)
+        $r = $this->db->where_in('product_id',$pl_ids)->update('product',array('is_property'=>1));
+    }
+    public function update_amenities()
+    {
+        $p = $this->db->select('product_id')->where("amenities != ''")->get('product')->result_array();
+        foreach($p as $k=> $pid)
+        {
+             $this->crud_model->set_amenities($pid['product_id']);
+        }
+    }
+    public function update_rating()
+    {
+        $rates = $this->db->select('product_id')->distinct('product_id')->get('user_rating')->result_array();
+        foreach($rates as $k=> $v)
+        {
+            $pid = $v['product_id'];
+            $sing = $this->db->select('count(*) as c, sum(rating) as rate')->where('product_id', $pid)->get('user_rating')->row();
+            if($sing)
+            {
+                $rate = $sing->rate/ $sing->c;
+                $up = array('rating_num'=>$rate);
+                $r = $this->db->where('product_id',$pid)->update('product',$up);
+            }
+        }
+    }
+    public function delete_gallery(){
+        $this->db->where('id', $_REQUEST['id']);
+        $this->db->delete('product_to_images');
+        echo '1';
+    }
+    public function upload_bpage()
+    {
+        if(isset($_REQUEST['column']) && isset($_REQUEST['product']))
+        {
+            $column = $_REQUEST['column'];
+            $pid = $_REQUEST['product'];
+        $this->load->library('cloudinarylib'); 
+            if($_FILES["file"]['tmp_name']){
+                    if(true){
+                        $path = 'uploads/'.time().'.jpg';
+                        move_uploaded_file($_FILES["file"]['tmp_name'], $path);
+                        $data = \Cloudinary\Uploader::upload($path);
+						if(isset($data['public_id']))
+						{
+							$logo_id = $this->crud_model->add_img($path,$data);
+							
+							if($logo_id)
+							{
+							    if($column == 'gallery')
+							    {
+							        $in = array(
+							            'pid'=>$pid,
+							            'img'=>$logo_id,
+							            );
+							        $gallary = $this->db->insert('product_to_images', $in);
+							     //   die("Here");
+							    }
+							    else
+							    {
+                             $this->db->where('product_id', $pid);
+                            $this->db->update('product', array(
+                                $column => $logo_id
+                            ));
+							    }
+                            echo 1;
+                            die();
+						   }
+						}
+	//top_banner
+                    }
+                }
+        }
+    }
+    public function srch_loc()
+    {
+        if(isset($_GET["str"]))
+        {
+        $curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='.$_GET["str"].'&key='.$this->config->item('map_key'),
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'GET',
+));
+
+$response = curl_exec($curl);
+
+curl_close($curl);
+$arr = json_decode($response, true);
+?>
+<ul>
+<?php
+if(isset($arr['predictions']) && count($arr['predictions']))
+{
+    $add = $arr['predictions'];
+    foreach($add as $k=> $v)
+    {
+        ?>
+        <li onclick="select_place('<?= $v['place_id'] ?>','<?= $v['description'] ?>')" ><?= $v['description'] ?></li>
+        <?php
+    }
+}
+else
+{
+    ?>
+    <li>No result found</li>
+    <?php
+}
+?>
+</ul>
+<?php
+
+}
+    }
     public function add_rate()
     {
         if(isset($_GET['rating']) && isset($_GET['comment']) && isset($_GET['pid']) && $this->session->userdata('user_login') == "yes")
@@ -202,7 +400,15 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     {
         //$this->output->enable_profiler(TRUE);
         //$page_data['min'] = $this->get_range_lvl('product_id !=', '', "min");
-        $page_data['brands'] = $this->db->get('category')->result_array();
+          $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value, true);
+                       $result=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result[]=$row;
+                                                }
+                                            }
+                    $page_data['brands'] =  $this->db->where_in('category_id',$result)->get('category')->result_array();
+
         $this->get_ranger_val();
         $home_style = $this->db->get_where('ui_settings', array('type' => 'home_page_style'))->row()->value;
 
@@ -373,6 +579,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             $config['full_tag_open'] = '<ul class="pagination">';
             $config['full_tag_close'] = '</ul>';
 
+            
             $config['cur_tag_open'] = '<li class="active"><a>';
             $config['cur_tag_close'] = '<span class="sr-only">(current)</span></a></li>';
 
@@ -497,6 +704,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         if ($this->paypal->validate_ipn() == true) {
             $data['status'] = 'paid';
             $data['payment_details'] = json_encode($_POST);
+
             $id = $_POST['custom'];
             $this->db->where('wallet_load_id', $id);
             $this->db->update('wallet_load', $data);
@@ -509,7 +717,6 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             $this->db->update('user', array('wallet' => $new_balance));
         }
     }
-
 
     /* FUNCTION: Loads after cancelling paypal*/
     function wallet_paypal_cancel()
@@ -679,7 +886,6 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             $new_balance = base64_encode($balance + $amount);
             $this->db->where('user_id', $user);
             $this->db->update('user', array('wallet' => $new_balance));
-
             $this->session->set_userdata('wallet_id', '');
             redirect(base_url() . 'home/profile/part/wallet/', 'refresh');
         } else {
@@ -758,10 +964,127 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         } elseif ($para1 == "wishlist") {
             $page_data['log'] = $this->db->get('aff_log')->result_array();
             $this->load->view('front/affliate/wishlist',$page_data); 
-        } elseif ($para1 == "affiliation_point_earnings") {
-            
-            $page_data['compain'] = $this->db->get('compain')->result_array();
-            $this->load->view('front/affliate/affiliation_point_earnings',$page_data);
+        }
+         elseif ($para1 == "affiliation_point_earnings") {
+             echo '1';
+         $this->load->library('Ajax_pagination');
+
+        // $id = $this->session->userdata('user_id');
+        // $this->db->where('from_where', '{"type":"user","id":"' . $id . '"}');
+        // $this->db->or_where('to_where', '{"type":"user","id":"' . $id . '"}');
+        // $config['total_rows'] = $this->db->count_all_results('compain');
+        
+        // nimra code
+                if(isset($_GET['vid']) && !empty($_GET['vid'])){
+                $id = '{"type":"vendor","id":"'.$_GET['vid'].'"}';
+                 $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain')->result_array();
+             
+            }
+            elseif($_SESSION['vendor_login']){
+                // var_dump($_SESSION);
+              $id = '{"type":"vendor","id":"'.$_SESSION['vendor_id'].'"}';
+                 $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain')->result_array();
+
+            }
+            else 
+            {
+             $config['total_rows'] = $this->db->count_all_results('compain');
+            }
+        // nimra code
+        
+        
+        $config['base_url'] = base_url() . 'home/affiliate/';
+        $config['per_page'] = 3;
+        $config['uri_segment'] = 5;
+        $config['cur_page_giv'] = $para2;
+
+        $function = "ticket_listed('0')";
+        $config['first_link'] = '&laquo;';
+        $config['first_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
+        $config['first_tag_close'] = '</a></li>';
+
+        $rr = ($config['total_rows'] - 1) / $config['per_page'];
+        $last_start = floor($rr) * $config['per_page'];
+        $function = "ticket_listed('" . $last_start . "')";
+        $config['last_link'] = '&raquo;';
+        $config['last_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
+        $config['last_tag_close'] = '</a></li>';
+
+        $function = "ticket_listed('" . ($para2 - $config['per_page']) . "')";
+        $config['prev_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
+        $config['prev_tag_close'] = '</a></li>';
+
+        $function = "ticket_listed('" . ($para2 + $config['per_page']) . "')";
+        $config['next_link'] = '&rsaquo;';
+        $config['next_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
+        $config['next_tag_close'] = '</a></li>';
+
+        $config['full_tag_open'] = '<ul class="pagination pagination-style-2 pagination-sm">';
+        $config['full_tag_close'] = '</ul>';
+
+        $config['cur_tag_open'] = '<li class="active"><a rel="grow" class="btn-u btn-u-red grow" class="active">';
+        $config['cur_tag_close'] = '</a></li>';
+
+        // $function = "ticket_listed(((this.innerHTML)*" . $config['per_page'] . "))";
+        $function = "ticket_listed(this.innerHTML)";
+        $config['num_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
+        $config['num_tag_close'] = '</a></li>';
+        $this->ajax_pagination->initialize($config);
+        // $this->db->where('from_where', '{"type":"user","id":"' . $id . '"}');
+        // $this->db->or_where('to_where', '{"type":"user","id":"' . $id . '"}');
+                  if(isset($_GET['vid']) && !empty($_GET['vid'])){
+                $id = '{"type":"vendor","id":"'.$_GET['vid'].'"}';
+                 $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain', $config['per_page'], $para2)->result_array();
+             
+            }
+            elseif($_SESSION['vendor_login']){
+                // var_dump($_SESSION);
+              $id = '{"type":"vendor","id":"'.$_SESSION['vendor_id'].'"}';
+                 $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain', $config['per_page'], $para2)->result_array();
+
+            }
+            else 
+            {
+                $page_data['compain1']= $this->db->get('compain', $config['per_page'], $para2)->result_array();
+            }
+        // $page_data['compain1'] = $this->db->get('compain', $config['per_page'], $para2)->result_array();
+         $this->load->view('front/affliate/affiliation_point_earnings',$page_data);
+           
+        
+    }
+        //     elseif ($para1 == "affiliation_point_earnings") {
+        //     // var_dump($_GET);
+        //     if(isset($_GET['vid']) && !empty($_GET['vid'])){
+        //         $id = '{"type":"vendor","id":"'.$_GET['vid'].'"}';
+        //          $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain')->result_array();
+             
+        //     }
+        //     elseif($_SESSION['vendor_login']){
+        //         // var_dump($_SESSION);
+        //       $id = '{"type":"vendor","id":"'.$_SESSION['vendor_id'].'"}';
+        //          $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain')->result_array();
+
+        //     }
+        //     else 
+        //     {
+        //         $page_data['compain1']= $this->db->get('compain')->result_array();
+        //     }
+        //     //  var_dump($page_data['compain1']);
+        //     //      die();
+        //     $this->load->view('front/affliate/affiliation_point_earnings',$page_data);
+        // }
+        elseif($para1 == "pnv_affiliate_company"){
+            $y = $this->db->where('user_id',$this->session->userdata('user_id'))->get('user')->row_array();
+            $aff = array_unique(json_decode($y['affliate']));
+            $ids = $aff;
+            //Here I am getting b pages
+            foreach($aff as $k=> $v)
+            {
+                $ids = '{"type":"vendor","id":"'.$v.'"}';
+            }
+            $page_data['compain'] = $com=  $this->db->where_in('added_by', $ids )->where('is_bpage',1)->get('product')->result_array();
+            // var_dump($com);
+            $this->load->view('front/affliate/affiliation_company',$page_data);
         } elseif ($para1 == "uploaded_products") {
             $this->load->view('front/user/uploaded_products');
         } elseif ($para1 == "uploaded_product_status") {
@@ -2219,6 +2542,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
 
         $function = "uploaded_products_list('0')";
         $config['first_link'] = '&laquo;';
+
         $config['first_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
         $config['first_tag_close'] = '</a></li>';
 
@@ -2228,7 +2552,6 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $config['last_link'] = '&raquo;';
         $config['last_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
         $config['last_tag_close'] = '</a></li>';
-
         $function = "uploaded_products_list('" . ($para2 - $config['per_page']) . "')";
         $config['prev_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
         $config['prev_tag_close'] = '</a></li>';
@@ -2546,13 +2869,12 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         }
         if($text)
         {
-        // $this->db->like('title', $text);
-        $page_data['all_products'] = array();
-        //$this->db->get('product')->result_array();
+        $this->db->like('title', $text);
+        $page_data['all_products'] = $this->db->get('product')->result_array();
         }
         else
         {
-            $page_data['all_products'] = array();//$this->db->get('product')->result_array();
+            $page_data['all_products'] = $this->db->get('product')->result_array();
         }
         
 
@@ -2650,10 +2972,17 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             foreach ($cats as $key => $value) {
                 if($this->crud_model->if_publishable_category($value->category_id))
                 {
-                echo '<li onclick="load_sub('.$value->category_id.')">';
-                echo '<span>'.$value->category_name.'<i  id="icon_'. $value->category_id.'" class="fa fa-angle-up"></i></span>';
-                echo '</li>
-                <div class="children" id="child_'.$value->category_id.'"></div>';
+                    $row = (array) $value;
+                ?>
+                <li>
+                    <input type="checkbox" name="cats[]" class="cat_check" style="float:left" id="cat_<?php echo $row['category_id']; ?>" value="<?php echo $row['category_id']; ?>">
+                    <label for="cat_<?php echo $row['category_id']; ?>"><?php echo $row['category_name']; ?></label>
+                    <div class="cat_result" id="cat_r<?php echo $row['category_id']; ?>"></div>
+                    <div class="children" style="margin-left:20px" cat="<?= $row['category_id'] ?>" id="child_<?= $row['category_id'] ?>"></div>
+                    
+                    
+                </li>
+                <?php
                 }
             }
             echo "</ul>";
@@ -2665,19 +2994,21 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     }
     function text_search()
     {
+        $place_id = (isset($_REQUEST['place_id'])?$_REQUEST['place_id']:'');
         $type = 'product';
         $search = $this->modify_for_multi_search(urlencode($this->input->post('query')));
         $category = 0;
+        $loc = '?place_id='.$place_id;
         $this->session->set_flashdata('query', $search);
 
         if ($this->input->post('query')) {  
 
-            redirect(base_url() . 'home/category/' . $category . '/0-0/0/0/' . $search, 'refresh');
+            redirect(base_url() . 'home/category/' . $category . '/0-0/0/0/' . $search.$loc, 'refresh');
         } else {
             if ($type == 'vendor') {
-                redirect(base_url() . 'home/store_locator/' . $search, 'refresh');
+                redirect(base_url() . 'home/store_locator/' . $search.$loc, 'refresh');
             } else if ($type == 'product') {
-                redirect(base_url() . 'home/category/' . $category . '/0-0/0/0/' . $search, 'refresh');
+                redirect(base_url() . 'home/category/' . $category . '/0-0/0/0/' . $search.$loc, 'refresh');
             }
         }
     }
@@ -2872,10 +3203,58 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                 $text = $this->input->post('text');
             }
             $category = $this->input->post('category');
+            $lat = $this->input->post('lat');
+            $lng = $this->input->post('lng');
+            $make = $this->input->post('make');
+            $job_hours = $this->input->post('job_hours');
+            $job_type = $this->input->post('job_type');
+            $event_date = $this->input->post('event_date');
+            $event_type = $this->input->post('event_type');
+            $age_restriction = $this->input->post('age_restriction');
+            $bedrooms = $this->input->post('bedrooms');
+            $property_type = $this->input->post('property_type');
+            $seats = $this->input->post('seats');
+            $modelf = $this->input->post('modelf');
+            $modelt = $this->input->post('modelt');
             $category = explode(',', $category);
             $sub_category = $this->input->post('sub_category');
             $sub_category = explode(',', $sub_category);
+            $mind = $this->input->post('min-value');
+            $maxd = $this->input->post('max-value');
             $featured = $this->input->post('featured');
+            $place_id = $this->input->post('place_id');
+            $amenities = $this->input->post('amenities');
+            $amenities = explode(',', $amenities);
+            foreach($amenities as $k=> $v)
+            {
+                if(!$v)
+                {
+                    unset($amenities[$k]);
+                }
+            }
+            $lat = '';
+            $lng = '';
+            if($place_id)
+            {
+                //$place_id
+                $det = place_details($place_id);
+            if(isset($det['result']))
+            {
+            if(isset($det['result']['geometry']))
+            {
+                $address = $det['result']['geometry'];
+                if(isset($address['location']['lat']))
+                {
+                    $lat = $address['location']['lat'];
+                }
+                if(isset($address['location']['lng']))
+                {
+                    $lng = $address['location']['lng'];
+                }
+                
+            }
+            }
+            }
             $brand = $this->input->post('brand');
             $name = '';
             $cat = '';
@@ -2911,12 +3290,166 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                     $this->db->where('product_id', '');
                 }
             }
+            if(!empty($event_date))
+            {
+                $this->db->where('event_date',$event_date);
+            }
+            if(!empty($age_restriction))
+            {
+                $this->db->where('age_restriction_event',$age_restriction);
+            }
+            if(!empty($event_type))
+            {
+                $this->db->where('event_type',$event_type);
+            }
+            if($make)
+            {
+                $this->db->where('make',$make);
+            }
+            if($bedrooms)
+            {
+                $this->db->where('no_of_bedroom',$bedrooms);
+            }
+            if($property_type)
+            {
+                $this->db->where('propert_type',$property_type);
+            }
+            if($seats)
+            {
+                $this->db->where('seats',$seats);
+            }
+            if($modelf)
+            {
+                $this->db->where('model >=',$modelf);
+            }
+            if($modelt)
+            {
+                $this->db->where('model <=',$modelt);
+            }
 
 
             $this->db->where('status', 'ok');
             if ($featured == 'ok') {
                 $this->db->where('featured', 'ok');
             }
+
+            if ($brand !== '0' && $brand !== '') {
+                $this->db->where('brand', $brand);
+            }
+            
+            if (isset($range)) {
+                $p = explode(';', $range);
+                $this->db->where('sale_price >=', $p[0]);
+                $this->db->where('sale_price <=', $p[1]);
+            }
+
+            $query = array();
+
+            if (count($category) > 0 && $setter !== 'get') {
+                $i = 0;
+                // $this->db->group_start();
+    foreach($category as $value)
+    {
+        if($value)
+        $this->db->where("find_in_set($value, category)");
+    }
+    
+            }
+     if($amenities)
+    {
+        $this->db->group_start();
+    foreach($amenities as $value)
+    {
+        if($value)
+        $this->db->where("find_in_set('".$value."', amenities)");
+    }
+        $this->db->group_end();
+    }
+            if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'affliate_listing')
+            {
+                $this->db->where('is_affiliate ', '1');
+            }
+            
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing')
+            {
+                $this->db->where('is_product ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing')
+            {
+                $this->db->where('is_blog ', '1');
+            }
+            
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'places_listing')
+            {
+                $this->db->where('is_place ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'jobs_listing')
+            {
+                $this->db->where('is_job ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing')
+            {
+                $this->db->where('is_car ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'charity_listing')
+            {
+                $this->db->where('is_charity ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'event_listing')
+            {
+                $this->db->where('is_event ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'news_listing') 
+            {
+                $this->db->where('is_blog ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'buss_listing')
+            {
+                $this->db->where('is_bpage ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'property_listing')
+            {
+                
+                $this->db->where('is_property ', '1');
+            }
+            $this->db->order_by('product_id', 'desc');
+
+            // pagination
+            $this->db->where('status', 'ok');
+            if ($featured == 'ok') {
+                $this->db->where('featured', 'ok');
+                $grid_items_per_row = 3;
+                $name = 'Featured';
+            } else {
+                $grid_items_per_row = 3;
+            }
+
+            if (isset($text)) {
+                if ($text !== '') {
+                    $this->db->like('title', $text, 'both');
+                }
+            }
+
+            if ($physical_product_activation == 'ok' && $digital_product_activation !== 'ok') {
+                $this->db->where('download', NULL);
+            } else if ($physical_product_activation !== 'ok' && $digital_product_activation == 'ok') {
+                $this->db->where('download', 'ok');
+            } else if ($physical_product_activation !== 'ok' && $digital_product_activation !== 'ok') {
+                $this->db->where('product_id', '');
+            }
+
+            if ($vendor_system !== 'ok') {
+                $this->db->like('added_by', '{"type":"admin"', 'both');
+            }
+
+            if ($vendor = $this->input->post('vendor')) {
+                if (in_array($vendor, $vendors)) {
+                    $this->db->where('added_by', '{"type":"vendor","id":"' . $vendor . '"}');
+                } else {
+                    $this->db->where('product_id', '');
+                }
+            }
+
 
             if ($brand !== '0' && $brand !== '') {
                 $this->db->where('brand', $brand);
@@ -2947,27 +3480,59 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                 }
             }
 
-            if (count($category) > 0 && $setter !== 'get') {
-                $i = 0;
-                foreach ($category as $row) {
-                    $i++;
-                    if ($row !== "") {
-                        if ($row !== "0") {
-                            if ($i == 1) {
-                                $this->db->where('category', $row);
-                            } else {
-                                $this->db->or_where('category', $row);
-                            }
-                        } else {
-                            $this->db->where('category !=', '0');
-                        }
-                    }
-                }
-            }
-            $this->db->order_by('product_id', 'desc');
+            
 
-            // pagination
-            $config['total_rows'] = $this->db->count_all_results('product');
+            $sort = $this->input->post('sort');
+
+            if ($sort == 'most_viewed') {
+                $this->db->order_by('number_of_view', 'desc');
+            }
+            if ($sort == 'condition_old') {
+                $this->db->order_by('product_id', 'asc');
+            }
+            if ($sort == 'condition_new') {
+                $this->db->order_by('product_id', 'desc');
+            }
+            if ($sort == 'rating_num') {
+                $this->db->order_by('rating_num', 'desc');
+            }
+            
+            if ($sort == 'distance') {
+                $this->db->order_by('distance', 'desc');
+            }
+               if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing')
+             {
+                 $this->db->where("sale_price >=",$mind);
+                 $this->db->where("sale_price <=",$maxd);
+             }
+               if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing')
+             {
+                 $this->db->where("sale_price >=",$mind);
+                 $this->db->where("sale_price <=",$maxd);
+             }
+               if($lat && $lng)
+             {
+                 $this->db->where("getDistance(product.lat,product.lng,'".$lat."','".$lng."') >=",$mind);
+                 $this->db->where("getDistance(product.lat,product.lng,'".$lat."','".$lng."') <=",$maxd);
+             }
+            
+            if ($lat && $lng) {
+                 $mylat= $lat;
+                 $mylng = $lat;
+                 
+            $this->db->select("product.*,getDistance(product.lat,product.lng,'".$mylat."','".$mylng."') as distance");
+             
+            }
+            else
+            {
+                $this->db->select('product.*');
+            }
+            $befor = $this->db;
+            $all = $this->db->get('product')->result_array();
+            // print_r($this->db->last_query());    
+            // die();
+
+            $config['total_rows'] = count($all);
             $config['base_url'] = base_url() . 'index.php?home/listed/';
             if ($featured !== 'ok') {
                 $config['per_page'] = 9;
@@ -3044,6 +3609,51 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                     $this->db->where('product_id', '');
                 }
             }
+            if($job_hours)
+            {
+                $this->db->where('job_hours',$job_hours);
+            }
+            if(!empty($job_type))
+            {
+                $this->db->where('job_type',$job_type);
+            }
+            
+            if(!empty($event_date))
+            {
+                $this->db->where('event_date',$event_date);
+            }
+            if(!empty($age_restriction))
+            {
+                $this->db->where('age_restriction_event',$age_restriction);
+            }
+            if(!empty($event_type))
+            {
+                $this->db->where('event_type',$event_type);
+            }
+            if($make)
+            {
+                $this->db->where('make',$make);
+            }
+            if($bedrooms)
+            {
+                $this->db->where('no_of_bedroom',$bedrooms);
+            }
+            if($property_type)
+            {
+                $this->db->where('propert_type',$property_type);
+            }
+            if($seats)
+            {
+                $this->db->where('seats',$seats);
+            }
+            if($modelf)
+            {
+                $this->db->where('model >=',$modelf);
+            }
+            if($modelt)
+            {
+                $this->db->where('model <=',$modelt);
+            }
 
 
             if ($brand !== '0' && $brand !== '') {
@@ -3077,20 +3687,64 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
 
             if (count($category) > 0 && $setter !== 'get') {
                 $i = 0;
-                foreach ($category as $rowc) {
-                    $i++;
-                    if ($rowc !== "") {
-                        if ($rowc !== "0") {
-                            if ($i == 1) {
-                                $this->db->where('category', $rowc);
-                            } else {
-                                $this->db->or_where('category', $rowc);
-                            }
-                        } else {
-                            $this->db->where('category !=', '0');
-                        }
-                    }
-                }
+                // $this->db->group_start();
+    foreach($category as $value)
+    {
+        if($value)
+        $this->db->where("find_in_set($value, category)");
+    }
+            }
+    if($amenities)
+    {
+        $this->db->group_start();
+    foreach($amenities as $value)
+    {
+        if($value)
+        $this->db->where("find_in_set('".$value."', amenities)");
+    }
+        $this->db->group_end();
+    }
+            if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'affliate_listing')
+            {
+                $this->db->where('is_affiliate ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing')
+            {
+                $this->db->where('is_product ', '1');
+            } 
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing')
+            {
+                $this->db->where('is_blog ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'jobs_listing')
+            {
+                $this->db->where('is_job ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'event_listing')
+            {
+                $this->db->where('is_event ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'places_listing')
+            {
+                $this->db->where('is_place ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing')
+            {
+                $this->db->where('is_car ', '1');
+            }
+            
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'charity_listing')
+            {
+                $this->db->where('is_charity ', '1');
+            }
+            
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'buss_listing')
+            {
+                $this->db->where('is_bpage ', '1');
+            }
+            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'property_listing')
+            {
+                $this->db->where('is_property ', '1');
             }
 
             $sort = $this->input->post('sort');
@@ -3104,17 +3758,43 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             if ($sort == 'condition_new') {
                 $this->db->order_by('product_id', 'desc');
             }
-            if ($sort == 'price_low') {
-                $this->db->order_by('sale_price', 'asc');
+            if ($sort == 'rating_num') {
+                $this->db->order_by('rating_num', 'desc');
             }
-            if ($sort == 'price_high') {
-                $this->db->order_by('sale_price', 'desc');
-            } else {
-                $this->db->order_by('product_id', 'desc');
+            
+            if ($sort == 'distance') {
+                $this->db->order_by('distance', 'desc');
             }
-
+               if($lat && $lng)
+             {
+                 $this->db->where("getDistance(product.lat,product.lng,'".$lat."','".$lng."') <=",50);
+             }
+               if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing')
+             {
+                 $this->db->where("sale_price >=",$mind);
+                 $this->db->where("sale_price <=",$maxd);
+             }
+              if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing')
+             {
+                 $this->db->where("sale_price >=",$mind);
+                 $this->db->where("sale_price <=",$maxd);
+             }
+            
+            if ($lat && $lng) {
+                 $mylat= $lat;
+                 $mylng = $lat;
+                 
+            $this->db->select("product.*,getDistance(product.lat,product.lng,'".$mylat."','".$mylng."') as distance");
+             
+            }
+            else
+            {
+                $this->db->select('product.*');
+            }
+            $befor = $this->db;
             $page_data['all_products'] = $this->db->get('product', $config['per_page'], $para2)->result_array();
-
+            // var_dump($this->db->last_query());
+            // die();
             if ($name != '') {
                 $name .= ' : ';
             }
@@ -3137,13 +3817,17 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
 
         } elseif ($para1 == "load") {
             $page_data['all_products'] = $this->db->get('product')->result_array();
+            
         }
+        
         $page_data['vendor_system'] = $this->db->get_where('general_settings', array('type' => 'vendor_system'))->row()->value;
         $page_data['category_data'] = $category;
         $page_data['viewtype'] = $this->input->post('view_type');
         $page_data['name'] = $name;
         $page_data['count'] = $config['total_rows'];
+        // var_dump($config);
         $page_data['grid_items_per_row'] = $grid_items_per_row;
+    //  echo '<pre style="display:none">'; print_r($page_data); echo '</pre>';
         $this->load->view('front/product_list/other/listed', $page_data);
     }
 
@@ -3186,8 +3870,100 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
 
 
     /* FUNCTION: Loads Product View Page */
+    public function update_product()
+    {
+        $cols = $this->db->list_fields('product');
+        // $thi default_business
+        $json = file_get_contents('php://input');
+
+// decode the json data
+$data = json_decode($json,true);
+foreach($data as $k=> $v)
+{
+    if(!in_array($k,$cols))
+    {
+        unset($data[$k]);
+    }
+    
+}
+        if(isset($data['product_id']))
+        {
+            $pid = $data['product_id'];
+        $unset = array('product_id','comp_logo','comp_cover','gallary','title_edit','sub_category','category');
+        foreach($unset as $k=> $v)
+        {
+            if(isset($data[$v]))
+            {
+            unset($data[$v]);
+            }
+        }
+        $json = array('feature','etra_content','text');
+         foreach($json as $k=> $v)
+        {
+            if(isset($data[$v]))
+            $data[$v] = json_encode($data[$v]);
+        }
+        $r = $this->db->where(array('product_id' => $pid))->update('product',$data);
+        if($r)
+        {
+            echo '1';
+        }
+        else
+        {
+            echo '0';
+        }
+
+        return '';
+        }
+        
+        
+    }
+    public function product_data($id)
+    {
+        $dpage = 665;
+        $product_data = $this->db->get_where('product', array('product_id' => $id))->row();
+        $gallary = $this->db->get_where('product_to_images', array('pid' => $id))->result_array();
+        if(!$gallary)
+        {
+            $gallary = $this->db->get_where('product_to_images', array('pid' => $dpage))->result_array();
+        }
+        // $product_data->comp_cover = $this->crud_model->size_img($product_data->comp_cover,820,312);
+        foreach($gallary as $k=> $v)
+        {
+            $gallary[$k]['img'] = $this->crud_model->size_img($v['img'],100,100);
+        }
+        $product_data->gallary = $gallary;
+        
+        $product_data = json_decode(json_encode($product_data), true);
+        
+        $default = $this->db->where('product_id',$dpage)->get('product')->row_array();
+        foreach($product_data as $k=> $v)
+        {
+            if(!$v)
+            {
+                
+                if(isset($default[$k]))
+                {
+                $product_data[$k] = $default[$k];
+                }
+            }
+        }
+        if($product_data['comp_cover'])
+        {
+            
+            $product_data['comp_cover'] = $this->crud_model->size_img($product_data['comp_cover'],640,214);
+        }
+        if($product_data['comp_logo'])
+        {
+            $product_data['comp_logo'] = $this->crud_model->size_img($product_data['comp_logo'],100,100);
+            
+        }
+        echo json_encode($product_data);
+        die();
+    }
     function product_view($para1 = "", $para2 = "")
     {
+        // die('ok');
         $user_id = $this->session->userdata('user_id') ? $this->session->userdata('user_id') : 0;
         $this->crud_model->_set_variation($para1);
         $vendors = array();
@@ -3210,14 +3986,24 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $type = 'other';
         if($product_data->row()->is_bpage)
         {
+            if(isset($_GET['edit']))
+            {
+                $page_data['ng'] = 1;
+            }
             $type = 'bpage';
         }
-        if(isset($_REQUEST['other1']))
+        elseif($product_data->row()->is_product)
         {
-            $type = 'other1';
+            $type = 'product';
+        }
+        else
+        {
+            $type="car";
         }
         $page_data['product_details'] = $this->db->get_where('product', array('product_id' => $para1))->result_array();
         $page_data['vendors'] = $vendors;
+        // var_dump($product_details);
+        
         $page_data['page_name'] = "product_view/" . $type . "/page_view";
         $page_data['asset_page'] = "product_view_" . $type;
         $page_data['product_data'] = $product_data->result_array();
@@ -3359,7 +4145,16 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $this->session->set_userdata('currency', $currency);
         recache();
     }
-
+    
+    function contactus(){
+        $from_name = $_REQUEST['fname'];
+        $from = $_REQUEST['email'];
+        $msg = 'Testing';//$_REQUEST['msg'];
+        $sub = "MESSAGE";
+        $to = "raheelshehzad188@gmail.com";
+        $this->load->model('email_model');
+        $this->email_model->directory_contact($_REQUEST,$to,$msg);
+    }
     /* FUNCTION: Loads Contact Page */
     function contact($para1 = "")
     {
@@ -3501,8 +4296,110 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     }
 
     /* FUNCTION: Concerning Login */
+    public function success_subscription()
+    {
+        if(isset($_GET['track']))
+        {
+            // $track = $_GET['track'];
+            // $pack = $this->db->where('track_id',$track)->get('membership_payment')->row();
+            // $v = $this->db->where('vendor_id', $pack->vendor)->update('vendor',array('membership'=>$pack->vendor));
+            $page_data = array();
+            $page_data['page_name'] = "subscription_thank";
+            // $page_data['asset_page'] = "register";
+            $page_data['page_title'] = translate('registration');
+            $this->load->view('front/index', $page_data);
+            
+        }
+    }
+    
+    public function vendor_subscription()
+    {
+        //get vendor id here
+        $_SESSION['subscription_vendor'] = 34;
+        if(isset($_SESSION['subscription_vendor']))
+        {
+             
+            $user = $this->db->where('vendor_id',$_SESSION['subscription_vendor'])->get('vendor')->row();
+            
+            if(isset($user->pack) && $user->pack)
+            {
+                $pack = $this->db->where('membership_id',$user->pack)->get('membership')->row();
+                
+                $track = time();
+                $in = array(
+                    'vendor' => $_SESSION['subscription_vendor'],
+                    'amount' => $pack->price,
+                    'method' => 'stripe-subscription',
+                    'status' => 'Pending',
+                    'track_id' => $track,
+                    );
+                    $this->db->insert('membership_payment',$in);
+                    if(isset($pack->stripe_id) && $pack->stripe_id)
+                    {
+                        $path = FCPATH.'/stripe-subscription/vendor/autoload.php';
+                        require $path;
+ \Stripe\Stripe::setApiKey('sk_test_51KxcDlAuzV7aLiwxSU6ucZEUtpEhfRnatPJgx86qp0jQ0lsOaUpXoKaY7OUGdryKL7QDYSfF1OMkKc1MdHwrkoBT00MVS8HOLd');
+                    $checkout_session = \Stripe\Checkout\Session::create([
+      'success_url' => base_url().'/home/success_subscription?track='.$track,
+      'cancel_url' => base_url().'/stripe-subscription/cancel.html',
+      'payment_method_types' => ['card'],
+      'mode' => 'subscription',
+      'line_items' => [[
+        'price' => "price_1MNZWDAuzV7aLiwxkDQjMYvk",
+        // For metered billing, do not pass quantity
+        'quantity' => 1,
+      ]],
+      // 'metadata' => [
+      //   'plan_id' => 1,
+      //   'customer_id' => $_SESSION['subscription_vendor'],
+      // ],
+      'subscription_data'=>['metadata' => ["plan_id" => $user->pack,"track" => $track, "customer_id" => $_SESSION['subscription_vendor']]],
+    ]);
+                    ?>
+                    <head>
+  <title>Stripe Subscription Checkout</title>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <script type="text/javascript">
+     var stripe = Stripe('pk_test_51KxcDlAuzV7aLiwx3CROcLFk2FIP9EiaxlpIRq7kpi7xpthRmsEZ8VJ6SeOFe5megdWfJce3OrREhboghh5pDKkZ006Sg5I8lY');
+     var session = "<?php echo $checkout_session['id']; ?>";
+          stripe.redirectToCheckout({ sessionId: session })
+                  .then(function(result) {
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, you should display the localized error message to your
+          // customer using `error.message`.
+          if (result.error) {
+            alert(result.error.message);
+          }
+        })
+        .catch(function(error) {
+          console.error('Error:', error);
+        });          
+
+
+
+  </script>
+  
+</body>
+                    <?php
+                    }
+                    
+            }
+            
+            /*require FCPATH.'stripe-subscription/vendor/autoload.php';
+ \Stripe\Stripe::setApiKey('sk_test_mSOHfomD5CDglqvXR9d7ImNs');*/
+        }
+        else
+        {
+            die('Forbidden request!');
+        }
+        
+    }
     public function vendor_page($id)
     {
+        
+        
         $user = $this->db->where('vendor_id',$id)->get('vendor')->row();
         
         $added_by = array (
@@ -3511,12 +4408,28 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
 );
         $in = array();
         $in['title'] = $user->company;
-        $in['brand'] = $user->buss_type;
+        $in['brand'] = $user->cat1;
+        $in['cat2'] = $user->cat2;
+        $in['cat3'] = $user->cat3;
+        $in['name'] = $user->name;
+        $in['address1'] = $user->address1;
+        $in['address2'] = $user->address2;
+        $in['country'] = $user->country;
+        $in['city'] = $user->city;
+        $in['state'] = $user->state;
+        $in['status'] = 'ok';
+        $in['bussniuss_phone'] = $user->phone;
+        $in['whatsapp_number'] = $user->whatsapp;
+        $in['bussniuss_email'] = $user->email;
+        $in['zip'] = $user->zip;
         $in['added_by'] = json_encode($added_by);
         $in['is_bpage'] = 1;
+    
         $this->db->insert('product',$in);
+        //  var_dump($this->db->last_query());
+        //  die();
         $pid = $this->db->insert_id();
-        $this->db->where('vendor_id', $id)->update('vendor',array('bpage'=>$pid));
+        $v = $this->db->where('vendor_id', $id)->update('vendor',array('bpage'=>$pid));
         //s
         if($user->pack)
         {
@@ -3538,6 +4451,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                 'tax' => 0
             );
             $this->cart->insert($data);
+            $_SESSION['subscription_vendor'] = $id;
             echo "checkout";
             exit();
 
@@ -3575,6 +4489,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     }
     function vendor_logup($para1 = "", $para2 = "")
     {
+        // var_dump($_REQUEST);
         if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
             $this->load->library('recaptcha');
         }
@@ -3598,11 +4513,16 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             $this->form_validation->set_rules('password1', 'Password', 'required|matches[password2]');
             $this->form_validation->set_rules('password2', 'Confirm Password', 'required');
             $this->form_validation->set_rules('address1', 'Address Line 1', 'required');
-            $this->form_validation->set_rules('display_name', 'Display Name', 'required');
+            // $this->form_validation->set_rules('display_name', 'Display Name', 'required');
             $this->form_validation->set_rules('state', 'State', 'required');
             $this->form_validation->set_rules('country', 'Country', 'required');
             $this->form_validation->set_rules('zip', 'Zip', 'required');
             $this->form_validation->set_rules('city', 'City', 'required');
+            $this->form_validation->set_rules('middle_name', 'Middle Name', 'required');
+            $this->form_validation->set_rules('last_name', 'Last Name', 'required');
+            if($this->input->post('affiliate') == 'yes'){
+            $this->form_validation->set_rules('affiliate_terms_check', 'Affiliate Terms of Use', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
+            }
             $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
             if ($this->form_validation->run() == FALSE) {
                 echo validation_errors();
@@ -3621,14 +4541,14 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                             $data['state'] = $this->input->post('state');
                             $data['cat1'] = $this->input->post('buss_type');
                             $data['cat2'] = $this->input->post('sub_category');
-                            $data['cat3'] = $this->input->post('buss_type');
+                            $data['cat3'] = $this->input->post('sub3_category');
                             $data['country'] = $this->input->post('country');
                             $data['city'] = $this->input->post('city');
                             $data['zip'] = $this->input->post('zip');
                             $data['pack'] = $this->input->post('pack');
-                            $data['cat1'] = $this->input->post('buss_type');
-                            $data['cat2'] = $this->input->post('sub_category');
-                            $data['cat3'] = $this->input->post('sub3_category');
+                    
+                            $data['middle_name'] = $this->input->post('middle_name');
+                            $data['last_name'] = $this->input->post('last_name');
                             $data['create_timestamp'] = time();
                             $data['approve_timestamp'] = 0;
                             $data['approve_timestamp'] = 0;
@@ -3667,7 +4587,18 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                         $data['city'] = $this->input->post('city');
                         $data['zip'] = $this->input->post('zip');
                         $data['pack'] = $this->input->post('pack');
-                            $data['cat1'] = $this->input->post('buss_type');
+                        $data['cat1'] = $this->input->post('buss_type');
+                        $data['phone'] = $this->input->post('phone');
+                        $data['whatsapp'] = $this->input->post('wphone');
+                        $data['cat2'] = $this->input->post('sub_category');
+                        $data['cat3'] = $this->input->post('sub3_category');
+                        $data['middle_name'] = $this->input->post('middle_name');
+                        $data['last_name'] = $this->input->post('last_name');
+                        $data['add_affilite'] = $this->input->post('affiliate');
+                         $data['TOC'] = $this->input->post('terms_check');
+                        if($this->input->post('affiliate') == 'yes'){
+                            $data['aff_TOC'] = $this->input->post('affiliate_terms_check');
+                        }
                         $data['create_timestamp'] = time();
                         $data['approve_timestamp'] = 0;
                         $data['approve_timestamp'] = 0;
@@ -3803,7 +4734,93 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         }
         //$this->load->view('front/index', $page_data);
     }
-
+    
+    
+    function report(){
+        
+            $name = $_GET['fname']; 
+            $email = $_GET['email'];
+            $msg = $_GET['message'];
+            $pid = $_GET['pid'];
+            $data = array(
+                "name" =>$name,
+                "email" =>$email,
+                "meg" =>$msg,
+                'pid'=>$pid
+                );
+            
+            $report = $this->db->insert('report', $data);
+            $lastid = $this->db->insert_id();
+            if(!$report)
+            {
+             $ret = array(
+                        'email'=>'0',
+                        'msg'=>'server error'
+                        );
+            }
+            
+            if($report){
+                $email = $this->email_model->report_email($lastid);
+                if ($email) {
+                       
+                         $ret = array(
+                        "email"=>'1',
+                        "msg"=>'email sent'
+                        );
+                    } else{
+                       $ret = array(
+                        "email"=>'0',
+                        "msg"=>'email not sent'
+                         );
+                    }
+                   return json_encode($ret);
+            }
+            
+            
+       
+    }
+    function contact_us(){
+        
+            $fname = $_GET['fname'];
+            $lname = $_GET['lname'];
+            $email = $_GET['email'];
+            $phone = $_GET['phone'];
+            $msg = $_GET['message'];
+            $pid = $_GET['pid'];
+            $data = array(
+                "first_name" =>$fname,
+                "last_name"=>$lname,
+                "email" =>$email,
+                "phone"=>$phone,
+                "msg" =>$msg,
+                'pid'=>$pid
+                );
+            
+            $report = $this->db->insert('contact_us', $data);
+            $lastid = $this->db->insert_id();
+            if($report){
+                $email = $this->email_model->contact_email($lastid);
+               if ($email) {
+                       
+                         $ret = array(
+                        "email"=>'1',
+                        "msg"=>'email sent'
+                        );
+                    } else{
+                       $ret = array(
+                        "email"=>'0',
+                        "msg"=>'email not sent'
+                         );
+                    }
+                   return json_encode($ret);
+            }
+            
+            
+       
+    }
+        function email_template(){
+            $this->load->view('email/index');
+        }
     /* FUNCTION: Setting login page with facebook and google */
     function login_set($para1 = '', $para2 = '', $para3 = '')
     {
@@ -3939,7 +4956,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                 } else {
                     $data['username'] = $g_user['givenName'];
                     $data['surname']  = $g_user['familyName'];
-                    $data['email'] = 'required';
+                    $data['email'] = $g_user['email'];
                     $data['wishlist'] = '[]';
                     $data['package_info'] = '[]';
                     $data['product_upload'] = $this->db->get_where('package', array('package_id' => 1))->row()->upload_amount;
@@ -4043,7 +5060,14 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         }
         echo $exists;
     }
-
+    function email(){
+        $page_data['page_title'] = 'Email';
+        $page_data['email_body'] = $this->load->view('front/user/email'); 
+        $page_data['to'] = 'nk7162390@gmail.com';
+        $page_data['from'] = 'info@markethubland.com';
+        $this->email_model->emails($email_body,$to,$from);
+        // var_dump($page_data);
+    }
     /* FUNCTION: Newsletter Subscription */
     function subscribe()
     {
@@ -4107,6 +5131,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $this->load->library('form_validation');
         $page_data['page_name'] = "registration";
         if ($para1 == "add_info") {
+            // here
             $msg = '';
             $this->form_validation->set_rules('username', 'First Name', 'required');
             $this->form_validation->set_rules('email', 'Email', 'required|is_unique[user.email]|valid_email', array('required' => 'You have not provided %s.', 'is_unique' => 'This %s already exists.'));
@@ -4120,15 +5145,19 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             $this->form_validation->set_rules('state', 'State', 'required');
             $this->form_validation->set_rules('country', 'Country', 'required');
             $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
-
+            if($this->input->post('affiliate') == 'yes'){
+            $this->form_validation->set_rules('affiliate_terms_check', 'Affiliates Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
+            }
             if ($this->form_validation->run() == FALSE) {
                 echo validation_errors();
             }
             else {
                 if ($safe == 'yes') {
+                // 
                     if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
                         $captcha_answer = $this->input->post('g-recaptcha-response');
                         $response = $this->recaptcha->verifyResponse($captcha_answer);
+                       
                         if ($response['success']) {
                             $data['username'] = $this->input->post('username');
                             $data['email'] = $this->input->post('email');
@@ -4163,6 +5192,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                         }
                     }
                     else {
+                        // die('nimra');
                         $data['username'] = $this->input->post('username');
                         $data['email'] = $this->input->post('email');
                         $data['address1'] = $this->input->post('address1');
@@ -4173,6 +5203,11 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                         $data['city'] = $this->input->post('city');
                         $data['state'] = $this->input->post('state');
                         $data['country'] = $this->input->post('country');
+                        $data['add_affilite'] = $this->input->post('affiliate');
+                        $data['TOC'] = $this->input->post('terms_check');
+                        if($this->input->post('affiliate') == 'yes'){
+                            $data['aff_TOC'] = $this->input->post('affiliate_terms_check');
+                        }
                         $data['langlat'] = '';
                         $data['wishlist'] = '[]';
                         $data['package_info'] = '[]';
@@ -4281,9 +5316,16 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $weight = 1;
         $mass_unit = 'kg';
         $vproduct = $this->db->where('product_id',$pid)->get('product')->row();
-        if(isset($vproduct->parent_id) && $vproduct->parent_id)
+        if($vproduct)
         {
-            $aproduct = $this->db->where('product_id',$vproduct->parent_id)->get('product')->row();
+            $added = json_decode($vproduct->added_by,true);
+            if(isset($added['type']) && $added['type'] == 'vendor')
+            {
+                $vendor = $this->db->where('vendor_id',$added['id'])->get('vendor')->row();
+                $from = $this->get_shippo_rate($vendor->name,$vendor->vendor_id,$vendor->city,$vendor->address1,$vendor->email,$vendor->phone,$vendor->zip);
+            
+            }
+            
             if($aproduct->weight)
             {
                 $weight = $aproduct->weight;
@@ -4314,6 +5356,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
   ),
   'async' => false,
 );
+
             $curl = curl_init();
 
 curl_setopt_array($curl, array(
@@ -4339,25 +5382,32 @@ curl_close($curl);
 $response = json_decode($response,true);
 if(isset($response['rates']))
 {
+    
 return $response['rates'];
+}
+else
+{
+    return $response;
 }
         }
     }
     function send_shipping($sale_id)
     {
-        $rows = $this->crud_model->get_type_name_by_id('sale', $sale_id, 'product_details');
+        $rows = $this->crud_model->get_type_name_by_id('sale',$sale_id, 'product_details');
+        // var_dump($rows);
         $rows = json_decode($rows, true);
         foreach($rows as $k=> $v)
         {
-            $sing = $this->db->where('cart_key',$k)->get('shipoo_rates')->row();
+            $sing = $this->db->where('id',$v['shippoo_info'])->get('ship_method')->row();
+            // var_dump($sing);
+            // var_dump($v);
+            // die('OK61');
             $fields = array(
-                'rate' =>$sing->rate_object,
+                'rate' =>$sing->object_id,
                 'label_file_type' =>'PDF',
                 'async' =>'true',
                 );
-            
 $curl = curl_init();
-
 curl_setopt_array($curl, array(
   CURLOPT_URL => "https://api.goshippo.com/transactions",
   CURLOPT_RETURNTRANSFER => true,
@@ -4374,38 +5424,45 @@ curl_setopt_array($curl, array(
     "postman-token: 89a980c7-e44a-08ab-ff3d-2834d08950d4"
   ),
 ));
-
-$response = curl_exec($curl);
+echo $response = curl_exec($curl);
+die();
 $response = json_decode($response,true);
 $track = !empty($response['tracking_number'])?$response['tracking_number']:'test';
-$up = array('book_object'=> json_encode($response),'track'=>$track);
-$this->db->where('cart_key',$k)->update('shipoo_rates',$up);
+$up = array('raw_book'=> json_encode($response),'track'=>$track);
+$this->db->where('id',$v['shippoo_info'])->update('ship_method',$up);
 
 $err = curl_error($curl);
 
 curl_close($curl);
         }
     }
-    function get_shippo_rate($fname,$lname,$city,$address1,$email,$phone)
+    function get_shippo_rate($fname,$lname,$city,$address1,$email,$phone,$zip = '')
     {
             //curl request here 
-            $country = $this->db->where('countries_id',$city)->get('countries')->row();
+            $country = $this->db->where('cities_id',$city)->get('cities')->row();
             $city= '';
             $state= '';
             $city= '';
             $country_ios= '';
             if(!empty($country))
             {
-            $country_ios= $country->iso2;
+                $city= $country->name;
+            $state= $country->state_id;
+            $state = $this->db->where('states_id',$state)->get('states')->row();
+            if(!empty($state))
+            {
+                $state= $state->iso2;
+            }
+            $country_ios= $country->country_code;
             }
             $curl = curl_init();
             $param = array(
                 'name' => $fname.' '.$lname,
-                'company' => 'vendor product',
+                'company' => 'comunity hub land',
                 'street1' => $address1,
                 'city' => $city,
                 'state' => $state,
-                'zip' => '41000',
+                'zip' => $zip,
                 'country' => $country_ios,
                 'email' => $email,
                 'phone' => $phone,
@@ -4432,11 +5489,16 @@ $response = curl_exec($curl);
 
 curl_close($curl);
 $obj = json_decode($response);
-
-if(isset($obj->object_id) && $obj->object_id)
+if(isset($obj->object_id) && $obj->object_id && $obj->is_complete)
 {
     return $obj->object_id;
 }
+else
+{
+    // var_dump($param);
+    return $obj;
+}
+
         return false;
     }
     function vendor_addresss_object($vid)
@@ -4676,30 +5738,18 @@ if(isset($obj->object_id) && $obj->object_id)
         $this->cart->destroy();
         redirect(base_url(), 'refresh');
     }
-
     /* FUNCTION: Concering Add, Remove and Updating Cart Items*/
     function cart($para1 = '', $para2 = '', $para3 = '', $para4 = '')
     {
         $this->cart->product_name_rules = '[:print:]';
         if ($para1 == "add") {
-            $stock_id = $stock = (isset($_GET['stock']) && !empty($_GET['stock']))?$_GET['stock']:0;
-            $stock_row = $this->db->where('stock_id',$stock_id)->get('stock')->row();
-            $attr_value = '';
-            if($stock_row)
-            {
-                $attr_id = $stock_row->attribute;
-                $attr_row = $this->db->where('id',$attr_id)->get('attribute_to_values')->row();
-                if($attr_row)
-                {
-                    $attr_value = $attr_row->value;
-                }
-            }
             $qty = $this->input->post('qty');
-            $option = array('color' => array('title' => 'Color', 'value' => $attr_value));
+            $color = $this->input->post('color');
+            $option = array('color' => array('title' => 'Color', 'value' => $color));
             $all_op = json_decode($this->crud_model->get_type_name_by_id('product', $para2, 'options'), true);
             if ($all_op) {
                 foreach ($all_op as $ro) {
-                    $name = $ro['name'];
+                    $name = 'choice_'.$ro['no'];
                     $title = $ro['title'];
                     $option[$name] = array('title' => $title, 'value' => $this->input->post($name));
                 }
@@ -4722,59 +5772,24 @@ if(isset($obj->object_id) && $obj->object_id)
                     $this->cart->update($data);
                 }
             }
-            $price = $this->crud_model->get_product_price($para2);
-            if($stock)
-            {
-                $stock_row = $this->db->where('stock_id',$stock)->get('stock')->row();
-                if($stock_row && $stock_row->rate && $stock_row->quantity)
-                {
-                $stock = $stock_row->quantity;
-                $price = $stock_row->rate;
-                }
-            }
-            else
-            {
-            $stock = $this->crud_model->get_type_name_by_id('product', $para2, 'current_stock');
-            } 
-            //get vendor id here
-            
-            $added_by = $this->crud_model->get_type_name_by_id('product', $para2, 'added_by');
-            $added_by = json_decode($added_by,true);
-            $vendor = 0;
-            if(isset($added_by['type']) && $added_by['type'] == 'vendor')
-            {
-                $vendor = $added_by['id'];
-            }
-            $object = $this->vendor_addresss_object($vendor);
-            if(!$object)
-            {
-                echo "error";
-                die();
-            }
-            $user = $this->db->where('vendor_id',$vendor)->get('vendor')->row();
-            //get parent product
-            $sing = $this->db->where('product_id', $para2)->get('product')->row();
+
             $data = array(
                 'id' => $para2,
                 'qty' => $qty,
                 'option' => json_encode($option),
-                'vendor' => $vendor,
-                'vendor_name' => $user->name,
-                'stock' => $stock_id,
-                'price' => $price,
+                'price' => $this->crud_model->get_product_price($para2),
                 'name' => $this->crud_model->get_type_name_by_id('product', $para2, 'title'),
-                'shipping' => 0,
-                'tax' => 0,
-                'image' => $this->crud_model->file_view('product', $sing->parent_id, '', '', 'thumb', 'src', 'multi', 'one'),
-                'coupon' => '',
-                'address' => $object
+                'shipping' => $this->crud_model->get_shipping_cost($para2),
+                'tax' => $this->crud_model->get_product_tax($para2),
+                'image' => $this->crud_model->file_view('product', $para2, '', '', 'thumb', 'src', 'multi', 'one'),
+                'coupon' => ''
             );
 
-            if (!$this->crud_model->is_added_to_cart($para2) || $para3 == 'pp')
-            {
+            $stock = $this->crud_model->get_type_name_by_id('product', $para2, 'current_stock');
+
+            if (!$this->crud_model->is_added_to_cart($para2) || $para3 == 'pp') {
                 if ($stock >= $qty || $this->crud_model->is_digital($para2)) {
-                    $r = $this->cart->insert($data);
-                    // $cart[] = $data;
+                    $this->cart->insert($data);
                     echo 'added';
                 } else {
                     echo 'shortage';
@@ -4796,24 +5811,14 @@ if(isset($obj->object_id) && $obj->object_id)
         }
 
         if ($para1 == "quantity_update") {
-            $stock_id = 0;
 
             $carted = $this->cart->contents();
             foreach ($carted as $items) {
                 if ($items['rowid'] == $para2) {
                     $product = $items['id'];
-                    $stock_id = $items['stock'];
                 }
             }
-            if($stock_id)
-            {
-                $stock_row = $this->db->where('stock_id',$stock_id)->get('stock')->row();
-                $current_quantity = $stock_row->quantity;
-            }
-            else
-            {
             $current_quantity = $this->crud_model->get_type_name_by_id('product', $product, 'current_stock');
-            }
             $msg = 'not_limit';
 
             foreach ($carted as $items) {
@@ -4821,7 +5826,6 @@ if(isset($obj->object_id) && $obj->object_id)
                     if ($current_quantity >= $para3) {
                         $data = array(
                             'rowid' => $items['rowid'],
-                            'subtotal' => $items['price'] * $para3,
                             'qty' => $para3
                         );
                     } else {
@@ -4837,18 +5841,13 @@ if(isset($obj->object_id) && $obj->object_id)
                         'qty' => $items['qty']
                     );
                 }
-                $ret = $this->cart->update($data);
-                // if ($items['rowid'] == $para2) {
-                //     var_dump($current_quantity);
-                //     var_dump($data);
-                //     die();
-                // }
+                $this->cart->update($data);
             }
             $return = '';
             $carted = $this->cart->contents();
             foreach ($carted as $items) {
                 if ($items['rowid'] == $para2) {
-                    $return = currency().$items['subtotal'];
+                    $return = currency($items['subtotal']);
                 }
             }
             $return .= '---' . $msg;
@@ -4881,7 +5880,198 @@ if(isset($obj->object_id) && $obj->object_id)
 
 
         if ($para1 == "whole_list") {
-            echo json_encode( $this->cart->contents());
+            echo json_encode($this->cart->contents());
+        }
+
+        if ($para1 == 'calcs') {
+            $total = $this->cart->total();
+            if ($this->crud_model->get_type_name_by_id('business_settings', '3', 'value') == 'product_wise') {
+                $shipping = $this->crud_model->cart_total_it('shipping');
+            } elseif ($this->crud_model->get_type_name_by_id('business_settings', '3', 'value') == 'fixed') {
+                $shipping = $this->crud_model->get_type_name_by_id('business_settings', '2', 'value');
+            }
+            $tax = $this->crud_model->cart_total_it('tax');
+            $grand = $total + $shipping + $tax;
+            if ($para2 == 'full') {
+                $ship = $shipping;
+                $count = count($this->cart->contents());
+
+                if ($total == '') {
+                    $total = 0;
+                }
+                if ($ship == '') {
+                    $ship = 0;
+                }
+                if ($tax == '') {
+                    $tax = 0;
+                }
+                if ($grand == '') {
+                    $grand = 0;
+                }
+
+                $total = currency($total);
+                $ship = currency($ship);
+                $tax = currency($tax);
+                $grand = currency($grand);
+
+                echo $total . '-' . $ship . '-' . $tax . '-' . $grand . '-' . $count;
+            }
+
+            if ($para2 == 'prices') {
+                $carted = $this->cart->contents();
+                $return = array();
+                foreach ($carted as $row) {
+                    $return[] = array('id' => $row['rowid'], 'price' => currency($row['price']), 'subtotal' => currency($row['subtotal']));
+                }
+                echo json_encode($return);
+            }
+        }
+
+    }
+
+    /* FUNCTION: Concering Add, Remove and Updating Cart Items*/
+    function cart1($para1 = '', $para2 = '', $para3 = '', $para4 = '')
+    {
+        $this->cart->product_name_rules = '[:print:]';
+        if ($para1 == "add") {
+            $qty = $this->input->post('qty');
+            $color = $this->input->post('color');
+            $option = array('color' => array('title' => 'Color', 'value' => $color));
+            $all_op = json_decode($this->crud_model->get_type_name_by_id('product', $para2, 'options'), true);
+            if ($all_op) {
+                foreach ($all_op as $ro) {
+                    $name = $ro['name'];
+                    $title = $ro['title'];
+                    $option[$name] = array('title' => $title, 'value' => $this->input->post($name));
+                }
+            }
+
+            if ($para3 == 'pp') {
+                $carted = $this->cart->contents();
+                foreach ($carted as $items) {
+                    if ($items['id'] == $para2) {
+                        $data = array(
+                            'rowid' => $items['rowid'],
+                            'qty' => 0
+                        );
+                    } else {
+                        $data = array(
+                            'rowid' => $items['rowid'],
+                            'qty' => $items['qty']
+                        );
+                    }
+                    $this->cart->update($data);
+                }
+            }
+
+            $data = array(
+                'id' => $para2,
+                'qty' => $qty,
+                'option' => json_encode($option),
+                'price' => $this->crud_model->get_product_price($para2),
+                'name' => $this->crud_model->get_type_name_by_id('product', $para2, 'title'),
+                'shipping' => $this->crud_model->get_shipping_cost($para2),
+                'tax' => $this->crud_model->get_product_tax($para2),
+                'image' => $this->crud_model->file_view('product', $para2, '', '', 'thumb', 'src', 'multi', 'one'),
+                'coupon' => ''
+            );
+
+            $stock = $this->crud_model->get_type_name_by_id('product', $para2, 'current_stock');
+
+            if (!$this->crud_model->is_added_to_cart($para2) || $para3 == 'pp') {
+                if ($stock >= $qty || $this->crud_model->is_digital($para2)) {
+                    $this->cart->insert($data);
+                    echo 'added';
+                } else {
+                    echo 'shortage';
+                }
+            } else {
+                echo 'already';
+            }
+            //var_dump($this->cart->contents());
+        }
+
+        if ($para1 == "added_list") {
+            $page_data['carted'] = $this->cart->contents();
+            $this->load->view('front/added_list', $page_data);
+        }
+
+        if ($para1 == "empty") {
+            $this->cart->destroy();
+            $this->session->set_userdata('couponer', '');
+        }
+
+        if ($para1 == "quantity_update") {
+
+            $carted = $this->cart->contents();
+            foreach ($carted as $items) {
+                if ($items['rowid'] == $para2) {
+                    $product = $items['id'];
+                }
+            }
+            $current_quantity = $this->crud_model->get_type_name_by_id('product', $product, 'current_stock');
+            $msg = 'not_limit';
+
+            foreach ($carted as $items) {
+                if ($items['rowid'] == $para2) {
+                    if ($current_quantity >= $para3) {
+                        $data = array(
+                            'rowid' => $items['rowid'],
+                            'qty' => $para3
+                        );
+                    } else {
+                        $msg = $current_quantity;
+                        $data = array(
+                            'rowid' => $items['rowid'],
+                            'qty' => $current_quantity
+                        );
+                    }
+                } else {
+                    $data = array(
+                        'rowid' => $items['rowid'],
+                        'qty' => $items['qty']
+                    );
+                }
+                $this->cart->update($data);
+            }
+            $return = '';
+            $carted = $this->cart->contents();
+            foreach ($carted as $items) {
+                if ($items['rowid'] == $para2) {
+                    $return = currency($items['subtotal']);
+                }
+            }
+            $return .= '---' . $msg;
+            echo $return;
+        }
+
+        if ($para1 == "remove_one") {
+            $carted = $this->cart->contents();
+            foreach ($carted as $items) {
+                if ($items['rowid'] == $para2) {
+                    $data = array(
+                        'rowid' => $items['rowid'],
+                        'qty' => 0
+                    );
+                } else {
+                    $data = array(
+                        'rowid' => $items['rowid'],
+                        'qty' => $items['qty']
+                    );
+                }
+                $this->cart->update($data);
+            }
+
+            $carted = $this->cart->contents();
+            echo count($carted);
+            if (count($carted) == 0) {
+                $this->cart('empty');
+            }
+        }
+
+
+        if ($para1 == "whole_list") {
+            echo json_encode($this->cart->contents());
         }
 
         if ($para1 == 'calcs') {
@@ -4963,18 +6153,34 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
         $con_rate = $this->get_rate();//get rate of euro
 
         if ($para1 == "orders") {
-            if(isset($_GET['smethod']) && isset($_GET['r_id']))
+            if(isset($_GET['r_id']))
             {
                 $r_id = $_GET['r_id'];
-                $method = $_GET['smethod'];
+                
+                /*--new logic---*/
+                $carted = $this->cart->contents();
+                foreach($carted as $k => $v)
+                {
+                    $methods = $this->db->select('MIN(`amount`) as amount,id')->where('r_id',$r_id)->where('cart_key',$v['rowid'])->get('ship_method')->row();
+                    if(isset($_SESSION['cart_contents'][$v['rowid']]['shipping']) && isset($methods->amount))
+                    {
+                        $_SESSION['cart_contents'][$v['rowid']]['shipping'] = $methods->amount;
+                        $_SESSION['cart_contents'][$v['rowid']]['shippoo_info'] = $methods->id;
+                    }
+                    
+                }
+                /*--new logic---*/
                 $methods = $this->db->where('r_id',$r_id)->distinct('slug')->get('ship_method')->result_array();
             foreach($methods as $sk => $sv)
             {
+                
                 $tot = 0;
-                foreach($carted as $k => $v)
+                
+                    foreach($carted as $k => $v)
                 {
                     if($k == $sv['cart_key'] && $sv['slug'] == $method)
                     {
+                        
                         
                         $tot = $tot + $sv['amount'];
                         $eu_price = $sv['amount'] * $con_rate ;
@@ -4991,28 +6197,35 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                     );
                     $this->db->insert('shipoo_rates',$in);
                 $this->cart->update($v);
-                    }
+                // var_dump($_SESSION);
+                    } 
                 }
             }
+            $carted = $this->cart->contents();
             }
             $carted = $this->cart->contents();
+            // var_dump($carted);
             echo $r = $this->load->view('front/shopping_cart/order_set',array(),true);
             exit();
         }
         if ($para1 == "cal_shipping") {
-            if(isset($_GET['firstname']) && isset($_GET['lastname'])&& isset($_GET['address1'])&& isset($_GET['email']) && isset($_GET['country']) && isset($_GET['phone']))
+            if(isset($_GET['firstname']) && isset($_GET['lastname'])&& isset($_GET['address1'])&& isset($_GET['email']) && isset($_GET['country']) && isset($_GET['phone']) && isset($_GET['city']))
             {
-            $obj = $this->get_shippo_rate($_GET['firstname'],$_GET['lastname'],$_GET['country'],$_GET['address1'],$_GET['email'],$_GET['phone']);
+            // $obj = $this->get_shippo_rate($_GET['firstname'],$_GET['lastname'],$_GET['country'],$_GET['address1'],$_GET['email'],$_GET['phone']);
+            $obj = $this->get_shippo_rate($_GET['firstname'],$_GET['lastname'],$_GET['city'],$_GET['address1'],$_GET['email'],$_GET['phone'],$_GET['zip']);
             $r_id = time();
+            $carted = $this->cart->contents();
             foreach($carted as $k => $v)
             {
+                $rate = array();
+                if($obj)
+                {
                 $rate = $this->get_rate_object($v['id'],$v['address'],$obj);
-                // var_dump($rate);
-                // die();
+                }
+                
                 $ship_id = 0;
                 foreach($rate as $rk=> $rv)
                 {
-                
                     $wh = array(
                         'shipment_id'=> $rv['carrier_account'],
                         'slug'=> $rv['provider'],
@@ -5056,24 +6269,23 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                             $ship_method = $this->db->insert('ship_method',$wh);
                             $ship_id = $this->db->insert_id();
                         }
-                    
-                }
-                // $eu_price = $rate['amount'] * $con_rate ;
+                //  $eu_price = $rate['amount'] * $con_rate ;
                 // $v['shipping'] = $eu_price;
                 
                 // $in = array(
                 //     'cart_key' => $v['rowid'],
                 //     'from_address' => $v['address'],
                 //     'to_address' => $obj,
-                //     'rate_object' => $rate['object_id'],
+                //     'rate_object' => $v['object_id'],
                 //     'price' => $rate['amount'],
                 //     'eu_price' => $eu_price,
                 //     'raw_daata' => json_encode($rate)
                 //     );
-                //     $this->db->insert('shipoo_rates',$in);
-                // $this->cart->update($v);
+                //     $r = $this->db->insert('shipoo_rates',$in);   
+                }
+                $this->cart->update($v);
             }
-            // echo $r_id;
+            $con_rate = 1;
             $methods = $this->db->where('r_id',$r_id)->distinct('slug')->get('ship_method')->result_array();
             foreach($methods as $sk => $sv)
             {
@@ -5088,7 +6300,8 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 $methods[$sk]['price'] = round($tot*$con_rate, 2);
             }
             $data = array('methods'=>$methods,'r_id'=>$r_id);
-            $this->load->view('front/shopping_cart/ship_options',$data);
+            echo $r_id;
+            die();
             }
         } elseif ($para1 == "delivery_address") {
             $this->load->view('front/shopping_cart/delivery_address');
@@ -5100,6 +6313,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
             $page_data['asset_page'] = "shopping_cart";
             $page_data['page_title'] = translate('my_cart');
             $page_data['carted'] = $this->cart->contents();
+            // var_dump($page_data);
             $this->load->view('front/index', $page_data);
         }
     }
@@ -5561,7 +6775,9 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
 
                 $this->db->insert('sale', $data);
                 $sale_id = $this->db->insert_id();
+                
                 $this->send_shipping($sale_id);
+                
                 if ($this->session->userdata('user_login') == 'yes') {
                     $data['buyer'] = $this->session->userdata('user_id');
                 } else {
@@ -5577,6 +6793,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 $vendors = $this->crud_model->vendors_in_sale($sale_id);
                 $delivery_status = array();
                 $payment_status = array();
+                
                 foreach ($vendors as $p) {
                     $delivery_status[] = array('vendor' => $p, 'status' => 'pending', 'comment' => '', 'delivery_time' => '');
                     $payment_status[] = array('vendor' => $p, 'status' => 'due');
@@ -5592,7 +6809,8 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 $this->db->update('sale', $data);
                 $this->process_order($sale_id);
                 $this->crud_model->process_affiliation($sale_id,false);
-
+                
+                
                 foreach ($carted as $value) {
                     $this->crud_model->decrease_quantity($value['id'], $value['qty']);
                     $data1['type'] = 'destroy';
@@ -5610,9 +6828,11 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                     $data1['datetime'] = time();
                     $this->db->insert('stock', $data1);
                 }
+                
                 $this->crud_model->digital_to_customer($sale_id);
-                $this->email_model->email_invoice($sale_id);
-                $this->cart->destroy();
+                // $this->email_model->email_invoice($sale_id);
+                
+                // $this->cart->destroy();
                 $this->session->set_userdata('couponer', '');
                 //echo $sale_id;
                 if ($this->session->userdata('user_login') == 'yes') {
@@ -5678,6 +6898,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                     }
                     $this->wallet_model->reduce_user_balance($grand_total, $this->session->userdata('user_id'));
                     $this->crud_model->digital_to_customer($sale_id);
+                    
                     $this->crud_model->email_invoice($sale_id);
                     $this->cart->destroy();
                     $this->session->set_userdata('couponer', '');
@@ -6026,6 +7247,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 }
             }
         }
+        die("Here");
     }
 
 
@@ -6570,6 +7792,18 @@ $expire_time = strtotime($expire);
             $this->crud_model->add_wish($para2);
         } else if ($para1 == 'remove') {
             $this->crud_model->remove_wish($para2);
+        } else if ($para1 == 'num') {
+            echo $this->crud_model->wished_num();
+        }
+
+    }
+    /* FUNCTION: Concerning wishlist*/
+    function affliates($para1 = "", $para2 = "")
+    {
+        if ($para1 == 'add') {
+            $this->crud_model->add_aff($para2);
+        } else if ($para1 == 'remove') {
+            $this->crud_model->remove_aff($para2);
         } else if ($para1 == 'num') {
             echo $this->crud_model->wished_num();
         }
