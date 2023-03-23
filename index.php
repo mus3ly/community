@@ -68,7 +68,7 @@ date_default_timezone_set('Europe/London');
 
 	include_once './application/libraries/vendor/autoload.php';
 
-	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
 	//define('CFG_TIME_ZONE', 'Asia/Dacca');
 /*
  *---------------------------------------------------------------
