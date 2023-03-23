@@ -41,9 +41,9 @@ $(".closebtn,.cart_totaloverlay").click(function(){
 
 
 
-$("[id^=carousel-thumbs]").carousel({
-	interval: false
-});
+// $("[id^=carousel-thumbs]").carousel({
+// 	interval: false
+// });
 
 /** Pause/Play Button **/
 $(".carousel-pause").click(function () {

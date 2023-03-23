@@ -150,7 +150,6 @@
 			var level = $('input[name = "level"]:checked').val();
 			if(module == 'list_fields')
 			level = $('#cat_level').val();
-			alert(level);
 			var type = $('input[name = "type"]:checked').val();
 			ajax_load(base_url+''+user_type+'/'+module+'/'+list_cont_func+'?level='+level+'&type='+type,'list','first');
 		}
@@ -480,7 +479,7 @@
 
                 }
                 var topp = 100;
-                if(form_id == 'product_add' || form_id == 'product_edit'){
+                if(form_id == 'product_add' || form_id == 'product_edit' || form_id == 'fields_edit'){
                 } else {
 	                $('html, body').animate({
 	                    scrollTop: $("#scroll").offset().top - topp

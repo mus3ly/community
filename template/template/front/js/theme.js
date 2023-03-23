@@ -2,8 +2,8 @@
 
 // Cache
 var body = $('body');
-var mainSlider = $('#main-slider');
-var mainSliderSize = $('#main-slider').find('.item').size();
+// var mainSlider = $('#main-slider');
+// var mainSliderSize = $('#main-slider').find('.item').size();
 
 var imageCarousel = $('.img-carousel');
 var imageCarouselSize = $('.img-carousel').find('.item').size();

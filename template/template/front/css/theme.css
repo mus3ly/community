@@ -2913,7 +2913,7 @@ ul.tabs__ li.current__ b,ul.tabs__ li.current__ p{
     border-radius: 16px;
 }
 #left_gp{
-    padding: 0 32px 0 35px;
+    padding: 0;
 }
 .communitybox{
     padding-left: 0;
@@ -2934,7 +2934,7 @@ ul.tabs__ li.current__ b,ul.tabs__ li.current__ p{
     width: 100%;
 }
 #business__graphic{
-    padding: 0 0 0 58px !important;
+    padding: 0 !important;
 }
 .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next, .carousel-control .icon-prev {
     width: 46px;
