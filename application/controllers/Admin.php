@@ -175,6 +175,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $data['category_name'] = $value;
             $data['fa_icon'] = $this->input->post('fa_icon');
             $data['pcat'] = $this->input->post('pcat');
+            
             $this->db->insert('category', $data);
             $id = $this->db->insert_id();
             }
@@ -189,6 +190,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['fa_icon'] = $this->input->post('fa_icon');
             $data['pcat'] = $this->input->post('pcat');
             $data['level'] = 0;
+            $dara['slug'] = $this->input->post('slug');
             $this->db->where('category_id', $para2);
             $this->db->update('category', $data);
             if($_FILES['img']['name']!== ''){
@@ -349,6 +351,15 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $page_data['page_name']      = "category";
             $page_data['all_categories'] = $this->db->get('category')->result_array();
             $this->load->view('back/index', $page_data);
+        }
+    }
+    function cat_slug(){
+        $this->db->where('slug', $_REQUEST['val']);
+        $q = $this->db->get('category')->num_rows();
+        if($q > 0){
+            echo 'error';
+        }else{
+            echo 'success';
         }
     }
     function cat_child(){
@@ -1108,6 +1119,8 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $data['type'] = $this->input->post('type');
                 $data['category'] = $this->input->post('category');
                 $data['sort'] = $this->input->post('sort');
+                $data['position'] = $this->input->post('position');
+                $data['prefix'] = $this->input->post('prefix');
                 $data['placeholder'] = $this->input->post('placeholder');
                 $data['options'] = json_encode(explode(',', $this->input->post('option')));
                 $r = $this->db->insert('list_fields', $data);
@@ -1124,7 +1137,9 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $data['is_required'] = $this->input->post('is_required');
                 $data['type'] = $this->input->post('type');
                 $data['category'] = $this->input->post('category');
+                $data['position'] = $this->input->post('position');
                 $data['sort'] = $this->input->post('sort');
+                $data['prefix'] = $this->input->post('prefix');
                 $data['placeholder'] = $this->input->post('placeholder');
                 $data['options'] = json_encode(explode(',', $this->input->post('option')));
             $this->db->where('id', $para2);
@@ -1151,6 +1166,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $this->load->view('back/admin/fields_edit', $page_data);
         } elseif ($para1 == 'list') {
                  if(true){
+                    //  var_dump($_REQUEST);
                $this->db->select('list_fields.*,category.*');
                 $this->db->from('list_fields');
                 $this->db->join('category', 'list_fields.category = category.category_id'); 
@@ -1867,6 +1883,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['front_image']        = 0;
             $additional_fields['name']  = json_encode($this->input->post('ad_field_names'));
             $additional_fields['value'] = json_encode($this->input->post('ad_field_values'));
+            $additional_fields['checkbox_xtra_fields'] = json_encode($this->input->post('checkboxinfo'));
             $data['additional_fields']  = json_encode($additional_fields);
             $data['brand']              = $this->input->post('brand');
             $data['size_type']               = $this->input->post('size_type');

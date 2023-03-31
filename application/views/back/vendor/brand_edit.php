@@ -3,7 +3,7 @@
 ?>
     <div>
         <?php
-			echo form_open(base_url() . 'admin/brand/update/' . $row['brand_id'], array(
+			echo form_open(base_url() . 'vendor/brand/update/' . $row['textg_id'], array(
 				'class' => 'form-horizontal',
 				'method' => 'post',
 				'id' => 'brand_edit',
@@ -47,6 +47,12 @@
                         </span>
                     </div>
                 </div>
+                 <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-2"><?php echo translate('section details');?></label>
+                <div class="col-sm-8">
+                    <textarea rows="9" name="description"  class="summernotes" data-height="200" data-name="description"><?php echo $row['detail']; ?></textarea>
+                </div>
+            </div>
                      <div class="form-group">
                 <label class="col-sm-4 control-label" for="demo-hor-2"><?php echo translate('sort');?></label>
                 <div class="col-sm-8">
@@ -62,5 +68,30 @@
 ?>
 
 <script src="<?php echo base_url(); ?>template/back/js/custom/brand_form.js"></script>
+<script>
+    $('.summernotes').each(function() {
+            var now = $(this);
+            var h = now.data('height');
+            var n = now.data('name');
+            if(now.closest('div').find('.val').length == 0){
+                now.closest('div').append('<input type="hidden" class="val" name="'+n+'">');
+            }
+            now.summernote({
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['view', ['codeview', 'help']],
+                ],
+                height: h,
+                onChange: function() {
+                    now.closest('div').find('.val').val(now.code());
+                }
+            });
+            now.closest('div').find('.val').val(now.code());
+        });
+</script>
 
 

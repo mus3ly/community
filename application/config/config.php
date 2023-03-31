@@ -39,11 +39,11 @@ $config['demo'] = false;
 $config['lat'] = '51.509865';
 $config['lng'] = '-0.118092';
 $config['charity_cat'] = '134';
-$config['property_cat'] = '80';
+$config['property_cat'] = '808';
 $config['event_cat'] = '917';
 $config['job_cat'] = '78';
 $config['car_cat'] = '807';
-$config['places_cat'] = '81';
+$config['places_cat'] = '87';
 $config['index_page'] = 'index.php';
 $key = 'QUl6YVN5QjZxZ2pVeU1Temx1MDhNU0FJVHFjYzI2T3ltcFUwM3ZR';
 $config['map_key'] = base64_decode($key);
@@ -456,12 +456,14 @@ $config['csrf_expire'] 			= 7200;
 $config['csrf_regenerate'] 		= FALSE;
 $config['csrf_exclude_uris'] 	= array('home/paypal_success',
 									'admin/product/api_add',
+									'admin/cat_slug',
 									'home/contactus',  
 									'vendor/login',  
 									'home/upload_bpage',  
 									'home/delete_gallery',  
 									'home/paypal_ipn',
 									'admin/paypal_success',
+									'admin/list_fields/list',
 									'admin/paypal_ipn',
 									'vendor/paypal_success',
 									'vendor/paypal_ipn',
@@ -474,6 +476,7 @@ $config['csrf_exclude_uris'] 	= array('home/paypal_success',
 									'home/text_search',
 									'home/email',
 									'home/add_rate',
+									'home/business_unique_name',
 									'admin/display_settings',
 									'home/twocheckout_success',
 									'admin/twocheckout_success',
@@ -522,6 +525,7 @@ $config['csrf_exclude_uris'] 	= array('home/paypal_success',
                                     'home/ajax_post_user_rating',
 									'home/message_to_seller_reply/[0-9]+',
 									'home/update_product+',
+									'home/save',
 									'webhook/payment_webhook',
 								);
 /*

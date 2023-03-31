@@ -79,7 +79,7 @@
                 $type = 'property';
             }*/
     ?> 
-    <div class="col-md-<?php echo $col_md; ?> col-sm-<?php echo $col_sm; ?> col-xs-<?php echo $col_xs; ?> mb-6">
+    <div class="marg_mee col-md-<?php echo $col_md; ?> col-sm-<?php echo $col_sm; ?> col-xs-<?php echo $col_xs; ?> mb-6">
         <?php echo $this->html_model->product_box1($row, $type.'_'.$viewtype); ?>
     </div>
     <?php

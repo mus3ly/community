@@ -1,6 +1,78 @@
 
-<aside class="col-md-2 sidebar" id="sidebar">
+<aside class="col-md-2 sidebar new_sidebar" id="sidebar">
     <!-- widget shop categories -->
+    <!-- widget price filter -->
+               <?php
+            if(isset($_GET['is_listing']) && ($_GET['is_listing'] == 'shop_listing' || $_GET['is_listing'] == 'car_listing')){
+                    ?>
+            <div class="widget widget-filter-price">
+                <div class="Amenities">
+                 <h3>Filter Your Search</h3>
+                </div>
+                <div class="range_slider new_rang">
+                    <div class="row">
+                        <div class="col-sm-12">
+                          <div id="slider-range"></div>
+                        </div>
+                    </div>
+                    <div class="row slider-labels">
+                        <div class="col-xs-6 p-0 caption">
+                          <strong>Min:</strong> <span id="slider-range-value1"></span>
+                        </div>
+                        <div class="col-xs-6 p-0 text-right caption">
+                          <strong>Max:</strong> <span id="slider-range-value2"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
+            }
+            else
+            {
+                ?>
+            <div class="widget widget-filter-price">
+                <div class="Amenities">
+                 <div class="left_filter">
+                     <h3>Search Filter</h3>
+                </div>
+                   <div class="push_left">
+           <!-- <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="open_sidebar();">
+                <i class="fa fa-bars"></i>
+            </span>-->
+            <a class="btn-theme-light make_it_flexi" onClick="set_view('grid')" href="#"><img src="<?php echo base_url(); ?>/white_grid.png" alt=""/></a>
+            <a class="btn btn-theme-light make_it_flexi" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>/white_icon.png" alt=""/></a>
+        </div>
+                </div>
+                <div class="new_title_1">
+                    <h3>Distance Range</h3>
+                </div>
+                <div class="range_slider new_rang">
+                    <div class="row">
+                        <div class="col-sm-12">
+                          <div id="slider-range"></div>
+                        </div>
+                    </div>
+                    <div class="row slider-labels">
+                        <div class="col-xs-6 caption">
+                          <strong>Min:</strong> <span id="slider-range-value1"></span>
+                        </div>
+                        <div class="col-xs-6 text-right caption">
+                          <strong>Max:</strong> <span id="slider-range-value2"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
+            }
+            ?>
     <?php
             if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'car_listing'){
                 $all_makes =  $this->db->get('makes')->result_array();
@@ -36,8 +108,8 @@
                     ?>
                     
                  
-                    <input type="number" placeholder="No: of Bedrooms" onkeyup="do_product_search('0')" id="bedrooms_input"  class="form-control"> 
-                       <select name="select_property_type" onchange="do_product_search('0')" id="select_property_type" class="form-control">
+                    <input type="number" placeholder="No: of Bedrooms" onkeyup="do_product_search('0')" id="bedrooms_input"  class="margin_added form-control"> 
+                       <select name="select_property_type" onchange="do_product_search('0')" id="select_property_type" class="margin_added form-control">
                        <option value="" >Type</option>
                         <option value="detached">Detached </option>
                         <option value="apartment ">Apartment </option>
@@ -56,7 +128,7 @@
                     ?>
                     
                  
-                        <select name="select_job_hours" onchange="do_product_search('0')"  id="select_job_hours" class="form-control">
+                        <select name="select_job_hours" onchange="do_product_search('0')"  id="select_job_hours" class="margin_added form-control">
                                 <option value="">select job hours</option>
                                 <option value="fulltime">Full Time</option>
                                 <option value="parttime ">Part Time</option>
@@ -64,7 +136,7 @@
                                 <option value="two_years ">Two Years</option>
                                
                             </select>
-                      <select name="select_job_type" onchange="do_product_search('0')"  id="select_job_type" class="form-control">
+                      <select name="select_job_type" onchange="do_product_search('0')"  id="select_job_type" class="margin_added form-control">
                                     <option value="">select job type</option>
                                     <option value="paermanent">Permanent</option>
                                     <option value="temporary">Temporary</option>
@@ -80,8 +152,8 @@
             if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'event_listing'){
                     ?>
                     
-                        <input type="date" id="event_date_input" onchange="do_product_search('0')" class="form-control">
-                        <select id="event_type_input"class="form-control" onchange="do_product_search('0')">
+                        <input type="date" id="event_date_input" onchange="do_product_search('0')" class="add_padding form-control">
+                        <select id="event_type_input"class="form-control add_padding" onchange=" do_product_search('0')">
                             <option value="">Event type</option>
                             <option value="wedding">Wedding</option>
                             <option value="festival">Festival</option>
@@ -90,7 +162,7 @@
                             <option value="get_to_gether">Get To Gether</option>
                             <option value="music">Music</option>
                         </select>
-                       <select id="age_restriction_input" class="form-control" onchange="do_product_search('0')">
+                       <select id="age_restriction_input" class="form-control add_padding" onchange=" do_product_search('0')">
                                    <option value="">Age Restrictions</option>
                                     <option value="family">Family Friendly</option>
                                     <option value="kids">Kids Friendly</option>

@@ -1972,6 +1972,7 @@ foreach($vendors as $kk=> $vv)
     function can_add_product($vendor)
     {
         $membership = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->membership;
+        // die($membership);
         $expire = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->member_expire_timestamp;
         $already = $this->db->get_where('product', array('added_by' => '{"type":"vendor","id":"' . $vendor . '"}','status'=>'ok','is_bpage'=> 0))->num_rows();
         // $already = $already -1;//remove b pages

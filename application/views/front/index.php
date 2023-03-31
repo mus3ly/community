@@ -36,6 +36,8 @@
     {
         ?>
          <style href="<?= base_url(); ?>/template/front/css/socialmedia9_style.css" ></style>   
+         <script type="text/javascript" src="components/bootstrap/dist/js/bootstrap.js"></script>
+
            
         <?php
     }
@@ -196,6 +198,11 @@ include 'preloader.php';
     function submitForm()
     {
         alert();
+    }
+    
+    function close_sidebar(){
+        $('.sidebar').removeClass('open');
+        $('.sidebar').addClass('close_now');
     }
     $(document).ready(function(){
         $('.home-switch button').on('click', function(){

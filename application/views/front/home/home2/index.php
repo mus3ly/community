@@ -87,7 +87,7 @@
                            <div class="item">
                               <div class="slider_box_icons">
                                 <ul>
-                                    <li ><a href="<?= base_url('home/category/'.$value['category_id']); ?>"><i class="fa <?= ($value['fa_icon'])?$value['fa_icon']:'fa-file-image-o'; ?>"></i>  <?= $value['category_name'] ?></a></li>
+                                    <li ><a href="<?= base_url('category/'.$value['slug']); ?>"><i class="fa <?= ($value['fa_icon'])?$value['fa_icon']:'fa-file-image-o'; ?>"></i>  <?= $value['category_name'] ?></a></li>
                                 </ul>
                             </div>
                            </div>

@@ -2,6 +2,10 @@
     // Requires jQuery
 
 // Initialize slider:
+$('#btn__sort').click(function(){
+    $('#sorter_search').toggle();
+    
+});
 $(document).ready(function() {
     <?php
     if(isset($cur_category))
@@ -2070,6 +2074,10 @@ function select_place(place,txt)
 	var wait = 0;
 	$(document).on('click', '.cat_check', function(){
 	    var val = $(this).val();
+	    var mmid='#cat_'+val;
+	    $(mmid)[0].checked = true;
+
+	   // alert(val);
 	    var mid = '#cat_r'+val;
 	    if($(this).is(":checked"))
 	    {
@@ -2186,6 +2194,7 @@ function select_place(place,txt)
         var univ_max = $('#univ_max').val(); 
         $('.on_click_search').on('click',function(){
 			var set_cat = $('#cur_cat').val();
+// 			alert(set_cat);
 			var brands = $(".search_cat_click[data-cat='" + set_cat +"']").data('brands');
 			set_brands(brands);
 			var mint = $(this).closest('ul').closest('li').find('.search_cat').data('min');
@@ -2393,6 +2402,7 @@ function select_place(place,txt)
             }
 });
         $('#categoryaa').val(cats.join(','));
+        // alert($('#categoryaa').val());
         $('#make').val($('#select_make').val());
         $('#bedrooms').val($('#bedrooms_input').val());
         $('#property_type').val($('#select_property_type').val());

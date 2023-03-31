@@ -171,165 +171,6 @@ $lng = $this->config->item('lng');
     
     }
 </style>
-<section class="container">
-    <div class="row">
-        <div class="col-md-2">
-            <!-- widget price filter -->
-               <?php
-            if(isset($_GET['is_listing']) && ($_GET['is_listing'] == 'shop_listing' || $_GET['is_listing'] == 'car_listing')){
-                    ?>
-            <div class="widget widget-filter-price">
-                <div class="Amenities">
-                 <h3>Filter Your Search</h3>
-                </div>
-                <div class="range_slider">
-                    <div class="row">
-                        <div class="col-sm-12">
-                          <div id="slider-range"></div>
-                        </div>
-                    </div>
-                    <div class="row slider-labels">
-                        <div class="col-xs-6 p-0 caption">
-                          <strong>Min:</strong> <span id="slider-range-value1"></span>
-                        </div>
-                        <div class="col-xs-6 p-0 text-right caption">
-                          <strong>Max:</strong> <span id="slider-range-value2"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <?php
-            }
-            else
-            {
-                ?>
-            <div class="widget widget-filter-price">
-                <div class="Amenities">
-                 <h3>Distance Range</h3>
-                </div>
-                <div class="range_slider">
-                    <div class="row">
-                        <div class="col-sm-12">
-                          <div id="slider-range"></div>
-                        </div>
-                    </div>
-                    <div class="row slider-labels">
-                        <div class="col-xs-6 caption">
-                          <strong>Min:</strong> <span id="slider-range-value1"></span>
-                        </div>
-                        <div class="col-xs-6 text-right caption">
-                          <strong>Max:</strong> <span id="slider-range-value2"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <?php
-            }
-            ?>
-        </div>
-        <div class="col-md-8">
-            <!-- shop-sorting -->
-                        <div class="shop-sorting">
-                            <div class="row">
-                                    <div class="col-sm-12">
-                                            <div class="" id="location_search">
-                                            <div class="widget-search search_bar">
-                                                <img src="<?= base_url('/template/front/images/Location.png'); ?>" alt="Search">
-                                                <input class="form-control set-shadow-none" style="border-right: 1px solid #cccccc82 !important;border-radius:0;" type="text" id="texted" value="<?php echo make_proper($text); ?>" placeholder="<?php echo translate('search'); ?>">
-                                                <input type="text" value="<?php echo make_proper($address); ?>" id="loc_box"  onkeyup="search_location()"  placeholder="location" name="" alt="">
-                                                <button onclick="do_product_search('0')" class="on_click_search txt_src_btn">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            <div id="map_search" style="
-                                        z-index: 9999999999999999;
-                                        position: absolute;
-                                    ">
-                                                             <img id="loader" style="display:none" src="<?= base_url('/map-loader.gif'); ?>" />
-                                                             <div id="result_loc"></div>
-                                                         </div>
-                                            </div>
-                                        </div>
-                                        </div>
-                                     
-                                     
-                                    </div>
-                            <div class="row" id="width-100">
-                                <div class="col-md-12 col-sm-12 col-xs-12 sort-item">
-                                    
-                                    <div class="row align-items-center">
-                                        <div class="col-sm-12 radio_listing set-list-more-icon">
-                                            <?php
-                                            ?>
-                                        
-                                                <ul>
-                                                    <li>
-                                                    <a  href="<?= base_url('directory?is_listing=directory_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'directory_listing')?"active":"" ?>"><?php echo translate('directory'); ?></a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="<?= base_url('directory?is_listing=buss_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'buss_listing')?"active":"" ?>"><?php echo translate('business'); ?></a>
-                                                     </li>
-                                                    <li>
-                                                        <a href="<?= base_url('directory?is_listing=affliate_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'affliate_listing')?"active":"" ?>"><?php echo translate('affliate'); ?></a>
-                                                     </li>
-                                                     <li>
-                                                        <a href="<?= base_url('directory/76?is_listing=shop_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'shop_listing')?"active":"" ?>"><?php echo translate('shop'); ?></a>
-                                                     </li>
-                                                     <li>
-                                                        <a href="<?= base_url('directory/353?is_listing=blog_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'blog_listing')?"active":"" ?>"><?php echo translate('Blogs'); ?></a>
-                                                     </li>
-                                                     <li>
-                                                        <a href="<?= base_url('directory/1069?is_listing=event_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'event_listing')?"active":"" ?>"><?php echo translate('events'); ?></a>
-                                                     </li>
-                                                      <li>
-                                                        <a href="<?= base_url('directory/82?is_listing=jobs_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'jobs_listing')?"active":"" ?>"><?php echo translate('jobs'); ?></a>
-                                                     </li>
-                                                      <li>
-                                                        <a href="<?= base_url('directory/87?is_listing=places_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'places_listing')?"active":"" ?>"><?php echo translate('places'); ?></a>
-                                                     </li>
-                                                      <li>
-                                                        <a href="<?= base_url('directory/80?is_listing=car_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'car_listing')?"active":"" ?>"><?php echo translate('cars'); ?></a>
-                                                     </li>
-                                                      <li>
-                                                        <a href="<?= base_url('directory/808?is_listing=property_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'property_listing')?"active":"" ?>"><?php echo translate('Property'); ?></a>
-                                                     </li>
-                                                      <li>
-                                                        <a href="<?= base_url('directory/134?is_listing=charity_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'charity_listing')?"active":"" ?>"><?php echo translate('charity'); ?></a>
-                                                     </li>
-                                                     <li>
-                                                        <a href="<?= base_url('directory/353?is_listing=news_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'news_listing')?"active":"" ?>"><?php echo translate('news'); ?></a>
-                                                     </li>
-                                                </ul>
-                                                <!--<input type="radio" value="directory_listing" name="group1" id="val2" ><label for="val2"></label>-->
-                                                <!--<input type="radio" value="affliate_listing" name="group1" id="val3" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'affliate_listing')?"checked":"" ?>><label for="val3"><?php echo translate('affliate_listing'); ?></label>-->
-                                                <!--<input type="radio" value="shop_listing" name="group1" id="val4" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'shop_listing')?"checked":"" ?>><label for="val4"><?php echo translate('shop_listing'); ?></label>-->
-                                                <!--<input type="radio" value="blog" name="group1" id="val5" url="<?= base_url('home/blog'); ?>"><label for="val5" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'blog')?"checked":"" ?>><?php echo translate('Blogs'); ?></label>-->
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--<div class="col-md-2 col-sm-12 col-xs-12 text-right view_select_btn">-->
-                                <!--    <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="open_sidebar();">-->
-                                <!--        <i class="fa fa-bars"></i>-->
-                                <!--    </span>-->
-                                <!--    <a class="btn btn-theme-transparent btn-sort" href="#"><img src="<?php echo base_url(); ?>template/front/img/sort.png" alt=""width="20px;"/></a>-->
-                                <!--    <a class="btn btn-theme-transparent btn-theme-sm grid" onClick="set_view('grid')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-grid.png" alt=""/></a>-->
-                                <!--    <a class="btn btn-theme-transparent btn-theme-sm list" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-list.png" alt=""/></a>-->
-                                <!--</div>-->
-                            </div>
-                        </div>
-                        <!-- /shop-sorting -->
-        </div>
-        
-    </div>
-    
-</section>
 <section class="banner_listing">
     <div class="menu_items align" id="menuitems">
         <div class="container menu_list_bg">
@@ -370,35 +211,119 @@ $lng = $this->config->item('lng');
             </div>
         </div>
 </section>
+<section class="container">
+    <div class="row">
+        
+        <div class="col-md-10 add_center_div ">
+            <!-- shop-sorting -->
+                        <div class="shop-sorting">
+                            <div class="row">
+                                    <div class="col-sm-12 p-0">
+                                            <div class="" id="location_search">
+                                            <div class="widget-search search_bar">
+                                                <img style="width:22px;" src="<?= base_url('/search_icon_bar.png'); ?>" alt="Search">
+                                                <input class="form-control set-shadow-none" style="border-right: 1px solid #f26122 !important;border-radius:0;" type="text" id="texted" value="<?php echo make_proper($text); ?>" placeholder="SEARCH">
+                                                <img style="width:17px;" src="<?= base_url('/template/front/images/Location.png'); ?>" alt="Search">
+                                                <input type="text" value="<?php echo make_proper($address); ?>" id="loc_box"  onkeyup="search_location()"  placeholder="LOCATION" name="" alt="">
+                                                <button onclick="do_product_search('0')" class="on_click_search txt_src_btn">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            <div id="map_search" style="
+                                        z-index: 9999999999999999;
+                                        position: absolute;
+                                    ">
+                                                             <img id="loader" style="display:none" src="<?= base_url('/map-loader.gif'); ?>" />
+                                                             <div id="result_loc"></div>
+                                                         </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                     
+                                     
+                                    </div>
+                            <div class="row" id="width-100">
+                                <div class="col-md-12 col-sm-12 col-xs-12 sort-item">
+                                    
+                                    <div class="row align-items-center">
+                                        <div class="col-sm-12 radio_listing set-list-more-icon add_bg_in">
+                                            <?php
+                                            ?>
+                                        
+                                                <ul>
+                                                    <li>
+                                                    <span  class="marg_add"><i class="fa-solid fa-folder"></i></span><a  href="<?= base_url('directory?is_listing=directory_listing'); ?>" class=" <?= ((isset($_GET['is_listing']) && $_GET['is_listing'] == 'directory_listing') || !(isset($_GET['is_listing'])) )?"active":"" ?>"><?php echo translate('directory'); ?></a>
+                                                    </li>
+                                                    <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-business-time"></i></span><a href="<?= base_url('directory?is_listing=buss_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'buss_listing')?"active":"" ?>"><?php echo translate('business'); ?></a>
+                                                     </li>
+                                                    <li>
+                                                        <span  class="marg_add"><i class="fab fa-affiliatetheme"></i></span><a href="<?= base_url('directory?is_listing=affliate_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'affliate_listing')?"active":"" ?>"><?php echo translate('affiliate'); ?></a>
+                                                     </li>
+                                                     <li>
+                                                       <span  class="marg_add"><i class="fa-solid fa-shop"></i></span> <a href="<?= base_url('directory/76?is_listing=shop_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'shop_listing')?"active":"" ?>"><?php echo translate('shop'); ?></a>
+                                                     </li>
+                                                     <li>
+                                                       <span  class="marg_add"><i class="fa-solid fa-blog"></i></span> <a href="<?= base_url('directory/353?is_listing=blog_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'blog_listing')?"active":"" ?>"><?php echo translate('Blogs'); ?></a>
+                                                     </li>
+                                                     <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-calendar-days"></i></span><a href="<?= base_url('directory/1069?is_listing=event_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'event_listing')?"active":"" ?>"><?php echo translate('events'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-briefcase"></i></span><a href="<?= base_url('directory/82?is_listing=jobs_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'jobs_listing')?"active":"" ?>"><?php echo translate('jobs'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-location-dot"></i></span><a href="<?= base_url('directory/87?is_listing=places_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'places_listing')?"active":"" ?>"><?php echo translate('places'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-car"></i></span><a href="<?= base_url('directory/80?is_listing=car_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'car_listing')?"active":"" ?>"><?php echo translate('cars'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-building"></i></span><a href="<?= base_url('directory/808?is_listing=property_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'property_listing')?"active":"" ?>"><?php echo translate('Property'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-hand-holding-heart"></i></span><a href="<?= base_url('directory/134?is_listing=charity_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'charity_listing')?"active":"" ?>"><?php echo translate('charity'); ?></a>
+                                                     </li>
+                                                     <li>
+                                                        <span class="marg_add"><i class="fa-solid fa-newspaper"></i></span><a href="<?= base_url('directory/353?is_listing=news_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'news_listing')?"active":"" ?>"><?php echo translate('news'); ?></a>
+                                                     </li>
+                                                </ul>
+                                                <a class="btn btn-theme-transparent btn-sort"  id="btn__sort"><img src="<?php echo base_url(); ?>/sort12.png" alt="" width="20px;"/></a>
+                                                <ul class="selectpicker input-price sorter_search" data-live-search="true" data-width="100%"
+                                                                                       data-toggle="tooltip" title="Select" onClick="delayed_search()" id="sorter_search">
+                                                    <li value="rating_num"><?php echo translate('top_rated'); ?></li>
+                                                    <li value="distance"><?php echo translate('near_by'); ?></li>
+                                                    <li value="rating_num"><?php echo translate('popularity'); ?></li>
+                                                    <li value="condition_old"><?php echo translate('oldest'); ?></li>
+                                                    <li value="condition_new"><?php echo translate('newest'); ?></li>
+                                                    <li value="most_viewed"><?php echo translate('most_viewed'); ?></li>
+                                                </ul>
+                                                <!--<input type="radio" value="directory_listing" name="group1" id="val2" ><label for="val2"></label>-->
+                                                <!--<input type="radio" value="affliate_listing" name="group1" id="val3" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'affliate_listing')?"checked":"" ?>><label for="val3"><?php echo translate('affliate_listing'); ?></label>-->
+                                                <!--<input type="radio" value="shop_listing" name="group1" id="val4" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'shop_listing')?"checked":"" ?>><label for="val4"><?php echo translate('shop_listing'); ?></label>-->
+                                                <!--<input type="radio" value="blog" name="group1" id="val5" url="<?= base_url('home/blog'); ?>"><label for="val5" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'blog')?"checked":"" ?>><?php echo translate('Blogs'); ?></label>-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="col-md-2 col-sm-12 col-xs-12 text-right view_select_btn">-->
+                                <!--    <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="open_sidebar();">-->
+                                <!--        <i class="fa fa-bars"></i>-->
+                                <!--    </span>-->
+                                <!--    <a class="btn btn-theme-transparent btn-sort" href="#"><img src="<?php echo base_url(); ?>template/front/img/sort.png" alt=""width="20px;"/></a>-->
+                                <!--    <a class="btn btn-theme-transparent btn-theme-sm grid" onClick="set_view('grid')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-grid.png" alt=""/></a>-->
+                                <!--    <a class="btn btn-theme-transparent btn-theme-sm list" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-list.png" alt=""/></a>-->
+                                <!--</div>-->
+                            </div>
+                        </div>
+                        <!-- /shop-sorting -->
+        </div>
+        
+    </div>
+    
+</section>
+
 
 
  <!-- PAGE WITH SIDEBAR -->
- <div class="container">
- <div class="middle_bar">
-                        <div class="menuss_icon">
-                            <div class="push_left">
-           <!-- <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="open_sidebar();">
-                <i class="fa fa-bars"></i>
-            </span>-->
-            <a class="btn btn-theme-transparent btn-theme-sm grid" onClick="set_view('grid')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-grid.png" alt=""/></a>
-            <a class="btn btn-theme-transparent btn-theme-sm list" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-list.png" alt=""/></a>
-        </div>
-                       
-                        <div class="push_right">
-                            <a class="btn btn-theme-transparent btn-sort" href="#" id="btn__sort"><img src="<?php echo base_url(); ?>template/front/img/sort.png" alt="" width="20px;"/></a>
-                <ul class="selectpicker input-price sorter_search" data-live-search="true" data-width="100%"
-                                                       data-toggle="tooltip" title="Select" onClick="delayed_search()" id="sorter_search">
-                    <li value="rating_num"><?php echo translate('top_rated'); ?></li>
-                    <li value="distance"><?php echo translate('near_by'); ?></li>
-                    <li value="rating_num"><?php echo translate('popularity'); ?></li>
-                    <li value="condition_old"><?php echo translate('oldest'); ?></li>
-                    <li value="condition_new"><?php echo translate('newest'); ?></li>
-                    <li value="most_viewed"><?php echo translate('most_viewed'); ?></li>
-                </ul>
-                        </div>
-                     </div>  
-                      </div>
-                     </div>  
  
 <section class="page-section with-sidebar">
     <div class="container_side section_bg">

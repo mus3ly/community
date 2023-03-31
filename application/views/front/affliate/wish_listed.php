@@ -8,7 +8,7 @@
     <tr>
         <td><?php echo $i; ?></td>
         <td class="description"><img src="<?= $url ?>" />
-        <?php echo $row1['ip']; ?>
+        <?php// echo $row1['ip']; ?>
         </td>                  
         <td class="description">
         <?php 

@@ -10,6 +10,17 @@
         ));
         
     ?>
+     <?php
+	    
+	    $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value,true);
+                                            $result1=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result1[]=$row;
+                                                }
+                                            }
+	    
+	    ?>
         <div class="panel-body">
 
             <div class="form-group">
@@ -46,10 +57,20 @@
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('category');?></label>
                 <div class="col-sm-6">
                     <select name="category" id="demo-hor-2" class="form-control required">
-                        <option value="808" <?php if($amenity_data['category'] == '808'){echo 'selected';} ?>>Property</option>
-                        <option value="807" <?php if($amenity_data['category'] == '807'){echo 'selected';} ?>>Cars</option>
-                        <option value="917" <?php if($amenity_data['category'] == '917'){echo 'selected';} ?>>Events</option>
-                        <option value="78" <?php if($amenity_data['category'] == '78'){echo 'selected';} ?>>Jobs</option>
+                        <?php
+			            foreach($result1 as $k=> $v)
+            			 {
+            			     $row1 = $this->db->where('category_id', $v)->get('category')->row();
+                           			if($row1)
+                           			{
+                           			    ?>
+                           			    <option value="<?= $v ?>" <?php if($amenity_data['category'] == $v){echo 'selected';} ?> ><?= $row1->category_name; ?></option>
+                           			    <?php
+                           			}
+            			 }
+			 
+			            
+			            ?>
                         </select>
                 </div>
             </div>
@@ -68,15 +89,39 @@
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('option');?></label>
                 <div class="col-sm-6">
                     <input type="text" name="option" id="demo-hor-1" 
-                    	placeholder="<?php echo translate('option'); ?>" value="<?= implode(',',json_decode($amenity_data['options'],true));?>" class="form-control required">
+                    	placeholder="<?php echo translate('option'); ?>" value="<?= implode(',',json_decode($amenity_data['options'],true));?>" class="form-control">
                     		<p>use comma to seperate</p>
                 </div>
             </div>
               <div class="form-group">
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('Sort');?></label>
                 <div class="col-sm-6">
-                    <input type="number" name="sort" id="demo-hor-1" 
-                    	placeholder="<?php echo translate('sort'); ?>" value="<?= $amenity_data['sort'];?>" class="form-control required">
+                    <select name="sort" class="form-control required">
+                        <option value="0">Choose Option</option>
+                        <option value="1"  <?php if($amenity_data['sort'] == '1'){echo 'selected';} ?>>1</option>
+                        <option value="2" <?php if($amenity_data['sort'] == '2'){echo 'selected';} ?>>2</option>
+                        <option value="3" <?php if($amenity_data['sort'] == '3'){echo 'selected';} ?>>3</option>
+                        <option value="4" <?php if($amenity_data['sort'] == '4'){echo 'selected';} ?>>4</option>
+                        <option value="5" <?php if($amenity_data['sort'] == '5'){echo 'selected';} ?>>5</option>
+                        <option value="6" <?php if($amenity_data['sort'] == '6'){echo 'selected';} ?>>6</option>
+                        </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('position');?></label>
+                <div class="col-sm-6">
+                    <select name="position" class="form-control required">
+                        <option value="0">Choose Position</option>
+                        <option value="1" <?php if($amenity_data['position'] == '1'){echo 'selected';} ?>>1</option>
+                        <option value="2" <?php if($amenity_data['position'] == '2'){echo 'selected';} ?>>2</option>
+                        <option value="3" <?php if($amenity_data['position'] == '3'){echo 'selected';} ?>>3</option>
+                        </select>
+                </div>
+            </div>
+     <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('prefix');?></label>
+                <div class="col-sm-6">
+                <input type="text" name="prefix" class="form-control" value="<?= $amenity_data['prefix']?>">
                 </div>
             </div>
 

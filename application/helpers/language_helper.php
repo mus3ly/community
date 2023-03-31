@@ -12,6 +12,149 @@
  * @since		Version 1.0
  * @filesource
  */
+ function find_values($f, $v)
+ {
+     $v = strtolower($v);
+     $i = 0;
+     $find = '';
+     foreach($f as $k=> $vv)
+     {
+         $k = strtolower($k);
+         $i++;
+         if (strpos($k, $v)  !== false) { 
+            $find = $vv;
+         }
+     }
+     return $find;
+ }
+ function filter_add($id){
+      $CI =& get_instance();
+     $pro = $CI->db->where('product_id',$id)->get('product')->row(); 
+     //spreate values
+     $additional_fields = json_decode($pro->additional_fields, true);
+    $names = array();
+    $valus = array();
+    
+    if(isset($additional_fields['name']) && $additional_fields['name'])
+    {
+        $names = json_decode($additional_fields['name'],true);
+        $valus = json_decode($additional_fields['value'],true);
+        
+    }
+    $pf = array();
+    foreach($names as $k=> $v)
+    {
+        $v= str_replace(' ', '', $v);
+       $pf[$v] = $valus[$k]; 
+    }
+        $CI->db->where('product_id', $id);
+       $cat = '';
+     if($pro->is_car == '1'){
+          
+        $cat =array(
+             'seats' => $pf["NumberOfSeats"],
+             'model' => $pf["CarModal"],
+             'sale_price' => $pf["Price"]
+             
+             );
+     }
+      if($pro->is_event == '1'){
+         
+        $cat =array(
+             'age_restriction_event' => $pf["AgeRestriction"],
+             'event_type' => $pf["TypeOfEvent"],
+              'sale_price' => $pf["Price"]
+             );
+     }
+     if($pro->is_job == '1'){
+          $cat =array(
+             'job_hours' => $pf["TypeOfHours"],
+             'event_type' => $pf["TypeOfEmployment"]
+             );
+         
+     }
+     if($pro->is_property == '1'){
+         $cat =array(
+             'no_of_bedroom' => $pf["NumberOfBedrooms"],
+             'propert_type' => $pf["TypeOfProperty"]
+             );
+     }
+    $x =  $CI->db->update('product', $cat);
+    if($x){
+         return true;
+    }else{
+        return false;
+    }
+
+ }
+ function get_fields_line($id, $sort)
+ {
+     $CI =& get_instance();
+     $pro = $CI->db->where('product_id',$id)->get('product')->row(); 
+     //spreate values
+     $additional_fields = json_decode($pro->additional_fields, true);
+    $names = array();
+    $valus = array();
+    
+    if(isset($additional_fields['name']) && $additional_fields['name'])
+    {
+        $names = json_decode($additional_fields['name'],true);
+        $valus = json_decode($additional_fields['value'],true);
+        
+    }
+    $pf = array();
+    foreach($names as $k=> $v)
+    {
+        $v= str_replace(' ', '', $v);
+       $pf[$v] = $valus[$k]; 
+    }
+    $vl = array();
+     if(isset($pro->category) && $pro->category)
+     {
+         $fields = $CI->db->where('sort',$sort)->order_by("position", "asc")->where_in('category',explode(',',$pro->category))->get('list_fields')->result_array(); 
+         $lb = array();
+         foreach($fields as $k=> $v)
+         {
+             if($v['position'])
+             {
+                 $v['label']= str_replace(' ', '', $v['label']);
+                 $lb[] = $v['label'];
+                 if(isset($pf[$v['label']]) && $pf[$v['label']])
+                 {
+                     if($v['prefix'])
+                     {
+                         $vl[$v['label']] = $pf[$v['label']].' '.$v['prefix'];
+                     }
+                     else
+                     {
+                    $vl[$v['label']] = $pf[$v['label']];        
+                     }
+                 
+                 }
+                 else
+                 {
+                     $r = find_values($pf, $v['label']);
+                     if($v['prefix'])
+                     {
+                         $vl[$v['label']] = $r.' '.$v['prefix'];
+                     }
+                     else
+                     {
+                    $vl[$v['label']] = $r;        
+                     }
+                 }
+             }
+         }
+     }
+     foreach($vl as $k=> $v)
+     {
+         if(empty($v))
+         {
+             unset($vl[$k]);
+         }
+     }
+     return implode(',',$vl);
+ }
  function get_product_meta($pid, $k= '')
  {
      $CI =& get_instance();
@@ -114,6 +257,32 @@ function create_slug($id)
              if($slug)
              {
                  $r = $CI->db->where('product_id',$v['product_id'])->update('product',array('slug'=>$slug));
+                //  var_dump($r);
+                //  var_dump($v['product_id']);
+                return  $slug;
+             }
+         }
+}
+function create_cat_slug($id)
+{
+    $CI =& get_instance();
+    $v = $CI->db->where('category_id',$id)->get('category')->row_array(); 
+    if(isset($v['category_name']))
+         {
+             if($v['slug'])
+             {
+                 return $v['slug'];
+             }
+             $slug = slugify($v['category_name']);
+             
+             $pros_slg = $CI->db->where('slug',$slug)->get('category')->row();
+             if($pros_slg)
+             {
+                 $slug = $slug.'-'.time();
+             }
+             if($slug)
+             {
+                 $r = $CI->db->where('category_id',$v['category_id'])->update('category',array('slug'=>$slug));
                 //  var_dump($r);
                 //  var_dump($v['product_id']);
                 return  $slug;
@@ -354,6 +523,20 @@ return $l;
 			}
 		}
 	}
+	function strWordCut($string,$length,$end='....')
+{
+    $string = strip_tags($string);
+
+    if (strlen($string) > $length) {
+
+        // truncate string
+        $stringCut = substr($string, 0, $length);
+
+        // make sure it ends in a word so assassinate doesn't become ass...
+        $string = substr($stringCut, 0, strrpos($stringCut, ' ')).$end;
+    }
+    return $string;
+}
 	//check and add to db
 	if ( ! function_exists('add_lang_word'))
 	{

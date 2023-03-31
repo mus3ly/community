@@ -355,16 +355,28 @@ if(isset($_GET['test']))
         $col1= array();
         $col2= array();
         $i = 1;
+        $lim = 30;
+        $accor = array();
         foreach($names as $k=> $v)
         {
+            if(strlen($valus[$k]) > $lim)
+            {
+                $accor[$v] = $valus[$k];
+            }
+            else
+            {
             $i++;
+            
             if($i%2 == 0)
             {
+                if($valus[$k])
                 $col1[$v] = $valus[$k];
             }
             else
             {
+                if($valus[$k])
                 $col2[$v] = $valus[$k];
+            }
             }
         }
         
@@ -541,7 +553,7 @@ if($vendor['comp_logo'])
     <div class="container">
         <div class="row">
             <div class="col-sm-12 inner_box_info">
-            <h2>Information</h2>
+     
             <p><?= $pro['description']; ?></p>
         </div>
         </div>
@@ -590,10 +602,13 @@ if($vendor['comp_logo'])
                     <?php
                     $features = json_decode($pro['feature'], true);
                     foreach($features as $k => $v){
+                        if(!empty($v['fdet']))
+                        {
                     ?>
                         <li><?= $v['fdet'];?></li>
                     <?php
                         }
+                    }
                     ?>
                     </ul>
                 <div class="learn_more_btns">
@@ -603,6 +618,8 @@ if($vendor['comp_logo'])
 
                                 foreach ($btns as $key => $value) {
                                     $i++;
+                                    if(!empty($value['txt']))
+                                    {
                                     if($i %2 !=  0)
                                     {
                                         ?>
@@ -614,95 +631,85 @@ if($vendor['comp_logo'])
                                         <a href="<?= $value['url'] ?>"><?= $value['txt'] ?></a>
                                         <?php
                                     }
+                                    }
                                 }
                                 ?>
                 </div>
             </div>
         </div>
 
-      <?php
-      if($pro['tag']){
-      ?> 
-      <div class="inner_box_info" style="    padding: 0 0 30px;">
-            <h2>Tags</h2>
-            <p>You can now list your</p>
-        </div>
-    
-        <div class="tags_box">
-            <ul>
-                <?php
-                $tags = $pro['tag'];
-                $x = (explode(",",$tags));
-                foreach($x as $K => $v){
-                ?>
-                <li><a href="#"><img src="#" alt=""> <?=  $v;?></a></li>
-                <?php
-                }
-                ?>
-               </ul>
-        </div>
-<?php
-      }
-    ?>
     </div>
 </div>                  
                     <div class="container">
                         <div class="row">
                             <div class="col-md-8">
+                                <?php
+                                $chek = json_decode($pro['checkbox_xtra_fields']);
+                                foreach($chek as $k=> $v)
+                                {
+                                    if(empty($v))
+                                    {
+                                        unset($chek[$k]);
+                                    }
+                                }
+                                if($chek)
+                                {
+                                ?>
                         <div class="check_box_wrapper">
                             <div class="inner_box_sec">
                                 <div class="box_title">
                                     <h2>FEATURES</h2>
+                                    
                                 </div>
                                 <div class="check_box_content">
                                     <div class="listings">
+
                                         <ul>
-                                            <div class="d-flex gap_inn">
+                                            <?php
+                                                
+                                                 $odd= array();
+                                                $even= array();
+                                                $i = 1;
+                                                $lm = 40;
+                                                if($chek)
+                                                {
+                                                foreach($chek as $k=> $v)
+                                                {
+                                                    $i++;
+                                                    if($i%2 == 0)
+                                                    {
+                                                        $even[] = $v;
+                                                    }
+                                                    else
+                                                    {
+                                                        $odd[] = $v;
+                                                    }
+                                                }
+                                                }
+                                            
+                                                foreach($even as $k){
+                                                    if(strlen($k) < $lm){
+                                                ?>
+                                            <div class="d-flex gap_inn">   
                                             <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
+                                            <li><?= $k;?></li>
                                             </div>
+                                            <?php
+                                                }}
+                                            ?>
                                         </ul>
                                         <ul>
+                                            <?php
+                                            foreach($odd as $k){
+                                                if(strlen($k) < $lm){
+                                                ?>
                                             <div class="d-flex gap_inn">
                                             <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
-                                            </div><div class="d-flex gap_inn">
-                                            <li><span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span></li>
-                                            <li>Air Condition</li>
+                                            <li><?= $k; ?></li>
                                             </div>
+                                            <?php
+                                            }}
+                                            ?>
                                         </ul>
                                         
                                         
@@ -710,6 +717,9 @@ if($vendor['comp_logo'])
                                 </div>
                             </div>
                         </div>
+                        <?php
+                                }
+                        ?>
                         </div>
                         </div>
                         </div>
@@ -721,6 +731,7 @@ if($vendor['comp_logo'])
                                 <div class="panel-group" id="accordion">
                                
                                    <?php
+                                   
                                         $additional_fields_new = json_decode($pro['additional_fields_new'], true);
                                         
                                         
@@ -731,18 +742,43 @@ if($vendor['comp_logo'])
                                             $names = $additional_fields_new['name'];
                                             $valus = $additional_fields_new['value'];
                                         }
+                                        if($accor)
+                                        {
+                                            $ii = 99;
+                                            foreach($accor as $k=> $v)
+                                            {
+                                                $ii ++;
+                                                ?>
+                                               <div class="panel panel-default">
+                                                   Test
+                                                    <div class="panel-heading add_flexible">
+                                                      <h4 class="panel-title add_flexible">
+                                                        
+                                                            <?= $k; ?>
+                                                    
+                                                      </h4>
+                                                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $ii; ?>"><i class="clr_chngg fa-solid fa-caret-down"></i></a>
+                                                    </div>
+                                                    <div id="collapse<?= $ii; ?>" class="panel-collapse collapse">
+                                                      <div class="panel-body">  <?= $v; ?></div>
+                                                    </div>
+                                                  </div>
+                                                <?php
+                                            }
+                                        }
                                         if($valus && $names)
                                         {
                                             foreach($names as $k=> $v)
                                             {
                                                 ?>
                                                <div class="panel panel-default">
-                                                    <div class="panel-heading">
-                                                      <h4 class="panel-title">
-                                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $k; ?>">
+                                                    <div class="panel-heading add_flexible">
+                                                      <h4 class="panel-title add_flexible">
+                                                        
                                                             <?= $v; ?>
-                                                        </a>
+                                                    
                                                       </h4>
+                                                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $k; ?>"><i class="clr_chngg fa-solid fa-caret-down"></i></a>
                                                     </div>
                                                     <div id="collapse<?= $k; ?>" class="panel-collapse collapse">
                                                       <div class="panel-body">  <?= $valus[$k]; ?></div>
@@ -757,34 +793,27 @@ if($vendor['comp_logo'])
                             </div>
                         </div>
 
-                        <div class="orange_pathwrap" style="" id="orange_middle_form">
-                        <div class="container-fluid">
-                            <div class="iframe_box" id="newform">
-                               
+                         <div class="orange_pathwrap" id="bpage_form">
+                            <div class="container">
+                                <div class="iframe_box">
+                                <div id="googleMap" style="width:100%;height:550px;"></div>
 
 
-                                <div class="getin_touch">
-                                        <div class="alert alert-success d-none" id="success" role="alert">
-                                          Reported Successfully!
-                                        </div>
-                                        <div class="alert alert-danger d-none" id="danger" role="alert">
-                                          Please Try Again!
-                                        </div>
-                                        <h3>Get In Touch <img src="<?= base_url(); ?>/upload/phone_2.png" alt=""></h3>
+                                    <div class="getin_touch">
+                                        <h3>Get In Touch <img src="<?= base_url(); ?>upload/phone_2.png" alt=""></h3>
                                         <form action="" method="">
-                                            <input type="hidden" name="pid" id="pid" value="<?= $pro['product_id']?>">
                                             <div class="row">
                                                 <div class="col-sm-6 form_gapp">
                                                     <div class="form_box">
-                                                        <label for="First name" class="required">First name</label>
-                                                        <input type="text" placeholder="" name="fname" id="fname__">
-                                                        <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="name">
+                                                        <label for="First name">First name</label>
+                                                        <input type="text" placeholder="" name="">
+                                                        <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 form_gapp">
                                                     <div class="form_box">
-                                                        <label for="Last name" class="required">Last name</label>
-                                                        <input type="text" placeholder=""id="lname" name="lname">
+                                                        <label for="Last name">Last name</label>
+                                                        <input type="text" placeholder="" name="">
                                                         <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
                                                     </div>
                                                 </div>
@@ -792,8 +821,8 @@ if($vendor['comp_logo'])
                                             <div class="row">
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
-                                                        <label for="Email"  class="required">Email</label>
-                                                        <input type="email" placeholder="" name="email1" id="email__">
+                                                        <label for="Email">Email</label>
+                                                        <input type="email" placeholder="" name="">
                                                         <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
                                                     </div>
                                                 </div>
@@ -801,38 +830,40 @@ if($vendor['comp_logo'])
                                             <div class="row">
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
-                                                        <label for="Phone number" class="required">Phone number</label>
-                                                        <input type="number" placeholder="" id="phone" name="phone">
-                                                        <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
+                                                        <label for="Phone number">Phone number</label>
+                                                        <input type="number" placeholder="Type phone number" name="">
+                                                        <img class="phone_iconn" src="<?= base_url(); ?>upload/phone_icon.png" alt="">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
-                                                        <label for="Message" class="required">Message</label>
-                                                        <textarea placeholder="Describe in 100 words" name="message" id="message__"></textarea>
-                                                        <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
+                                                        <label for="Message">Message</label>
+                                                        <textarea placeholder="Type Message"></textarea>
+                                                        <img class="msg_iconn" src="<?= base_url(); ?>upload/message_1.png" alt="">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
-                                                        <button type="button" class="not" id="send">Send</button>
-                                                        <button type="submit" class="yes">GET DIRECTION</button>
+                                                        <button type="submit">Send</button>
+                                                        <button type="submit">GET DIRECTION</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
-                                    <div id="googleMap" class="map_in" style="width:100%;height:550px;margin-bottom:100px; z-index: 99;"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
                     <div class="container" id="mrg_tp"> 
                                 <div class="row">
-                                    
+                                    <?php
+                                    if(isset($pro['listing_amenities']) && !empty($pro['listing_amenities'])){
+                                    ?>
                                     <div class="col-md-6">
                                         <div class="tag_sec_wrapper tags_sec">
                                             <div class="head_section">
@@ -840,77 +871,68 @@ if($vendor['comp_logo'])
                                             </div>
                                             <div class="inner_sec">
                                                 <div class="tag_container">
+                                                    <?php
+                                                    $amn = json_decode($pro['listing_amenities']);
+                                                    foreach($amn as $k => $v){
+                                                    ?>
                                                     <div class="tags_in">
                                                         <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Credit Card</span>
+                                                        <span><?= $v; ?></span>
                                                     </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Bike Parking</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Coupon</span>
-                                                    </div> 
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Parking</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Wireless</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Cleaning</span>
-                                                    </div>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                     </div>
                                                 
                                                     
                                                 </div>
                                                 </div>
                                             </div>
+                                                                                    
+                                              <?php
+                                                    }
+                                              if(isset($pro['tag']) && !empty($pro['tag'])){
+                                              ?> 
+                                          
+                                            
                                         <div class="col-md-6">
                                          <div class="tag_sec_wrapper tags_sec">
                                             <div class="head_section">
-                                               <h4>CATEGORIES</h4> 
+                                               <h4>Tags</h4> 
                                             </div>
+                                             
+                                     
                                             <div class="inner_sec">
                                                 <div class="tag_container">
+                                                      <?php
+                                                        $tags = $pro['tag'];
+                                                        $x = (explode(",",$tags));
+                                                        foreach($x as $K => $v){?>
                                                     <div class="tags_in">
                                                         <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Resturent</span>
+                                                        <span><?=  $v;?></span>
                                                     </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Nightlife</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Hotel</span>
-                                                    </div> 
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Cars</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Trucks</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Blogs</span>
-                                                    </div>
+                                                    <?php
+                                                        }
+                                                    ?>
+                                                    
                                                 </div>
-                                        </div>        
+                                             </div>        
                                                 </div>
                                             </div>
-                                        
+                                           <?php
+                                              }
+                                            ?>
                                         
                                     </div>   
                                 </div>
                     <div class="contact_info new_contact_info">
+  
     <div class="container">
+          <?php
+            if(isset($pro['etra_content']) && !empty($pro['etra_content'])){
+                // var_dump($pro['etra_content']);
+            ?>
         <div class="row">
             <?php
                         //extra_info
@@ -957,7 +979,9 @@ if($vendor['comp_logo'])
                         }
                         ?>
         </div>
-        
+        <?php
+    }
+        ?>
         
                             <?php
                                 if(isset($pro['additional_fields_new']) && !empty($pro['additional_fields_new'])){

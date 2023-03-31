@@ -112,15 +112,12 @@ $logo='';
                         }
      
      ?>
-            <div onclick="location.href='<?= $this->crud_model->product_link($product_id); ?>'"  class="sidegap_product item white_shadow__box" onmouseover="open_marker(<?= $lat  ?>, <?=$lng ?>)" data-lat="<?= $lat; ?>" data-lng="<?= $lng; ?>" rate="<?= ($rating_num)?$rating_num:0; ?>">
+            <div class="sidegap_product item white_shadow__box" onmouseover="open_marker(<?= $lat  ?>, <?=$lng ?>)" data-lat="<?= $lat; ?>" data-lng="<?= $lng; ?>" rate="<?= ($rating_num)?$rating_num:0; ?>">
               <div class="img_hover_icons left">
                 <?php
-                   echo $this->crud_model->rate_html(3);
+                   echo $this->crud_model->rate_html($rating_num);
                    ?>
                  
-                </div>
-              <div class="img_hover_icons right">
-                   <a href="#"><i class="fa fa-heart"></i></a>
                 </div>
               
              <div class="row">  
@@ -128,12 +125,12 @@ $logo='';
              <!--<div class="itemimg" style="background-image:url('https://imageio.forbes.com/specials-images/imageserve/5d35eacaf1176b0008974b54/0x0.jpg?format=jpg&crop=4560,2565,x790,y784,safe&width=1200')"></div>-->
               <?php
              if($is_blog == 1){?>
-                 <div class="itemimg" style="background-image:url('<?= $logo; ?>')"></div>   
+                 <div onclick="location.href='<?= $this->crud_model->product_link($product_id); ?>'" class="itemimg" style="background-image:url('<?= $logo; ?>')"></div>   
              <?php
                  
              }else{
              ?>
-             <div class="itemimg" style="background-image:url('<?= $img; ?>')"></div>
+             <div onclick="location.href='<?= $this->crud_model->product_link($product_id); ?>'" class="itemimg" style="background-image:url('<?= $img; ?>')"></div>
             <?php
              }
             ?>
@@ -144,7 +141,7 @@ $logo='';
                         <?php
                        
                          $time = date('H:i:s', time());
-                         if($time >=$vendor['openig_time'] && $time <=$vendor['closing_time']){
+                         if($time >=$vendor['openig_time'] && $time <= $vendor['closing_time']){
                           ?>
                           <a href="#" class="online_box_wrapper"><span class="online_box2"></span></a>
                           <?php  
@@ -155,99 +152,49 @@ $logo='';
                     </div>
                     </div>
             
-            <div class="col-sm-8 col-12 desc_col">
-                <div class="flex">
-                <div>    
-                        <h1><?= $product_id; ?>-<?= $title; ?></h1>
-                    <?php
-                    if($is_car)    
-                    {
-                        ?>
-                        <h4><?= get_product_meta($product_id,'car_condition') ?>,<?= get_product_meta($product_id,'type_fuel') ?>,<?= get_product_meta($product_id,'Seats') ?> Seater</h4>
-                    <h4><?= $sale_price ?>0</h4>
-                        <?php
-                    }
-                    elseif($is_job)    
-                    {
-                        ?>
-                        <h4>Posted on : <?= date("jS F Y", strtotime($create_at)); ?>/<?= get_product_meta($product_id,'recureter_name') ?></h4>
-                    <h4><?= get_product_meta($product_id,'Salary') ?>/<?= get_product_meta($product_id,'Hours') ?></h4>
-                        <?php
-                    }
-                    elseif($is_event)    
-                    {
-                        ?>
-          
-                    <p><?= get_product_meta($product_id,'event_catchphrase') ?></p>
-                    <p>Posted By:<?= get_product_meta($product_id,'name_of_person') ?>/Ticket Price: <?= get_product_meta($product_id,'price') ?>	</p>
-                 
-                        <?php
-                    }
-                    
-                    
-                    ?>
-                </div>
-                <div>  
-                    <?php 
-                   
-                if($is_car == 1){?>
-                       <div><?= get_product_meta($product_id,'modal') ?></div>
-                       <div><?= get_product_meta($product_id,'mileage') ?></div>
-                       <div><?= get_product_meta($product_id,'transmission') ?></div>
-               
+            <div class="col-sm-8 col-12 desc_col desc_col_in">
+                <!--work here-->
+                <div class="row" id="add_height_in">
                 <?php
-                    
-                }if($is_blog == 1){
-                 ?>   
-                 <p><?= date('Y-m-d H:i:s',strtotime($posted_date));?></p>
-              
-               <div><?= $author_name;?></div>
-               <?php
-                }if($is_event == 1){
-               ?>
-                  <p><?= get_product_meta($product_id,'date') ?>/<?= get_product_meta($product_id,'time') ?>	</p>
-                    <p><?= get_product_meta($product_id,'type') ?>/<?= get_product_meta($product_id,'age_restriction') ?>	</p>
-                    <p><?= get_product_meta($product_id,'location') ?>/<?= get_product_meta($product_id,'city_event') ?>	</p>
-               <?php
-                }if($is_job == 1){
-                 ?><p><?= get_product_meta($product_id,'job_city') ?>,<?= get_product_meta($product_id,'sarting_date') ?></p>   
-                 <p><?= get_product_meta($product_id,'job_nature') ?>,<?= get_product_meta($product_id,'Employment') ?></p>
-              
-               <p><?= $author_name;?><?= get_product_meta($product_id,'Deadline') ?></p>
-               <?php
-                }
-
-                ?>
-            </div>
-                </div>
-                      <?php
-                      if($is_car)
-                      {
-                          ?>
-                          <b>Details</b>
-                           <div class="desc"><?= excerpt($description,100); ?></div>
-                          <?php
-                      }
-                      else
-                      {
-                      ?>
-                      <div class="desc"><?= excerpt($description,100); ?></div>
-                   <?php
-                      }
-                    if($is_car == 1){
-                        ?>
-                        <?php
-                    }elseif($is_property == 1){?>
-                       <div class="center"> No Of Bedrooms: (<?= $no_of_bedroom; ?>)</div> 
-                   <?php
-                   }else{
-                    
+                if($is_bpage)
+                {
                     ?>
-                    <div class="center"></div> 
-                        <?php
-                            }
-                        ?>
-                    <div class="share_iconss">
+                    yhn bpage
+                    <?php
+                }
+                elseif($is_blog)
+                {
+                    ?>
+                        <div class="col-md-12 p-0">
+                        <div class="blogs_titlee"><h1><?= $title ?></h1></div>
+                        <div class="meddle_cont">
+                            <div class="meddle_cont_left">
+                            <h4><?= $author_name; ?></h4>
+                            <h4><?= $slog; ?></h4>
+                            </div>
+                            <div class="meddle_cont_right">
+                            <h4>Posted On <?= date("d-m-Y",strtotime($create_at)); ?></h4>
+                            <?php 
+                                if(!empty($posted_date)){
+                            ?>
+                            <h4>Updated On <?= date("d-m-Y",strtotime($posted_date)); ?></h4>
+                            <?php 
+                                }
+                            $cat = $this->db->where('category_id' , $category)->get('category')->row_array();
+                            // var_dump($c)
+                            ?>
+                            <h4><?= $cat['category_name']; ?></h4>
+                            </div>
+                        </div>
+                        <div class="last_desc">
+                            <div class="col-md-12 dec_wrappper p-0">
+                    <h2>Details</h2>
+                    <p>
+                    <?= strWordCut($description,250); ?>
+                    </p>
+                </div>
+                        </div>
+                        <div class="share_iconss">
                         <div class="affliate">
                             <?php 
                     $user = true;//$this->session->userdata('user_id');
@@ -262,7 +209,7 @@ $logo='';
                         
                         $wish = $this->crud_model->is_aff($product_id); 
                     ?>
-                    Affliate
+                    Affiliate
                     <?php
                     }
                     ?>
@@ -277,11 +224,65 @@ $logo='';
                         }
                              ?>
                         <a href="#"><i class="fa fa-share"></i></a>
-                   <a href="#"><i class="fa fa-heart"></i></a>
+                   <a onclick="to_wishlist(<?php echo $product_id; ?>,event)"><i class="fa fa-heart"></i></a>
                         <a href="mailto: <?= $bussniuss_email;?>"><i class="fa fa-envelope"></i></a>
                         <a href="tel:<?= $bussniuss_phone;?>"><i class="fa fa-phone"></i></a>
                     </div>
-               </div> 
+                        </div>
+                        
+                        
+                    <?php
+                    
+                }
+                else
+                {
+                    ?>
+                    
+                    <div class="col-md-6 left_fields" >
+                        <h1><?= $title; ?></h1>
+                        <h1><?= $slog ?></h1>
+                        <div class="list_attributes list3">
+                            <?= get_fields_line($product_id, 3); ?>
+                        </div>
+                        <div class="list_attributes list5">
+                            <?= get_fields_line($product_id, 5); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6 right_fields" >
+                    <div class="right_fields_inner" >
+                        <div class="list_attributes list2">
+                            <?= get_fields_line($product_id, 1); ?>
+                        </div>
+                        <div class="list_attributes list2">
+                            <?= get_fields_line($product_id, 2); ?>
+                        </div>
+                        <div class="list_attributes list4">
+                            <?= get_fields_line($product_id, 4); ?>
+                        </div>
+                        <div class="list_attributes list6">
+                            <?= get_fields_line($product_id, 6); ?>
+                        </div>
+                        </div>
+                        
+                    </div>
+                
+                    <?php
+                }
+                
+                ?>
+                </div>
+                <?php
+                if($description)
+                {
+                ?>
+                <!--<div class="row add_hegiht_in">-->
+                    
+                <!--</div>-->
+                <?php
+                }
+                ?>
+                
+            </div>  
                 </div>
             </div>
             </div>    

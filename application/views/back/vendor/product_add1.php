@@ -470,7 +470,7 @@ $.ajax(settings).done(function (response) {
     }
     function get_cat(id,now){
         $('#sub').hide('slow');
-        ajax_load(base_url+'vendor/product/sub_by_cat/'+id,'sub_cat','other');
+        ajax_load(base_url+'vendor/product/sub_by_cat1/'+id,'sub_cat','other');
     }
     function get_brnd(id){
         
@@ -631,7 +631,7 @@ function selecttype(id)
     else{
         $('#category').val(id);
     }
-    var url  = base_url+'vendor/product/sub_by_cat/'+id;
+    var url  = base_url+'vendor/product/sub_by_cat1/'+id;
         // alert(url);
     $.ajax({
   url: url,

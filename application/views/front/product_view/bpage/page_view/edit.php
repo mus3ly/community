@@ -1,3 +1,14 @@
+  <?php
+
+  ?>
+  <!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+<div class="loader_img"style="display:none;">
+    <img width="50px" src="<?=base_url('/upload/map-loader.gif')?>">   
+    
+</div>
 <?php
 $pro = array();
  
@@ -5,15 +16,22 @@ $pro = array();
     {
         $pro = $product_data[0];
     }
+    $vid = json_decode($pro['added_by']);
+ 
+if(($_SESSION['login'] != 'yes') && ($vid->id != $_SESSION['vendor_id']) ){
+    echo 'You are not authorized to open this...  Login first!!';
+    die();
+}
+  
 ?>
-<a href="<?=base_url($pro['slug']);?>" class="btn btn-info pre_btnn">Preview<span><i class="fa-regular fa-eye"></i></span></a>
+<a href="<?=base_url($pro['slug']);?>" target="_blank" class="btn btn-info pre_btnn">Preview<span><i class="fa-regular fa-eye"></i></span></a>
 <!--    <div class="icon_wrapper">-->
 <!--    <div class="icon-container">-->
 <!--  <i class="fas fa-cog fa-lg"></i>-->
 <!--</div>-->
 <!--</div>-->
-<div class="wrapper d-flex align-items-stretch addd_butn">
-    <nav id="sidebar">
+<div class="wrapper d-flex align-items-stretch addd_butn" id="addd_butn">
+    <nav id="sidebar" style="    width: 286px;">
 				<div class="custom-menu">
 					<button type="button" id="sidebarCollapse" class="btn btn-primary">
 	          <i class="ICON_BTN fas fa-cog fa-lg"></i>
@@ -21,46 +39,30 @@ $pro = array();
 	        </button>
         </div>
 				<div class="p-4 pt-5">
-		  		<h1><a href="index.html" class="logo">Splash</a></h1>
+		  		<h1><a href="index.html" class="logo">Setting</a></h1>
 	        <ul class="list-unstyled components mb-5">
-	          <li class="active">
-	            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-	            <ul class="collapse list-unstyled" id="homeSubmenu">
-                <li>
-                    <a href="#">Home 1</a>
-                </li>
-                <li>
-                    <a href="#">Home 2</a>
-                </li>
-                <li>
-                    <a href="#">Home 3</a>
-                </li>
-	            </ul>
-	          </li>
-	          <li>
-	              <a href="#">About</a>
-	          </li>
-	          <li>
-              <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-              <ul class="collapse list-unstyled" id="pageSubmenu">
-                <li>
-                    <a href="#">Page 1</a>
-                </li>
-                <li>
-                    <a href="#">Page 2</a>
-                </li>
-                <li>
-                    <a href="#">Page 3</a>
-                </li>
-              </ul>
-	          </li>
-	          <li>
-              <a href="#">Portfolio</a>
-	          </li>
-	          <li>
-              <a href="#">Contact</a>
-	          </li>
+	         
+	          <div class="form-group">
+	          <input type="text" ng-model="detail.lat" placeholder="Latitude" class="form-control">
+	          </div>
+	          <div class="form-group">
+	          <input type="text" ng-model="detail.lng" placeholder="Longitude" class="form-control">
+	          </div>
+	          <div class="form-group">
+	          <input type="text" ng-model="detail.bussniuss_email" placeholder="Business Email" class="form-control">
+	          </div>
+	          <label for="appt">Opening time:</label>
+	           <div class="form-group">
+	            
+                <input type="text" id="appt" ng-model="detail.openig_time" name="appt" class="form-control">
+                </div>
+                <label for="appt">Closing time:</label>
+	           <div class="form-group">
+	            
+                <input type="text" ng-model="detail.closing_time" id="appt" name="appt" class="form-control">
+                </div>
 	        </ul>
+	        
 
 	    <!--    <div class="mb-5">-->
 					<!--	<h3 class="h6">Subscribe for newsletter</h3>-->
@@ -78,6 +80,29 @@ $pro = array();
     	</nav>
 
     
+</div>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg_colore">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <iframe src="<?= base_url();?>/home/ckeditor/759/description" height="100%" width="100%" id="dis_frame" title="Iframe Example"></iframe>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+      </div>
+    </div>
+  </div>
 </div>
 
        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
@@ -374,7 +399,9 @@ input:checked + .slider:before {
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-sanitize.js"></script>
-    <script src="//cdn.ckeditor.com/4.20.1/standard/ckeditor.js"></script>
+      <!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
     <script>
 var app = angular.module('myApp', ['ngSanitize']);
@@ -391,13 +418,14 @@ app.controller('myCtrl', function($scope, $http) {
        
         var id = id;
         var product = "<?= $pro['product_id']; ?>";
-
+        $scope.show_loader();
          $.ajax({
         url: '<?= base_url('/home/delete_gallery'); ?>',
         type: "Post",
         async: true,
         data: { product:product, id:id},
         success: function (data) {
+            $scope.hide_loader();
             if(data){
                     $scope.onload();
                 }
@@ -412,12 +440,14 @@ app.controller('myCtrl', function($scope, $http) {
     {
         $scope.update_btn = 'Processing';
         // Simple Post request example:
-
+$scope.show_loader();
 var url = "<?= base_url('/home/update_product'); ?>",config='contenttype';
 
 $http.post(url, $scope.detail, config).then(function (response) {
+    $scope.hide_loader();
     if(response.data)
     {
+        
         $scope.update_btn = 'Update';
     }
     else
@@ -432,9 +462,45 @@ $http.post(url, $scope.detail, config).then(function (response) {
 
 });
     };
+    $scope.show_modal= function(id){
+        console.log($scope.detail);
+        console.log($scope.detail[id]);
+        $('#exampleModalLong').modal('show');
+        //dis_frame
+        
+        var url = "https://markethubland.com/home/ckeditor/<?= $pro['product_id']; ?>/"+id;
+        // alert(url);
+        var html = '<iframe src="'+url+'" height="100%" width="100%" id="dis_frame" title="Iframe Example"></iframe>';
+        $('#exampleModalLong .modal-body').html(html);
+        //modal-body
+            $("#dis_frame").attr("src", url);
+            setInterval(function () {
+                console.log('checking');
+                var foo = $.cookie("is_save")
+                if(foo == '<?= $pro['product_id']; ?>')
+                {
+                    $('#exampleModalLong').modal('hide');
+                $.removeCookie('is_save');
+                $scope.onload();
+                }
+
+                
+            }, 1000);
+
+        ('#summernote').summernote();
+    };
+    $scope.show_loader= function(){
+        $('.loader_img').show();
+    };
+    $scope.hide_loader= function(){
+        $('.loader_img').hide();
+    };
     $scope.onload= function(){
+        // alert("Loader");
+        $scope.show_loader();
         $http.get("<?= base_url('/home/product_data/'.$pro['product_id']); ?>")
   .then(function(response) {
+      $scope.hide_loader();
     $scope.detail = response.data;
     $scope.detail.enable_checks = JSON.parse($scope.detail.enable_checks);
     $scope.detail.feature = JSON.parse($scope.detail.feature);
@@ -493,7 +559,7 @@ $http.post(url, $scope.detail, config).then(function (response) {
    
     $scope.update_edit_col = function(i,ind = 0)
     {
-        if(true)
+        /*if(true)
         {
             var mid = '#extra'+ind;
             // alert(mid);
@@ -501,8 +567,10 @@ $http.post(url, $scope.detail, config).then(function (response) {
             $scope.detail.etra_content[ind] = $(mid).val();
             console.log($scope.detail.etra_content);
         }
-        $scope.edit_col = i+1;
-        // alert(i);
+        $scope.edit_col = i+1;*/
+        var col = 'etra_content-'+i;
+        $scope.show_modal(col);
+        // alert(col);
         console.log($scope.detail.etra_content);
         // alert($scope.detail.etra_content[i]);
     };
@@ -581,6 +649,7 @@ $http.post(url, $scope.detail, config).then(function (response) {
         fd.append('file',files);
         fd.append('column',file_id);
         fd.append('product',"<?= $pro['product_id']; ?>");
+        $scope.show_loader();
 
         $.ajax({
             url: '<?= base_url('/home/upload_bpage'); ?>',
@@ -589,6 +658,7 @@ $http.post(url, $scope.detail, config).then(function (response) {
             contentType: false,
             processData: false,
             success: function(response){
+                $scope.hide_loader();
                 // alrert(response);
                 if(response){
                     $scope.onload();
@@ -648,6 +718,9 @@ $scope.getBase64(file_id, file);
     <body id="page-name"  ng-app="myApp" ng-controller="myCtrl">
         <div class="container">
         <div class="update_btn">
+        <button type="button" id="btun_clss" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+                 Launch demo modal
+        </button>
         <button class="btn btn-primary" ng-click="update_product()">{{update_btn}}</button>
         </div>
         </div>
@@ -1064,7 +1137,7 @@ $scope.getBase64(file_id, file);
                                 <!--<h3>{{detail.main_heading}}</h3>-->
                                 <div class="scroll" id="scrol_9sec" >
                                 <div class="desc">
-                                    <p ng-click="detail.description_edit = 1" ng-if="!detail.description_edit">{{ detail.description}}</p>
+                                    <p ng-click="show_modal('description');" ng-if="!detail.description_edit" ng-bind-html="detail.description"></p>
                                     <form ng-if="detail.description_edit" class="sub_form2" style="position: relative;">
                                         <textarea name="ckeditor" ng-model="detail.description" class="form-control" style="width:100%;"></textarea>
                                         <button  type="button" class="btn btn-primary" ng-click="detail.description_edit = 0">Save</button>
@@ -1487,193 +1560,15 @@ $scope.getBase64(file_id, file);
                         ?>
                         
 
-
+ 
 
 
 <?php
                         if(true)
                         {
-                            $feature  = json_decode($pro['text'],true);
                             ?>
-                        <div class="container">
-                            <div class="verify_head" style="    padding: 10px 42px;">
-                                         <h3 ng-click="detail.gtitle_edit = 1" ng-if="!detail.gtitle_edit">{{detail.gtitle}}</h3>
-                                    <form ng-if="detail.gtitle_edit" class="sub_form" style="position: relative;">
-                                        <input type="text" class="form-control"  ng-model="detail.gtitle" />
-                                        <button  type="button" class="btn btn-primary" ng-click="detail.gtitle_edit = 0">Save</button>
-                                    </form>
-                                    <p ng-click="detail.gdesc_edit = 1" ng-if="!detail.gdesc_edit">{{detail.gdesc}}</p>
-                                    <form ng-if="detail.gdesc_edit" class="sub_form" style="position: relative;">
-                                        <input type="text" class="form-control"  ng-model="detail.gdesc" />
-                                        <button  type="button" class="btn btn-primary" ng-click="detail.gdesc_edit = 0">Save</button>
-                                    </form>
-                        </div>
-
-                        <div class="inner_content_tabs">
-                        
-                         <div class="row" id="left_gp">
-                         <ul class="tabs__" ng-repeat="x in detail.etra_tab" ng-if="($index+1) <= detail.number_of_tab" ng-style="extra_tab()">{{$index+1}}
-                                    <button class="btn btn-info" ng-click="update_edit_tab($index);">Edit it</button>
-                                <div class="inner_box_design height_auto scroll" style="overflow-y: scroll;height:324px;min-height: 324px;max-height: 324px;" ng-bind-html="x" ng-if="edit_col != ($index+1)">
-                                </div>
-                                <dform ng-if="edit_col == ($index+1)">
-                                    <textarea style="width:100%; height:500px" id="new{{$index}}">{{x}}</textarea>
-                                    <button ng-click="update_edit_tab(-1, $index)">Save</button>
-                                </form>
-                            </div>
-                             <div class="row" id="left_gp">
-                            <ul class="tabs__ gtxt">
-                                <li ng-repeat="x in detail.text" class="tab-link__ {{ ($index == 0)?"current":" "}}" data-tab="<?= $tab ?>"  style="width:100%;"><b><i class="fa-solid <?=$value['ficon'] ?>"></i></b> <p><?=$value['fhead'] ?></p></li>
-                                <?php
-                                $feature  = $this->db->where('vid',34)->get('textg')->result_array();
-                                $count = count($feature);
-                                // echo $count;
-                                if($feature && $count == 1)
-                                {
-                                    $i = 0;
-                                    foreach($feature as $k=> $value)
-                                    {
-                                        $value['ficon'] = $value['icon'];
-                                        // var_dump($value);
-                                        $i++;
-                                        $tab = 'tab-'.$i.'__';
-                                    ?>
-                                    
-                                    <?php
-                                    }
-                                }  elseif($feature && $count == '2' )
-                                {
-                                    $i = 0;
-                                    foreach($feature as $k=> $value)
-                                    {
-                                        $value['ficon'] = $value['icon'];
-                                        // var_dump($value);
-                                        $i++;
-                                        $tab = 'tab-'.$i.'__';
-                                    ?>
-                                    <li class="tab-link__ <?= ($i == 1)?"current__":""; ?>" data-tab="<?= $tab ?>"  style="width:47%;"><b><i class="fa-solid <?=$value['ficon'] ?>"></i></b> <p><?=$value['title'] ?></p></li>
-                                    <?php
-                                    }
-                                } elseif($feature && $count == '3' )
-                                {
-                                    $i = 0;
-                                    foreach($feature as $k=> $value)
-                                    {
-                                        $value['ficon'] = $value['icon'];
-                                        // var_dump($value);
-                                        $i++;
-                                        $tab = 'tab-'.$i.'__';
-                                    ?>
-                                    <li class="tab-link__ <?= ($i == 1)?"current__":""; ?>" data-tab="<?= $tab ?>"  style="width:31%;"><b><i class="fa-solid <?=$value['ficon'] ?>"></i></b> <p><?=$value['title'] ?></p></li>
-                                    <?php
-                                    }
-                                }elseif($feature && $count == '4' )
-                                {
-                                    $i = 0;
-                                    foreach($feature as $k=> $value)
-                                    {
-                                        $value['ficon'] = $value['icon'];
-                                        // var_dump($value);
-                                        $i++;
-                                        $tab = 'tab-'.$i.'__';
-                                    ?>
-                                    <li class="tab-link__ <?= ($i == 1)?"current__":""; ?>" data-tab="<?= $tab ?>"  style="width:23%;"><b><i class="fa-solid <?=$value['ficon'] ?>"></i></b> <p><?=$value['title'] ?></p></li>
-                                    <?php
-                                    }
-                                }elseif($feature && $count == '5' )
-                                {
-                                    $i = 0;
-                                    foreach($feature as $k=> $value)
-                                    {
-                                        $value['ficon'] = $value['icon'];
-                                        // var_dump($value);
-                                        $i++;
-                                        $tab = 'tab-'.$i.'__';
-                                    ?>
-                                    <li class="tab-link__ <?= ($i == 1)?"current__":""; ?>" data-tab="<?= $tab ?>"  style="width:18%;"><b><i class="fa-solid <?=$value['ficon'] ?>"></i></b> <p><?=$value['title'] ?></p></li>
-                                    <?php
-                                    }
-                                }elseif($feature && $count == '6' )
-                                {
-                                    $i = 0;
-                                    foreach($feature as $k=> $value)
-                                    {
-                                        $value['ficon'] = $value['icon'];
-                                        // var_dump($value);
-                                        $i++;
-                                        $tab = 'tab-'.$i.'__';
-                                    ?>
-                                    <li class="tab-link__ <?= ($i == 1)?"current__":""; ?>" data-tab="<?= $tab ?>"  style="width:14%;"><b><i class="fa-solid <?=$value['ficon'] ?>"></i></b> <p><?=$value['title'] ?></p></li>
-                                    <?php
-                                    }
-                                }elseif($feature && $count == '7' )
-                                {
-                                    $i = 0;
-                                    foreach($feature as $k=> $value)
-                                    {
-                                        $value['ficon'] = $value['icon'];
-                                        // var_dump($value);
-                                        $i++;
-                                        $tab = 'tab-'.$i.'__';
-                                    ?>
-                                    <li class="tab-link__ <?= ($i == 1)?"current__":""; ?>" data-tab="<?= $tab ?>"><b><i class="fa-solid <?=$value['ficon'] ?>"></i></b> <p><?=$value['title'] ?></p></li>
-                                    <?php
-                                    }
-                                }
-                                ?>
-                                
-                            </ul>
+                            <a href="<?= base_url('/vendor/brand'); ?>"><p>To include a text gallery to your business page, go to Text Gallery in the left column of your vendor panel and include your detail there. This will show on your public page automatically</p></a>
                             <?php
-                                if($feature)
-                                {
-                                    $i = 0;
-                                    foreach($feature as $k=> $value)
-                                    {
-                                        $value['ficon'] = $value['icon'];
-                                        $value['img'] = $this->crud_model->get_img($value['img'])->secure_url;
-                                        $i++;
-                                        $tab = 'tab-'.$i.'__';
-                                    ?>
-                            <div id="<?= $tab ?>" class="tab-content__ <?= ($i == 1)?"current__":""; ?>">
-                                <?php
-                                if(!$value['img']){
-                                    ?>
-                                    <div class="row" id="advertise_info" style="padding-top:16px;">
-                    
-                                 <div class="col-sm-12 communitybox " id="community">
-                                     <h3> <?= $value['title'] ?></h3>
-                                     <div class="desc">
-                                       <p> <?= $value['detail'] ?></p>
-                                     </div>
-                                    </div>
-                                   </div>
-                                    <?php
-                                }else{
-                                ?>
-                <div class="row" id="advertise_info" style="padding-top:16px;">
-                    <div class="col-sm-4 business_graphic" id="leftboxx">
-                     <img src=" <?= $value['img'] ?>" alt="">
-                    </div>
-                 <div class="col-sm-8 communitybox" id="equal_btnw">
-                     <h3> <?= $value['title'] ?></h3>
-                     <div class="desc">
-                       <p> <?= $value['detail'] ?></p>
-                     </div>
-                    </div>
-                </div>
-                <?php
-                                }
-                ?>
-                              
-                            </div>
-                              <?php
-                                    }
-                                }
-                                ?>
-
-                        </div>
-                        </div>
-                        <?php
                         }
                         ?>
         <?php
@@ -1708,49 +1603,6 @@ $scope.getBase64(file_id, file);
                                         <button  type="button" class="btn btn-primary" ng-click="detail.about_desc_edit = 0">Save</button>
                                     </form>
                    <div class="row">
-                   <div class="col-sm-6">
-                   <p><b>Categories</b></p>
-                   <div class="row">
-                   <?php
-                   $categories =  $pro['cats']; 
-                   $cat = explode(",",$categories);
-                //   var_dump($cat);
-                   foreach($cat as $k =>$v){
-                   ?>
-                       <!--<div class="equal"><?php // $v; ?></div>-->
-                       <div class="col-sm-6">
-                   <ul>
-                    <li ><i class="fa fa-circle"></i><?= $v; ?></li>
-                    </ul>
-                    </div>
-                    <?php
-                   }?>
-                   </div>
-                   </div>
-                   <div class="col-sm-6">
-                   <?php
-                    if(isset($pro['amen_check']) && $pro['amen_check'] == 'yes'){
-                        $amen = $pro['amenities']; 
-                    $amenities = explode(',',$amen);
-                     ?>
-                     <p><b>Ameneties</b></p>
-                     <div class="row">
-                     <?php
-                    foreach($amenities as $k => $v){
-                    ?>
-                     
-                    <!--<div class="equal"><?php // $v; ?></div>-->
-                    <div class="col-sm-6">
-                     <ul>
-                    <li><i class="fa fa-circle"></i><?= $v; ?></li>
-                    </ul>
-                    </div>
-                    <?php
-                    }
-                    }
-                    ?>
-                    </div>
-                    </div>
                     </div>
                  <!--nimra code-->
                     <div class="learn_more_btns" style="text-align: center;">
@@ -1802,7 +1654,7 @@ $scope.getBase64(file_id, file);
                     
                    <?php if(isset($pro['about_address']) && !empty($pro['about_address'])){ 
                    ?>
-                   <div ng-click="detail.about_address_edit = 1" ng-if="!detail.about_address_edit" class="margin-bottom">
+                   <div  ng-click="show_modal('about_address');" ng-if="!detail.about_address_edit" class="margin-bottom">
                        <i class="fa fa-map-marker"></i> {{detail.about_address}}</div>
                         <form ng-if="detail.about_address_edit" class="sub_form" style="    position: relative;">
                             <input type="text" class="form-control" ng-model="detail.about_address" />
@@ -1845,7 +1697,7 @@ $scope.getBase64(file_id, file);
 
                    ?>
                     
-                   <div  class="margin-bottom"><?= date("h:ia", strtotime( $pro['openig_time'])) .'-'.date("h:ia", strtotime( $pro['closing_time'])) ;?></div>
+                   <div  class="margin-bottom"><i class="fa fa-clock"></i> <?= date("g:ia", strtotime( $pro['openig_time'])) .' - '.date("g:ia", strtotime( $pro['closing_time'])) ;?></div>
                       <?php
                        }
                       ?>
@@ -1913,7 +1765,7 @@ $scope.getBase64(file_id, file);
                                         <input type="text" class="form-control" ng-model="detail.info_head" />
                                         <button ng-click="detail.info_head_edit = 0"  type="button" class="btn btn-primary">Save</button>
                                     </form>
-                                    <p ng-click="detail.info_desc_edit = 1" ng-if="!detail.info_desc_edit">{{detail.info_desc}}</p>
+                                    <p   ng-click="show_modal('info_desc');" ng-if="!detail.info_desc_edit">{{detail.info_desc}}</p>
                                     <form ng-if="detail.info_desc_edit" class="sub_form" style="    position: relative;">
                                         <textarea name="ckeditor" ng-model="detail.info_desc" class="form-control" style="width:100%;"></textarea>
                                         <button ng-click="detail.info_desc_edit = 0"  type="button" class="btn btn-primary">Save</button>
@@ -1936,78 +1788,6 @@ $scope.getBase64(file_id, file);
                             <!--{{detail.button_url}}-->
                         </div>
                         <div class="container">
-                                <div class="row" id="marg_tp">
-                                    <div class="col-md-6">
-                                        <div class="tag_sec_wrapper">
-                                            <div class="head_section">
-                                               <h4>TAGS</h4>
-                                                  <p> 
-                                                    <span ng-click="detail.slog_edit = 1" ng-if="!detail.slog_edit">Add New</span>
-                                                <form ng-if="detail.slog_edit" style="" class="Submit_1">">
-                                                    <input type="text" class="form-control" ng-model="detail.slog" />
-                                                    <button ng-click="detail.slog_edit = 0"  type="button" class="btn btn-primary">Save</button>
-                                                </form>
-                                                
-                                                </p>
-                                            </div>
-                                            <div class="inner_sec">
-                                                <div class="tag_container">
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Accept Credit Card</span>
-                                                    </div>
-                                                </div>
-                                                
-                                                </div>
-                                            </div>
-                                        
-                                    </div>   
-                                    <div class="col-md-6">
-                                         <div class="tag_sec_wrapper">
-                                            <div class="head_section">
-                                               <h4>CATEGORIES</h4>
-                                              <p> 
-                                                    <span ng-click="detail.slog_edit = 1" ng-if="!detail.slog_edit">Add New</span>
-                                                <form ng-if="detail.slog_edit" style="" class="Submit_1">">
-                                                    <input type="text" class="form-control" ng-model="detail.slog" />
-                                                    <button ng-click="detail.slog_edit = 0"  type="button" class="btn btn-primary">Save</button>
-                                                </form>
-                                                
-                                                </p>
-                                            </div>
-                                            <div class="inner_sec">
-                                                <div class="tag_container">
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Resturent</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Nightlife</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Hotel</span>
-                                                    </div> 
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Cars</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Trucks</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Blogs</span>
-                                                    </div>
-                                                </div>
-                                        </div>        
-                                                </div>
-                                            </div>
-                                        
-                                        
-                                    </div>   
                                 </div>
                                 
                                 
@@ -2597,6 +2377,13 @@ return src;
     }
     $(document).ready(function(){
         $('.summernote').summernote();
+    });
+    </script>
+      <script type="text/javascript">
+    $(document).ready(function(){
+       $('#sidebarCollapse').click(function(){
+           $('#addd_butn').toggleClass('sidebar_open');
+       });
     });
     </script>
     <script type="text/javascript">

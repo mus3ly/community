@@ -78,7 +78,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input class="form-control required" name="company" type="text" placeholder="<?php echo translate('business_name');?>" data-toggle="tooltip" title="<?php echo translate('business_name');?>">
+                                <input class="form-control required" name="company" id="uniquebusiness" type="text" placeholder="<?php echo translate('business_name');?>" data-toggle="tooltip" title="<?php echo translate('business_name');?>">
+                                <small style="color:red;display:none;" id="buss_error">Business Name already exist</small>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -280,6 +281,26 @@ function other(){
     $(document ).ready(function() {
         // set_cart_map();
         other();
+    });
+    $( "#uniquebusiness" ).on('keyup', function(){
+        $('#buss_error').css({'display':'none'}); 
+        var val = $(this).val();
+        if(val)
+        {
+       $.ajax({
+        url: '<?= base_url('Home/business_unique_name'); ?>',
+        type: "Post",
+        async: true,
+        data: {val:val },
+        success: function (data) {
+           if(data == 'error'){
+              $('#buss_error').css({'display':'block'}); 
+           }
+        },
+        error: function (xhr, exception) {
+         }
+    });
+        }
     });
     function get_cat(id,now){
         $('#scat').show('slow');

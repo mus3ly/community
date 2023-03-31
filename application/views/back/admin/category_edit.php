@@ -40,6 +40,14 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('slug');?></label>
+                <div class="col-sm-6">
+                    <input type="text" name="slug" id="slug" placeholder="<?php echo translate('slug'); ?>" class="form-control" value="<?php echo $row['slug'];?>">
+                    <small class="slug_error" style="display:none;">Slug already exist</small>
+                       
+                </div>
+            </div>
 			</div>
 		</form>
 	</div>
@@ -52,6 +60,31 @@
 	    $("form").submit(function(e) {
 	        return false;
 	    });
+	});
+		$('#slug').on('keyup', function(){
+	    $('.slug_error').css({'display':'none'});
+	    $(".enterer").prop('disabled', false);
+
+	    var val = $(this).val();
+	    if(val){
+	    $.ajax({
+        url: '<?= base_url('Admin/cat_slug'); ?>',
+        type: "Post",
+        async: true,
+        data: { val:val },
+        success: function (data) {
+           if(data == 'error'){
+               $(".enterer").prop('disabled', true);
+               $('.slug_error').css({'display':'block'});
+               $('.slug_error').css({'color':'red'});
+           }
+        },
+        error: function (xhr, exception) {
+         
+           
+        }
+    }); 
+	    }
 	});
 	function readURL(input) {
 		if (input.files && input.files[0]) {

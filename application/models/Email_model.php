@@ -110,10 +110,12 @@ class Email_model extends CI_Model
 				
 			}
 
-            return $send_mail;
+            return 1;
+            echo 1;
         }
         else {
             return false;
+            // echo 0;
         }
     }
     
@@ -132,11 +134,12 @@ class Email_model extends CI_Model
         }
 
         $query  = $this->db->get_where('contact_us', array('id' => $id));
-
-        if ($query->num_rows() > 0){
+        // var_dump($this->db->last_query());
+        if (count($query) > 0){
 
             $sub    = $this->db->get_where('email_template', array('email_template_id' => 11))->row()->subject . $this->db->get_where('product', array('product_id' => $query->row()->pid))->row()->title;
             $to =$this->db->get_where('product', array('product_id' => $query->row()->pid))->row()->bussniuss_email;
+            // var_dump($to);
             // $to     = $query->row()->email;
             $to_name = $query->row()->first_name;
             $phone = $query->row()->phone;

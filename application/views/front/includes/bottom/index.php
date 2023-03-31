@@ -16,9 +16,23 @@
 
 <script src="<?php echo base_url(); ?>template/front/plugins/modernizr.custom.js"></script>
 <script src="<?php echo base_url(); ?>template/front/modal/js/jquery.active-modals.js"></script>
-<script src="<?php echo base_url(); ?>template/front/js/theme.js"></script>
 <script src="<?php echo base_url(); ?>template/front/rateit/jquery.rateit.min.js"></script>
-
+<script>
+            $('.menubtn').click(function(){
+                $('.navbar_box_items').toggle();
+            });
+            $('.close_icon').click(function(){
+                $('.navbar_box_items').toggle();
+            });
+    function open_sidebar(){
+        $('.sidebar').removeClass('close_now');
+        $('.sidebar').addClass('open');
+    }
+    function close_sidebar(){
+        $('.sidebar').removeClass('open');
+        $('.sidebar').addClass('close_now');
+    }
+         </script>
 
 <?php
 include $asset_page.'.php';

@@ -83,6 +83,7 @@ if(isset($_GET['test']))
 <section class="page-section with-sidebar">
     <div class="container">
         <div class="row">
+            <div class="col-md-12">
             <div class="header_titles">
                  <div class="post-header">
                         <h2 class="post-title">
@@ -98,7 +99,8 @@ if(isset($_GET['test']))
                         </div>
                     </div>
             </div>
-            <div class="col-md-9 content" id="content">
+            </div>
+            <div class="col-md-9 content" id="content2">
             
             	<article class="post-wrap post-single">
             	   
@@ -188,7 +190,7 @@ if(isset($_GET['test']))
             <!-- SIDEBAR -->
            <?php ?>
            
-           <aside class="col-md-3 sidebar hidden-sm hidden-xs" id="sidebar">
+           <aside class="col-md-3 sidebar hidden-sm hidden-xs" id="sidebar2">
                <div class="ad_box">
                    
                </div>

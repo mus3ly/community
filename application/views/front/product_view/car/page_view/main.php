@@ -1,5 +1,5 @@
 <?php
-
+die();
 $pro = array();
 if(isset($product_data[0]))
 {
@@ -431,22 +431,31 @@ if(isset($_GET['test']))
                 <h3><?= $pro['slogan']; ?></h3>
                 <p><?= $pro['main_heading']; ?></p>
                 <ul>
+                    I m here to test
                     <?php
                     $features = json_decode($pro['feature'], true);
+                    if($features)
+                    {
                     foreach($features as $k => $v){
                     ?>
                         <li><?= $v['fdet'];?></li>
                     <?php
                         }
+                    }
                     ?>
                     </ul>
                 <div class="learn_more_btns">
+                    Buttons
                    <?php
                                 $btns  = json_decode($pro['buttons'],true);
                                 $i = 0;
+                                if($btns)
+                                {
 
                                 foreach ($btns as $key => $value) {
                                     $i++;
+                                    if($value['txt'])
+                                    {
                                     if($i %2 !=  0)
                                     {
                                         ?>
@@ -458,6 +467,8 @@ if(isset($_GET['test']))
                                         <a href="<?= $value['url'] ?>"><?= $value['txt'] ?></a>
                                         <?php
                                     }
+                                    }
+                                }
                                 }
                                 ?>
                 </div>

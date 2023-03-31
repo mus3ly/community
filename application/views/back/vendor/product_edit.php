@@ -166,50 +166,15 @@ btn1 .fa{
                         <li class="<?= ($gen)?"active":""; ?>"  onclick="go_tab('top_banner')">
                             <a data-toggle="tab" href="#top_banner"><?php echo translate('general'); ?></a>
                         </li>
-                              <li id="car_show" style="display:none" onclick="go_tab('xtra_info')">
-                            <a data-toggle="tab" href="#xtra_info"><?php echo translate('extra_car_info'); ?></a>
-                        </li>  
-                       <li id="property_show" style="display:none"  onclick="go_tab('xtra_property_info')">
-                            <a data-toggle="tab" href="#xtra_property_info"><?php echo translate('extra_property_info'); ?></a>
-                        </li>  
-                        <?php
-                        if(isset($_GET['is_event'])){
-                        ?>
-                        <li id="event_show"  onclick="go_tab('xtra_event_info')">
-                            <a data-toggle="tab" href="#xtra_event_info"><?php echo translate('extra_event_info'); ?></a>
-                        </li> 
-                        <?php 
-                            
-                        }else{
-                        ?>
-                         <li id="event_show" style="display:none"  onclick="go_tab('xtra_event_info')">
-                            <a data-toggle="tab" href="#xtra_event_info"><?php echo translate('extra_event_info'); ?></a>
-                        </li> 
-                        <?php
-                        }
-                        ?>
-                        <?php
-                        if(isset($_GET['is_job'])){
-                        ?>
-                        <li id="job_show"  onclick="go_tab('xtra_job_info')">
-                            <a data-toggle="tab" href="#xtra_job_info"><?php echo translate('extra_job_info'); ?></a>
-                        </li> 
-                        <?php 
-                            
-                        }else{
-                        ?>
-                           <li id="job_show" style="display:none" onclick="go_tab('xtra_job_info')">
-                            <a data-toggle="tab" href="#xtra_job_info"><?php echo translate('extra_job_info'); ?></a>
-                        </li> 
-                        <?php
-                        }
-                        ?>
-                      
+                        
                        <li onclick="go_tab('event_images')">
                             <a data-toggle="tab" href="#event_images"><?php echo translate('images_gallary'); ?></a>
                         </li>
                         <li onclick="go_tab('custom_attributes_0')">
-                            <a data-toggle="tab" href="#custom_attributes_0"><?php echo translate('checkboxs_information'); ?></a>
+                            <a data-toggle="tab" href="#custom_attributes_0"><?php echo translate('Top_information'); ?></a>
+                        </li>
+                        <li onclick="go_tab('checkbox_information')">
+                            <a data-toggle="tab" href="#checkbox_information"><?php echo translate('checkbox_information'); ?></a>
                         </li>
                         <li  onclick="go_tab('amenitys')">
                             <a data-toggle="tab" href="#amenitys"><?php echo translate('Amenities'); ?></a>
@@ -328,6 +293,12 @@ btn1 .fa{
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('listing_title');?></label>
                                 <div class="col-sm-6">
                                     <input type="text" name="title" id="demo-hor-1" value="<?php echo $row['title']; ?>" placeholder="<?php echo translate('listing_title');?>" class="form-control required">
+                                </div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('catchphrase_or_slogan');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="slog" id="demo-hor-1" value="<?php echo $row['slog']; ?>" placeholder="<?php echo translate('catchphrase_or_slogan');?>" class="form-control required">
                                 </div>
                             </div>
                             <div class="form-group btm_border">
@@ -575,6 +546,9 @@ btn1 .fa{
                                     </div>
                         </div>
                    <div id="custom_attributes_0" class="tab-pane fade ">
+                        <div class="form-group btn_border">
+                            <h5 style="color: red;padding: 0 89px;">If more than 30 characters, it will be added to the accordion section</h5>
+                        </div>
                       <div class="form-group btm_border">
                           <?php
                           if(isset($row['additional_fields'])){
@@ -614,6 +588,52 @@ btn1 .fa{
                                  
                             </div>
                              
+                        </div>
+                           <div id="checkbox_information" class="tab-pane fade ">
+                                 <div class="form-group btn_border">
+                            <h5 style="color: red;padding: 0 89px;">Do not exceed more than 30 characters per entry</h5>
+                        </div>
+                      <div class="form-group btm_border">
+                          <?php
+                          if(isset($row['checkbox_xtra_fields']) && !empty($row['checkbox_xtra_fields'])){
+                            $x = json_decode($row['checkbox_xtra_fields']);
+                            // var_dump($x);
+                            foreach( $x as $k => $v){
+                          ?>
+                          <div class="form-group"> 
+                           
+                          <div class="col-sm-9">
+                            <input type="text" name="checkboxinfo[]" class="moredata form-control" value="<?= $v; ?>" placeholder="Field Name">  
+                            </div>
+                            
+                            <div class="col-sm-2">  
+                            <span class="remove_it_v rms btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>
+                            </div>
+                            </div>
+                            <?php
+                            }
+                          }else{
+                            ?>
+                            <div class="form-group"> 
+                          <div class="col-sm-9">    
+                            <input type="text" name="checkboxinfo[]" class=" moredata form-control " placeholder="Field Name">    
+                            </div>   
+                            <div class="col-sm-2">  
+                            </div>
+                            </div>
+                            <?php
+                                 }
+                            ?>
+                         <div id="more_checkbox_fields"></div>                                
+                                <div class="col-sm-12">
+                                    <h4 class="pull-left">
+                                        <i><?php echo translate('if_you_need_more_field_for_your_product_,_please_click_here_for_more...');?></i>
+                                    </h4>
+                                    <div id="more_field_btn" class="moredata btn btn-mint btn-labeled fa fa-plus pull-right">
+                                    <?php echo translate('add_more_fields');?></div>
+                                </div>
+                            </div>
+                            
                         </div>
                          <div id="amenitys" class="tab-pane fade ">
                      <div class="form-group btm_border">
@@ -683,59 +703,7 @@ btn1 .fa{
                                     <?php echo translate('add_more_fields');?>
                         </div>    
                         </div>
-                              <div id="xtra_info" class="tab-pane fade ">
-                                   <?php
-                            $this->db->order_by("sort", "asc");
-                            // var_dump($row['product_id']);
-                            $fileds = $this->db->where('category',807)->get('list_fields')->result_array();
-                            foreach($fileds as $k=> $v)
-                            {
-                                $v['pid'] = $row['product_id'];
-                                $this->load->view('vendor_fields',$v);
-                            }
-                            ?>
-                            </div>
-                          
-                            <div id="xtra_property_info" class="tab-pane fade ">
-                                <?php
-                            $this->db->order_by("sort", "asc");
-
-                            $fileds = $this->db->where('category',808)->get('list_fields')->result_array();
-                            foreach($fileds as $k=> $v)
-                            {
-                                $v['pid'] = $row['product_id'];
-                                $this->load->view('vendor_fields',$v);
-                            }
-                            ?>
-                         
-                           
-                        </div>
-                        <div id="xtra_event_info" class="tab-pane fade ">
-                         <?php
-                            $this->db->order_by("sort", "asc");
-
-                            $fileds = $this->db->where('category',917)->get('list_fields')->result_array();
-                            foreach($fileds as $k=> $v)
-                            {
-                                $v['pid'] = $row['product_id'];
-                                $this->load->view('vendor_fields',$v);
-                            }
-                            ?>
-                        </div>
-                        <div id="xtra_job_info" class="tab-pane fade ">
-                            
-                        <?php
-                            $this->db->order_by("sort", "asc");
-
-                            $fileds = $this->db->where('category',78)->get('list_fields')->result_array();
-                            foreach($fileds as $k=> $v)
-                            {
-                                $v['pid'] = $row['product_id'];
-                                $this->load->view('vendor_fields',$v);
-                            }
-                            ?>
-                         
-                        </div>
+                             
                         <div id="seo_section" class="tab-pane fade ">
                         <div class="form-group btm_border">
                                 <div class="col-sm-4"></div>
@@ -846,7 +814,6 @@ btn1 .fa{
                             </div>
                         </div>
                         <div id="event_images" class="tab-pane fade ">
-                            I m here
                         <div class="form-group btm_border">
                                 <h4 class="text-thin text-center"><?php echo translate('gallary_images'); ?></h4>                            
                             </div>
@@ -856,6 +823,15 @@ btn1 .fa{
                                     <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
                                         <input type="file" multiple name="images[]" onchange="preview(this);" id="demo-hor-inputpass" class="form-control">
                                     </span>
+                                    <img id="show_hide_loader" style="display:none;" src="<?=base_url()?>map-loader.gif">
+                                    <style>
+                                        #show_hide_loader{
+                                                width: 45px;
+                                                position: absolute;
+                                                top: -15px;
+                                                left:100px;
+                                            }
+                                    </style>
                                     <br><br>
                                     <span id="previewImg" ></span>
                                     <br><br>
@@ -1009,7 +985,7 @@ function activaTab(tab){
     
     function upload_img(img){
         var old_txt = $('#gimgs_txt').text();
-
+        $('#show_hide_loader').show();
         // $('#gimgs_txt').text('Uploading ...');
         var settings = {
   "url": "<?= base_url(); ?>/vendor/gupload",
@@ -1029,7 +1005,8 @@ $.ajax(settings).done(function (response) {
     // alert(response);
     // $('#gimgs_txt').text(old_txt);
     $('.gallary_images').load(imgUrl);
-  console.log(response);
+    $('#show_hide_loader').hide();
+//   console.log(response);
 });
 
     }
@@ -1179,6 +1156,7 @@ $.ajax(settings).done(function (response) {
         'top_banner',
         'event_images',
         'custom_attributes_0',
+        'checkbox_information',
         'amenitys',
         'first_section',
         'custom_attributes_1',
@@ -1349,9 +1327,9 @@ $.ajax(settings).done(function (response) {
     tabs = [
         'customer_choice_options',
         'top_banner',
-        'xtra_info',
         'event_images',
         'custom_attributes_0',
+        'checkbox_information',
         'amenitys',
         'first_section',
         'custom_attributes_1',
@@ -1370,9 +1348,9 @@ else
 { tabs = [
         'customer_choice_options',
         'top_banner',
-        'xtra_property_info',
         'event_images',
         'custom_attributes_0',
+        'checkbox_information',
         'amenitys',
         'first_section',
         'custom_attributes_1',
@@ -1393,9 +1371,9 @@ if(myArray.indexOf(event_cat) != -1)
     tabs = [
         'customer_choice_options',
         'top_banner',
-        'xtra_event_info',
         'event_images',
         'custom_attributes_0',
+        'checkbox_information',
         'amenitys',
         'first_section',
         'custom_attributes_1',
@@ -1414,9 +1392,9 @@ if(myArray.indexOf(job_cat) != -1)
 {  tabs = [
         'customer_choice_options',
         'top_banner',
-        'xtra_job_info',
         'event_images',
         'custom_attributes_0',
+        'checkbox_information',
         'amenitys',
         'first_section',
         'custom_attributes_1',
@@ -2005,6 +1983,21 @@ $('.exra_chnge').change(function(){
         }
     });  
     });
+     $("#more_field_btn").click(function(){
+        
+        $("#more_checkbox_fields").append(''
+            +'<div class="form-group">'
+            +'    <div class="col-sm-9">'
+            +'        <input type="text" name="checkboxinfo[]" class="moredata form-control"  placeholder="<?php echo translate('field_name'); ?>">'
+            +'    </div>'
+            +'    <div class="col-sm-2">'
+            +'        <span class="remove_it_v rms btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>'
+            +'    </div>'
+            +'</div>'
+        );
+        set_summer();
+    });
+    
     $('#amn_btn').on('click', function(){
         var url = '<?= base_url('vendor/getAmenties')?>';
         var value = $('#amnty').val();

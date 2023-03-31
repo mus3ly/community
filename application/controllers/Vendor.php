@@ -29,6 +29,26 @@ class Vendor extends CI_Controller
             redirect(base_url(), 'refresh');
         }
     }
+    function admin_fields(){
+    {
+        if(isset($_GET['cats']))
+        {
+            $cats = $_GET['cats'];
+            $pid = (isset($_GET['pid'])?$_GET['pid']:0);
+            $cats = explode(',',$cats);
+            $fields = $this->db->where_in('category', $cats)->get('list_fields')->result_array();
+            foreach($fields as $k=> $v)
+            {
+                $v['pid'] = $pid;
+                $this->load->view('admin_f',$v);
+            }
+        }
+    }
+    }
+    function testing(){
+      $x = filter_add('738');
+      var_dump($this->db->last_query());
+    }
     function productslug(){
         $slug = $_REQUEST['value'];
         $this->db->where('slug', $slug);
@@ -80,6 +100,7 @@ class Vendor extends CI_Controller
             $this->crud_model->set_category_data(0);
             recache();
         } elseif ($para1 == "update") {
+            var_dump($para2);
             $data['vid']        = $this->session->userdata('vendor_id');
             $data['title']        = $this->input->post('name');
             $data['icon']        = $this->input->post('fa_icon');
@@ -87,6 +108,7 @@ class Vendor extends CI_Controller
             $data['sort']        = $this->input->post('sort');
             $this->db->where('textg_id', $para2);
             $this->db->update('textg', $data);
+            // var_dump($this->db->last_query());
            if(isset($_FILES['img']['name']))
             {
             $path = $_FILES['img']['name'];
@@ -750,7 +772,7 @@ class Vendor extends CI_Controller
             $num_of_imgs = 0;
                 $cat = $this->input->post('category');
                $cat2 = explode(',', $cat);
-             if (in_array("807", $cat2))
+             if (in_array($this->config->item('car_cat'), $cat2))
                   {
                 $data['is_car'] = 1;
                 $data['make']               = $this->input->post('make');
@@ -796,20 +818,23 @@ class Vendor extends CI_Controller
             if(isset($_REQUEST['is_blog'])){
                 $data['is_blog'] = 1;
                 $data['author_name'] = $this->input->post('author');
-                $data['posted_date'] = $this->input->post('date');
+                $data['create_at'] = $this->input->post('date');
             }
            
             if(isset($_REQUEST['is_product']))
             {
+                // var_dump(slugify($this->input->post('title')));
             $data['is_product']          = 1;
             $data['current_stock']      = $this->input->post('current_stock');
+            // $data['slug']               = slugify($this->input->post('title'));
             }
-            // var_dump($this->input->post('amenities'));
+   
             // die();
             $data['seo_title']          = $this->input->post('seo_title');
             $data['seo_description']    = $this->input->post('seo_description');
             $data['title']              = $this->input->post('title');
             $data['slogan']               = $this->input->post('slogan');
+            $data['slog']                = $this->input->post('slog');
             $data['main_heading']         = $this->input->post('main_heading');
             $data['bussniuss_email']      = $this->input->post('bussniuss_email');
             $data['bussniuss_phone']      = $this->input->post('bussniuss_phone');
@@ -826,6 +851,7 @@ class Vendor extends CI_Controller
             $data['listing_amenities']    = json_encode($this->input->post('listingamenities'));
              $additional_value['name']    = json_encode($this->input->post('ad_field_names_custom'));
             $additional_value['value']    = json_encode($this->input->post('ad_field_values_custom'));
+            $data['checkbox_xtra_fields'] = json_encode($this->input->post('checkboxinfo'));
             $data['additional_fields_new']= json_encode($additional_value);
             $data['add_timestamp']        = time();
             $data['download']             = NULL;
@@ -844,12 +870,18 @@ class Vendor extends CI_Controller
             $additional_fields['value']   = json_encode($this->input->post('ad_field_values'));
             /*--extra field---*/
             $data['color']                = json_encode($this->input->post('color'));
-            $additional_fields['name']    = json_encode($this->input->post('ad_field_names'));
-            $additional_fields['value']   = json_encode($this->input->post('ad_field_values'));
+            $additional_fields1 = array();
+            $additional_fields1['name']    = json_encode($this->input->post('ad_field_names'));
+            $additional_fields1['value']   = json_encode($this->input->post('ad_field_values'));
             $data['additional_fields']    = json_encode($additional_fields);
+            $data['additional_fields_new']    = json_encode($additional_fields1);
             $data['brand']                = $this->input->post('brand');
+            
             $data['unit']                 = $this->input->post('unit');
+            if($this->input->post('slug'))
             $data['slug']                 = $this->input->post('slug');
+            else
+            $data['slug']               = slugify($this->input->post('title'));
         
             $choice_titles                = $this->input->post('op_title');
             $choice_types                 = $this->input->post('op_type');
@@ -861,54 +893,50 @@ class Vendor extends CI_Controller
                 
                $this->db->insert('product', $data);
             //   var_dump($this->db->last_query());
-            //   die();
-                $id = $this->db->insert_id();
+               $id = $this->db->insert_id();
                 if($id){
-                    
-                    foreach($_POST['fields'] as $k=> $v)
-                    {
-                        $r = update_product_meta($id,$k, $v);
-                    }
-
-                    $this->crud_model->set_amenities($id);
-                    
-                    // var_dump($id);
-                    if(isset($_REQUEST['rand_id']) && !empty($_REQUEST['rand_id']))
-                    {
-                        $up = array('pid'=>$id);
-                        $ret = $this->db->where('pid',$_REQUEST['rand_id'])->update('product_to_images', $up);
-                    }
-                    $this->benchmark->mark_time();
-                    $this->load->library('cloudinarylib');
-                    if($id && isset($_FILES['sneakerimg']['name']) && !empty($_FILES['sneakerimg']['name'])){
-                    
-                        $sneakerimg = $this->crud_model->file_up("sneakerimg", "product", 'sneakerimg_'.time());
-                    $data = \Cloudinary\Uploader::upload($sneakerimg);
-                    if(isset($data['public_id']))
-                    {
+                            filter_add($id);
+                            foreach($_POST['fields'] as $k=> $v)
+                            {
+                                $r = update_product_meta($id,$k, $v);
+                            }
+                            
+                            // var_dump($id);
+                            if(isset($_REQUEST['rand_id']) && !empty($_REQUEST['rand_id']))
+                            {
+                                $up = array('pid'=>$id);
+                                $ret = $this->db->where('pid',$_REQUEST['rand_id'])->update('product_to_images', $up);
+                            }
+                            $this->benchmark->mark_time();
+                            $this->load->library('cloudinarylib');
+                            if($id && isset($_FILES['sneakerimg']['name']) && !empty($_FILES['sneakerimg']['name'])){
+                            
+                                $sneakerimg = $this->crud_model->file_up("sneakerimg", "product", 'sneakerimg_'.time());
+                            $data = \Cloudinary\Uploader::upload($sneakerimg);
+                            if(isset($data['public_id']))
+                            {
                         $logo_id = $this->crud_model->add_img($sneakerimg,$data);
                         array_push($dataInfo,$logo_id);
                         $r =$this->db->where('product_id',$id)->update('product',array('comp_logo'=>$logo_id));
                         // var_dump($r);
-                        die("logo");
                         
                         
-                    }
-                    
-                }
-                    if($id && isset($_FILES['sideimg']['name']) && !empty($_FILES['sideimg']['name'])){
-                    
-                        $sneakerimg = $this->crud_model->file_up("sideimg", "product", 'sideimg_'.time());
-                        $data = \Cloudinary\Uploader::upload($sneakerimg);
-                    if(isset($data['public_id']))
-                    {
-                        $logo_id = $this->crud_model->add_img($sneakerimg,$data);
-                        $this->db->where('product_id',$id)->update('product',array('comp_cover'=>$logo_id));
+                        }
+                            
+                        }
+                        if($id && isset($_FILES['sideimg']['name']) && !empty($_FILES['sideimg']['name'])){
                         
-                        
-                    }
-                        
-                    }
+                            $sneakerimg = $this->crud_model->file_up("sideimg", "product", 'sideimg_'.time());
+                            $data = \Cloudinary\Uploader::upload($sneakerimg);
+                        if(isset($data['public_id']))
+                        {
+                            $logo_id = $this->crud_model->add_img($sneakerimg,$data);
+                            $this->db->where('product_id',$id)->update('product',array('comp_cover'=>$logo_id));
+                            
+                            
+                        }
+                            
+                        }
 
                 } else {
                     echo 'already uploaded maximum product';
@@ -991,7 +1019,7 @@ class Vendor extends CI_Controller
           if(isset($_REQUEST['is_blog'])){
                 $data['is_blog'] = 1;
                 $data['author_name'] = $this->input->post('author');
-                $data['posted_date'] = $this->input->post('date');
+                $data['posted_date'] = date('Y-m-d H:i:s');
             }
            
             $data['seo_title']          = $this->input->post('seo_title');
@@ -1001,7 +1029,7 @@ class Vendor extends CI_Controller
         //extra info end
             $data['seo_description']    = $this->input->post('seo_description');
             $data['title']              = $this->input->post('title');
-            $data['slogan']             = $this->input->post('slogan');
+            $data['slogan']               = $this->input->post('slogan');
             $data['main_heading']       = $this->input->post('main_heading');
             $data['bussniuss_email']    = $this->input->post('bussniuss_email');
             $data['bussniuss_phone']    = $this->input->post('bussniuss_phone');
@@ -1024,6 +1052,7 @@ class Vendor extends CI_Controller
             $data['discount']           = $this->input->post('discount');
             $data['discount_type']      = $this->input->post('discount_type');
             $data['tax_type']           = $this->input->post('tax_type');
+            echo $data['checkbox_xtra_fields'] = json_encode($_POST['checkboxinfo']);
             $data['shipping_cost']      = $this->input->post('shipping_cost');
             $data['about_title']        = $this->input->post('about_title');
             $data['about_desc']         = $this->input->post('about_description');
@@ -1103,9 +1132,11 @@ class Vendor extends CI_Controller
             // var_dump($data);
             // die();
             $this->db->update('product', $data);
-    
+            // var_dump($this->db->last_query());
             $this->load->library('cloudinarylib');
             $id = $para2;
+            filter_add($id);
+            // var_du/mp($x);/
             if(isset($_POST['fields']) && $id)
             {
                 foreach($_POST['fields'] as $k=> $v)
@@ -1118,6 +1149,7 @@ class Vendor extends CI_Controller
                     
                          move_uploaded_file($_FILES["sneakerimg"]['tmp_name'], $path);
                         $data = \Cloudinary\Uploader::upload($path);
+                        // var_dump($data);
                     if(isset($data['public_id']))
                     {
                         $logo_id = $this->crud_model->add_img($path,$data);
@@ -1542,6 +1574,8 @@ class Vendor extends CI_Controller
                 }
             }
             // echo $this->crud_model->select_html('sub_category', 'sub_category', 'sub_category_name', 'add', 'demo-chosen-select required', '', 'category', $para2, 'get_brnd');
+        } elseif ($para1 == 'sub_by_cat1') {
+            echo $this->crud_model->select_html('sub_category', 'sub_category', 'sub_category_name', 'add', 'demo-chosen-select', '', 'category', $para2, 'get_brnd');
         } elseif ($para1 == 'brand_by_sub') {
             $brands=json_decode($this->crud_model->get_type_name_by_id('sub_category',$para2,'brand'),true);
             echo $this->crud_model->select_html('brand', 'brand', 'name', 'add', 'demo-chosen-select required', '', 'brand_id', $brands, '', 'multi');

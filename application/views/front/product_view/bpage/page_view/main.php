@@ -161,7 +161,7 @@
                 <div class="whatsapp_new">
                     <a href="mailto:<?= $pro['bussniuss_email']?>"><img src="<?= base_url(); ?>template/front/images/envelope-orange.png" alt=""></a>
                     <a href="https://api.whatsapp.com/send?phone=<?php echo $pro['whatsapp_number'];?>"  target="_blank"><img src="<?= base_url(); ?>template/front/images/whats-app.png" alt=""></a>
-                    <a href="tel:<?= $pro['bussniuss_phone']?>"><img src="<?= base_url(); ?>template/front/images/phone-white4.png" alt=""></a>
+                    <a href="tel:<?= $pro['bussniuss_phone']?>"><img src="<?= base_url(); ?>template/front/images/phone-white4.png" alt="" id="left_align"></a>
                      <!--<a href="#"><i class="fa fa-map-marker"></i></a>-->
                 </div>
                 <div class="share_icon share_icon_right">
@@ -390,8 +390,9 @@
                         if(in_array('event_images',$checks) || true)
                         {
                             ?>
+                            
                         <div class="verify_head" id="left_gp">
-                            <h3>Personalised Image Gallery</h3>
+                            <h3><?= $pro['gallery_lable']; ?></h3>
                             <p><?= $pro['gallery_text']; ?></p>
                         </div>
                         <?php
@@ -505,10 +506,10 @@
                                             <img src="<?= $first ?>" data-src="<?= $first ?>" id="large_img" cur="0" ondblclick="opengal('0')" class="galimg" index="0" alt="">
                                         </div>
                                         <div class="arrow__left">
-                                            <a href="#" onclick="gopre()"><i class="fa fa-angle-left"></i></a>
+                                            <a href="javascript:void(0)" onclick="gopre()"><i class="fa fa-angle-left"></i></a>
                                         </div>
                                         <div class="arrow__right">
-                                            <a href="#"  onclick="gonext()"><i class="fa fa-angle-right"></i></a>
+                                            <a href="javascript:void(0)"  onclick="gonext()"><i class="fa fa-angle-right"></i></a>
                                         </div>
                                     </div>
 
@@ -665,7 +666,9 @@
                         {
                             ?>
                         <div class="container">
-
+                           <div class="verify_head" style="    padding: 10px 0px;">
+                                <h3>Text Gallery</h3>
+                            </div>
                         <div class="inner_content_tabs">
                         <!--</select>-->
                          <div class="row" id="left_gp">
@@ -809,7 +812,7 @@
                     <div class="col-sm-4 business_graphic" id="leftboxx">
                      <img src=" <?= $value['img'] ?>" alt="">
                     </div>
-                 <div class="col-sm-8 communitybox" id="equal_btnw">
+                 <div class="col-sm-8 communitybox no_box_bd inner_box_design" id="equal_btnw">
                      <h3> <?= $value['title'] ?></h3>
                      <div class="desc">
                        <p> <?= $value['detail'] ?></p>
@@ -844,7 +847,7 @@
                             ?>
     <div class="container"><div class="main_wrp">
         
-        <div class="verify_head" style="    padding: 10px 37px;">
+        <div class="verify_head" style="    padding: 10px 0px;">
             <h3><?= $pro['about_title']; ?></h3>
         </div>
         <div class="row">
@@ -897,43 +900,36 @@
                 </div>
                 <div class="container" id="mrg_tp"> 
                                 <div class="row">
+                                    <?php
+                                    if($pro['amen_check'] == 'yes'){
+                                    ?>
                                     <div class="no_pdding" id="add_rigth">
                                         <div class="tag_sec_wrapper">
                                             <div class="head_section">
-                                               <h4>Aminies</h4> 
+                                               <h4>Amenities</h4> 
                                             </div>
                                             <div class="inner_sec">
                                                 <div class="tag_container">
+                                                      <?php
+                                                    $cat = explode(',',$pro['amenities']);
+                                                    foreach($cat as $k){
+                                                    ?>
                                                     <div class="tags_in">
                                                         <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Credit Card</span>
+                                                        <span><?= $k; ?></span>
                                                     </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Bike Parking</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Coupon</span>
-                                                    </div> 
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Parking</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Wireless</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Cleaning</span>
-                                                    </div>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </div>
                                                 
                                                 </div>
                                             </div>
                                         
-                                    </div>   
+                                    </div>
+                                    <?php
+                                    }
+                                    ?>
                                     <div class="no_pdding">
                                          <div class="tag_sec_wrapper">
                                             <div class="head_section">
@@ -941,30 +937,18 @@
                                             </div>
                                             <div class="inner_sec">
                                                 <div class="tag_container">
+                                                    <?php
+                                                    $cat = explode(',',$pro['cats']);
+                                                    foreach($cat as $k){
+                                                    ?>
                                                     <div class="tags_in">
                                                         <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Resturent</span>
+                                                        <span><?= $k; ?></span>
                                                     </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Nightlife</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Hotel</span>
-                                                    </div> 
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Cars</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Trucks</span>
-                                                    </div>
-                                                    <div class="tags_in">
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-                                                        <span>Blogs</span>
-                                                    </div>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                  
                                                 </div>
                                         </div>        
                                                 </div>
@@ -1005,7 +989,7 @@
                        }if(isset($pro['openig_time']) && !empty($pro['openig_time'])){
 
                    ?>
-                   <div  class="margin-bottom"><i class="fa fa-clock"></i> <?=  date("h:ia", strtotime( $pro['openig_time'])) .'-'.date("h:ia", strtotime( $pro['closing_time'])) ;?></div>
+                   <div  class="margin-bottom"><i class="fa fa-clock"></i> <?= date("g:ia", strtotime( $pro['openig_time'])) .' - '.date("g:ia", strtotime( $pro['closing_time'])) ;?></div>
                       <?php
                        }
                       ?>
@@ -1083,31 +1067,27 @@
                         
                         
                           
-                        <div class="orange_pathwrap" style="" id="orange_middle_form">
-                        <div class="container-fluid">
-                            <div class="iframe_box" id="newform">
-                                <div class="getin_touch">
-                                        <div class="alert alert-success d-none" id="success" role="alert">
-                                          Reported Successfully!
-                                        </div>
-                                        <div class="alert alert-danger d-none" id="danger" role="alert">
-                                          Please Try Again!
-                                        </div>
-                                        <h3>Get In Touch <img src="<?= base_url(); ?>/upload/phone_2.png" alt=""></h3>
+                         <div class="orange_pathwrap" id="bpage_form">
+                            <div class="container">
+                                <div class="iframe_box">
+                                <div id="googleMap" style="width:100%;height:550px;"></div>
+
+
+                                    <div class="getin_touch">
+                                        <h3>Get In Touch <img src="<?= base_url(); ?>upload/phone_2.png" alt=""></h3>
                                         <form action="" method="">
-                                            <input type="hidden" name="pid" id="pid" value="<?= $pro['product_id']?>">
                                             <div class="row">
                                                 <div class="col-sm-6 form_gapp">
                                                     <div class="form_box">
-                                                        <label for="First name" class="required">First name</label>
-                                                        <input type="text" placeholder="" name="fname" id="fname__">
-                                                        <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="name">
+                                                        <label for="First name">First name</label>
+                                                        <input type="text" placeholder="" name="">
+                                                        <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 form_gapp">
                                                     <div class="form_box">
-                                                        <label for="Last name" class="required">Last name</label>
-                                                        <input type="text" placeholder=""id="lname" name="lname">
+                                                        <label for="Last name">Last name</label>
+                                                        <input type="text" placeholder="" name="">
                                                         <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
                                                     </div>
                                                 </div>
@@ -1115,44 +1095,44 @@
                                             <div class="row">
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
-                                                        <label for="Email"  class="required">Email</label>
-                                                        <input type="email" placeholder="" name="email1" id="email__">
+                                                        <label for="Email">Email</label>
+                                                        <input type="email" placeholder="" name="">
                                                         <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                             <div class="row">
+                                                <div class="col-sm-12 form_gapp">
+                                                    <div class="form_box">
+                                                        <label for="Phone number">Phone number</label>
+                                                        <input type="number" placeholder="Type phone number" name="">
+                                                        <img class="phone_iconn" src="<?= base_url(); ?>upload/phone_icon.png" alt="">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
-                                                        <label for="Phone number" class="required">Phone number</label>
-                                                        <input type="number" placeholder="" id="phone" name="phone">
-                                                        <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
+                                                        <label for="Message">Message</label>
+                                                        <textarea placeholder="Type Message"></textarea>
+                                                        <img class="msg_iconn" src="<?= base_url(); ?>upload/message_1.png" alt="">
                                                     </div>
                                                 </div>
-                                            </div>
+                                                </div>
                                             <div class="row">
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
-                                                        <label for="Message" class="required">Message</label>
-                                                        <textarea placeholder="Describe in 100 words" name="message" id="message__"></textarea>
-                                                        <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 form_gapp">
-                                                    <div class="form_box">
-                                                        <button type="button" class="not" id="send">Send</button>
-                                                        <button type="submit" class="yes">GET DIRECTION</button>
+                                                        <button type="submit">Send</button>
+                                                        <button type="submit">GET DIRECTION</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
-                                    <div id="googleMap" class="map_in" style="width:100%;height:550px;margin-bottom:100px; z-index: 99;"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+
 
            
                         <div class="purple_line" id="intrested">
@@ -1498,6 +1478,7 @@
         
         success: function (data) {
              const myArr = JSON.parse(JSON.stringify(data));
+             console.log(data);
               if(myArr['email'] == 1){
                 $("#success").attr("class", "alert alert-success d-block");
               }else{
@@ -1794,7 +1775,7 @@ return src;
             var email = $('#email__').val();
             var msg = $('#message__').val();
             var phone = $('#phone').val();
-            var pid = $('#pid').va();
+            var pid = $('#pid').val();
                $.ajax({
                 url: url,
                 type: "get",

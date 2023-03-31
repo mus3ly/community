@@ -282,6 +282,12 @@ btn1 .fa{
                                 </div>
                             </div>
                             <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('catchphrase_or_slogan');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="slog" id="demo-hor-1" value="" placeholder="<?php echo translate('catchphrase_or_slogan');?>" class="form-control required">
+                                </div>
+                            </div>
+                            <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('listing_detail'); ?></label>
                                 <div class="col-sm-6">
                                     <textarea rows="9" name="description"  class="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>
@@ -316,6 +322,15 @@ btn1 .fa{
                                         <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
                                             <input type="file" value="<?= ($row['sneakerimg'])?$row['sneakerimg']:""; ?>" name="sneakerimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control">
                                         </span>
+                                        <img id="show_hide_loader" style="display:none;" src="<?=base_url()?>map-loader.gif">
+                                    <style>
+                                        #show_hide_loader{
+                                                width: 45px;
+                                                position: absolute;
+                                                top: -15px;
+                                                left:100px;
+                                            }
+                                    </style>
                                         <br><br>
                                         <span id="previewImg1" >
                                             
@@ -382,7 +397,7 @@ btn1 .fa{
                                 <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('description'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" name="main_heading"  class="summernotes" data-height="200" data-name="main_heading"><?php echo $row['main_heading']; ?></textarea>
+                                    <textarea rows="9" name="main_heading" id="desc_summernote" class="summernotes" data-height="200" data-name="main_heading"><?php echo $row['main_heading']; ?></textarea>
                                 </div>
                                 </div>
                                 <div class="form-group btm_border">
@@ -526,16 +541,12 @@ btn1 .fa{
                                     </div>
                         </div>
                         <div id="custom_attributes_0" class="tab-pane fade ">
-                      <div class="form-group btm_border">
-                          <div class="form-group"> 
-                          <div class="col-sm-4">    
-                            <input type="text" name="ad_field_names[]" class="form-control required" placeholder="Field Name">    
-                            </div>   
-                            <div class="col-sm-5">    
-                            <input type="text" rows="9" class="form-control" data-height="100" name="ad_field_values[]">    </div>   
-                            <div class="col-sm-2">  
-                            </div>
-                            </div>
+                            <div class="form-group btn_border">
+                            <h5 style="color: red;padding: 0 89px;">If more than 30 characters, it will be added to the accordion section</h5>
+                        </div>
+                      <div class="form-group btm_border" id="admin_fields">
+                          <span id="admin_loader"></span>
+                        
                          <div id="more_additional_fields"></div>                                
                                 <div class="col-sm-12">
                                     <h4 class="pull-left">
@@ -548,10 +559,13 @@ btn1 .fa{
                             
                         </div>
                         <div id="checkbox_information" class="tab-pane fade ">
+                              <div class="form-group btn_border">
+                            <h5 style="color: red;padding: 0 89px;">Do not exceed more than 30 characters per entry</h5>
+                        </div>
                       <div class="form-group btm_border">
                           <div class="form-group"> 
                           <div class="col-sm-9">    
-                            <input type="text" name="checkboxinfo[]" class="form-control required" placeholder="Field Name">    
+                            <input type="text" name="checkboxinfo[]" class=" moredata form-control" placeholder="Field Name">    
                             </div>   
                             <div class="col-sm-2">  
                             </div>
@@ -561,7 +575,7 @@ btn1 .fa{
                                     <h4 class="pull-left">
                                         <i><?php echo translate('if_you_need_more_field_for_your_product_,_please_click_here_for_more...');?></i>
                                     </h4>
-                                    <div id="more_field_btn" class="moredata btn btn-mint btn-labeled fa fa-plus pull-right">
+                                    <div id="more_field_btn" class=" btn btn-mint btn-labeled fa fa-plus pull-right">
                                     <?php echo translate('add_more_fields');?></div>
                                 </div>
                             </div>
@@ -592,7 +606,7 @@ btn1 .fa{
                         <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>" value="<?php echo translate('requirements'); ?>">
                         </div>
                         <div class="col-sm-5">
-                         <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values_custom" ></textarea>
+                         <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values_custom[]" ></textarea>
                             </div>
                     
                         </div>
@@ -601,7 +615,7 @@ btn1 .fa{
                         <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>" value="<?php echo translate('benefits'); ?>">
                         </div>
                         <div class="col-sm-5">
-                         <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values" name="requirmnts[]"></textarea>
+                         <textarea rows="9"  class="summernotes" data-height="100" name="requirmnts[]"></textarea>
                             </div>
                     
                         </div>
@@ -1129,6 +1143,7 @@ btn1 .fa{
                                     <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
                                         <input type="file" multiple name="images[]" onchange="preview(this);" id="demo-hor-inputpass" class="form-control">
                                     </span>
+                                    <img id="show_hide_loader" href="<?=base_url()?>/loader.gif">
                                     <br><br>
                                     <span id="previewImg" ></span>
                                     <br><br>
@@ -1257,230 +1272,15 @@ function activaTab(tab){
     $('.nav-tabs a[href="#' + tab + '"]').tab('show');
 };
     function validate_listing(){
-        var property_cat = '<?= $this->config->item('property_cat') ?>';
-        
-    var car_cat = '<?= $this->config->item('car_cat') ?>';
-    var event_cat = '<?= $this->config->item('event_cat') ?>';
-    var job_cat = '<?= $this->config->item('job_cat') ?>';
-    var cats = $('#category').val();
-    if(!cats)
-    {
-        alert("Please select atleast 1 category");
-        return 0;
-    }
-    const myArray = cats.split(",");
-    if(myArray.indexOf(car_cat) != -1)
-{  
-    car_cat = 1;
-}
-else
-{
-   car_cat = 0;
-}
-    if(myArray.indexOf(property_cat) != -1)
-{ 
-    
-   property_cat = 1;
-}
-else
-{
-   property_cat = 0;
-}
-if(myArray.indexOf(event_cat) != -1)
-{  
-   event_cat = 1;
-}
-else
-{
-    event_cat = 0
-}
-if(myArray.indexOf(job_cat) != -1)
-{  
-   job_cat = 1;
-}
-else
-{
-    job_cat = 0;
-}
-                    var car_error = 0;
-                    var property_error = 0;
-                    var event_error = 0;
-                    var job_error = 0;
-        if(car_cat == 1)
-        {
-            var focus = '';
-            $('.required1').each(function(i, obj) {
-                if(!$(this).val() || $(this).val() == 0)
-                {
-                    car_error = 1;
-                    
-                    $(this).addClass('error');
-                    // console.log($(this).attr('class'));
-                }
-                else
-                {
-                    $(this).removeClass('error');                    
-                }
-                console.log($(this).attr('name'));
-            });
-            if(car_error == 1)
-            {
-                var fdone = 0;
-                $('.required1').each(function(i, obj) {
-                if(!$(this).val() && fdone == 0)
-                {
-                    fdone = 1;
-                    $(this).focus();
-                }
-                console.log($(this).attr('name'));
-            });
-                alert("Please fill required field");
-                $('.tab-pane').each(function(i, obj) {
-                    $(this).removeClass('active');
-                    $(this).removeClass('in');
-                
-                });
-                $('#xtra_info').addClass("active in");
-                $('#car_show').addClass("active");
-            }
-            else
-            {
-                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
-            }
-        }
-        else if(property_cat == 1)
-        {
-            var focus = '';
-            $('.required2').each(function(i, obj) {
-                if(!$(this).val() || $(this).val() == 0)
-                {
-                    property_error = 1;
-                    
-                    $(this).addClass('error');
-                    // console.log($(this).attr('class'));
-                }
-                else
-                {
-                    $(this).removeClass('error');                    
-                }
-                console.log($(this).attr('name'));
-            });
-            if(property_error == 1)
-            {
-                var fdone = 0;
-                $('.required2').each(function(i, obj) {
-                if(!$(this).val() && fdone == 0)
-                {
-                    fdone = 1;
-                    $(this).focus();
-                }
-                console.log($(this).attr('name'));
-            });
-                alert("Please fill required field");
-                $('.tab-pane').each(function(i, obj) {
-                    $(this).removeClass('active');
-                    $(this).removeClass('in');
-                
-                });
-                $('#xtra_property_info').addClass("active in");
-                $('#property_show').addClass("active");
-            }
-            else
-            {
-                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
-            }
-        }
-        else if(event_cat == 1)
-        {
-            var focus = '';
-            $('.required3').each(function(i, obj) {
-                if(!$(this).val() || $(this).val() == 0)
-                {
-                    event_error = 1;
-                    
-                    $(this).addClass('error');
-                    // console.log($(this).attr('class'));
-                }
-                else
-                {
-                    $(this).removeClass('error');                    
-                }
-                console.log($(this).attr('name'));
-            });
-            // alert(event_error);
-            if(event_error == 1)
-            {
-                var fdone = 0;
-                $('.required3').each(function(i, obj) {
-                if(!$(this).val() && fdone == 0)
-                {
-                    fdone = 1;
-                    $(this).focus();
-                }
-                console.log($(this).attr('name'));
-            });
-                alert("Please fill required field");
-                $('.tab-pane').each(function(i, obj) {
-                    $(this).removeClass('active');
-                    $(this).removeClass('in');
-                
-                });
-                $('#xtra_event_info').addClass("active in");
-                $('#event_show').addClass("active");
-            }
-            else
-            {
-                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
-            }
-        }
-        else if(job_cat == 1)
-        {
-            var focus = '';
-            $('.required4').each(function(i, obj) {
-                if(!$(this).val() || $(this).val() == 0)
-                {
-                    job_error = 1;
-                    
-                    $(this).addClass('error');
-                    // console.log($(this).attr('class'));
-                }
-                else
-                {
-                    $(this).removeClass('error');                    
-                }
-                console.log($(this).attr('name'));
-            });
-            if(job_error == 1)
-            {
-                var fdone = 0;
-                $('.required4').each(function(i, obj) {
-                if(!$(this).val() && fdone == 0)
-                {
-                    fdone = 1;
-                    $(this).focus();
-                }
-                console.log($(this).attr('name'));
-            });
-                alert("Please fill required field");
-                $('.tab-pane').each(function(i, obj) {
-                    $(this).removeClass('active');
-                    $(this).removeClass('in');
-                
-                });
-                $('#xtra_job_info').addClass("active in");
-                $('#job_show').addClass("active");
-            }
-            else
-            {
-                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
-            }
-        }
-        else
-        {
-            form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
-        }
-        return 0;
-        // 
+        var textareaValue = $('#desc_summernote').summernote('code', 'value');
+        console.log(textareaValue);
+        console.log('ok');
+        // alert(textareaValue.length);
+        //   if(textareaValue.length < '300')
+        //     {
+        //         alert('ok');
+            // }
+        form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
     }
     window.preview = function (input) {
         if (input.files && input.files[0]) {
@@ -1500,8 +1300,9 @@ else
         }
     }
     function upload_img(img){
-        var old_txt = $('#gimgs_txt').text();
-
+        
+     var old_txt = $('#gimgs_txt').text();
+        $('#show_hide_loader').show();
         // $('#gimgs_txt').text('Uploading ...');
         var settings = {
   "url": "<?= base_url(); ?>/vendor/gupload",
@@ -1521,7 +1322,8 @@ $.ajax(settings).done(function (response) {
     // alert(response);
     // $('#gimgs_txt').text(old_txt);
     $('.gallary_images').load(imgUrl);
-  console.log(response);
+     $('#show_hide_loader').hide();
+//   console.log(response);
 });
 
     }
@@ -1568,9 +1370,11 @@ $.ajax(settings).done(function (response) {
             var now = $(this);
             var h = now.data('height');
             var n = now.data('name');
+          
             if(now.closest('div').find('.val').length == 0){
                 now.closest('div').append('<input type="hidden" class="val" name="'+n+'">');
             }
+            // desc_summernote
             now.summernote({
                 toolbar: [
                     ['style', ['style']],
@@ -1653,18 +1457,11 @@ $.ajax(settings).done(function (response) {
         set_summer();
     });
     $("#more_field_btn").click(function(){
-        var k = 0;
-        $('.moredata').each(function(i, e) {
-           k = $('.moredata').length;
-            });
-    if(k >=6){
-        alert('You can add only 6 fields');
-    }
-    else{
+       
         $("#more_checkbox_fields").append(''
             +'<div class="form-group">'
             +'    <div class="col-sm-9">'
-            +'        <input type="text" name="checkboxinfo[]" class="moredata form-control required"  placeholder="<?php echo translate('field_name'); ?>">'
+            +'        <input type="text" name="checkboxinfo[]" class="moredata form-control"  placeholder="<?php echo translate('field_name'); ?>">'
             +'    </div>'
             +'    <div class="col-sm-2">'
             +'        <span class="remove_it_v rms btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>'
@@ -1672,7 +1469,7 @@ $.ajax(settings).done(function (response) {
             +'</div>'
         );
         set_summer();
-    }
+   
     });
     
       $("#more_btn_attr").click(function(){
@@ -1828,104 +1625,39 @@ var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
 }
 function show_rel_fields()
 {
-    var property_cat = '<?= $this->config->item('property_cat') ?>';
-    var car_cat = '<?= $this->config->item('car_cat') ?>';
-    var event_cat = '<?= $this->config->item('event_cat') ?>';
-    var job_cat = '<?= $this->config->item('job_cat') ?>';
+    //work here 
+    $('#admin_loader').html('Loading ... ');
     var cats = $('#category').val();
-    const myArray = cats.split(",");
-    if(myArray.indexOf(car_cat) != -1)
-{  tabs = [
-        'customer_choice_options',
-        'top_banner',
-        'xtra_info',
-        'event_images',
-        'custom_attributes_0',
-        'checkbox_information',
-        'amenitys',
-        'first_section',
-        'custom_attributes_1',
-        'location',
-        'seo_section',
-        
-    ];
-    ctab = 'customer_choice_options';
+    $.ajax({
+        url: "<?= base_url('vendor/admin_fields') ?>",
+        type: "get",
+        async: true,
+        data: {cats: cats },
+        success: function (data) {
+        $('#admin_loader').html(data);
+           
+        },
+        error: function (xhr, exception) {
+            var msg = "";
+            if (xhr.status === 0) {
+                msg = "Not connect.\n Verify Network." + xhr.responseText;
+            } else if (xhr.status == 404) {
+                msg = "Requested page not found. [404]" + xhr.responseText;
+            } else if (xhr.status == 500) {
+                msg = "Internal Server Error [500]." +  xhr.responseText;
+            } else if (exception === "parsererror") {
+                msg = "Requested JSON parse failed.";
+            } else if (exception === "timeout") {
+                msg = "Time out error." + xhr.responseText;
+            } else if (exception === "abort") {
+                msg = "Ajax request aborted.";
+            } else {
+                msg = "Error:" + xhr.status + " " + xhr.responseText;
+            }
+           
+        }
+    });
     
-   $('#car_show').css({'display':'block'});
-}
-else
-{
-   $('#car_show').css({'display':'none'});
-}
-    if(myArray.indexOf(property_cat) != -1)
-{ 
-    tabs = [
-        'customer_choice_options',
-        'top_banner',
-        'xtra_property_info',
-        'event_images',
-        'custom_attributes_0',
-        'checkbox_information',
-        'amenitys',
-        'first_section',
-        'custom_attributes_1',
-        'location',
-        'seo_section',
-        
-    ];
-    ctab = 'customer_choice_options';
-   $('#property_show').css({'display':'block'});
-}
-else
-{
-   $('#property_show').css({'display':'none'});
-}
-if(myArray.indexOf(event_cat) != -1)
-{  
-    tabs = [
-        'customer_choice_options',
-        'top_banner',
-        'xtra_event_info',
-        'event_images',
-        'custom_attributes_0',
-        'checkbox_information',
-        'amenitys',
-        'first_section',
-        'custom_attributes_1',
-        'location',
-        'seo_section',
-        
-    ];
-    ctab = 'customer_choice_options';
-   $('#event_show').css({'display':'block'});
-}
-else
-{
-    $('#event_show').css({'display':'none'});
-}
-if(myArray.indexOf(job_cat) != -1)
-{  
-    tabs = [
-        'customer_choice_options',
-        'top_banner',
-        'xtra_job_info',
-        'event_images',
-        'custom_attributes_0',
-        'checkbox_information',
-        'amenitys',
-        'first_section',
-        'custom_attributes_1',
-        'location',
-        'seo_section',
-        
-    ];
-    ctab = 'customer_choice_options';
-   $('#job_show').css({'display':'block'});
-}
-else
-{
-    $('#job_show').css({'display':'none'});
-}
 }
 function selecttype(id,ajax= 0)
 {

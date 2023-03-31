@@ -22,7 +22,7 @@
                 <div class="close_icon">
                     <i class="fa fa-close"></i>
                 </div>
-                <ul>
+                <ul  class="make_it_left">
                        <li class="padd_right set-pad-tb"><a href="#" class="this-padding">Community Pegs</a>
                     <div class="dropdown_box dropdowon_color">
            
@@ -178,10 +178,10 @@
                     }
                     ?>
                     <li>
-                        <div class="flex-col-6 flex-col-lg-auto text-right">
+                        <div class="flex-col-6 flex-col-lg-auto text-left">
                     <!-- Header shopping cart -->
                     <div class="header-cart" id="cart_modelbox">
-                        <div class="cart-wrapper">
+                        <div class="cart-wrapper ">
                             <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart">
                                 <i class="fa fa-shopping-cart"></i> 
                                 <span class="hidden-xs"> 

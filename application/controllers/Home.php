@@ -189,6 +189,82 @@ class Home extends CI_Controller
         //slugify
         }
     }
+    
+    public function ckeditor($id='', $col='')
+    {
+        $org = $col;
+        $ex = explode('-',$col);
+        $num = -1;
+        if(count($ex))
+        {
+            $col = $ex[0];
+            $num = $ex[1];
+            
+        }
+        $page_data['product']=$this->db->where('product_id',$id)->get('product')->row()->$col;
+        if($num > -1)
+        {
+            $arr = json_decode($page_data['product'],true);
+            $page_data['product'] = $arr[$num];
+        }
+        $page_data['pid']=$id;
+        $page_data['col']=$org;
+        $this->load->view('editor',$page_data);
+    }
+     public function save()
+    {
+      $val = $_POST['val'];
+      $pid = $_POST['pid'];
+      $col = $_POST['col'];
+      $org = $col;
+        $ex = explode('-',$col);
+        $num = -1;
+        if(count($ex))
+        {
+            $col = $ex[0];
+            $old = $this->db->where('product_id',$pid)->get('product')->row()->$col;
+            $num = $ex[1];
+            $arr = json_decode($old,true);
+            $arr[$num] = $val;
+            $val =  json_encode($arr);
+            
+        }
+      $save = $this->db->where('product_id',$pid)->update('product',array($col => $val));
+    //   var_dump($save);
+      if($save){
+          $cookie_name = "is_save";
+$cookie_value = $pid;
+setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); 
+echo 1;
+      }else{
+          echo'0';
+      }
+      
+    }
+    
+    public function update_slug_cat()
+    {
+               $this->db->limit(15, 0);
+
+        $pros = $this->db->where('slug',NULL)->get('category')->result_array();
+        // var_dump($this->db->last_query());
+        foreach($pros as $k=> $v)
+        {
+            echo $v['category_id'].'<br>';
+         echo create_cat_slug($v['category_id']).'<br>';
+        echo '1';
+        //slugify
+        }
+    }
+    public function business_unique_name(){
+        $company = $this->db->where('company',$_REQUEST['val'])->get('vendor')->num_rows();
+        if($company > 0){
+            echo 'error';
+        }
+        else{
+            echo 'success';
+        }
+    }
     public function update_dire()
     {
         $place_id = $this->config->item('places_cat');
@@ -372,6 +448,12 @@ else
             exit();
         }
     }
+    public function test1()
+    {
+        $r = get_fields_line(733, 2);
+        var_dump($r);
+        die();
+    }
     public function latest_load()
     {
         
@@ -398,6 +480,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     }
     public function index()
     {
+        
         //$this->output->enable_profiler(TRUE);
         //$page_data['min'] = $this->get_range_lvl('product_id !=', '', "min");
           $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value, true);
@@ -3351,7 +3434,11 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     foreach($category as $value)
     {
         if($value)
-        $this->db->where("find_in_set($value, category)");
+      
+          if(isset($_REQUEST['list_type']) && ($_REQUEST['list_type'] != 'blog_listing') && ($_REQUEST['list_type'] != 'event_listing') )
+            {
+               $this->db->where("find_in_set($value, category)"); 
+            }
     }
     
             }
@@ -3411,6 +3498,14 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             {
                 
                 $this->db->where('is_property ', '1');
+            }
+            if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing')
+            {
+                $this->db->where('comp_logo > 1');
+            }
+            else
+            {
+                $this->db->where('comp_cover > 1');
             }
             $this->db->order_by('product_id', 'desc');
 
@@ -3691,7 +3786,11 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     foreach($category as $value)
     {
         if($value)
-        $this->db->where("find_in_set($value, category)");
+        
+          if(isset($_REQUEST['list_type']) && ($_REQUEST['list_type'] != 'blog_listing') && ($_REQUEST['list_type'] != 'event_listing') )
+            {
+               $this->db->where("find_in_set($value, category)"); 
+            }
     }
             }
     if($amenities)
@@ -3779,6 +3878,14 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                  $this->db->where("sale_price >=",$mind);
                  $this->db->where("sale_price <=",$maxd);
              }
+             if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing')
+            {
+                $this->db->where('comp_logo > 1');
+            }
+            else
+            {
+                $this->db->where('comp_cover > 1');
+            }
             
             if ($lat && $lng) {
                  $mylat= $lat;
@@ -3897,7 +4004,7 @@ foreach($data as $k=> $v)
             unset($data[$v]);
             }
         }
-        $json = array('feature','etra_content','text');
+        $json = array('feature','etra_content','text','enable_checks');
          foreach($json as $k=> $v)
         {
             if(isset($data[$v]))
@@ -3982,6 +4089,11 @@ foreach($data as $k=> $v)
             'number_of_view' => $product_data->row()->number_of_view + 1,
             'last_viewed' => time()
         ));
+        $vid = json_decode($product_data->row()->added_by);
+        if(isset($_GET['edit']) && ($_SESSION['login'] != 'yes') && ($vid->id != $_SESSION['vendor_id']) ){
+            $this->error();
+            exit();
+        }
 
         $type = 'other';
         if($product_data->row()->is_bpage)
@@ -3995,6 +4107,10 @@ foreach($data as $k=> $v)
         elseif($product_data->row()->is_product)
         {
             $type = 'product';
+        }
+        elseif($product_data->row()->is_blog)
+        {
+            $type = 'blog';
         }
         else
         {
@@ -4773,10 +4889,10 @@ foreach($data as $k=> $v)
                         "msg"=>'email not sent'
                          );
                     }
-                   return json_encode($ret);
+                   
             }
             
-            
+            echo json_encode($ret);
        
     }
     function contact_us(){
@@ -4800,13 +4916,16 @@ foreach($data as $k=> $v)
             $lastid = $this->db->insert_id();
             if($report){
                 $email = $this->email_model->contact_email($lastid);
+                    var_dump($email);
+                    die('ok');
                if ($email) {
-                       
+                    //   echo 'ok';
                          $ret = array(
                         "email"=>'1',
                         "msg"=>'email sent'
                         );
                     } else{
+                        // echo 'no';
                        $ret = array(
                         "email"=>'0',
                         "msg"=>'email not sent'
@@ -5286,7 +5405,7 @@ foreach($data as $k=> $v)
 
     function error()
     {
-        $this->load->view('front/others/404_error');
+        echo $this->load->view('front/others/404_error',array(),true);
     }
 
 

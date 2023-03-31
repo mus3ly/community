@@ -72,3 +72,8 @@ foreach ($query as $v){
     
     $route[$v['slug']] = 'home/product_view/'.$v['product_id'];
 }
+$query1 = $db->query("select * from category where slug != '' ")->result_array();
+foreach ($query1 as $v){
+    
+    $route['category/'.$v['slug']] = 'home/category/'.$v['category_id'];
+}

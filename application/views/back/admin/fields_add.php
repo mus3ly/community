@@ -7,6 +7,17 @@
             'enctype' => 'multipart/form-data'
         ));
     ?>
+    <?php
+	    
+	    $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value,true);
+                                            $result1=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result1[]=$row;
+                                                }
+                                            }
+	    
+	    ?>
         <div class="panel-body">
 
             <div class="form-group">
@@ -43,10 +54,21 @@
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('category');?></label>
                 <div class="col-sm-6">
                     <select name="category" id="demo-hor-2" class="form-control required">
-                        <option value="808">Property</option>
-                        <option value="807">Cars</option>
-                        <option value="917">Events</option>
-                        <option value="78">Jobs</option>
+                         <option value="">Select Category</option>
+			            <?php
+			            foreach($result1 as $k=> $v)
+            			 {
+            			     $row1 = $this->db->where('category_id', $v)->get('category')->row();
+                           			if($row1)
+                           			{
+                           			    ?>
+                           			    <option value="<?= $v ?>" ><?= $row1->category_name; ?></option>
+                           			    <?php
+                           			}
+            			 }
+			 
+			            
+			            ?>
                         </select>
                 </div>
             </div>
@@ -72,8 +94,32 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('Sort');?></label>
                 <div class="col-sm-6">
-                    <input type="number" name="sort" id="demo-hor-1" 
-                    	placeholder="<?php echo translate('sort'); ?>" value="1" class="form-control required">
+                    <select name="sort" class="form-control required">
+                        <option value="0">Choose Option</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('position');?></label>
+                <div class="col-sm-6">
+                    <select name="position" class="form-control required">
+                        <option value="0">Choose Position</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        </select>
+                </div>
+            </div>
+     <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('prefix');?></label>
+                <div class="col-sm-6">
+                <input type="text" name="prefix" class="form-control">
                 </div>
             </div>
 
