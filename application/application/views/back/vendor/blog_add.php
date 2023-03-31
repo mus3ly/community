@@ -31,6 +31,12 @@
                                     <input type="text" name="title" id="demo-hor-1" placeholder="<?php echo translate('blog_title');?>" class="form-control required">
                                 </div>
                             </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('catchphrase_or_slogan');?></label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="slog" id="demo-hor-1" placeholder="<?php echo translate('catchphrase_or_slogan');?>" class="form-control required">
+                                </div>
+                            </div>
                             
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-2"><?php echo translate('category');?></label>
@@ -85,25 +91,30 @@
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('author');?></label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="author" id="demo-hor-1" placeholder="<?php echo translate('author');?>" class="form-control ">
+                                    <input type="text" name="author" id="demo-hor-1" placeholder="<?php echo translate('author');?>" class="form-control required">
                                 </div>
                             </div>
 
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('date');?></label>
                                 <div class="col-sm-6">
-                                    <input type="date" name="date" id="demo-hor-1" class="form-control">
+                                    <?php 
+                                    $date = date('Y-m-d');
+                                    ?>
+                                    <input type="text" name="date" id="demo-hor-1" class="form-control" value="<?= $date; ?>" readonly>
                                 </div>
                             </div>
+                            <!--<div class="form-group btm_border">-->
+                            <!--    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('time');?></label>-->
+                            <!--    <div class="col-sm-6">-->
+                            <!--      
+                            <!--        <input type="time" name="openig_time" id="demo-hor-1" class="form-control" value="<?= $time; ?>">-->
+                            <!--    </div>-->
+                            <!--</div> -->
                             <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('time');?></label>
-                                <div class="col-sm-6">
-                                    <input type="time" name="openig_time" id="demo-hor-1" class="form-control">
-                                </div>
-                            </div> <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('slug');?></label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="slug" id="slug" class="form-control" required>
+                                    <input type="text" name="slug" id="slug" class="form-control required" >
                                 </div>
                             </div>
 

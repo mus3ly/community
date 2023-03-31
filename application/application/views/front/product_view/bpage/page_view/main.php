@@ -666,7 +666,9 @@
                         {
                             ?>
                         <div class="container">
-
+                           <div class="verify_head" style="    padding: 10px 0px;">
+                                <h3>Text Gallery</h3>
+                            </div>
                         <div class="inner_content_tabs">
                         <!--</select>-->
                          <div class="row" id="left_gp">
@@ -810,7 +812,7 @@
                     <div class="col-sm-4 business_graphic" id="leftboxx">
                      <img src=" <?= $value['img'] ?>" alt="">
                     </div>
-                 <div class="col-sm-8 communitybox" id="equal_btnw">
+                 <div class="col-sm-8 communitybox no_box_bd inner_box_design" id="equal_btnw">
                      <h3> <?= $value['title'] ?></h3>
                      <div class="desc">
                        <p> <?= $value['detail'] ?></p>
@@ -1065,27 +1067,27 @@
                         
                         
                           
-                        <div class="orange_pathwrap" id="bpage_form">
+                         <div class="orange_pathwrap" id="bpage_form">
                             <div class="container">
                                 <div class="iframe_box">
                                 <div id="googleMap" style="width:100%;height:550px;"></div>
 
 
                                     <div class="getin_touch">
-                                        <h3>Get In Touch <img src="<?= base_url(); ?>template/front/images/orange-phone.png" alt=""></h3>
+                                        <h3>Get In Touch <img src="<?= base_url(); ?>upload/phone_2.png" alt=""></h3>
                                         <form action="" method="">
                                             <div class="row">
                                                 <div class="col-sm-6 form_gapp">
                                                     <div class="form_box">
                                                         <label for="First name">First name</label>
-                                                        <input type="text" placeholder="Tamim" name="">
+                                                        <input type="text" placeholder="" name="">
                                                         <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 form_gapp">
                                                     <div class="form_box">
                                                         <label for="Last name">Last name</label>
-                                                        <input type="text" placeholder="Islam" name="">
+                                                        <input type="text" placeholder="" name="">
                                                         <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
                                                     </div>
                                                 </div>
@@ -1094,17 +1096,17 @@
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
                                                         <label for="Email">Email</label>
-                                                        <input type="email" placeholder="Email" name="">
+                                                        <input type="email" placeholder="" name="">
                                                         <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                             <div class="row">
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
                                                         <label for="Phone number">Phone number</label>
                                                         <input type="number" placeholder="Type phone number" name="">
-                                                        <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
+                                                        <img class="phone_iconn" src="<?= base_url(); ?>upload/phone_icon.png" alt="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -1113,10 +1115,10 @@
                                                     <div class="form_box">
                                                         <label for="Message">Message</label>
                                                         <textarea placeholder="Type Message"></textarea>
-                                                        <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
+                                                        <img class="msg_iconn" src="<?= base_url(); ?>upload/message_1.png" alt="">
                                                     </div>
                                                 </div>
-                                            </div>
+                                                </div>
                                             <div class="row">
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
@@ -1130,6 +1132,7 @@
                                 </div>
                             </div>
                         </div>
+
 
            
                         <div class="purple_line" id="intrested">

@@ -87,6 +87,9 @@ if($is_bpage)
 $vendor_id =json_decode($added_by);
 $id = $vendor_id->id;
 $vendor = $this->db->where('vendor_id', $id)->get('vendor')->row_array();
+$this->db->where('added_by',$added_by);
+$this->db->where('is_bpage',1);
+$vendor1 = $this->db->get('product')->row_array();
 // get product
 $n = $this->db->where('product_id',$vendor['bpage'])->where('is_bpage',1)->get('product')->row_array();
 $img = '';
@@ -166,16 +169,17 @@ $vendorlogo= '';
             ?>
                   <div class="logo_withname">
                         <img src="<?= $vendorlogo; ?>" alt="">
-                         <?php
+                        <?php
+                       
                          $time = date('H:i:s', time());
-                         $time = time();
-                         if($time >=$openig_time && $time <=$closing_time){
+                         
+                         if($time >=$vendor1['openig_time'] && $time <=$vendor1['closing_time']){
                           ?>
                           <a href="#" class="online_box_wrapper"><span class="online_box2"></span></a>
                           <?php  
                         }
                         ?>
-                        <h4><?= $name ?></h4>
+                      
                         
                         
                     </div>
@@ -190,7 +194,9 @@ $vendorlogo= '';
             </div> 
             <div class="col-12 desc_col">
                 <div class="row" id="add_height_in">
+                    <div class="col-md-12 p-0">
                     <h1 class="title_space"><?= $title; ?></h1>
+                    </div>
                     <div class="col-md-6 left_fields" >
                         
                         <h1><?= $slog ?></h1>

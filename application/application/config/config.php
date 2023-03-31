@@ -456,6 +456,7 @@ $config['csrf_expire'] 			= 7200;
 $config['csrf_regenerate'] 		= FALSE;
 $config['csrf_exclude_uris'] 	= array('home/paypal_success',
 									'admin/product/api_add',
+									'admin/cat_slug',
 									'home/contactus',  
 									'vendor/login',  
 									'home/upload_bpage',  
@@ -524,6 +525,7 @@ $config['csrf_exclude_uris'] 	= array('home/paypal_success',
                                     'home/ajax_post_user_rating',
 									'home/message_to_seller_reply/[0-9]+',
 									'home/update_product+',
+									'home/save',
 									'webhook/payment_webhook',
 								);
 /*

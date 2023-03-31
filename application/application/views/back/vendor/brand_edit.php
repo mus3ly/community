@@ -68,5 +68,30 @@
 ?>
 
 <script src="<?php echo base_url(); ?>template/back/js/custom/brand_form.js"></script>
+<script>
+    $('.summernotes').each(function() {
+            var now = $(this);
+            var h = now.data('height');
+            var n = now.data('name');
+            if(now.closest('div').find('.val').length == 0){
+                now.closest('div').append('<input type="hidden" class="val" name="'+n+'">');
+            }
+            now.summernote({
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['view', ['codeview', 'help']],
+                ],
+                height: h,
+                onChange: function() {
+                    now.closest('div').find('.val').val(now.code());
+                }
+            });
+            now.closest('div').find('.val').val(now.code());
+        });
+</script>
 
 

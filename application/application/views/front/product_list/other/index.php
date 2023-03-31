@@ -171,6 +171,46 @@ $lng = $this->config->item('lng');
     
     }
 </style>
+<section class="banner_listing">
+    <div class="menu_items align" id="menuitems">
+        <div class="container menu_list_bg">
+            <div class="menulist_bar">
+                <h3>Have a Look at what’s happening in your community</h3>
+            </div>
+            <ul class="menu_list">
+                <?php
+                $brands = $this->db->get('category')->result_array();
+                ?><?php
+                $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 86))->row()->value,true);
+                                            $result=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result[]=$row;
+                                                } 
+                                            }
+
+                    foreach ($brands as $key => $value) {
+                        if(in_array($value['category_id'], $result))
+                        {
+                        ?>
+                        <li>
+                    <a href="<?= base_url('home/category/'.$value['category_id']); ?>">
+                        <i class="fa <?= ($value['fa_icon'])?$value['fa_icon']:'fa-file-image-o'; ?>"></i>
+                        <?= $value['category_name'] ?>
+                    </a>
+                </li>
+
+                        <?php
+                    }
+                    }
+                ?>
+            </ul>
+            <div class="product_para">
+                <p>Joining Community HubLand gives you the opportunity to post advertisements on you business page, which you can use as your community marketing homepage, and on Community HubLand directory site. Enjoy great marketing features only a few clicks away at a very low subscription fee.</p>
+                </div>
+            </div>
+        </div>
+</section>
 <section class="container">
     <div class="row">
         
@@ -181,9 +221,10 @@ $lng = $this->config->item('lng');
                                     <div class="col-sm-12 p-0">
                                             <div class="" id="location_search">
                                             <div class="widget-search search_bar">
-                                                <img src="<?= base_url('/template/front/images/Location.png'); ?>" alt="Search">
-                                                <input class="form-control set-shadow-none" style="border-right: 1px solid #cccccc82 !important;border-radius:0;" type="text" id="texted" value="<?php echo make_proper($text); ?>" placeholder="<?php echo translate('search'); ?>">
-                                                <input type="text" value="<?php echo make_proper($address); ?>" id="loc_box"  onkeyup="search_location()"  placeholder="location" name="" alt="">
+                                                <img style="width:22px;" src="<?= base_url('/search_icon_bar.png'); ?>" alt="Search">
+                                                <input class="form-control set-shadow-none" style="border-right: 1px solid #f26122 !important;border-radius:0;" type="text" id="texted" value="<?php echo make_proper($text); ?>" placeholder="SEARCH">
+                                                <img style="width:17px;" src="<?= base_url('/template/front/images/Location.png'); ?>" alt="Search">
+                                                <input type="text" value="<?php echo make_proper($address); ?>" id="loc_box"  onkeyup="search_location()"  placeholder="LOCATION" name="" alt="">
                                                 <button onclick="do_product_search('0')" class="on_click_search txt_src_btn">
                                                     <i class="fa fa-search"></i>
                                                 </button>
@@ -246,6 +287,16 @@ $lng = $this->config->item('lng');
                                                         <span class="marg_add"><i class="fa-solid fa-newspaper"></i></span><a href="<?= base_url('directory/353?is_listing=news_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'news_listing')?"active":"" ?>"><?php echo translate('news'); ?></a>
                                                      </li>
                                                 </ul>
+                                                <a class="btn btn-theme-transparent btn-sort"  id="btn__sort"><img src="<?php echo base_url(); ?>/sort12.png" alt="" width="20px;"/></a>
+                                                <ul class="selectpicker input-price sorter_search" data-live-search="true" data-width="100%"
+                                                                                       data-toggle="tooltip" title="Select" onClick="delayed_search()" id="sorter_search">
+                                                    <li value="rating_num"><?php echo translate('top_rated'); ?></li>
+                                                    <li value="distance"><?php echo translate('near_by'); ?></li>
+                                                    <li value="rating_num"><?php echo translate('popularity'); ?></li>
+                                                    <li value="condition_old"><?php echo translate('oldest'); ?></li>
+                                                    <li value="condition_new"><?php echo translate('newest'); ?></li>
+                                                    <li value="most_viewed"><?php echo translate('most_viewed'); ?></li>
+                                                </ul>
                                                 <!--<input type="radio" value="directory_listing" name="group1" id="val2" ><label for="val2"></label>-->
                                                 <!--<input type="radio" value="affliate_listing" name="group1" id="val3" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'affliate_listing')?"checked":"" ?>><label for="val3"><?php echo translate('affliate_listing'); ?></label>-->
                                                 <!--<input type="radio" value="shop_listing" name="group1" id="val4" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'shop_listing')?"checked":"" ?>><label for="val4"><?php echo translate('shop_listing'); ?></label>-->
@@ -269,77 +320,10 @@ $lng = $this->config->item('lng');
     </div>
     
 </section>
-<section class="banner_listing">
-    <div class="menu_items align" id="menuitems">
-        <div class="container menu_list_bg">
-            <div class="menulist_bar">
-                <h3>Have a Look at what’s happening in your community</h3>
-            </div>
-            <ul class="menu_list">
-                <?php
-                $brands = $this->db->get('category')->result_array();
-                ?><?php
-                $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 86))->row()->value,true);
-                                            $result=array();
-                                            foreach($categories as $row){
-                                                if($this->crud_model->if_publishable_category($row)){
-                                                    $result[]=$row;
-                                                } 
-                                            }
 
-                    foreach ($brands as $key => $value) {
-                        if(in_array($value['category_id'], $result))
-                        {
-                        ?>
-                        <li>
-                    <a href="<?= base_url('home/category/'.$value['category_id']); ?>">
-                        <i class="fa <?= ($value['fa_icon'])?$value['fa_icon']:'fa-file-image-o'; ?>"></i>
-                        <?= $value['category_name'] ?>
-                    </a>
-                </li>
-
-                        <?php
-                    }
-                    }
-                ?>
-            </ul>
-            <div class="product_para">
-                <p>Joining Community HubLand gives you the opportunity to post advertisements on you business page, which you can use as your community marketing homepage, and on Community HubLand directory site. Enjoy great marketing features only a few clicks away at a very low subscription fee.</p>
-                </div>
-            </div>
-        </div>
-</section>
 
 
  <!-- PAGE WITH SIDEBAR -->
- <div class="container">
-     <div class="col-md-12">
- <div class="middle_bar">
-                        <div class="menuss_icon">
-                            <div class="push_left">
-           <!-- <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="open_sidebar();">
-                <i class="fa fa-bars"></i>
-            </span>-->
-            <a class="btn btn-theme-transparent btn-theme-sm grid" onClick="set_view('grid')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-grid.png" alt=""/></a>
-            <a class="btn btn-theme-transparent btn-theme-sm list" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-list.png" alt=""/></a>
-        </div>
-                       
-                        <div class="push_right">
-                            <a class="btn btn-theme-transparent btn-sort"  id="btn__sort"><img src="<?php echo base_url(); ?>template/front/img/sort.png" alt="" width="20px;"/></a>
-                <ul class="selectpicker input-price sorter_search" data-live-search="true" data-width="100%"
-                                                       data-toggle="tooltip" title="Select" onClick="delayed_search()" id="sorter_search">
-                    <li value="rating_num"><?php echo translate('top_rated'); ?></li>
-                    <li value="distance"><?php echo translate('near_by'); ?></li>
-                    <li value="rating_num"><?php echo translate('popularity'); ?></li>
-                    <li value="condition_old"><?php echo translate('oldest'); ?></li>
-                    <li value="condition_new"><?php echo translate('newest'); ?></li>
-                    <li value="most_viewed"><?php echo translate('most_viewed'); ?></li>
-                </ul>
-                        </div>
-                     </div>  
-                      </div>
-                     </div>  
-                     </div>  
  
 <section class="page-section with-sidebar">
     <div class="container_side section_bg">

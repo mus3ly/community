@@ -1,5 +1,13 @@
-<div class="loader_img">
+  <?php
+
+  ?>
+  <!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+<div class="loader_img"style="display:none;">
     <img width="50px" src="<?=base_url('/upload/map-loader.gif')?>">   
+    
 </div>
 <?php
 $pro = array();
@@ -8,15 +16,22 @@ $pro = array();
     {
         $pro = $product_data[0];
     }
+    $vid = json_decode($pro['added_by']);
+ 
+if(($_SESSION['login'] != 'yes') && ($vid->id != $_SESSION['vendor_id']) ){
+    echo 'You are not authorized to open this...  Login first!!';
+    die();
+}
+  
 ?>
-<a href="<?=base_url($pro['slug']);?>" class="btn btn-info pre_btnn">Preview<span><i class="fa-regular fa-eye"></i></span></a>
+<a href="<?=base_url($pro['slug']);?>" target="_blank" class="btn btn-info pre_btnn">Preview<span><i class="fa-regular fa-eye"></i></span></a>
 <!--    <div class="icon_wrapper">-->
 <!--    <div class="icon-container">-->
 <!--  <i class="fas fa-cog fa-lg"></i>-->
 <!--</div>-->
 <!--</div>-->
-<div class="wrapper d-flex align-items-stretch addd_butn">
-    <nav id="sidebar">
+<div class="wrapper d-flex align-items-stretch addd_butn" id="addd_butn">
+    <nav id="sidebar" style="    width: 286px;">
 				<div class="custom-menu">
 					<button type="button" id="sidebarCollapse" class="btn btn-primary">
 	          <i class="ICON_BTN fas fa-cog fa-lg"></i>
@@ -24,46 +39,30 @@ $pro = array();
 	        </button>
         </div>
 				<div class="p-4 pt-5">
-		  		<h1><a href="index.html" class="logo">Splash</a></h1>
+		  		<h1><a href="index.html" class="logo">Setting</a></h1>
 	        <ul class="list-unstyled components mb-5">
-	          <li class="active">
-	            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-	            <ul class="collapse list-unstyled" id="homeSubmenu">
-                <li>
-                    <a href="#">Home 1</a>
-                </li>
-                <li>
-                    <a href="#">Home 2</a>
-                </li>
-                <li>
-                    <a href="#">Home 3</a>
-                </li>
-	            </ul>
-	          </li>
-	          <li>
-	              <a href="#">About</a>
-	          </li>
-	          <li>
-              <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
-              <ul class="collapse list-unstyled" id="pageSubmenu">
-                <li>
-                    <a href="#">Page 1</a>
-                </li>
-                <li>
-                    <a href="#">Page 2</a>
-                </li>
-                <li>
-                    <a href="#">Page 3</a>
-                </li>
-              </ul>
-	          </li>
-	          <li>
-              <a href="#">Portfolio</a>
-	          </li>
-	          <li>
-              <a href="#">Contact</a>
-	          </li>
+	         
+	          <div class="form-group">
+	          <input type="text" ng-model="detail.lat" placeholder="Latitude" class="form-control">
+	          </div>
+	          <div class="form-group">
+	          <input type="text" ng-model="detail.lng" placeholder="Longitude" class="form-control">
+	          </div>
+	          <div class="form-group">
+	          <input type="text" ng-model="detail.bussniuss_email" placeholder="Business Email" class="form-control">
+	          </div>
+	          <label for="appt">Opening time:</label>
+	           <div class="form-group">
+	            
+                <input type="text" id="appt" ng-model="detail.openig_time" name="appt" class="form-control">
+                </div>
+                <label for="appt">Closing time:</label>
+	           <div class="form-group">
+	            
+                <input type="text" ng-model="detail.closing_time" id="appt" name="appt" class="form-control">
+                </div>
 	        </ul>
+	        
 
 	    <!--    <div class="mb-5">-->
 					<!--	<h3 class="h6">Subscribe for newsletter</h3>-->
@@ -81,6 +80,29 @@ $pro = array();
     	</nav>
 
     
+</div>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg_colore">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <iframe src="<?= base_url();?>/home/ckeditor/759/description" height="100%" width="100%" id="dis_frame" title="Iframe Example"></iframe>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+      </div>
+    </div>
+  </div>
 </div>
 
        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
@@ -377,7 +399,9 @@ input:checked + .slider:before {
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-sanitize.js"></script>
-    <script src="//cdn.ckeditor.com/4.20.1/standard/ckeditor.js"></script>
+      <!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
     <script>
 var app = angular.module('myApp', ['ngSanitize']);
@@ -394,13 +418,14 @@ app.controller('myCtrl', function($scope, $http) {
        
         var id = id;
         var product = "<?= $pro['product_id']; ?>";
-
+        $scope.show_loader();
          $.ajax({
         url: '<?= base_url('/home/delete_gallery'); ?>',
         type: "Post",
         async: true,
         data: { product:product, id:id},
         success: function (data) {
+            $scope.hide_loader();
             if(data){
                     $scope.onload();
                 }
@@ -415,12 +440,14 @@ app.controller('myCtrl', function($scope, $http) {
     {
         $scope.update_btn = 'Processing';
         // Simple Post request example:
-
+$scope.show_loader();
 var url = "<?= base_url('/home/update_product'); ?>",config='contenttype';
 
 $http.post(url, $scope.detail, config).then(function (response) {
+    $scope.hide_loader();
     if(response.data)
     {
+        
         $scope.update_btn = 'Update';
     }
     else
@@ -435,9 +462,45 @@ $http.post(url, $scope.detail, config).then(function (response) {
 
 });
     };
+    $scope.show_modal= function(id){
+        console.log($scope.detail);
+        console.log($scope.detail[id]);
+        $('#exampleModalLong').modal('show');
+        //dis_frame
+        
+        var url = "https://markethubland.com/home/ckeditor/<?= $pro['product_id']; ?>/"+id;
+        // alert(url);
+        var html = '<iframe src="'+url+'" height="100%" width="100%" id="dis_frame" title="Iframe Example"></iframe>';
+        $('#exampleModalLong .modal-body').html(html);
+        //modal-body
+            $("#dis_frame").attr("src", url);
+            setInterval(function () {
+                console.log('checking');
+                var foo = $.cookie("is_save")
+                if(foo == '<?= $pro['product_id']; ?>')
+                {
+                    $('#exampleModalLong').modal('hide');
+                $.removeCookie('is_save');
+                $scope.onload();
+                }
+
+                
+            }, 1000);
+
+        ('#summernote').summernote();
+    };
+    $scope.show_loader= function(){
+        $('.loader_img').show();
+    };
+    $scope.hide_loader= function(){
+        $('.loader_img').hide();
+    };
     $scope.onload= function(){
+        // alert("Loader");
+        $scope.show_loader();
         $http.get("<?= base_url('/home/product_data/'.$pro['product_id']); ?>")
   .then(function(response) {
+      $scope.hide_loader();
     $scope.detail = response.data;
     $scope.detail.enable_checks = JSON.parse($scope.detail.enable_checks);
     $scope.detail.feature = JSON.parse($scope.detail.feature);
@@ -496,7 +559,7 @@ $http.post(url, $scope.detail, config).then(function (response) {
    
     $scope.update_edit_col = function(i,ind = 0)
     {
-        if(true)
+        /*if(true)
         {
             var mid = '#extra'+ind;
             // alert(mid);
@@ -504,8 +567,10 @@ $http.post(url, $scope.detail, config).then(function (response) {
             $scope.detail.etra_content[ind] = $(mid).val();
             console.log($scope.detail.etra_content);
         }
-        $scope.edit_col = i+1;
-        // alert(i);
+        $scope.edit_col = i+1;*/
+        var col = 'etra_content-'+i;
+        $scope.show_modal(col);
+        // alert(col);
         console.log($scope.detail.etra_content);
         // alert($scope.detail.etra_content[i]);
     };
@@ -584,6 +649,7 @@ $http.post(url, $scope.detail, config).then(function (response) {
         fd.append('file',files);
         fd.append('column',file_id);
         fd.append('product',"<?= $pro['product_id']; ?>");
+        $scope.show_loader();
 
         $.ajax({
             url: '<?= base_url('/home/upload_bpage'); ?>',
@@ -592,6 +658,7 @@ $http.post(url, $scope.detail, config).then(function (response) {
             contentType: false,
             processData: false,
             success: function(response){
+                $scope.hide_loader();
                 // alrert(response);
                 if(response){
                     $scope.onload();
@@ -651,6 +718,9 @@ $scope.getBase64(file_id, file);
     <body id="page-name"  ng-app="myApp" ng-controller="myCtrl">
         <div class="container">
         <div class="update_btn">
+        <button type="button" id="btun_clss" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+                 Launch demo modal
+        </button>
         <button class="btn btn-primary" ng-click="update_product()">{{update_btn}}</button>
         </div>
         </div>
@@ -1067,7 +1137,7 @@ $scope.getBase64(file_id, file);
                                 <!--<h3>{{detail.main_heading}}</h3>-->
                                 <div class="scroll" id="scrol_9sec" >
                                 <div class="desc">
-                                    <p ng-click="detail.description_edit = 1" ng-if="!detail.description_edit">{{ detail.description}}</p>
+                                    <p ng-click="show_modal('description');" ng-if="!detail.description_edit" ng-bind-html="detail.description"></p>
                                     <form ng-if="detail.description_edit" class="sub_form2" style="position: relative;">
                                         <textarea name="ckeditor" ng-model="detail.description" class="form-control" style="width:100%;"></textarea>
                                         <button  type="button" class="btn btn-primary" ng-click="detail.description_edit = 0">Save</button>
@@ -1584,7 +1654,7 @@ $scope.getBase64(file_id, file);
                     
                    <?php if(isset($pro['about_address']) && !empty($pro['about_address'])){ 
                    ?>
-                   <div ng-click="detail.about_address_edit = 1" ng-if="!detail.about_address_edit" class="margin-bottom">
+                   <div  ng-click="show_modal('about_address');" ng-if="!detail.about_address_edit" class="margin-bottom">
                        <i class="fa fa-map-marker"></i> {{detail.about_address}}</div>
                         <form ng-if="detail.about_address_edit" class="sub_form" style="    position: relative;">
                             <input type="text" class="form-control" ng-model="detail.about_address" />
@@ -1695,7 +1765,7 @@ $scope.getBase64(file_id, file);
                                         <input type="text" class="form-control" ng-model="detail.info_head" />
                                         <button ng-click="detail.info_head_edit = 0"  type="button" class="btn btn-primary">Save</button>
                                     </form>
-                                    <p ng-click="detail.info_desc_edit = 1" ng-if="!detail.info_desc_edit">{{detail.info_desc}}</p>
+                                    <p   ng-click="show_modal('info_desc');" ng-if="!detail.info_desc_edit">{{detail.info_desc}}</p>
                                     <form ng-if="detail.info_desc_edit" class="sub_form" style="    position: relative;">
                                         <textarea name="ckeditor" ng-model="detail.info_desc" class="form-control" style="width:100%;"></textarea>
                                         <button ng-click="detail.info_desc_edit = 0"  type="button" class="btn btn-primary">Save</button>
@@ -2309,7 +2379,7 @@ return src;
         $('.summernote').summernote();
     });
     </script>
-     <script type="text/javascript">
+      <script type="text/javascript">
     $(document).ready(function(){
        $('#sidebarCollapse').click(function(){
            $('#addd_butn').toggleClass('sidebar_open');

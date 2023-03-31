@@ -541,6 +541,9 @@ btn1 .fa{
                                     </div>
                         </div>
                         <div id="custom_attributes_0" class="tab-pane fade ">
+                            <div class="form-group btn_border">
+                            <h5 style="color: red;padding: 0 89px;">If more than 30 characters, it will be added to the accordion section</h5>
+                        </div>
                       <div class="form-group btm_border" id="admin_fields">
                           <span id="admin_loader"></span>
                         
@@ -556,6 +559,9 @@ btn1 .fa{
                             
                         </div>
                         <div id="checkbox_information" class="tab-pane fade ">
+                              <div class="form-group btn_border">
+                            <h5 style="color: red;padding: 0 89px;">Do not exceed more than 30 characters per entry</h5>
+                        </div>
                       <div class="form-group btm_border">
                           <div class="form-group"> 
                           <div class="col-sm-9">    

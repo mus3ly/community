@@ -45,6 +45,10 @@ class Vendor extends CI_Controller
         }
     }
     }
+    function testing(){
+      $x = filter_add('738');
+      var_dump($this->db->last_query());
+    }
     function productslug(){
         $slug = $_REQUEST['value'];
         $this->db->where('slug', $slug);
@@ -814,7 +818,7 @@ class Vendor extends CI_Controller
             if(isset($_REQUEST['is_blog'])){
                 $data['is_blog'] = 1;
                 $data['author_name'] = $this->input->post('author');
-                $data['posted_date'] = $this->input->post('date');
+                $data['create_at'] = $this->input->post('date');
             }
            
             if(isset($_REQUEST['is_product']))
@@ -891,7 +895,7 @@ class Vendor extends CI_Controller
             //   var_dump($this->db->last_query());
                $id = $this->db->insert_id();
                 if($id){
-                    
+                            filter_add($id);
                             foreach($_POST['fields'] as $k=> $v)
                             {
                                 $r = update_product_meta($id,$k, $v);
@@ -1015,7 +1019,7 @@ class Vendor extends CI_Controller
           if(isset($_REQUEST['is_blog'])){
                 $data['is_blog'] = 1;
                 $data['author_name'] = $this->input->post('author');
-                $data['posted_date'] = $this->input->post('date');
+                $data['posted_date'] = date('Y-m-d H:i:s');
             }
            
             $data['seo_title']          = $this->input->post('seo_title');
@@ -1048,7 +1052,7 @@ class Vendor extends CI_Controller
             $data['discount']           = $this->input->post('discount');
             $data['discount_type']      = $this->input->post('discount_type');
             $data['tax_type']           = $this->input->post('tax_type');
-            $data['checkbox_xtra_fields'] = json_encode($this->input->post('checkboxinfo'));
+            echo $data['checkbox_xtra_fields'] = json_encode($_POST['checkboxinfo']);
             $data['shipping_cost']      = $this->input->post('shipping_cost');
             $data['about_title']        = $this->input->post('about_title');
             $data['about_desc']         = $this->input->post('about_description');
@@ -1131,6 +1135,8 @@ class Vendor extends CI_Controller
             // var_dump($this->db->last_query());
             $this->load->library('cloudinarylib');
             $id = $para2;
+            filter_add($id);
+            // var_du/mp($x);/
             if(isset($_POST['fields']) && $id)
             {
                 foreach($_POST['fields'] as $k=> $v)

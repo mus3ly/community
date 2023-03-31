@@ -175,6 +175,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $data['category_name'] = $value;
             $data['fa_icon'] = $this->input->post('fa_icon');
             $data['pcat'] = $this->input->post('pcat');
+            
             $this->db->insert('category', $data);
             $id = $this->db->insert_id();
             }
@@ -189,6 +190,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['fa_icon'] = $this->input->post('fa_icon');
             $data['pcat'] = $this->input->post('pcat');
             $data['level'] = 0;
+            $dara['slug'] = $this->input->post('slug');
             $this->db->where('category_id', $para2);
             $this->db->update('category', $data);
             if($_FILES['img']['name']!== ''){
@@ -349,6 +351,15 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $page_data['page_name']      = "category";
             $page_data['all_categories'] = $this->db->get('category')->result_array();
             $this->load->view('back/index', $page_data);
+        }
+    }
+    function cat_slug(){
+        $this->db->where('slug', $_REQUEST['val']);
+        $q = $this->db->get('category')->num_rows();
+        if($q > 0){
+            echo 'error';
+        }else{
+            echo 'success';
         }
     }
     function cat_child(){

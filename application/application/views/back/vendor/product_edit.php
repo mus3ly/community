@@ -546,6 +546,9 @@ btn1 .fa{
                                     </div>
                         </div>
                    <div id="custom_attributes_0" class="tab-pane fade ">
+                        <div class="form-group btn_border">
+                            <h5 style="color: red;padding: 0 89px;">If more than 30 characters, it will be added to the accordion section</h5>
+                        </div>
                       <div class="form-group btm_border">
                           <?php
                           if(isset($row['additional_fields'])){
@@ -587,10 +590,14 @@ btn1 .fa{
                              
                         </div>
                            <div id="checkbox_information" class="tab-pane fade ">
+                                 <div class="form-group btn_border">
+                            <h5 style="color: red;padding: 0 89px;">Do not exceed more than 30 characters per entry</h5>
+                        </div>
                       <div class="form-group btm_border">
                           <?php
                           if(isset($row['checkbox_xtra_fields']) && !empty($row['checkbox_xtra_fields'])){
                             $x = json_decode($row['checkbox_xtra_fields']);
+                            // var_dump($x);
                             foreach( $x as $k => $v){
                           ?>
                           <div class="form-group"> 

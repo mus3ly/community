@@ -141,7 +141,7 @@ $logo='';
                         <?php
                        
                          $time = date('H:i:s', time());
-                         if($time >=$vendor['openig_time'] && $time <=$vendor['closing_time']){
+                         if($time >=$vendor['openig_time'] && $time <= $vendor['closing_time']){
                           ?>
                           <a href="#" class="online_box_wrapper"><span class="online_box2"></span></a>
                           <?php  
@@ -155,50 +155,46 @@ $logo='';
             <div class="col-sm-8 col-12 desc_col desc_col_in">
                 <!--work here-->
                 <div class="row" id="add_height_in">
-                    <div class="col-md-6 left_fields" >
-                        <h1><?= $title; ?></h1>
-                        <h1><?= $slog ?></h1>
-                        <div class="list_attributes list3">
-                            <?= get_fields_line($product_id, 3); ?>
-                        </div>
-                        <div class="list_attributes list5">
-                            <?= get_fields_line($product_id, 5); ?>
-                        </div>
-                    </div>
-                    <div class="col-md-6 right_fields" >
-                    <div class="right_fields_inner" >
-                        <div class="list_attributes list2">
-                            <?= get_fields_line($product_id, 1); ?>
-                        </div>
-                        <div class="list_attributes list2">
-                            <?= get_fields_line($product_id, 2); ?>
-                        </div>
-                        <div class="list_attributes list4">
-                            <?= get_fields_line($product_id, 4); ?>
-                        </div>
-                        <div class="list_attributes list6">
-                            <?= get_fields_line($product_id, 6); ?>
-                        </div>
-                        </div>
-                        
-                    </div>
-                </div>
                 <?php
-                if($description)
+                if($is_bpage)
                 {
-                ?>
-                <div class="row add_hegiht_in">
-                    <div class="col-md-12 dec_wrappper">
+                    ?>
+                    yhn bpage
+                    <?php
+                }
+                elseif($is_blog)
+                {
+                    ?>
+                        <div class="col-md-12 p-0">
+                        <div class="blogs_titlee"><h1><?= $title ?></h1></div>
+                        <div class="meddle_cont">
+                            <div class="meddle_cont_left">
+                            <h4><?= $author_name; ?></h4>
+                            <h4><?= $slog; ?></h4>
+                            </div>
+                            <div class="meddle_cont_right">
+                            <h4>Posted On <?= date("d-m-Y",strtotime($create_at)); ?></h4>
+                            <?php 
+                                if(!empty($posted_date)){
+                            ?>
+                            <h4>Updated On <?= date("d-m-Y",strtotime($posted_date)); ?></h4>
+                            <?php 
+                                }
+                            $cat = $this->db->where('category_id' , $category)->get('category')->row_array();
+                            // var_dump($c)
+                            ?>
+                            <h4><?= $cat['category_name']; ?></h4>
+                            </div>
+                        </div>
+                        <div class="last_desc">
+                            <div class="col-md-12 dec_wrappper p-0">
                     <h2>Details</h2>
                     <p>
-                    <?= strWordCut($description,200); ?>
+                    <?= strWordCut($description,250); ?>
                     </p>
                 </div>
-                </div>
-                <?php
-                }
-                ?>
-                <div class="share_iconss">
+                        </div>
+                        <div class="share_iconss">
                         <div class="affliate">
                             <?php 
                     $user = true;//$this->session->userdata('user_id');
@@ -232,6 +228,60 @@ $logo='';
                         <a href="mailto: <?= $bussniuss_email;?>"><i class="fa fa-envelope"></i></a>
                         <a href="tel:<?= $bussniuss_phone;?>"><i class="fa fa-phone"></i></a>
                     </div>
+                        </div>
+                        
+                        
+                    <?php
+                    
+                }
+                else
+                {
+                    ?>
+                    
+                    <div class="col-md-6 left_fields" >
+                        <h1><?= $title; ?></h1>
+                        <h1><?= $slog ?></h1>
+                        <div class="list_attributes list3">
+                            <?= get_fields_line($product_id, 3); ?>
+                        </div>
+                        <div class="list_attributes list5">
+                            <?= get_fields_line($product_id, 5); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-6 right_fields" >
+                    <div class="right_fields_inner" >
+                        <div class="list_attributes list2">
+                            <?= get_fields_line($product_id, 1); ?>
+                        </div>
+                        <div class="list_attributes list2">
+                            <?= get_fields_line($product_id, 2); ?>
+                        </div>
+                        <div class="list_attributes list4">
+                            <?= get_fields_line($product_id, 4); ?>
+                        </div>
+                        <div class="list_attributes list6">
+                            <?= get_fields_line($product_id, 6); ?>
+                        </div>
+                        </div>
+                        
+                    </div>
+                
+                    <?php
+                }
+                
+                ?>
+                </div>
+                <?php
+                if($description)
+                {
+                ?>
+                <!--<div class="row add_hegiht_in">-->
+                    
+                <!--</div>-->
+                <?php
+                }
+                ?>
+                
             </div>  
                 </div>
             </div>

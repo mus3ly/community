@@ -2194,7 +2194,7 @@ function select_place(place,txt)
         var univ_max = $('#univ_max').val(); 
         $('.on_click_search').on('click',function(){
 			var set_cat = $('#cur_cat').val();
-			alert(set_cat);
+// 			alert(set_cat);
 			var brands = $(".search_cat_click[data-cat='" + set_cat +"']").data('brands');
 			set_brands(brands);
 			var mint = $(this).closest('ul').closest('li').find('.search_cat').data('min');

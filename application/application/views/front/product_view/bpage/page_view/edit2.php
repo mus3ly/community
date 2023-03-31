@@ -1,7 +1,7 @@
 <div class="loader_img">
     <img width="50px" src="<?=base_url('/upload/map-loader.gif')?>">   
 </div>
-<div class="wrapper d-flex align-items-stretch addd_butn">
+<div class="wrapper d-flex align-items-stretch addd_butn" id="addd_butn">
     <nav id="sidebar">
 				<div class="custom-menu">
 					<button type="button" id="sidebarCollapse" class="btn btn-primary">
@@ -2246,6 +2246,11 @@ $('.openbtn').show();
     <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
                             </div>
     <script type="text/javascript">
+    $(document).ready(function(){
+       $('#sidebarCollapse').click(function(){
+           $('#addd_butn').toggleClass('sidebar_open');
+       });
+    });
         $(document).ready(function(){
         
         $('ul.tabss li').click(function(){
