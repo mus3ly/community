@@ -44,7 +44,7 @@ if(!isset($_COOKIE["dev_test"]))
  * @license	http://opensource.org/licenses/MIT	MIT License
  * @link	http://codeigniter.com
  * @since	Version 1.0.0
- * @filesource test mac
+ * @filesource test sublime git
  */
 
 /*
