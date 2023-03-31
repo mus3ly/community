@@ -11,7 +11,7 @@ if(!isset($_COOKIE["dev_test"]))
     exit();
 }*/
 /**
- * CodeIgniter Nimra branch
+ * CodeIgniter 
  *
  * An open source application development framework for PHP
  *
