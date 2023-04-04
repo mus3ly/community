@@ -3,6 +3,8 @@ $(".login_info a").click(function(){
 });
 
 
+
+
  // Gallery image hover
 $( ".img-wrapper" ).hover(
   function() {

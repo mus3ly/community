@@ -22,13 +22,14 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
     text-align: right;
     padding: 0 64px 0 0;
 }
+.widget_colum h4{margin-top:10px;}
 </style>
 
 
 <footer class="footer_warp">
     <div class="container">
         <div class="row">
-            <div class="col-sm-5 fotter_logo">
+            <div class="col-sm-5 col-12 fotter_logo">
                 <a href="#"><img src="<?= base_url(); ?>/template/front/images/logo.png" alt=""></a>
                 
                 <div class="footer_search">
@@ -44,11 +45,17 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                     </div>
                 </div>
             </div>
-            <div class="col-sm-2 widget_colum">
+            <div class="col-sm-7 col-12">
+                <div class="row">  
+            <div class="col-sm-5 widget_colum">
                 <h4>Community Pegs</h4>
-                <ul>
+                <div style="display:flex;">
+                <ul style="
+    margin-right: 30px;
+">
                                                    <?php
                         // die('come');
+                        $x=0;
                         $brands = $this->db->get('category')->result_array();
                 $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 86))->row()->value,true);
                                             $result=array();
@@ -61,6 +68,10 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                     foreach ($brands as $key => $value) {
                         if(in_array($value['category_id'], $result))
                         {
+                            $x++;
+                        if($x==7){
+                            echo '</ul><ul>';
+                        }    
                             //  echo $value['category_id'];
                         ?>
 
@@ -70,6 +81,7 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                     }
                               ?> 
                                 </ul>
+                                </div>
                 <!--<ul>-->
                     <?php /*
                     $categories=json_decode($footer_category);
@@ -87,7 +99,7 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                     ?>
                 <!--</ul>-->
             </div>
-            <div class="col-sm-2 widget_colum">
+            <div class="col-sm-4 widget_colum">
                 <h4>Company Info</h4>
                 <ul>
                     <li><a href="<?= base_url('home/page/Disclaimer'); ?>">Disclaimer</a></li>
@@ -96,8 +108,7 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                     <li><a href="<?= base_url('home/page/Terms_Of_Use'); ?>">Terms of Use</a></li>
                     <li><a href="<?= base_url('home/page/affiliate_terms_of_use'); ?>">Affiliate Terms of Use</a></li>
                     <li><a href="<?= base_url('home/page/shop_terms_of_use'); ?>">Shop Terms of Use</a></li>
-                    <li><a href="<?= base_url('home/page/shipping_n_return'); ?>">Ship & Returns</a></li>
-                </ul>
+                      </ul>
                 <!--<ul>-->
                 <?php /*
                     $categories=json_decode($footer_page);
@@ -113,16 +124,14 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                     ?>
                 <!--</ul>-->
             </div>
-            <div class="col-sm-2 widget_colum">
+            <div class="col-sm-3 widget_colum">
                 <h4>Discovery</h4>
                   <ul>
                     <li><a href="<?= base_url('home/page/About_Us'); ?>"> About Us</a></li>
                     <li><a href="<?= base_url('home/page/Services'); ?>">Services</a></li>
                     <li><a href="<?= base_url('home/page/career'); ?>">Career</a></li>
                     <li><a href="<?= base_url('home/page/Articles'); ?>">Articles</a></li>
-                    <li><a href="<?= base_url('vendor_logup/registration'); ?>">SIGN-UP to Add a Listing</a></li>
-                    <li><a href="<?= base_url('directory'); ?>">Visit Directory</a></li>
-                    <li><a href="<?= base_url('home/login_set/registration'); ?>">Join Our Affiliate Marketing</a></li>
+                    
                 </ul>
                 <!--<ul>-->
                     <?php /*
@@ -139,7 +148,14 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                     ?>
                 <!--</ul>-->
             </div>
+            <div class="footerbtn">
+             <a href="<?= base_url('vendor_logup/registration'); ?>"><button>SIGN-UP to Add a Listing</button></a>
+             <a href="<?= base_url('directory'); ?>"><button>Visit Directory</button></a>
+             <a href="<?= base_url('home/login_set/registration'); ?>"><button>Join Our Affiliate Marketing</button></a>
+            </div>
+            </div>
         </div>
+    </div>
     </div>
 </footer>
 

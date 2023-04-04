@@ -63,7 +63,7 @@ $route['directory/(:any)'] = 'home/category/$1';
 $route['404_override'] = 'home/error';
 $route['sitemap.xml'] = 'home/sitemap';
 $route['translate_uri_dashes'] = FALSE;
-
+/*
 require_once( BASEPATH .'database/DB.php');
 $db =& DB();
 
@@ -77,3 +77,4 @@ foreach ($query1 as $v){
     
     $route['category/'.$v['slug']] = 'home/category/'.$v['category_id'];
 }
+*/

@@ -3306,7 +3306,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             $maxd = $this->input->post('max-value');
             $featured = $this->input->post('featured');
             $place_id = $this->input->post('place_id');
-            $amenities = $this->input->post('amenities');
+            $amenities = $this->input->post('amen');
             $amenities = explode(',', $amenities);
             foreach($amenities as $k=> $v)
             {
@@ -3442,6 +3442,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     }
     
             }
+            
      if($amenities)
     {
         $this->db->group_start();

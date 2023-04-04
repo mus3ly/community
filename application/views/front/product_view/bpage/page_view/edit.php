@@ -505,6 +505,12 @@ $http.post(url, $scope.detail, config).then(function (response) {
     $scope.detail.enable_checks = JSON.parse($scope.detail.enable_checks);
     $scope.detail.feature = JSON.parse($scope.detail.feature);
     $scope.detail.etra_content = JSON.parse($scope.detail.etra_content);
+    // $scope.detail.gallary = JSON.parse($scope.detail.etra_content);
+    if(!$scope.detail.gallary.length)
+    {
+        // $scope.detail.detail.gallery_text = '';
+        $scope.detail.gallary = 0;
+    }
 
     if(!$scope.detail.etra_content)
         {
@@ -1386,7 +1392,11 @@ $scope.getBase64(file_id, file);
                             ?>
                         <div class="container gallery_div">
                             <div class="flex_ittt">
-                            <ul>
+                                <div ng-if="!detail.gallary" >
+                                    <a href="<?= base_url('/vendor/brand'); ?>" target="_blank"><p style="    text-align: center;">Click here to add you Text Gallery contents</p></a>
+                                    <img src="<?= base_url('/uploads/gal.png'); ?>" style="width:100%" />
+                                </div>
+                            <ul  ng-if="detail.gallary">
                                 <li ng-repeat="x in detail.gallary" class="icon_flex"><img  src="{{x.img}}" /><a ng-click="del_gallery(x.id)" class="cross_icon"><i class="fa-solid fa-trash-can"></i></a></li> 
                                 <li  onclick="click_id('gallery')"><button class="add_buton"><i class="fa-solid fa-plus icon_button"></i></button></li>
                             </ul>

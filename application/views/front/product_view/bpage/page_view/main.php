@@ -667,7 +667,8 @@
                             ?>
                         <div class="container">
                            <div class="verify_head" style="    padding: 10px 0px;">
-                                <h3>Text Gallery</h3>
+                                <h3><?= $pro['gallery_lable'] ?></h3>
+                                <p><?= $pro['gallery_text'] ?></p>
                             </div>
                         <div class="inner_content_tabs">
                         <!--</select>-->

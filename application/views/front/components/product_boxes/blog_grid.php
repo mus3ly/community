@@ -21,7 +21,8 @@
     color: #fff;
 }
 
-.itemimg{    height: 100%;
+.itemimg{  
+    /*height: 100%;*/
     min-height: 200px;
     width: 100%;
     background-size: cover;
@@ -186,46 +187,28 @@ $vendorlogo= '';
                     <?php
                         if($is_bpage)
                         {
-                            ?>
-                            
-                            <?php
-                        }
+                    ?>
+                    
+                    <h1><?= $title; ?></h1>
+                      <?php
+                    
+                    if($slog)
+                    {
+                    ?>
+                        <h4><?= $slog ?></h4>
+                        <?php
+                    }
                         ?>
-            </div> 
-            <div class="col-12 desc_col">
-                <div class="row" id="add_height_in">
-                    <div class="col-md-12 p-0">
-                    <h1 class="title_space"><?= $title; ?></h1>
-                    </div>
-                    <div class="col-md-6 left_fields" >
-                        
-                        <h1><?= $slog ?></h1>
-                        <div class="list_attributes list3">
-                            <?= get_fields_line($product_id, 3); ?>
-                        </div>
-                        <div class="list_attributes list5">
-                            <?= get_fields_line($product_id, 5); ?>
-                        </div>
-                    </div>
-                    <div class="col-md-6 right_fields" >
-                    <div class="right_fields_inner" >
-                        <div class="list_attributes list2">
-                            <?= get_fields_line($product_id, 1); ?>
-                        </div>
-                        <div class="list_attributes list2">
-                            <?= get_fields_line($product_id, 3); ?>
-                        </div>
-                        <div class="list_attributes list4">
-                            <?= get_fields_line($product_id, 4); ?>
-                        </div>
-                        <div class="list_attributes list6">
-                            <?= get_fields_line($product_id, 6); ?>
-                        </div>
-                        </div>
-                        
-                    </div>
+                    
+                        <div class="last_desc last_d2">
+                            <div class="col-md-12 dec_wrappper p-0">
+                    <h2>Details</h2>
+                    <p>
+                    <?= strWordCut($description,250); ?>
+                    </p>
                 </div>
-                <div class="share_iconss">
+                        </div>
+                        <div class="share_iconss icon_shares">
                         <div class="affliate">
                             <?php 
                     $user = true;//$this->session->userdata('user_id');
@@ -259,7 +242,189 @@ $vendorlogo= '';
                         <a href="mailto: <?= $bussniuss_email;?>"><i class="fa fa-envelope"></i></a>
                         <a href="tel:<?= $bussniuss_phone;?>"><i class="fa fa-phone"></i></a>
                     </div>
-            </div>
+                    <?php
+                }
+                        elseif($is_blog)
+                        {
+                    ?>
+                        <div class="col-md-12 p-0">
+                        <div class="blogs_titlee"><h1><?= $title ?></h1></div>
+                        <div class="meddle_cont">
+                            <div class="meddle_cont_left">
+                                <?php
+                                if($author_name)
+                                {
+                                ?>
+                            <h4><?= $author_name; ?></h4>
+                            <?php
+                                }
+                            ?>
+                            <?php
+                    
+                    if($slog)
+                    {
+                    ?>
+                        <h4><?= $slog ?></h4>
+                        <?php
+                    }
+                        ?>
+                            </div>
+                            <div class="meddle_cont_right">
+                            <h4>Posted On <?= date("d-m-Y",strtotime($create_at)); ?></h4>
+                            <?php 
+                                if(!empty($posted_date)){
+                            ?>
+                            <h4>Updated On <?= date("d-m-Y",strtotime($posted_date)); ?></h4>
+                            <?php 
+                                }
+                            $cat = $this->db->where('category_id' , $category)->get('category')->row_array();
+                            // var_dump($c)
+                            ?>
+                            <h4><?= $cat['category_name']; ?></h4>
+                            </div>
+                        </div>
+                        <div class="last_desc">
+                            <div class="col-md-12 dec_wrappper p-0">
+                    <h2>Details</h2>
+                    <p>
+                    <?= strWordCut($description,250); ?>
+                    </p>
+                </div>
+                        </div>
+                        <div class="share_iconss">
+                        <div class="affliate">
+                            <?php 
+                    $user = true;//$this->session->userdata('user_id');
+                    if($is_affiliate && $user)
+                    {
+                        $vid = 0;
+                        $added_by = json_decode($added_by, true);
+                        if(isset($added_by['type']) && $added_by['type'] == 'vendor')
+                        {
+                            $vid = $added_by['id'];
+                        }
+                        
+                        $wish = $this->crud_model->is_aff($product_id); 
+                    ?>
+                    Affiliate
+                    <?php
+                    }
+                    ?>
+                        </div>
+                        <!--<a href="#"><i class="fa fa-share"></i></a>-->
+                        <?php
+                        if($lat && $lng)
+                        {
+                        ?>
+                             <a  onclick="open_marker(<?= $lat?>, <?=$lng ?>);" ><i class="fa fa-map-marker-alt"></i></a>
+                             <?php
+                        }
+                             ?>
+                        <a href="#"><i class="fa fa-share"></i></a>
+                   <a onclick="to_wishlist(<?php echo $product_id; ?>,event)"><i class="fa fa-heart"></i></a>
+                        <a href="mailto: <?= $bussniuss_email;?>"><i class="fa fa-envelope"></i></a>
+                        <a href="tel:<?= $bussniuss_phone;?>"><i class="fa fa-phone"></i></a>
+                    </div>
+                        </div>
+                        
+                        
+                    <?php
+                    
+                }
+                        else
+                        {
+                    ?>
+                    
+                    <div class="col-md-8 left_fields" >
+                        <h1><?= $title; ?></h1>
+                        <?php
+                        if($slog)
+                        {
+                        ?>
+                        <h2><?= $slog ?></h2>
+                        <?php
+                        }
+                        ?>
+                        <div class="list_attributes list3">
+                            <?= get_fields_line($product_id, 3); ?>
+                        </div>
+                        <div class="list_attributes list5">
+                            <?= get_fields_line($product_id, 5); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4 right_fields" >
+                    <div class="right_fields_inner" >
+                        <div class="list_attributes list2">
+                            <?= get_fields_line($product_id, 1); ?>
+                        </div>
+                        <div class="list_attributes list2">
+                            <?= get_fields_line($product_id, 2); ?>
+                        </div>
+                        <div class="list_attributes list4">
+                            <?= get_fields_line($product_id, 4); ?>
+                        </div>
+                        <div class="list_attributes list6">
+                            <?= get_fields_line($product_id, 6); ?>
+                        </div>
+                        </div>
+                        
+                    </div>
+                    <?php
+                if($description)
+                {
+                ?>
+                <div class="last_desc1">
+                            <div class="col-md-12 dec_wrappper p-0">
+                    <h2>Details</h2>
+                    <p>
+                    <?= strWordCut($description,200); ?>
+                    </p>
+                </div>
+                        </div>
+                        <div class="share_iconss">
+                        <div class="affliate">
+                            <?php 
+                    $user = true;//$this->session->userdata('user_id');
+                    if($is_affiliate && $user)
+                    {
+                        $vid = 0;
+                        $added_by = json_decode($added_by, true);
+                        if(isset($added_by['type']) && $added_by['type'] == 'vendor')
+                        {
+                            $vid = $added_by['id'];
+                        }
+                        
+                        $wish = $this->crud_model->is_aff($product_id); 
+                    ?>
+                    Affiliate
+                    <?php
+                    }
+                    ?>
+                        </div>
+                        <!--<a href="#"><i class="fa fa-share"></i></a>-->
+                        <?php
+                        if($lat && $lng)
+                        {
+                        ?>
+                             <a  onclick="open_marker(<?= $lat?>, <?=$lng ?>);" ><i class="fa fa-map-marker-alt"></i></a>
+                             <?php
+                        }
+                             ?>
+                        <a href="#"><i class="fa fa-share"></i></a>
+                   <a onclick="to_wishlist(<?php echo $product_id; ?>,event)"><i class="fa fa-heart"></i></a>
+                        <a href="mailto: <?= $bussniuss_email;?>"><i class="fa fa-envelope"></i></a>
+                        <a href="tel:<?= $bussniuss_phone;?>"><i class="fa fa-phone"></i></a>
+                    </div>
+                <?php
+                }
+                ?>
+                
+                    <?php
+                }
+                        
+                        ?>
+            </div> 
+            
             </div>
             </div>    
                       

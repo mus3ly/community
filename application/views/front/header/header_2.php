@@ -13,7 +13,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-3 logobox">
-                <a href="<?= base_url(); ?>"><img src="<?= base_url(); ?>template/front/images/logo.png" alt=""></a>
+                <a href="<?= base_url(); ?>"><img src="<?= base_url(); ?>template/front/images/logo.png" alt="markethubland" style="width:200px"></a>
             </div>
             <div class="menubtn" onclick="open_sidebar();">
                 <i class="fa fa-bars"></i>

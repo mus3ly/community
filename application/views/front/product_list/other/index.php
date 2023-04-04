@@ -159,8 +159,7 @@ $lng = $this->config->item('lng');
         .view_select_btn{
             margin-top: 10px !important;
         }
-        #map_div{flex: 0 0 33.333333%;
-    max-width: 33.333333%;}
+
     
     .sidebar{-webkit-transition: all 0.5s ease;
     -moz-transition: all 0.2s ease;
@@ -170,78 +169,29 @@ $lng = $this->config->item('lng');
     padding-top: 50px;width: 300px;}
     
     }
+ 
+ 
+#content.desktop{-webkit-box-flex: 0;
+    -ms-flex: 0 0 66.666667%;
+    flex: 0 0 66.666667%;
+    max-width: 66.666667%;} 
+#map_div.desktop{-webkit-box-flex: 0;
+    -ms-flex: 0 0 22.666667%;
+        flex: 0 0 25.666667%;
+    max-width: 25.666667%;}   
+    
+#content.dtab{-webkit-box-flex: 0;
+    -ms-flex: 0 0 58.333333%;
+    flex: 0 0 58.333333%;
+    max-width: 58.333333%;} 
+#map_div.dtab{-webkit-box-flex: 0;
+    -ms-flex: 0 0 41.666667%;
+    flex: 0 0 41.666667%;
+    max-width: 41.666667%;}   
+
 </style>
-<section class="banner_listing">
-    <div class="menu_items align" id="menuitems">
-        <div class="container menu_list_bg">
-            <div class="menulist_bar">
-                <h3>Have a Look at what’s happening in your community</h3>
-            </div>
-            <ul class="menu_list">
-                <?php
-                $brands = $this->db->get('category')->result_array();
-                ?><?php
-                $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 86))->row()->value,true);
-                                            $result=array();
-                                            foreach($categories as $row){
-                                                if($this->crud_model->if_publishable_category($row)){
-                                                    $result[]=$row;
-                                                } 
-                                            }
-
-                    foreach ($brands as $key => $value) {
-                        if(in_array($value['category_id'], $result))
-                        {
-                        ?>
-                        <li>
-                    <a href="<?= base_url('home/category/'.$value['category_id']); ?>">
-                        <i class="fa <?= ($value['fa_icon'])?$value['fa_icon']:'fa-file-image-o'; ?>"></i>
-                        <?= $value['category_name'] ?>
-                    </a>
-                </li>
-
-                        <?php
-                    }
-                    }
-                ?>
-            </ul>
-            <div class="product_para">
-                <p>Joining Community HubLand gives you the opportunity to post advertisements on you business page, which you can use as your community marketing homepage, and on Community HubLand directory site. Enjoy great marketing features only a few clicks away at a very low subscription fee.</p>
-                </div>
-            </div>
-        </div>
-</section>
-<section class="container">
-    <div class="row">
-        
-        <div class="col-md-10 add_center_div ">
-            <!-- shop-sorting -->
-                        <div class="shop-sorting">
-                            <div class="row">
-                                    <div class="col-sm-12 p-0">
-                                            <div class="" id="location_search">
-                                            <div class="widget-search search_bar">
-                                                <img style="width:22px;" src="<?= base_url('/search_icon_bar.png'); ?>" alt="Search">
-                                                <input class="form-control set-shadow-none" style="border-right: 1px solid #f26122 !important;border-radius:0;" type="text" id="texted" value="<?php echo make_proper($text); ?>" placeholder="SEARCH">
-                                                <img style="width:17px;" src="<?= base_url('/template/front/images/Location.png'); ?>" alt="Search">
-                                                <input type="text" value="<?php echo make_proper($address); ?>" id="loc_box"  onkeyup="search_location()"  placeholder="LOCATION" name="" alt="">
-                                                <button onclick="do_product_search('0')" class="on_click_search txt_src_btn">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            <div id="map_search" style="
-                                        z-index: 9999999999999999;
-                                        position: absolute;
-                                    ">
-                                                             <img id="loader" style="display:none" src="<?= base_url('/map-loader.gif'); ?>" />
-                                                             <div id="result_loc"></div>
-                                                         </div>
-                                            </div>
-                                        </div>
-                                        </div>
-                                     
-                                     
-                                    </div>
-                            <div class="row" id="width-100">
+<div class="container-fluid">
+  <div class="row" id="width-100">
                                 <div class="col-md-12 col-sm-12 col-xs-12 sort-item">
                                     
                                     <div class="row align-items-center">
@@ -250,7 +200,7 @@ $lng = $this->config->item('lng');
                                             ?>
                                         
                                                 <ul>
-                                                    <li>
+                                                    <li class="active1">
                                                     <span  class="marg_add"><i class="fa-solid fa-folder"></i></span><a  href="<?= base_url('directory?is_listing=directory_listing'); ?>" class=" <?= ((isset($_GET['is_listing']) && $_GET['is_listing'] == 'directory_listing') || !(isset($_GET['is_listing'])) )?"active":"" ?>"><?php echo translate('directory'); ?></a>
                                                     </li>
                                                     <li>
@@ -313,11 +263,49 @@ $lng = $this->config->item('lng');
                                 <!--    <a class="btn btn-theme-transparent btn-theme-sm list" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>template/front/img/icon-list.png" alt=""/></a>-->
                                 <!--</div>-->
                             </div>
-                        </div>
-                        <!-- /shop-sorting -->
+                            </div>
+<section class="banner_listing">
+    <div class="menu_items align" id="menuitems">
+        <div class="container menu_list_bg">
+            <div class="menulist_bar">
+                <h3>Have a Look at what’s happening in your community</h3>
+            </div>
+            <ul class="menu_list">
+                <?php
+                $brands = $this->db->get('category')->result_array();
+                ?><?php
+                $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 86))->row()->value,true);
+                                            $result=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result[]=$row;
+                                                } 
+                                            }
+
+                    foreach ($brands as $key => $value) {
+                        if(in_array($value['category_id'], $result))
+                        {
+                        ?>
+                        <li>
+                    <a href="<?= base_url('home/category/'.$value['category_id']); ?>">
+                        <i class="fa <?= ($value['fa_icon'])?$value['fa_icon']:'fa-file-image-o'; ?>"></i>
+                        <?= $value['category_name'] ?>
+                    </a>
+                </li>
+
+                        <?php
+                    }
+                    }
+                ?>
+            </ul>
+            <div class="product_para">
+                <p>Joining Community HubLand gives you the opportunity to post advertisements on you business page, which you can use as your community marketing homepage, and on Community HubLand directory site. Enjoy great marketing features only a few clicks away at a very low subscription fee.</p>
+                </div>
+            </div>
         </div>
-        
-    </div>
+</section>
+<section class="container">
+   
     
 </section>
 
@@ -336,16 +324,51 @@ $lng = $this->config->item('lng');
             ?>
             <!-- /SIDEBAR -->
             <!-- CONTENT -->
-                    <div class="col-md-8 col-sm-12 col-xs-12 content" id="content">
-                        
+                    <div class="content col-md-10" id="content">
+                         <div class="row">
+        
+        <div class="col-md-12 add_center_div ">
+            <!-- shop-sorting -->
+                        <div class="shop-sorting">
+                            <div class="row">
+                                    <div class="col-sm-12 p-0">
+                                            <div class="" id="location_search">
+                                            <div class="widget-search search_bar">
+                                                <img style="width:22px;" src="<?= base_url('/search_icon_bar.png'); ?>" alt="Search">
+                                                <input class="form-control set-shadow-none" style="border-right: 1px solid #f26122 !important;border-radius:0;" type="text" id="texted" value="<?php echo make_proper($text); ?>" placeholder="SEARCH">
+                                                <img style="width:17px;" src="<?= base_url('/template/front/images/Location.png'); ?>" alt="Search">
+                                                <input type="text" value="<?php echo make_proper($address); ?>" id="loc_box"  onkeyup="search_location()"  placeholder="LOCATION" name="" alt="">
+                                                <button onclick="do_product_search('0')" class="on_click_search txt_src_btn">
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            <div id="map_search" style="
+                                        z-index: 9999999999999999;
+                                        position: absolute;
+                                    ">
+                                                             <img id="loader" style="display:none" src="<?= base_url('/map-loader.gif'); ?>" />
+                                                             <div id="result_loc"></div>
+                                                         </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                     
+                                     
+                                    </div>
+                          
+                        </div>
+                        <!-- /shop-sorting -->
+        </div>
+        
+    </div>
                         
                         <div id="result" style="min-height:300px;">
                         
                         </div>
 
                     </div>
-                <div class="col-sm-2" id="map_div" style="padding:0;"> <div id="map" style="    width: 100%;
-    height: 800px;" class="map_style "></div></div>
+                    
+                <div id="map_div" style="padding:0;">
+                <button onclick="initMapp()">Map</button>     <div id="map" style="" class="map_style "></div></div>
 
             <!-- /CONTENT -->
         </div>
@@ -416,9 +439,19 @@ function rate_html(rate)
         }
         return html;
     }
+//&callback=initMap    
     var markers = [];
     var  map = '';
-function initMap() {
+function initMapp() {
+    var w=$(window).width();
+    if(w>=768){
+  $('#content').addClass('col-md-8').removeClass('col-md-10');      
+  $('#map_div').addClass('col-md-2');      
+  //  $('#map_div,#content').addClass('desktop').removeClass('dtab');
+            }else if(w<768){
+  //  $('#map_div,#content').addClass('dtab').removeClass('desktop');
+            }
+    $('#map').css({width:'100%',height:'800px'});
   const uluru = { lat: <?= $lat; ?>, lng: <?= $lng; ?> };
    map = new google.maps.Map(document.getElementById("map"), {
     zoom: 12,
@@ -565,7 +598,7 @@ function generateIcon(number, callback) {
 </script>
 
  <script
-      src="https://maps.googleapis.com/maps/api/js?key=<?= $this->config->item('map_key'); ?>&callback=initMap&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=<?= $this->config->item('map_key'); ?>&v=weekly"
       defer
     ></script>
 

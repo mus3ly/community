@@ -304,7 +304,7 @@ btn1 .fa{
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('listing_detail'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" name="description"  class="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>
+                                    <textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>
                                 </div>
                                 </div>
                                 <div class="form-group btm_border">
@@ -1670,6 +1670,12 @@ function showPosition(position) {
     <script>
          function validate_listing(){
         var property_cat = '<?= $this->config->item('property_cat') ?>';
+        var plainText = $($("#summernotes").code()).text();
+          if(plainText.length < 300)
+            {
+                alert('Please add minimum 300 character in description');
+                return 0;
+            }
         
     var car_cat = '<?= $this->config->item('car_cat') ?>';
     var event_cat = '<?= $this->config->item('event_cat') ?>';

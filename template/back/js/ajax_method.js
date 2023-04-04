@@ -129,7 +129,8 @@
 
 	
 
-	$(document).ready(function() {
+
+	$(document).ready(function() {  
 		if($('#lang_select').length){
 		} else {
 			ajax_load(base_url+''+user_type+'/'+module+'/'+list_cont_func,'list','first');
@@ -142,11 +143,26 @@
 		sound('ajax_load');
 	}
 
-	function ajax_set_list(extra){
+	function ajax_set_list(extra,id){
+	   // alert(extra);
 		if(extra == 'level')
 		{
-			var level = $('#cat_level').val();
-			ajax_load(base_url+''+user_type+'/'+module+'/'+list_cont_func+'?level='+level,'list','first');
+		    if(id == 'amn'){
+		        var level = $("#amn option:selected" ).val();
+		    } 
+		    else{ 
+			var level = $('input[name = "level"]:checked').val();
+		        
+		    }
+			if(module == 'list_fields')
+			level = $('#cat_level').val();
+			var type = $('input[name = "type"]:checked').val();
+			ajax_load(base_url+''+user_type+'/'+module+'/'+list_cont_func+'?level='+level+'&type='+type,'list','first');
+		}
+		else if(false)//list_type
+		{
+		    extra = "?"+list_type+"=1";
+		  ajax_load(base_url+''+user_type+'/'+module+'/'+list_cont_func+'/'+extra,'list','first');  
 		}
 		else
 		{
@@ -288,10 +304,7 @@
 		var msg = here.data('msg');
 		var prv = here.html();
 		
-		form.find('.summernotes').each(function() {
-            var now = $(this);
-            now.closest('div').find('.val').val(now.code());
-        });
+		
 		
         //var form = $(this);
         var formdata = false;
@@ -406,6 +419,10 @@
 
 	function form_submit(form_id,noty,e){
 		// alert($(this).text());
+		$('.summernotes').each(function() {
+            var now = $(this);
+            now.closest('div').val(now.code());
+        });
 		var alerta = $('#form'); // alert div for show alert message
 
 		var form = $('#'+form_id);
@@ -468,7 +485,7 @@
 
                 }
                 var topp = 100;
-                if(form_id == 'product_add' || form_id == 'product_edit'){
+                if(form_id == 'product_add' || form_id == 'product_edit' || form_id == 'fields_edit'){
                 } else {
 	                $('html, body').animate({
 	                    scrollTop: $("#scroll").offset().top - topp

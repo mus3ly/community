@@ -153,7 +153,7 @@
              unset($vl[$k]);
          }
      }
-     return implode(',',$vl);
+     return implode(',&nbsp',$vl);
  }
  function get_product_meta($pid, $k= '')
  {

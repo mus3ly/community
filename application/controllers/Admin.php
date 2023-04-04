@@ -1082,7 +1082,14 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             ))->result_array();
             $this->load->view('back/admin/amenity_edit', $page_data);
         } elseif ($para1 == 'list') {
-            if(!empty($_GET['level'])){
+            
+            if(isset($_GET['level'])){
+               if($_GET['level'] == '0'){
+                   $this->db->where('status', '1');
+                $this->db->where('catid', $_GET['level']);
+                $this->db->order_by('amenity_id', 'desc');
+                $page_data['all_amenitys'] = $this->db->get('amenity')->result_array();
+               }else{
                $this->db->select('amenity.*,category.*');
                 $this->db->from('amenity');
                 $this->db->join('category', 'amenity.catid = category.category_id'); 
@@ -1090,6 +1097,8 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $this->db->where('amenity.catid', $_GET['level']);
                 $this->db->order_by('amenity_id', 'desc');
                  $page_data['all_amenitys'] = $this->db->get()->result_array();
+               }
+            
             }else{
                 $this->db->select('amenity.*,category.*');
                 $this->db->from('amenity');
@@ -1098,6 +1107,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $this->db->order_by('amenity_id', 'desc');
                  $page_data['all_amenitys'] = $this->db->get()->result_array();
             }
+            // var_dump($this->db->last_query());
             $this->load->view('back/admin/amenity_list', $page_data);
         } elseif ($para1 == 'add') {
             $this->load->view('back/admin/amenity_add');
