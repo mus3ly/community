@@ -2072,6 +2072,10 @@ function select_place(place,txt)
 	    map.setZoom(12);
 	}
 	var wait = 0;
+	$(document).on('click', '.amenities_check', function(){
+	    
+	    do_product_search('0');
+	});
 	$(document).on('click', '.cat_check', function(){
 	    var val = $(this).val();
 	    var mmid='#cat_'+val;
@@ -2155,6 +2159,7 @@ function select_place(place,txt)
     <input type="hidden" name="modelt" id="modelt" value="">
                 <input type="hidden" name="max-value" id="max-value" value="">
     <input type="hidden" name="sub_category" id="sub_categoryaa">
+    <input type="hidden" name="amen" id="amen_input">
     <input type="hidden" name="brand" id="brandaa">
     <input type="hidden" name="vendor" id="vendoraa">
     <input type="hidden" name="featured" id="featuredaa">
@@ -2401,6 +2406,18 @@ function select_place(place,txt)
     console.log($(this).val()+'-'+i);
             }
 });
+        
+        var amen = [];
+        $('.amenities_check').each(function(i, obj) {
+            //alert();
+            if($(this).is(":checked"))
+            {
+            amen.push($(this).val());
+    console.log($(this).val()+'-'+i);
+            }
+});
+console.log(amen);
+        $('#amen_input').val(amen.join(','));
         $('#categoryaa').val(cats.join(','));
         // alert($('#categoryaa').val());
         $('#make').val($('#select_make').val());
@@ -2439,6 +2456,7 @@ function select_place(place,txt)
             contentType : false,
             processData : false,
             beforeSend: function() {
+                // alert($('#amen_inpu t').val());
 				var top = '200';
                 place.html('<div style="text-align:center;width:100%;position:relative;top:'+top+'px;"><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>'); // change submit button text
             },

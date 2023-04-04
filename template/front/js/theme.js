@@ -2,8 +2,8 @@
 
 // Cache
 var body = $('body');
-var mainSlider = $('#main-slider');
-var mainSliderSize = $('#main-slider').find('.item').size();
+// var mainSlider = $('#main-slider');
+// var mainSliderSize = $('#main-slider').find('.item').size();
 
 var imageCarousel = $('.img-carousel');
 var imageCarouselSize = $('.img-carousel').find('.item').size();
@@ -389,6 +389,9 @@ jQuery(document).ready(function () {
 
     }
 
+$("#btn__sort").click(function(){
+    $("#sorter_search").toggle();
+});
 
             
     // Shop categories widget slide in/out

@@ -862,7 +862,8 @@ if($vendor['comp_logo'])
                     <div class="container" id="mrg_tp"> 
                                 <div class="row">
                                     <?php
-                                    if(isset($pro['listing_amenities']) && !empty($pro['listing_amenities'])){
+                                    $amn = json_decode($pro['listing_amenities']);
+                                    if(isset($pro['listing_amenities']) && !empty($pro['listing_amenities']) && $amn){
                                     ?>
                                     <div class="col-md-6">
                                         <div class="tag_sec_wrapper tags_sec">
@@ -872,7 +873,6 @@ if($vendor['comp_logo'])
                                             <div class="inner_sec">
                                                 <div class="tag_container">
                                                     <?php
-                                                    $amn = json_decode($pro['listing_amenities']);
                                                     foreach($amn as $k => $v){
                                                     ?>
                                                     <div class="tags_in">
@@ -895,6 +895,12 @@ if($vendor['comp_logo'])
                                               ?> 
                                           
                                             
+                                            <?php
+                                            $tags = $pro['tag'];
+                                                        $x = (explode(",",$tags));
+                                            if($x)
+                                            {
+                                                ?>
                                         <div class="col-md-6">
                                          <div class="tag_sec_wrapper tags_sec">
                                             <div class="head_section">
@@ -905,8 +911,6 @@ if($vendor['comp_logo'])
                                             <div class="inner_sec">
                                                 <div class="tag_container">
                                                       <?php
-                                                        $tags = $pro['tag'];
-                                                        $x = (explode(",",$tags));
                                                         foreach($x as $K => $v){?>
                                                     <div class="tags_in">
                                                         <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
@@ -920,24 +924,30 @@ if($vendor['comp_logo'])
                                              </div>        
                                                 </div>
                                             </div>
+                                            <?php
+                                            }
+                                            ?>
                                            <?php
                                               }
                                             ?>
                                         
                                     </div>   
                                 </div>
+                                <?php
+                                /*
+                                ?>
                     <div class="contact_info new_contact_info">
   
     <div class="container">
           <?php
             if(isset($pro['etra_content']) && !empty($pro['etra_content'])){
-                // var_dump($pro['etra_content']);
+                var_dump($pro['etra_content']);
             ?>
         <div class="row">
             <?php
                         //extra_info
                         
-                        if(true)
+                        if($pro['etra_content'])
                         {
                             $content = json_decode($pro['etra_content'],true);
                             $num = $pro['number_of_column'];
@@ -1005,6 +1015,9 @@ if($vendor['comp_logo'])
          <!---->
     </div>
 </div>
+<?php
+*/
+?>
 
 <?php
 $rating = $this->db->where('product_id', $pro['product_id'])->get('user_rating')->result_array();

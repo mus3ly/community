@@ -6,8 +6,18 @@
             if(isset($_GET['is_listing']) && ($_GET['is_listing'] == 'shop_listing' || $_GET['is_listing'] == 'car_listing')){
                     ?>
             <div class="widget widget-filter-price">
-                <div class="Amenities">
-                 <h3>Filter Your Search</h3>
+                <div class="Amenities1">
+                    <div class="left_filter to_left_f">
+                     <h3>Filter Your Search</h3>
+                </div>
+                 
+                 <div class="push_left">
+           <!-- <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="open_sidebar();">
+                <i class="fa fa-bars"></i>
+            </span>-->
+            <a class="btn-theme-light make_it_flexi" onClick="set_view('grid')" href="#"><img src="<?php echo base_url(); ?>/white_grid.png" alt=""/></a>
+            <a class="btn btn-theme-light make_it_flexi" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>/white_icon.png" alt=""/></a>
+        </div>
                 </div>
                 <div class="range_slider new_rang">
                     <div class="row">
@@ -29,14 +39,15 @@
                     </div>
                 </div>
             </div>
+            
             <?php
             }
             else
             {
                 ?>
             <div class="widget widget-filter-price">
-                <div class="Amenities">
-                 <div class="left_filter">
+                <div class="Amenities1">
+                 <div class="left_filter to_left_f">
                      <h3>Search Filter</h3>
                 </div>
                    <div class="push_left">
@@ -259,7 +270,7 @@
     </div>
     
     <?php
-    $id = '';
+    $id = '0';
       if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'car_listing'){
       $id = '807';
       }
@@ -285,7 +296,7 @@
             foreach($all_amenity as $k=> $v)
             {
                 ?>
-                <li><label><input type="checkbox" value="<?= $v['name'] ?>" class="amenities_check" /><?= $v['name']; ?></label></li>
+                <li><input type="checkbox" value="<?= $v['name'] ?>" class="amenities_check" /><label><?= $v['name']; ?></label></li>
                 <?php
             }
             ?>

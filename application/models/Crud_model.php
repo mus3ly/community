@@ -45,11 +45,16 @@ class Crud_model extends CI_Model
             foreach($all as $k=> $v)
             {
                 $already = $this->db->where('name',$v)->where('status',0)->get('amenity')->row();
-                var_dump($already);
+                // var_dump($already);
                 if(!$already)
                 {
+                     if($id == 723)
+            {
+                var_dump($v);
+            }
                     $add= array(
-                        'name' => $v
+                        'name' => $v,
+                        'catid' => 0,
                         );
                         $r = $this->db->insert('amenity',$add);
                         

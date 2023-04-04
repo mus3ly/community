@@ -290,7 +290,7 @@ btn1 .fa{
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('listing_detail'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" name="description"  class="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>
+                                    <textarea rows="9" name="description" id="summernotes"  class="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>
                                 </div>
                                 </div>
                                 <div class="form-group btm_border">
@@ -1272,14 +1272,13 @@ function activaTab(tab){
     $('.nav-tabs a[href="#' + tab + '"]').tab('show');
 };
     function validate_listing(){
-        var textareaValue = $('#desc_summernote').summernote('code', 'value');
-        console.log(textareaValue);
-        console.log('ok');
-        // alert(textareaValue.length);
-        //   if(textareaValue.length < '300')
-        //     {
-        //         alert('ok');
-            // }
+        // var textareaValue = $('#desc_summernote').summernote('code', 'value');
+        var plainText = $($("#summernotes").code()).text();
+          if(plainText.length < 300)
+            {
+                alert('Please add minimum 300 character in description');
+                return 0;
+            }
         form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
     }
     window.preview = function (input) {

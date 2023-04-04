@@ -43,11 +43,12 @@
             <div class="col-sm-8 perfect_place">
                 <h5>Community HubLand - A Directory Site - Your Virtual Land</h5>
                 <h3>Find Your <b>Perfect Place.</b></h3>
-                <div class="search_bar">
+                <div class="search_bar border_iner">
                 <form action="<?= base_url('/home/text_search'); ?>"  onkeyup="submitForm(event)" id="srch_form" method="post">
+                    <img style="width:22px;" src="<?= base_url('/search_icon_bar.png'); ?>" alt="Search">
+                    <input type="text" placeholder="TACOS, CHEAP DINNER, MAX’S" id="left_box"  name="query" alt="" style="border-right: 1px solid #f26122 !important;border-radius:0;" id="texted">
                     <img src="<?= base_url(); ?>template/front/images/Location.png" alt="Search">
-                    <input type="text" placeholder="tacos, cheap dinner, Max’s" id="left_box"  name="query" alt="" />
-                     <input type="text" id="loc_box"  onkeyup="search_location()" placeholder="Location"  name="" alt="" >
+                     <input type="text" id="loc_box"  onkeyup="search_location()" placeholder="LOCATION"  name="" alt="" >
                      <div id="map_search" style="
     z-index: 9999999999999999;
     position: absolute;

@@ -60,9 +60,9 @@
                         </div>
 
                         <div class="col-sm-12">
-                            <span class="forgot-password" style="cursor:pointer;" onClick="set_html('login','forget')">
+                            <div class="forgot-password" style="cursor:pointer;" onClick="set_html('login','forget')">
                                 <?php echo translate('forget_your_password_?');?>
-                            </span>
+                            </div>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <span class="btn btn-theme-sm btn-block btn-theme-dark pull-right login_btn enterer">

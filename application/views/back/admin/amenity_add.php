@@ -20,6 +20,7 @@
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('category');?></label>
                 <div class="col-sm-6">
                     <select name="cat" id="demo-hor-2" class="form-control required">
+                        <option value="0">Generl</option>
                         <option value="808">Property</option>
                         <option value="807">Cars</option>
                         <option value="917">Events</option>
