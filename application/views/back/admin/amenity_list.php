@@ -1,7 +1,8 @@
 	<div class="panel-body" id="demo_s">
 
-	    <select onchange="slevel()" id="cat_level">
-			            <option value="">Select Category</option>
+	    <select onchange="slevel()" id="amn" name="level">
+			            <option value="0" selected>Select Category</option>
+                        <option value="0" <?= (isset($_GET['level']) && $_GET['level'] == '0')?"selected":""; ?>>General</option>
                         <option value="808" <?= (isset($_GET['level']) && $_GET['level'] == '808')?"selected":""; ?>>Property</option>
                         <option value="807" <?= (isset($_GET['level']) && $_GET['level'] == '807')?"selected":""; ?>>Cars</option>
                         <option value="917" <?= (isset($_GET['level']) && $_GET['level'] == '917')?"selected":""; ?>>Events</option>
@@ -102,12 +103,47 @@
 
 
 
-
-
+<script>
+    $(document).ready(function() {
+            console.log( "ready!" );
+     
+        var val = $('#amn').val();
+        $.ajax({
+        url: '<?= base_url('admin/amenity/list'); ?>',
+        type: "Post",
+        async: true,
+        data: { val:val},
+        success: function (data) {
+        //   alert(data);
+        },
+        error: function (xhr, exception) {
+           
+        }
+    }); 
+    
+});
+</script>
+<script>
+    $('#amn').on('change', function(){
+        var val = $(this).val();
+        $.ajax({
+        url: '<?= base_url('admin/amenity/list'); ?>',
+        type: "Post",
+        async: true,
+        data: { val:val},
+        success: function (data) {
+        //   alert(data);
+        },
+        error: function (xhr, exception) {
+           
+           
+        }
+    }); 
+    })
+</script>
 <script>
     function slevel()
 {
-	ajax_set_list('level');
+	ajax_set_list('level','amn');
 }
 </script>
-           

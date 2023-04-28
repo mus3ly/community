@@ -132,6 +132,12 @@
                 }
             ?>
             <div class="item_count">
+                <?php 
+            $pro = $this->db->get_where('product', array('product_id' => $row['product_id']))->row();
+            if($pro->product_link){?>
+            
+                
+            <?php }else{?>
                 <div class="quantity product-quantity">
                     <span class="btn" name='subtract' onclick='decrease_val();'>
                         <i class="fa fa-minus"></i>
@@ -141,6 +147,7 @@
                         <i class="fa fa-plus">
                     </i></span>
                 </div>
+                <?php }?>
                 <?php
                     if($row['current_stock'] > 0){
                 ?>
@@ -160,6 +167,12 @@
         </div>
     </div>
     <div class="buttons" style="display:inline-flex;">
+        <?php 
+            $pro = $this->db->get_where('product', array('product_id' => $row['product_id']))->row();
+            if($pro->product_link){?>
+            
+                <a href="<?= $pro->product_link?>" class="btn btn-add-to cart"> Go To Shop</a>
+            <?php }else{?>
         <span class="btn btn-add-to cart" onclick="to_cart(<?php echo $row['product_id']; ?>,event)">
             <i class="fa fa-shopping-cart"></i>
 			<?php if($this->crud_model->is_added_to_cart($row['product_id'])=="yes"){
@@ -169,6 +182,7 @@
                 }
             ?>
         </span>
+        <?php }?>
         <?php
             $wish = $this->crud_model->is_wished($row['product_id']);
         ?>

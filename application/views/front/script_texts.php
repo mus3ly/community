@@ -1172,6 +1172,10 @@ if (keyCode == 13){
 		
 		$('body').on('click','.logup_btn', function(){
 			var here = $(this); // alert div for show alert message
+			if(here.attr('disabled'))
+			{
+			    return 0;
+			}
 			var form = here.closest('form');
 			var can = '';
 			var ing = here.data('ing');

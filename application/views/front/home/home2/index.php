@@ -22,7 +22,48 @@
     .scroll::-webkit-scrollbar {
             display: none;
         }
+        .left_fields {
+        padding: 9px !important;
+    }
+    .dec_wrappper {
+    padding: 9px !important;
+}
+ .blogs_titlee{
+    padding: 8px 7px;
+}
+.meddle_cont {
+    padding: 0 10px 0 8px;
+}
+.verifed_listings  .desc{
+    margin: 0px 4px 19px !important;
+    font-size: 15px !important;
+    padding: 7px 0px 10px;
+    line-height: 20px;
+    height: 70px;
+    display: -webkit-box;
+    max-width: 400px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #333;
+}
+.dec_wrappper > p {
+        margin: 0px 4px 19px !important;
+        font-size: 15px !important;
+        padding: 7px 8px 10px;
+        line-height: 20px;
+        height: 70px;
+        display: -webkit-box;
+        max-width: 400px;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #333;
+    }
 </style>
+
 <body id="page-name">
 
 <div class="main_warp">
@@ -42,12 +83,13 @@
             </div>
             <div class="col-sm-8 perfect_place">
                 <h5>Community HubLand - A Directory Site - Your Virtual Land</h5>
-                <h3>Find Your <b>Perfect Place.</b></h3>
-                <div class="search_bar">
+                <h3>Search Your <b>Communities</b></h3>
+                <div class="search_bar border_iner">
                 <form action="<?= base_url('/home/text_search'); ?>"  onkeyup="submitForm(event)" id="srch_form" method="post">
+                    <img style="width:22px;" src="<?= base_url('/search_icon_bar.png'); ?>" alt="Search">
+                    <input type="text" placeholder="TACOS, CHEAP DINNER, MAX’S" id="left_box"  name="query" alt="" style="border-right: 1px solid #f26122 !important;border-radius:0;" id="texted">
                     <img src="<?= base_url(); ?>template/front/images/Location.png" alt="Search">
-                    <input type="text" placeholder="tacos, cheap dinner, Max’s" id="left_box"  name="query" alt="" />
-                     <input type="text" id="loc_box"  onkeyup="search_location()" placeholder="Location"  name="" alt="" >
+                     <input type="text" id="loc_box"  onkeyup="search_location()" placeholder="LOCATION"  name="" alt="" >
                      <div id="map_search" style="
     z-index: 9999999999999999;
     position: absolute;
@@ -79,15 +121,18 @@
                                             }
 
                     foreach ($brands as $key => $value) {
+                        $fa_icons = $value['fa_icon'] == 'fa-thin fa-house-building' ? 'fa-building' : $value['fa_icon'];
+                        $fa_icons = $fa_icons == 'fa-shirt-long-sleeve' ? 'fa-shirt' : $fa_icons;
+                        $fa_icons = ($fa_icons)?$fa_icons:'fa-file-image-o';
                         if(in_array($value['category_id'], $result))
                         {
                             //  echo $value['category_id'];
-                        ?>
+                        ?> 
                             <div class="owl-item " >
                            <div class="item">
                               <div class="slider_box_icons">
                                 <ul>
-                                    <li ><a href="<?= base_url('category/'.$value['slug']); ?>"><i class="fa <?= ($value['fa_icon'])?$value['fa_icon']:'fa-file-image-o'; ?>"></i>  <?= $value['category_name'] ?></a></li>
+                                    <li ><a href="<?= base_url('directory/'.$value['slug']); ?>"><i class="fas <?= $fa_icons; ?>"></i>  <?= $value['category_name'] ?></a></li>
                                 </ul>
                             </div>
                            </div>
@@ -119,7 +164,42 @@
 </div>
 
 
-<div class="list_business">
+<div class="video_warp">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 business_graphic">
+                <video autoplay="" loop="" muted="">
+                <source src="https://gold-blu.gamedayspuds.com/wp-content/uploads/2022/12/glam-product.mp4" type="video/mp4">
+            </video>
+            </div>
+            <div class="col-sm-6 communitybox every_business">
+                
+                <h3>Sign-up and own a business page in less than 5 minutes</h3>
+                    <div class="scroll">
+                    <p>Use your business page as your community market page:</p>
+                    
+                    <ul>
+                        <?php 
+                        $points = array( 'Post Advertisements', 'Own A Commercial Business Page', 'Benefit From Affiliate Marketing' );
+                        $html = '';
+                        foreach( $points as $point ) {
+                            $html .= '<li><img src="https://markethubland.com/template/front/images/Tick-Square.png" alt="">' . $point . '</li>';
+                        }
+                        echo $html;
+                        ?>
+                    </ul>
+                    <p>
+                        Become Community HubLand pioneer now at an incredibly low subscription fee!
+                        <a href="" class="btn_anim from-top btn_simple">JOIN NOW</a>
+                    </p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- <div class="list_business">
     <div class="container">
         <div class="plus_dot">
             <div class="right_plus">
@@ -132,22 +212,20 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 <div class="icon_box_wrap">
     <div class="container">
         
-        <div class="row">
+      <!--  <div class="row">
 
         <?php
                 $cboxes = unserialize($this->crud_model->get_type_name_by_id('ui_settings','65','value'));
                                     $boxes = 3;
                                     if($cboxes)
                                     {
-                                        // $cboxes = unserialize($cboxes);
-
-                                        // var_dump($cboxes);
+                                        
                                         $boxes = count($cboxes);
                                     }
 
@@ -157,7 +235,7 @@
                 <div class="info_box_shadow">
                     <div class="shadow_icon">
                     <i class="fa <?= (isset($cboxes[$i]['icon'])?$cboxes[$i]['icon']:''); ?>" aria-hidden="true"></i>
-                        <!-- <img src="<?= base_url(); ?>template/front/images/business-icon.png" alt=""> -->
+                       
                     </div>
                     <b><?= (isset($cboxes[$i]['heading'])?$cboxes[$i]['heading']:''); ?></b>
                     <ul>
@@ -189,7 +267,7 @@
                                     }
             ?>
             
-        </div>
+        </div>-->
 
         
         </div>
@@ -205,7 +283,7 @@
             <div class="col-sm-7 communitybox every_business">
                 
                 <h3><?= $this->crud_model->get_type_name_by_id('ui_settings','69','value'); ?></h3>
-                <div class="scroll" id="scrol_9sec">
+                <div class="scroll">
                 <p><?= $this->crud_model->get_type_name_by_id('ui_settings','68','value'); ?></p>
                 
                 <ul>
@@ -259,7 +337,7 @@
                 <?php
                     $bullets =  $this->crud_model->get_type_name_by_id('ui_settings','77','value'); 
                     $bullets = explode(',',$bullets);
-                    
+
                     foreach($bullets as $k=> $v)
                     {
                         $exp = explode(':',$v);
@@ -272,7 +350,11 @@
                         <?php
                     }
                     ?>
-                
+                <div class="col-sm-12 checkbox_tick mt-4">
+                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""> 
+                    <h4>CALL CENTRE SERVICES</h4>
+                    <p>A myriad of low cost, highly efficient customer services from technical to telemarketing and help desk support</p>
+                </div>
             <div class="learn_more_btns">
                 <?php
                 $btns  = json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => '78'))->row()->value,true);
@@ -327,7 +409,7 @@
             <div class="col-sm-7 communitybox">
                 <b><?= $this->crud_model->get_type_name_by_id('ui_settings','79','value'); ?></b>
                 <h3><?= $this->crud_model->get_type_name_by_id('ui_settings','80','value'); ?></h3>
-                <div id="scrol_9sec" class="scroll">
+                <div class="scroll" style="display:inline-block">
                 <p><?= $this->crud_model->get_type_name_by_id('ui_settings','82','value'); ?></p>
                 <ul>
                     <?php
@@ -367,13 +449,14 @@ include "featured_products.php";
 ?>
 <div class="container">
   <div class="joinbtnbox">
-    <a href="#">Join Community HubLand Affiliate Marketing</a>
+    <a href="<?= base_url(); ?>vendor">Join Community HubLand Affiliate Marketing</a>
   </div>
 </div>
 
 <script src="<?= base_url('/'); ?>template/front/js-files/jquery-3.2.1.min.js"></script>
 <script src="<?= base_url('/'); ?>template/front/js-files/owl.carousel.js"></script>
 <script src="<?= base_url('/'); ?>template/front/js-files/custom.js"></script>
+<script src="<?= base_url('/'); ?>template/front/js-files/additional-script.js"></script>
           <script type="text/javascript">
               (function($) {
     

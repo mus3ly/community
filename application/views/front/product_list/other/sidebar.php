@@ -1,13 +1,27 @@
-
+<style>
+    #sidebar ul li a{
+        color:#000;
+    }
+</style>
 <aside class="col-md-2 sidebar new_sidebar" id="sidebar">
     <!-- widget shop categories -->
     <!-- widget price filter -->
                <?php
-            if(isset($_GET['is_listing']) && ($_GET['is_listing'] == 'shop_listing' || $_GET['is_listing'] == 'car_listing')){
+            if(isset($is_listing) && ($is_listing == 'shop_listing' || $is_listing == 'car_listing')){
                     ?>
             <div class="widget widget-filter-price">
-                <div class="Amenities">
-                 <h3>Filter Your Search</h3>
+                <div class="Amenities1">
+                    <div class="left_filter to_left_f">
+                     <h3>Filter Your Search</h3>
+                </div>
+                 
+                 <div class="push_left">
+           <!-- <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="open_sidebar();">
+                <i class="fa fa-bars"></i>
+            </span>-->
+            <a class="btn-theme-light make_it_flexi" onClick="set_view('grid')" href="#"><img src="<?php echo base_url(); ?>/white_grid.png" alt=""/></a>
+            <a class="btn btn-theme-light make_it_flexi" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>/white_icon.png" alt=""/></a>
+        </div>
                 </div>
                 <div class="range_slider new_rang">
                     <div class="row">
@@ -29,14 +43,15 @@
                     </div>
                 </div>
             </div>
+            
             <?php
             }
             else
             {
                 ?>
             <div class="widget widget-filter-price">
-                <div class="Amenities">
-                 <div class="left_filter">
+                <div class="Amenities1">
+                 <div class="left_filter to_left_f">
                      <h3>Search Filter</h3>
                 </div>
                    <div class="push_left">
@@ -74,7 +89,7 @@
             }
             ?>
     <?php
-            if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'car_listing'){
+            if(isset($is_listing) && $is_listing == 'car_listing'){
                 $all_makes =  $this->db->get('makes')->result_array();
 
                     ?>
@@ -104,7 +119,7 @@
                 }
                 ?>
                 <?php
-            if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'property_listing'){
+            if(isset($is_listing) && $is_listing == 'property_listing'){
                     ?>
                     
                  
@@ -124,7 +139,7 @@
                 }
                 ?>
                 <?php
-            if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'jobs_listing'){
+            if(isset($is_listing) && $is_listing == 'jobs_listing'){
                     ?>
                     
                  
@@ -149,7 +164,7 @@
                     <?php
                 }
                 ?>       <?php
-            if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'event_listing'){
+            if(isset($is_listing) && $is_listing == 'event_listing'){
                     ?>
                     
                         <input type="date" id="event_date_input" onchange="do_product_search('0')" class="add_padding form-control">
@@ -200,7 +215,7 @@
                                                           
                 <?php
                 $all_category = '' ; 
-                if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'shop_listing'){
+                if(isset($is_listing) && $is_listing == 'shop_listing'){
                         $all_category =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 87))->row()->value,true);
                     
                         foreach($all_category as $k=> $v)
@@ -232,11 +247,11 @@
                 }
                     foreach($all_category as $key => $row)
                     {
-						if(true){
+						if($row['category_id'] && $row['category_name']){
                 ?>
                 <li>
-                    <input style="display: none;" type="checkbox" name="cats[]" class="cat_check" style="float:left" id="cat_<?php echo $row['category_id']; ?>" value="<?php echo $row['category_id']; ?>">
-                    <label for="cat_<?php echo $row['category_id']; ?>"><?php echo $row['category_name']; ?>   <i  class="fa fa-angle-down angle_rightdown"></i></label>
+                    
+                    <a href="<?= base_url('/directory'); ?>/<?= $row['slug'] ?>" for="cat_<?php echo $row['category_id']; ?>"><?php echo $row['category_name']; ?>   <i  class="fa fa-angle-down angle_rightdown"></i></a>
                     <!--<i  class="fa fa-angle-down angle_rightdown"></i>-->
                     <div class="cat_result" id="cat_r<?php echo $row['category_id']; ?>"></div>
                     
@@ -259,7 +274,7 @@
     </div>
     
     <?php
-    $id = '';
+    $id = '0';
       if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'car_listing'){
       $id = '807';
       }
@@ -285,7 +300,7 @@
             foreach($all_amenity as $k=> $v)
             {
                 ?>
-                <li><label><input type="checkbox" value="<?= $v['name'] ?>" class="amenities_check" /><?= $v['name']; ?></label></li>
+                <li><input type="checkbox" value="<?= $v['name'] ?>" class="amenities_check" /><label><?= $v['name']; ?></label></li>
                 <?php
             }
             ?>

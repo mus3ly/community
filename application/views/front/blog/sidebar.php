@@ -1,7 +1,7 @@
 <aside class="col-md-3 hidden-sm hidden-xs" id="sidebar">
     <!-- widget shop categories -->
-    <div class="widget shop-categories">
-        <div class="widget-content">
+      <?php /* ?><div class="widget shop-categories">
+      <div class="widget-content">
             <ul>
                 <li><a href="#" onClick="get_blogs_by_cat('all')"><?php echo translate('all_blogs');?></a></li>
                 <?php
@@ -18,12 +18,10 @@
                 ?>
             </ul>
         </div>
-    </div>
+       
+    </div
+    > <?php */ ?>
     <!-- /widget shop categories -->
     <br>
-    <div class="row">
-    <?php
-		echo $this->html_model->widget('special_blogs');
-	?>
-    </div>
+    
 </aside>

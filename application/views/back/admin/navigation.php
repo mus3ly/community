@@ -563,6 +563,19 @@ $customer_product_check = $this->crud_model->get_type_name_by_id('general_settin
                             <?php
             							}
             						?>
+            						<?php
+            							if($this->crud_model->admin_permission('subect')){ ?>
+                            <li <?php if($page_name=="subject"){?> class="active-link" <?php } ?>>
+                                <a href="<?php echo base_url(); ?>admin/subject/">
+                                    <i class="fa fa-usd"></i>
+                                        <span class="menu-title">
+                                    		<?php echo translate('subject');?>
+                                        </span>
+                                </a>
+                            </li>
+                            <?php
+            							}
+            						?>
                         <?php
                             if($this->crud_model->admin_permission('coupon')){ ?>
                               <li <?php if($page_name=="coupon"){?> class="active-link" <?php } ?> >

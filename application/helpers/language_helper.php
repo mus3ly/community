@@ -27,6 +27,60 @@
      }
      return $find;
  }
+ function full_path($cid)
+ {
+     $path = array();
+     $path[] = $cid;
+     $CI =& get_instance();
+     $prow = $CI->db->select('pcat')->where('category_id',$cid)->get('category')->row();
+     $p = 0;
+     if(isset($prow->pcat))
+     {
+         $p = $prow->pcat;
+     }
+     while($p)
+     {
+         $path[] = $p;
+         $prow = $CI->db->select('pcat')->where('category_id',$p)->get('category')->row();
+         if(isset($prow->pcat))
+     {
+         $p = $prow->pcat;
+     }
+     }
+     return array_reverse($path);
+ }
+ function find_main($id){
+     $CI =& get_instance();
+     $levels = 2;
+     $ch = $CI->db->select('category_id,level')->where('pcat',$id)->get('category')->result_array();
+     $childs = array();
+     foreach($ch as $k=> $v)
+     {
+         $childs[] = $v['category_id'];
+     }
+     $CI->db->where('cat_id', $id)->update('direct_cats',array('childs'=>implode(',',$childs)));
+ }
+ function get_childs($id)
+ {
+     $childs = array();
+      $CI =& get_instance();
+     $ch = $CI->db->select('category_id,level')->where('pcat',$id)->get('category')->result_array(); 
+     foreach($ch as $k=> $v)
+     {
+         $chls = get_childs($v['category_id']);
+         if($chls)
+         {
+               $childs = array_merge($childs, $chls);
+
+             //merge here
+         }
+         else
+         {
+         $childs[] = $v['category_id'];
+         }
+     }
+     return $childs;
+ }
  function filter_add($id){
       $CI =& get_instance();
      $pro = $CI->db->where('product_id',$id)->get('product')->row(); 
@@ -153,7 +207,7 @@
              unset($vl[$k]);
          }
      }
-     return implode(',',$vl);
+     return implode(',&nbsp',$vl);
  }
  function get_product_meta($pid, $k= '')
  {
@@ -269,11 +323,18 @@ function create_cat_slug($id)
     $v = $CI->db->where('category_id',$id)->get('category')->row_array(); 
     if(isset($v['category_name']))
          {
+             $slug = slugify($v['category_name']);
              if($v['slug'])
              {
                  return $v['slug'];
              }
-             $slug = slugify($v['category_name']);
+             $pcat = $CI->db->where('category_id',$v['pcat'])->get('category')->row_array(); 
+             if($pcat)
+             $slug = create_cat_slug($v['pcat']).'-'.$slug;
+             else
+             {
+             }
+             
              
              $pros_slg = $CI->db->where('slug',$slug)->get('category')->row();
              if($pros_slg)
@@ -282,7 +343,8 @@ function create_cat_slug($id)
              }
              if($slug)
              {
-                 $r = $CI->db->where('category_id',$v['category_id'])->update('category',array('slug'=>$slug));
+                 $path = implode(',',full_path($v['category_id']));
+                 $r = $CI->db->where('category_id',$v['category_id'])->update('category',array('slug'=>$slug,'path'=>$path));
                 //  var_dump($r);
                 //  var_dump($v['product_id']);
                 return  $slug;

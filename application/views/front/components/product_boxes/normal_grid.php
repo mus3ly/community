@@ -1,4 +1,4 @@
-Normal grid<style>
+<style>
     .widget-search input{
         border:none !important;
     }

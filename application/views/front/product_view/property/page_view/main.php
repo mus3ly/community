@@ -799,8 +799,8 @@ $(".right_box .locationbox h4").click(function(){
 });
 
 </script>
-<script>
-    $('#send').on('click' , function(e){
+ <script>
+        $('#send').on('click' , function(e){
             e.preventDefault();
             
             var url = '<?php echo base_url('home/contact_us')?>';
@@ -809,14 +809,16 @@ $(".right_box .locationbox h4").click(function(){
             var email = $('#email__').val();
             var msg = $('#message__').val();
             var phone = $('#phone').val();
+            var pid = $('#pid').val();
                $.ajax({
                 url: url,
                 type: "get",
                 async: true,
-                data: {  fname:fname, email:email, message:msg,phone:phone,lname:lname },
+                
+                data: {  fname:fname, email:email, message:msg,phone:phone,lname:lname,pid:pid },
                 success: function (data) {
                     const myArr = JSON.parse(JSON.stringify(data));
-              if(myArr['email'] > 0){
+              if(myArr['email'] == 1){
                         $("#success").attr("class", "alert alert-success d-block");
                       }else{
                           $("#danger").attr("class", "alert alert-danger d-block");
@@ -845,8 +847,7 @@ $(".right_box .locationbox h4").click(function(){
 
 
         });
-    
-</script>
+    </script>
 <script>
 function myMap() {
 var mapProp= {

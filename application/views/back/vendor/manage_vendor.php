@@ -149,6 +149,7 @@
 										<?php echo translate('city');?>
                                     </label>
                                  <div  id="city_select">
+                                     <?php echo $this->crud_model->select_html('cities','city','name','edit','select_city demo-chosen-select ',$row['city'],'',NULL,'select_city'); ?>
                                         <?php  //echo $this->crud_model->select_html('cities','city','name','edit','select_city demo-chosen-select' ,'','',$row['city'],'',NULL,'select_city'); ?>
                                     </div>
                                 </div>

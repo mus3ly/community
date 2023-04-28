@@ -141,10 +141,17 @@ $vendorlogo= '';
                 data-original-title="<?php if($this->crud_model->is_wished($product_id)=="yes"){ echo translate('added_to_wishlist'); } else { echo translate('add_to_wishlist'); } ?>">
                 <strong><i class="fa fa-heart"></i></strong>
             </span>
+            <?php 
+            $pro = $this->db->get_where('product', array('product_id' => $product_id))->row();
+            if($pro->product_link){?>
+            
+                <a href="<?= $pro->product_link?>" class="btn btn-add-to cart"> Go To Shop</a>
+            <?php }else{?>
             <span class="icon-view right " onclick="to_cart(<?php echo $product_id; ?>,event)" data-toggle="tooltip" 
                 data-original-title="<?php if($this->crud_model->is_added_to_cart($product_id)){ echo translate('added_to_cart'); } else { echo translate('add_to_cart'); } ?>">
                 <strong><i class="fa fa-shopping-cart"></i></strong>
             </span>
+            <?php }?>
             <?php 
                     $user = $this->session->userdata('user_id');
                     if($is_affiliate && $user)
