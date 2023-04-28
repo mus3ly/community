@@ -111,6 +111,14 @@ $rid = time();
                                         *<?php echo translate('Write an seo friendly title within 60 characters')?>
                                     </div>
                                 </div>
+                                <div class="col-sm-12 sidegap_box">
+                                    <div class="form-group " >
+                                        <label class="control-label" for="demo-hor-6">Product link</label>
+                                         <input type="text" name="product_link"
+                                           placeholder="<?php echo translate('Your online store product link')?>"
+                                           class="form-control">
+                                    </div>
+                                </div>
                                 <div class="col-sm-3 sidegap_box">
                                     <div class="form-group " >
                                         <label class="control-label" for="demo-hor-6">Seo Friendly Title</label>

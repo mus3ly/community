@@ -1,4 +1,8 @@
 <?php
+$vendor_id =json_decode( $added_by);
+$id = $vendor_id->id;
+$vendor = $this->db->where('vendor_id', $id)->get('vendor')->row_array();
+$n = $this->db->where('product_id',$vendor['bpage'])->where('is_bpage',1)->get('product')->row_array();
 if($comp_logo)
                         {
                             $img = $this->crud_model->get_img($comp_logo);
@@ -55,7 +59,7 @@ if($comp_logo)
                 <div class="added_by" itemscope itemtype="http://schema.org/Store" style="display:flex;">
                     <?php echo translate('sold_by_:');?>
                     <p itemprop="name">
-                        <?php echo $this->crud_model->product_by($product_id,'with_link');?>
+                        <?php echo $n['title'];?>
                     </p>
                 </div>
                 <?php endif ?>
@@ -134,6 +138,12 @@ if($comp_logo)
                     <?php
                     }
                     ?>
+                    <?php 
+                    $pro = $this->db->get_where('product', array('product_id' => $product_id))->row();
+                    if($pro->product_link){?>
+                    
+                        <a href="<?= $pro->product_link?>" class="btn btn-add-to cart"> Go To Shop</a>
+                    <?php }else{?>
                     <span class="btn btn-add-to cart" onclick="to_cart(<?php echo $product_id; ?>,event)">
                         <i class="fa fa-shopping-cart"></i>
                         <?php if($this->crud_model->is_added_to_cart($product_id)){ 
@@ -143,6 +153,7 @@ if($comp_logo)
                             } 
                         ?>
                     </span>
+                    <?php }?>
                     <?php 
                         $wish = $this->crud_model->is_wished($product_id); 
                     ?>

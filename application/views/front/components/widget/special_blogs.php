@@ -24,14 +24,13 @@
 						foreach($latest as $row){
 					?>
                         <div class="media">
-                            <a class="pull-left media-link" href="<?php echo $this->crud_model->blog_link($row['blog_id']); ?>">
+                            <a class="left_media-body pull-left media-link" href="<?php echo $this->crud_model->blog_link($row['blog_id']); ?>">
                                 <img class="img-responsive" src="<?php echo $this->crud_model->file_view('blog',$row['blog_id'],'','','thumb','src','',''); ?>" alt=""/>
-                                <i class="fa fa-eye"></i>
                             </a>
-                            <div class="media-body">
+                            <div class="media-body right_media_body">
                                 <h6 class="media-heading">
                                     <a href="<?php echo $this->crud_model->blog_link($row['blog_id']); ?>">
-                                    	<?php echo $row['title']; ?>
+                                    	<?php echo strWordCut($row['title'],40); ?>
                                     </a>
                                 </h6>
                                 <div class="date">

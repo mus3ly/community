@@ -139,7 +139,7 @@ $lng = $this->config->item('lng');
     margin: 0 1px 0 5px;
 }
 
-    @media(max-width: 991px) {
+    @media(max-width: 600px) {
         .sidebar.open{
             opacity:1;
             position: fixed;
@@ -188,7 +188,23 @@ $lng = $this->config->item('lng');
     -ms-flex: 0 0 41.666667%;
     flex: 0 0 41.666667%;
     max-width: 41.666667%;}   
+.mapbtn{color: #fff;
+    background: #f26122;
+    padding: 4px;
+    margin: 10px 2px;
+    border: none;
+    outline: none !important;position: absolute;
+    top: -45px;
+    border-radius: 5px;}
+#content{transition: width 1s;}   
+#map_div{padding:0;width:44px;
+position:absolute;
+right:27px;
+background:url('/template/front/images/map_.jpeg');
+height: 600px;margin-top: 40px;}
+#map_div.open {right:5px !important;}
 
+#map_div.open{width:22%;}
 </style>
 <div class="container-fluid">
   <div class="row" id="width-100">
@@ -201,40 +217,40 @@ $lng = $this->config->item('lng');
                                         
                                                 <ul>
                                                     <li class="active1">
-                                                    <span  class="marg_add"><i class="fa-solid fa-folder"></i></span><a  href="<?= base_url('directory?is_listing=directory_listing'); ?>" class=" <?= ((isset($_GET['is_listing']) && $_GET['is_listing'] == 'directory_listing') || !(isset($_GET['is_listing'])) )?"active":"" ?>"><?php echo translate('directory'); ?></a>
+                                                    <span  class="marg_add"><i class="fa-solid fa-folder"></i></span><a  href="<?= base_url('directory'); ?>" class=" <?= ((isset($cur_slug) && $cur_slug == 'directory_listing') || !(isset($cur_slug)) )?"active":"" ?>"><?php echo translate('directory'); ?></a>
                                                     </li>
                                                     <li>
-                                                        <span  class="marg_add"><i class="fa-solid fa-business-time"></i></span><a href="<?= base_url('directory?is_listing=buss_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'buss_listing')?"active":"" ?>"><?php echo translate('business'); ?></a>
+                                                        <span  class="marg_add"><i class="fa-solid fa-business-time"></i></span><a href="<?= base_url('directory/business'); ?>" class=" <?= (isset($cur_slug) && $cur_slug == 'business')?"active":"" ?>"><?php echo translate('business'); ?></a>
                                                      </li>
                                                     <li>
-                                                        <span  class="marg_add"><i class="fab fa-affiliatetheme"></i></span><a href="<?= base_url('directory?is_listing=affliate_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'affliate_listing')?"active":"" ?>"><?php echo translate('affiliate'); ?></a>
+                                                        <span  class="marg_add"><i class="fab fa-affiliatetheme"></i></span><a href="<?= base_url('directory/affiliate-business'); ?>" class=" <?= (isset($cur_slug) && $cur_slug == 'affiliate-business')?"active":"" ?>"><?php echo translate('affiliate'); ?></a>
                                                      </li>
                                                      <li>
-                                                       <span  class="marg_add"><i class="fa-solid fa-shop"></i></span> <a href="<?= base_url('directory/76?is_listing=shop_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'shop_listing')?"active":"" ?>"><?php echo translate('shop'); ?></a>
+                                                       <span  class="marg_add"><i class="fa-solid fa-shop"></i></span> <a href="<?= base_url('directory/shop'); ?>" class=" <?= (isset($cur_slug) && $cur_slug == 'shop')?"active":"" ?>"><?php echo translate('shop'); ?></a>
                                                      </li>
                                                      <li>
-                                                       <span  class="marg_add"><i class="fa-solid fa-blog"></i></span> <a href="<?= base_url('directory/353?is_listing=blog_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'blog_listing')?"active":"" ?>"><?php echo translate('Blogs'); ?></a>
+                                                       <span  class="marg_add"><i class="fa-solid fa-blog"></i></span> <a href="<?= base_url('directory/blogs'); ?>" class=" <?= (isset($cur_slug) && $cur_slug == 'blogs')?"active":"" ?>"><?php echo translate('Blogs'); ?></a>
+                                                     </li>
+                                                     <li> 
+                                                        <span  class="marg_add"><i class="fa-solid fa-calendar-days"></i></span><a href="<?= base_url('directory/things-to-do-events'); ?>" class=" <?= (isset($cur_slug) && $cur_slug == 'things-to-do-events')?"active":"" ?>"><?php echo translate('events'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-briefcase"></i></span><a href="<?= base_url('directory/jobs'); ?>" class=" <?= (isset($cur_slug) && $cur_slug == 'jobs')?"active":"" ?>"><?php echo translate('jobs'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-location-dot"></i></span><a href="<?= base_url('directory/places'); ?>" class=" <?= (isset($cur_slug) && $cur_slug == 'places')?"active":"" ?>"><?php echo translate('places'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-car"></i></span><a href="<?= base_url('directory/vehicles-cars'); ?>" class=" <?= (isset($cur_slug) && ($cur_slug == 'vehicles-cars' || $cur_slug == 'vehicles-used-cars'))?"active":"" ?>"><?php echo translate('cars'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-building"></i></span><a href="<?= base_url('directory/properties'); ?>" class=" <?= (isset($cur_slug) && $cur_slug == 'properties')?"active":"" ?>"><?php echo translate('Property'); ?></a>
+                                                     </li>
+                                                      <li>
+                                                        <span  class="marg_add"><i class="fa-solid fa-hand-holding-heart"></i></span><a href="<?= base_url('directory/charities'); ?>" class=" <?= (isset($cur_slug) && $cur_slug == 'charities')?"active":"" ?>"><?php echo translate('charity'); ?></a>
                                                      </li>
                                                      <li>
-                                                        <span  class="marg_add"><i class="fa-solid fa-calendar-days"></i></span><a href="<?= base_url('directory/1069?is_listing=event_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'event_listing')?"active":"" ?>"><?php echo translate('events'); ?></a>
-                                                     </li>
-                                                      <li>
-                                                        <span  class="marg_add"><i class="fa-solid fa-briefcase"></i></span><a href="<?= base_url('directory/82?is_listing=jobs_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'jobs_listing')?"active":"" ?>"><?php echo translate('jobs'); ?></a>
-                                                     </li>
-                                                      <li>
-                                                        <span  class="marg_add"><i class="fa-solid fa-location-dot"></i></span><a href="<?= base_url('directory/87?is_listing=places_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'places_listing')?"active":"" ?>"><?php echo translate('places'); ?></a>
-                                                     </li>
-                                                      <li>
-                                                        <span  class="marg_add"><i class="fa-solid fa-car"></i></span><a href="<?= base_url('directory/80?is_listing=car_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'car_listing')?"active":"" ?>"><?php echo translate('cars'); ?></a>
-                                                     </li>
-                                                      <li>
-                                                        <span  class="marg_add"><i class="fa-solid fa-building"></i></span><a href="<?= base_url('directory/808?is_listing=property_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'property_listing')?"active":"" ?>"><?php echo translate('Property'); ?></a>
-                                                     </li>
-                                                      <li>
-                                                        <span  class="marg_add"><i class="fa-solid fa-hand-holding-heart"></i></span><a href="<?= base_url('directory/134?is_listing=charity_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'charity_listing')?"active":"" ?>"><?php echo translate('charity'); ?></a>
-                                                     </li>
-                                                     <li>
-                                                        <span class="marg_add"><i class="fa-solid fa-newspaper"></i></span><a href="<?= base_url('directory/353?is_listing=news_listing'); ?>" class=" <?= (isset($_GET['is_listing']) && $_GET['is_listing'] == 'news_listing')?"active":"" ?>"><?php echo translate('news'); ?></a>
+                                                        <span class="marg_add"><i class="fa-solid fa-newspaper"></i></span><a href="<?= base_url('directory/publishing-news'); ?>" class=" <?= (isset($cur_slug) && $cur_slug == 'publishing-news')?"active":"" ?>"><?php echo translate('news'); ?></a>
                                                      </li>
                                                 </ul>
                                                 <a class="btn btn-theme-transparent btn-sort"  id="btn__sort"><img src="<?php echo base_url(); ?>/sort12.png" alt="" width="20px;"/></a>
@@ -324,8 +340,8 @@ $lng = $this->config->item('lng');
             ?>
             <!-- /SIDEBAR -->
             <!-- CONTENT -->
-                    <div class="content col-md-10" id="content">
-                         <div class="row">
+                    <div class="content col-md-10 add_pading_to" id="content">
+                         <div class="row" id="row_height">
         
         <div class="col-md-12 add_center_div ">
             <!-- shop-sorting -->
@@ -366,9 +382,8 @@ $lng = $this->config->item('lng');
                         </div>
 
                     </div>
-                    
-                <div id="map_div" style="padding:0;">
-                <button onclick="initMapp()">Map</button>     <div id="map" style="" class="map_style "></div></div>
+                 <div id="map_div" style="">
+                <button  class="mapbtn">Map</button>     <div id="map" style="" class="map_style "></div></div>
 
             <!-- /CONTENT -->
         </div>
@@ -442,11 +457,22 @@ function rate_html(rate)
 //&callback=initMap    
     var markers = [];
     var  map = '';
+var mapopen=false;    
+$('.mapbtn').on('click',function(){
+    if(!mapopen){
+    mapopen=true;    
+       initMapp();
+    }else{
+   $('#map_div').removeClass('open');  
+   mapopen=false;  
+   $('#content').addClass('col-md-10').removeClass('col-md-8'); 
+    }
+})    
 function initMapp() {
     var w=$(window).width();
     if(w>=768){
   $('#content').addClass('col-md-8').removeClass('col-md-10');      
-  $('#map_div').addClass('col-md-2');      
+  $('#map_div').addClass('open');      
   //  $('#map_div,#content').addClass('desktop').removeClass('dtab');
             }else if(w<768){
   //  $('#map_div,#content').addClass('dtab').removeClass('desktop');

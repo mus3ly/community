@@ -13,7 +13,7 @@ $(document).ready(function() {
         ?>
         var mid = '#cat_<?= $cur_category?>';
         $(mid).prop("checked", true);
-        load_sub(<?= $cur_category?>);
+        load_sub(<?= $opn_category?>);
         $(mid).click();
         do_product_search('0');
         <?php
@@ -24,7 +24,7 @@ $(document).ready(function() {
   });
   var rangeSlider = document.getElementById('slider-range');
   <?php
-            if(isset($_GET['is_listing']) && ($_GET['is_listing'] == 'shop_listing' || $_GET['is_listing'] == 'car_listing')){
+            if(isset($is_listing) && ($is_listing == 'shop_listing' || $is_listing == 'car_listing')){
                     ?>
                       var moneyFormat = wNumb({
     decimals: 0,
@@ -2144,7 +2144,7 @@ function select_place(place,txt)
     ));
 ?>
     <input type="hidden" name="category" id="categoryaa">
-    <input type="hidden" name="list_type" id="list_type" value="<?= (isset($_GET['is_listing'])?$_GET['is_listing']:""); ?>">
+    <input type="hidden" name="list_type" id="list_type" value="<?= isset($is_listing)?$is_listing:'';?>"/>
     <input type="hidden" name="min-value" id="min-value" value="">
     <input type="hidden" name="make" id="make" value="">
     <input type="hidden" name="bedrooms" id="bedrooms" value="">
@@ -2418,7 +2418,7 @@ function select_place(place,txt)
 });
 console.log(amen);
         $('#amen_input').val(amen.join(','));
-        $('#categoryaa').val(cats.join(','));
+        $('#categoryaa').val(<?= $cur_category?>);
         // alert($('#categoryaa').val());
         $('#make').val($('#select_make').val());
         $('#bedrooms').val($('#bedrooms_input').val());

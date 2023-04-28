@@ -22,6 +22,7 @@
 }
 
 .itemimg{  
+    position: relative;
     /*height: 100%;*/
     min-height: 200px;
     width: 100%;
@@ -41,6 +42,21 @@
 }
 .flex{display:flex;justify-content: space-between;}
 .center{text-align:center;}
+h1.mhl_listing_title,
+
+/* New changes */
+
+.sidegap_product .last_desc, .sidegap_product .last_desc p {
+  /*  height: 142px; */
+}
+.blogs_titlee h1,
+h1.mhl_listing_title{
+    color: #f26122;
+    z-index: 9999999;
+    padding: 8px;
+    border-radius: 4px;
+    margin-right: 6px;
+}
 </style>
 
 <?php
@@ -48,7 +64,7 @@
 $time1 = date("H:i:s",strtotime($time1));
 $date = date('Y-m-d',strtotime($time1));
  $time = time();
- if($time >=$openig_time && $time <=$closing_time){
+ if($time >=$openig_time && $time <=$closing_time){ 
   $x = 'Opened';  
 }
 else{
@@ -159,12 +175,12 @@ $vendorlogo= '';
              <div class=" col-12 img_col" onclick="location.href='<?= $this->crud_model->product_link($product_id); ?>'">
              <?php
              if($is_blog == 1){?>
-                 <div class="itemimg" style="background-image:url('<?= $logo; ?>')"></div>   
+                 <div class="itemimg" style="background-image:url('<?= $logo; ?>')">   
              <?php
                  
              }else{
              ?>
-             <div class="itemimg" style="background-image:url('<?= $img; ?>')"></div>
+             <div class="itemimg" style="background-image:url('<?= $img; ?>')">
             <?php
              }
             ?>
@@ -184,6 +200,7 @@ $vendorlogo= '';
                         
                         
                     </div>
+                  </div>  
                     <?php
                         if($is_bpage)
                         {
@@ -202,7 +219,6 @@ $vendorlogo= '';
                     
                         <div class="last_desc last_d2">
                             <div class="col-md-12 dec_wrappper p-0">
-                    <h2>Details</h2>
                     <p>
                     <?= strWordCut($description,250); ?>
                     </p>
@@ -250,15 +266,8 @@ $vendorlogo= '';
                         <div class="col-md-12 p-0">
                         <div class="blogs_titlee"><h1><?= $title ?></h1></div>
                         <div class="meddle_cont">
-                            <div class="meddle_cont_left">
-                                <?php
-                                if($author_name)
-                                {
-                                ?>
-                            <h4><?= $author_name; ?></h4>
-                            <?php
-                                }
-                            ?>
+                            <div class="col-md-7 meddle_cont_left">
+                            
                             <?php
                     
                     if($slog)
@@ -268,6 +277,14 @@ $vendorlogo= '';
                         <?php
                     }
                         ?>
+                            <?php
+                                if($author_name)
+                                {
+                                ?>
+                            <h4 class="by_author_title">by <span style="color:#f26122;"><?= $author_name; ?></span></h4>
+                            <?php
+                                }
+                            ?>
                             </div>
                             <div class="meddle_cont_right">
                             <h4>Posted On <?= date("d-m-Y",strtotime($create_at)); ?></h4>
@@ -280,12 +297,12 @@ $vendorlogo= '';
                             $cat = $this->db->where('category_id' , $category)->get('category')->row_array();
                             // var_dump($c)
                             ?>
-                            <h4><?= $cat['category_name']; ?></h4>
+                            <h4 class="by_author_title"><?= $cat['category_name']; ?></h4>
                             </div>
                         </div>
                         <div class="last_desc">
                             <div class="col-md-12 dec_wrappper p-0">
-                    <h2>Details</h2>
+                   
                     <p>
                     <?= strWordCut($description,250); ?>
                     </p>
@@ -336,12 +353,12 @@ $vendorlogo= '';
                     ?>
                     
                     <div class="col-md-8 left_fields" >
-                        <h1><?= $title; ?></h1>
+                        <h1 class="mhl_listing_title"><?= $title; ?></h1>
                         <?php
                         if($slog)
                         {
                         ?>
-                        <h2><?= $slog ?></h2>
+                        <h2 class="mhl_listing_subtitle"><?= $slog ?></h2>
                         <?php
                         }
                         ?>
@@ -373,9 +390,9 @@ $vendorlogo= '';
                 if($description)
                 {
                 ?>
-                <div class="last_desc1">
+                <div class="last_desc">
                             <div class="col-md-12 dec_wrappper p-0">
-                    <h2>Details</h2>
+                   
                     <p>
                     <?= strWordCut($description,200); ?>
                     </p>

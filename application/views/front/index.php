@@ -31,6 +31,7 @@
     ?>
     <title><?php echo $page_title; ?> | <?php echo $system_title; ?></title>
     <link rel="stylesheet" href="<?= base_url(); ?>/bangla.css" > 
+    <link rel="stylesheet" href="<?= base_url(); ?>/asad.css" > 
     <?php
     if($home_style != 2 && !isset($new))
     {
@@ -238,7 +239,7 @@ include 'preloader.php';
         $(document).on('click','.owl-item', function (e) {
         var simg=$('img',this).attr('src');
         console.log(simg)
-        $('.big_imgmove img').attr('src',simg)
+        $('.big_imgmove #main').attr('src',simg)
         });
 </script>
 

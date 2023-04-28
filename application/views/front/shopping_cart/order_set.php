@@ -122,7 +122,7 @@
                         <?php echo currency($items['subtotal']); ?> 
                     </span>
                 </td>
-                <td class="total">
+                <td class="total" id="trasher">
                     <span class="close" style="color:#f00;">
                         <i class="fa fa-trash"></i>
                     </span>
@@ -134,14 +134,15 @@
         </tbody>
     </table>
 </div>
-<div class="col-md-4">
-    <h3 class="block-title">
+<div class="col-md-4" id="remv_pd">
+    
+    <div class="shopping-cart" style="background: #fff;">
+        <table>
+            <h3 class="block-title">
         <span>
             <?php echo translate('shopping_cart');?>
         </span>
     </h3>
-    <div class="shopping-cart" style="background: #fff;">
-        <table>
             <tr>
                 <td><?php echo translate('subtotal');?>:</td>
                 <td  id="total"></td>
@@ -190,7 +191,7 @@
 
 </div>
 
-<div class="col-md-12">
+<div class="col-md-12 add_margin_to">
     <span class="btn btn-theme-dark" onclick="load_payments();">
         <?php echo translate('next');?>
     </span>

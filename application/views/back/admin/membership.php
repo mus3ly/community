@@ -6,7 +6,12 @@
 		<div class="panel">
 			<div class="panel-body">
 				<div class="tab-content">
-                    <div class="col-md-12" style="border-bottom: 1px solid #ebebeb;padding:10px;">
+                    <div class="col-md-3" style="border-bottom: 1px solid #ebebeb;padding:10px;">
+                       <a href="<?= base_url('Admin/membership_category'); ?>"> <button class="btn btn-primary btn-labeled fa fa-plus-circle pull-right" >
+                                <?php echo translate('membership_category');?>
+                                    </button></a>
+                    </div>
+                    <div class="col-md-9" style="border-bottom: 1px solid #ebebeb;padding:10px;">
                         <button class="btn btn-primary btn-labeled fa fa-plus-circle pull-right" 
                             onclick="ajax_modal('add','<?php echo translate('add_vendor_package'); ?>','<?php echo translate('successfully_added!'); ?>','membership_add','')">
                                 <?php echo translate('create_vendor_package');?>

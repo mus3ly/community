@@ -33,14 +33,14 @@
                     </div>
                 </div>
             </div>
-            <!--<div class="form-group">-->
-            <!--    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('slug');?></label>-->
-            <!--    <div class="col-sm-6">-->
-            <!--        <input type="text" name="slug" id="slug" placeholder="<?php echo translate('slug'); ?>" class="form-control">-->
-            <!--        <small class="slug_error" style="display:none;">Slug already exist</small>-->
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('slug');?></label>
+                <div class="col-sm-6">
+                    <input type="text" name="slug" id="slug" placeholder="<?php echo translate('slug'); ?>" class="form-control required">
+                    <small class="slug_error" style="display:none;">Slug already exist</small>
                        
-            <!--    </div>-->
-            <!--</div>-->
+                </div>
+            </div>
         </div>
 	</form>
 </div>

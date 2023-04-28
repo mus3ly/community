@@ -178,7 +178,7 @@ if(isset($_GET['test']))
                     {
                     
                     ?>
-                    <img src="<?= $fimg; ?>" class="d-block w-100" alt="...">
+                    <img src="<?= $fimg; ?>" id="main" class="d-block w-100" alt="...">
                     
                      <div class="user_socials_login">
                         <a href="#"><img src="https://www.communityhubland.com/template/front/images/Group-39634_03.png" alt=""/></a>
@@ -750,7 +750,6 @@ if($vendor['comp_logo'])
                                                 $ii ++;
                                                 ?>
                                                <div class="panel panel-default">
-                                                   Test
                                                     <div class="panel-heading add_flexible">
                                                       <h4 class="panel-title add_flexible">
                                                         
@@ -800,20 +799,27 @@ if($vendor['comp_logo'])
 
 
                                     <div class="getin_touch">
+                                        <div class="alert alert-success d-none" id="success" role="alert">
+                                          Email Send Successfully!
+                                        </div>
+                                        <div class="alert alert-danger d-none" id="danger" role="alert">
+                                          Please Try Again!
+                                        </div>
                                         <h3>Get In Touch <img src="<?= base_url(); ?>upload/phone_2.png" alt=""></h3>
                                         <form action="" method="">
+                                            <input type="hidden" name="pid" id="pid1" value="<?= $pro['product_id']?>">
                                             <div class="row">
                                                 <div class="col-sm-6 form_gapp">
                                                     <div class="form_box">
                                                         <label for="First name">First name</label>
-                                                        <input type="text" placeholder="" name="">
+                                                        <input type="text" placeholder="" name="" id="fname__">
                                                         <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6 form_gapp">
                                                     <div class="form_box">
                                                         <label for="Last name">Last name</label>
-                                                        <input type="text" placeholder="" name="">
+                                                        <input type="text" placeholder="" name="" id="lname">
                                                         <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
                                                     </div>
                                                 </div>
@@ -822,16 +828,16 @@ if($vendor['comp_logo'])
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
                                                         <label for="Email">Email</label>
-                                                        <input type="email" placeholder="" name="">
+                                                        <input type="email" placeholder="" name="" id="email__">
                                                         <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
+                                             <div class="row">
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
                                                         <label for="Phone number">Phone number</label>
-                                                        <input type="number" placeholder="Type phone number" name="">
+                                                        <input type="number" placeholder="Type phone number" name="" id="phone">
                                                         <img class="phone_iconn" src="<?= base_url(); ?>upload/phone_icon.png" alt="">
                                                     </div>
                                                 </div>
@@ -840,15 +846,15 @@ if($vendor['comp_logo'])
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
                                                         <label for="Message">Message</label>
-                                                        <textarea placeholder="Type Message"></textarea>
+                                                        <textarea placeholder="Type Message" id="message__"></textarea>
                                                         <img class="msg_iconn" src="<?= base_url(); ?>upload/message_1.png" alt="">
                                                     </div>
                                                 </div>
-                                            </div>
+                                                </div>
                                             <div class="row">
                                                 <div class="col-sm-12 form_gapp">
                                                     <div class="form_box">
-                                                        <button type="submit">Send</button>
+                                                        <button type="button" id="send">Send</button>
                                                         <button type="submit">GET DIRECTION</button>
                                                     </div>
                                                 </div>
@@ -1189,7 +1195,7 @@ $(".right_box .locationbox h4").click(function(){
 
 </script>
 <script>
-    $('#send').on('click' , function(e){
+        $('#send').on('click' , function(e){
             e.preventDefault();
             
             var url = '<?php echo base_url('home/contact_us')?>';
@@ -1198,15 +1204,16 @@ $(".right_box .locationbox h4").click(function(){
             var email = $('#email__').val();
             var msg = $('#message__').val();
             var phone = $('#phone').val();
-            var pid = $('#pid').val();
+            var pid = $('#pid1').val();
                $.ajax({
                 url: url,
                 type: "get",
                 async: true,
-                data: {  fname:fname, email:email, message:msg,phone:phone,lname:lname ,pid:pid },
+                
+                data: {  fname:fname, email:email, message:msg,phone:phone,lname:lname,pid:pid },
                 success: function (data) {
-                    const myArr = JSON.parse(JSON.stringify(data));
-              if(myArr['email'] > 0){
+                    // const myArr = JSON.parse(JSON.stringify(data));
+              if(data == 1){
                         $("#success").attr("class", "alert alert-success d-block");
                       }else{
                           $("#danger").attr("class", "alert alert-danger d-block");
@@ -1235,8 +1242,7 @@ $(".right_box .locationbox h4").click(function(){
 
 
         });
-    
-</script>
+    </script>
 <script>
 function myMap() {
 var mapProp= {

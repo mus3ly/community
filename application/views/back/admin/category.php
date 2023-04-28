@@ -8,6 +8,10 @@
 				<div class="tab-content">
 					<div style="border-bottom: 1px solid #ebebeb;padding: 25px 5px 5px 5px;"
                     	class="col-md-12" >
+						<button id="up_slug" class="btn btn-primary btn-labeled fa-person-walking-arrow-loop-left pull-right mar-rgt" 
+                        	onclick="update_all_slug()">
+								<?php echo translate('update_slug');?>
+                                	</button>
 						<button id="up_btn" class="btn btn-primary btn-labeled fa-person-walking-arrow-loop-left pull-right mar-rgt" 
                         	onclick="update_all_db(1)">
 								<?php echo translate('update_database');?>
@@ -84,6 +88,50 @@
 	function signup_main_cat(id){
 		var url = base_url+'admin/category/signup_main_cat/'+id
 		ajax_load(url,id,'signup_cat');
+	}
+	function update_all_slug()
+	{
+	    $('#up_slug').text('processing');
+	    $('#up_slug').attr("disabled", true);
+	    $.ajax({
+        url: base_url+'home/update_slug_cat',
+        type: "Get",
+        async: true,
+        data: { },
+        success: function (data) {
+            // alert(data);
+            if(data != 0)
+            {
+                update_all_slug();
+            }
+            else
+            {
+                $('#up_slug').text("<?php echo translate('update_slug');?>");
+	    $('#up_slug').attr("disabled", false);
+	     ajax_set_list();
+            }
+           
+        },
+        error: function (xhr, exception) {
+            var msg = "";
+            if (xhr.status === 0) {
+                msg = "Not connect.\n Verify Network." + xhr.responseText;
+            } else if (xhr.status == 404) {
+                msg = "Requested page not found. [404]" + xhr.responseText;
+            } else if (xhr.status == 500) {
+                msg = "Internal Server Error [500]." +  xhr.responseText;
+            } else if (exception === "parsererror") {
+                msg = "Requested JSON parse failed.";
+            } else if (exception === "timeout") {
+                msg = "Time out error." + xhr.responseText;
+            } else if (exception === "abort") {
+                msg = "Ajax request aborted.";
+            } else {
+                msg = "Error:" + xhr.status + " " + xhr.responseText;
+            }
+           
+        }
+    }); 
 	}
 	function update_all_db(page = 0)
 	{

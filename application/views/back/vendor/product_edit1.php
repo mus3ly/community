@@ -26,6 +26,7 @@
         ?>
             <!--Panel heading-->
             <div class="row">
+                <input type="hidden" name="is_product" value="1" />
                 <div class="col-sm-3 sidebar">
                     <div class="panel-heading">
                         <div class="panel-control1">
@@ -137,6 +138,16 @@
 
                             <div class="form-group btm_border">
                                
+                                <div class="col-sm-12">
+                                    <small style="display: block;">*<?php echo translate('Write an seo friendly title within 60 characters')?></small>
+                                    <label style="text-align: left;" class="control-label" for="">
+                                    <?php echo translate('Product link');?>
+                                    </label>
+                                    <input type="text" name="product_link" value="<?php echo $row['product_link']; ?>"
+                                           placeholder="<?php echo translate('Your online store product link')?>"
+                                           class="form-control required">
+                                
+                                </div>
                                 <div class="col-sm-12">
                                     <small style="display: block;">*<?php echo translate('Write an seo friendly title within 60 characters')?></small>
                                     <label style="text-align: left;" class="control-label" for="">

@@ -5,6 +5,7 @@
                 <th><?php echo translate('no');?></th>
                 <th><?php echo translate('seal');?></th>
                 <th><?php echo translate('title');?></th>
+                <th><?php echo translate('category');?></th>
                 <th><?php echo translate('price');?></th>
                 <th><?php echo translate('for');?></th>
                 <th class="text-right"><?php echo translate('options');?></th>
@@ -17,6 +18,8 @@
                 <img class="img-md img-circle"
                     src="<?php echo $this->crud_model->file_view('membership',0,'100','','thumb','src','','','.png') ?>"  />
             </td>
+            
+            <td></td>
             <td>Free (Default)</td>
             <td><?php echo currency('','def').'0'; ?></td>
             <td><?php echo translate('lifetime');?></td>
@@ -39,6 +42,7 @@
                     src="<?php echo $this->crud_model->file_view('membership',$row['membership_id'],'100','','thumb','src','','','.png') ?>"  />
             </td>
             <td><?php echo $row['title']; ?></td>
+            <td><?php echo $row['name']; ?></td>
             <td><?php echo currency('','def').$row['price']; ?></td>
             <td><?php echo $row['timespan']; ?> <?php echo translate('days');?></td>
             <td class="text-right">

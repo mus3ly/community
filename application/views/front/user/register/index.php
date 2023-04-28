@@ -30,8 +30,8 @@
                       <?php echo translate('customer_registration');?>
                   <!--      <div class="option">-->
                   <!--    	<?php echo translate('already_a_member_?_click_to_');?>-->
-                  <div class="login_info">
-                                    <p>Please include the texts also to help user understand how to navigate this section: Join Community HubLand or Login to your account as a Business or as a Customer. With a Business Account… more ( when more is clicked, it should show the rest of the texts which are: you can access all tools to list your ads,<a href="#">read more</a> </p>
+                  <div class="login_info" style="margin-top:5px;">
+                                    <p>Are you a guest? Join Community HubLand as a customer, or login to leave reviews and  add to wish list. Join Community HubLand affiliate marketing to earn passively <a href="#">read more</a> </p>
                                     <div class="hovertext"><p>  create your own affiliate marketing portal to encourage affiliate marketers to market your business, bookmark your favourite listings, comment and more) With a Customer account… more (on click: you can bookmark your favourite businesses, comment in discussions and leave reviews) … - When they click Business Login or Business Sign-up, the text for business above should be on top of the form - When they click Customer Login or Customer Sign-up, the text for customer above should be on top of the form - Either form should have the other login and signup options available for them to change their mind and select another option ….. When the click on either of the affiliate logins or sign-ups the same follows and the texts are: - A Marketing Affiliate Account to will provide you options to earn as you share businesses on your social media accounts. Anyone joining Community HubLand or purchasing from businesses on Community HubLand via your shared links will provide you respective commissions from Community HubLand and/or the business purchase - A Business Affiliate Account will provide you a platform to host your marketing materials that affiliate marketers can access to share on the social media platforms. You can determine how much commission your affiliate marketers will earn.</p></div>
                                 </div>
                       </div>
@@ -85,10 +85,10 @@
                                 <?php echo $this->crud_model->select_html('countries','country','name','edit','form-control demo-chosen-select required select_country',$country,'',NULL,'select_country'); ?>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 p-0">
                             <div class="form-group">
                                 <label>State</label>
-                                <span id="stats_select" class="col-md-12">
+                                <span id="stats_select" class="pl-0 col-md-12">
                                 <input type="text" class="form-control required" name="state" />
                                 </span>
                             </div>
@@ -100,7 +100,7 @@
                                 <input class="form-control required" name="city" type="text" placeholder="<?php echo translate('city');?>" data-toggle="tooltip" title="<?php echo translate('city');?>">
                             </div>
                         </div>
-                        <div class="col-md-6" style="margin-top:0px">
+                        <div class="col-md-6 p-0" style="margin-top:0px">
                             <div class="form-group">
                                 <label>Zip code</label>
                                 <input class="form-control required" name="zip" type="text" placeholder="<?php echo translate('zip');?>" data-toggle="tooltip" title="<?php echo translate('zip');?>">

@@ -12,19 +12,19 @@
 <header class="header_wrap">
     <div class="container">
         <div class="row">
-            <div class="col-sm-3 logobox">
+            <div class="col-sm-2 logobox">
                 <a href="<?= base_url(); ?>"><img src="<?= base_url(); ?>template/front/images/logo.png" alt="markethubland" style="width:200px"></a>
             </div>
             <div class="menubtn" onclick="open_sidebar();">
                 <i class="fa fa-bars"></i>
             </div>
-            <div class="col-sm-9 navbar_box_items">
+            <div class="col-sm-10 navbar_box_items">
                 <div class="close_icon">
                     <i class="fa fa-close"></i>
                 </div>
                 <ul  class="make_it_left">
                        <li class="padd_right set-pad-tb"><a href="#" class="this-padding">Community Pegs</a>
-                    <div class="dropdown_box dropdowon_color">
+                    <div class="dropdown_box dropdowon_color drodwn1">
            
                             <ul>
                                                    <?php
@@ -44,7 +44,7 @@
                             //  echo $value['category_id'];
                         ?>
 
-                                <li><a href="<?= base_url('home/category/'.$value['category_id']); ?>"><?= $value['category_name'] ?></a></li>
+                                <li><a href="<?= base_url('directory/'.$value['slug']); ?>"><?= $value['category_name'] ?></a></li>
                               <?php
                         }
                     }
@@ -67,6 +67,7 @@
                     else{
                         $login = 'guest';
                     }   
+                    
                     $menu = $this->db->where('parent', '0')->order_by('sorting', 'asc')->get('menu')->result_array();
                     
                      foreach($menu as $k => $v){
@@ -75,10 +76,12 @@
                         if(in_array($login, $p))
                         {
                           $menu1 = $this->db->where('parent', $v['id'])->order_by('sorting', 'asc')->get('menu')->result_array(); 
+                          $link_class = ( $v['name'] == 'Account' && $login == 'guest' ) ? ' disabled' : '';
                           ?>
-                          <li class="set-pad-tb"><a href="<?= base_url().$v['slug']; ?>" class="this-padding"><b><?= $v['name']?></b> 
+                          <li class="set-pad-tb">
+                              <a href="<?= base_url().$v['slug']; ?>" class="this-padding<?php echo $link_class; ?>"><b><?= $v['name']?></b>
                           <?php
-                          if(count($menu1) || $v['id'] == 12)
+                          if( count($menu1) || $v['id'] == 12 )
                           {
                           ?>
                             <i class="fa fa-angle-down"></i></a>
@@ -94,7 +97,7 @@
                                 //  die();
                                 // }
                             ?>
-                            <div class="dropdown_box dropdowon_color">
+                            <div class="dropdown_box dropdowon_color drodwn2 d<?=$v['id']?>">
                             <ul>
                                 <?php
                                 foreach($menu1 as $k => $v){
@@ -120,9 +123,18 @@
                         ?>
                     
                     <?php
-                    if(!($_SESSION['vendor_id'])){
+                    if(true){
+                        if($_SESSION['vendor_id'])
+                        {
+                        $link = base_url('vendor/product');
+                        }
+                        else
+                        {
+                            $link = base_url('vendor_logup/registration');
+                        }
+                // <img src="<?= base_url(); template/front/images/plus-icon.png" alt="">        
                     ?>   
-                <li><a href="<?= base_url('vendor_logup/registration'); ?>" class="add_listing">Add Listing <img src="<?= base_url(); ?>template/front/images/plus-icon.png" alt=""></a></li>
+                <li><a href="<?= $link; ?>" class="add_listing">Add Listing <i class="fa fa-plus"></i></a></li>
                 <?php
                 }?>
             <?php
@@ -146,7 +158,7 @@
          } 
          ?>
          " alt=""></a>
-         <div class="dropdown_box" id="user_dropdonw">
+         <div class="dropdown_box drodwn3" id="user_dropdonw">
                             <ul>
                                 <li><a href="<?= base_url('/home/affliate'); ?>">Affliate</a></li>
                                 <li><a href="<?= base_url('/home/profile'); ?>">Settings</a></li>
@@ -162,7 +174,7 @@
                     {
                     ?>
                     <li class="padd_right set-pad-tb"><a href="#" class="this-padding"><img class="avatar_img" src="<?= base_url(); ?>template/front/images/login.png" alt=""></a>
-                    <div class="dropdown_box dropdowon_color">
+                    <div class="dropdown_box dropdowon_color drodwn4">
                             <ul>
                                 <li><a href="<?= base_url('login_set/login');?>"> Customer Login</a></li>
                                 <li><a href="<?= base_url('home/login_set/registration');?>"> Customer Sign-up</a></li>

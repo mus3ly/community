@@ -43,7 +43,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('slug');?></label>
                 <div class="col-sm-6">
-                    <input type="text" name="slug" id="slug" placeholder="<?php echo translate('slug'); ?>" class="form-control" value="<?php echo $row['slug'];?>">
+                    <input type="text" name="slug" id="slug" placeholder="<?php echo translate('slug'); ?>" class="form-control required" value="<?php echo $row['slug'];?>">
                     <small class="slug_error" style="display:none;">Slug already exist</small>
                        
                 </div>
@@ -71,7 +71,7 @@
         url: '<?= base_url('Admin/cat_slug'); ?>',
         type: "Post",
         async: true,
-        data: { val:val },
+        data: { val:val,cat:<?= $row['category_id'] ?> },
         success: function (data) {
            if(data == 'error'){
                $(".enterer").prop('disabled', true);

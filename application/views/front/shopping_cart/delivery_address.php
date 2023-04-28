@@ -27,6 +27,11 @@ if($this->session->userdata('user_login')== "yes"){
     $country        = $user_data->country; 
   } 
 ?>
+<style>
+    #shoip_error{
+    color:red;
+    }
+</style>
 
 <div class="row ">
     <div class="col-md-6">
@@ -41,7 +46,7 @@ if($this->session->userdata('user_login')== "yes"){
     </div>
     <div class="col-md-12">
         <div class="form-group">
-            <input class="form-control required address" name="address1" value="<?php echo $address1; ?>" type="text" placeholder="<?php echo translate('address_line_1');?>">
+            <input class="form-control new_required required address" name="address1" value="<?php echo $address1; ?>" type="text" placeholder="<?php echo translate('address_line_1');?>">
         </div>
     </div>
     <div class="col-md-12" style="padding:0;">
@@ -50,12 +55,12 @@ if($this->session->userdata('user_login')== "yes"){
                 <?php echo $this->crud_model->select_html('countries','country','name','edit','form-control demo-chosen-select required select_country',$country,'',NULL,'select_country','single','one'); ?>
                 
             </div>
-            <div class="col-md-3" id="stats_select">
-                <input type="text" name="state" placeholder="State" />
+            <div class="col-md-3" id="stats_select1">
+                <input type="text" name="state" class="form-control" placeholder="State" />
                 
             </div>
-            <div class="col-md-3" id="city_select">
-                <input type="text" name="city" placeholder="City" />
+            <div class="col-md-3" id="city_select1">
+                <input type="text" name="city" class="form-control" placeholder="City" />
                 
             </div>
             <div class="col-md-3">
@@ -65,12 +70,12 @@ if($this->session->userdata('user_login')== "yes"){
     </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6 col-sm-12">
         <div class="form-group">
             <input class="form-control required" value="<?php echo $email ;?>" name="email" type="text" placeholder="<?php echo translate('email');?>">
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6 col-sm-12">
         <div class="form-group">
             <input class="form-control required" value="<?php echo $phone ;?>" name="phone" type="text" placeholder="<?php echo translate('phone_number');?>">
         </div>
@@ -92,13 +97,15 @@ if($this->session->userdata('user_login')== "yes"){
             </label>
         </div>
     </div>
+    
 
 
     <div class="col-md-12">
-        <span class="btn btn-theme-dark" onclick="load_smethods();">
+        <span class="btn btn-theme-dark ship_btn" onclick="load_smethods();">
             <?php echo translate('next');?>
         </span>
     </div>
+    <div id="shoip_error"></div>
 
 </div>
 

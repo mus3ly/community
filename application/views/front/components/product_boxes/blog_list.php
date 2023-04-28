@@ -21,7 +21,9 @@
     color: #fff;
 }
 
-.itemimg{    height: 100%;
+.itemimg{    
+position: relative;
+    height: 100%;
 min-height: 200px;
     width: 100%;
     background-size: cover;
@@ -120,17 +122,17 @@ $logo='';
                  
                 </div>
               
-             <div class="row">  
+             <div class="row" id="row_hieght">  
              <div class="col-sm-4 col-12 img_col">
              <!--<div class="itemimg" style="background-image:url('https://imageio.forbes.com/specials-images/imageserve/5d35eacaf1176b0008974b54/0x0.jpg?format=jpg&crop=4560,2565,x790,y784,safe&width=1200')"></div>-->
               <?php
              if($is_blog == 1){?>
-                 <div onclick="location.href='<?= $this->crud_model->product_link($product_id); ?>'" class="itemimg" style="background-image:url('<?= $logo; ?>')"></div>   
+                 <div onclick="location.href='<?= $this->crud_model->product_link($product_id); ?>'" class="itemimg" style="background-image:url('<?= $logo; ?>')">   
              <?php
                  
              }else{
              ?>
-             <div onclick="location.href='<?= $this->crud_model->product_link($product_id); ?>'" class="itemimg" style="background-image:url('<?= $img; ?>')"></div>
+             <div onclick="location.href='<?= $this->crud_model->product_link($product_id); ?>'" class="itemimg" style="background-image:url('<?= $img; ?>')">
             <?php
              }
             ?>
@@ -149,6 +151,7 @@ $logo='';
                         ?>
                         
                         
+                    </div>
                     </div>
                     </div>
                     <?php
@@ -178,9 +181,9 @@ $logo='';
                     }
                         ?>
                     
-                        <div class="last_desc last_d2">
+                        <div class="last_desc last_d2 col-md-12">
                             <div class="col-md-12 dec_wrappper p-0">
-                    <h2>Details</h2>
+                 
                     <p>
                     <?= strWordCut($description,250); ?>
                     </p>
@@ -216,9 +219,10 @@ $logo='';
                         }
                              ?>
                         <a href="#"><i class="fa fa-share"></i></a>
-                   <a onclick="to_wishlist(<?php echo $product_id; ?>,event)"><i class="fa fa-heart"></i></a>
+                        <a onclick="to_wishlist(<?php echo $product_id; ?>,event)"><i class="fa fa-heart"></i></a>
                         <a href="mailto: <?= $bussniuss_email;?>"><i class="fa fa-envelope"></i></a>
                         <a href="tel:<?= $bussniuss_phone;?>"><i class="fa fa-phone"></i></a>
+                        <a href="tel:<?= $bussniuss_phone;?>"><i class="fa-brands fa-whatsapp"></i></a>
                     </div>
                     <?php
                 }
@@ -313,7 +317,7 @@ $logo='';
                 {
                     ?>
                     
-                    <div class="col-md-8 left_fields" >
+                    <div class="col-md-8 left_fields car_out" >
                         <h1><?= $title; ?></h1>
                         <?php
                         if($slog)
@@ -333,7 +337,7 @@ $logo='';
                     <div class="col-md-4 right_fields" >
                     <div class="right_fields_inner" >
                         <div class="list_attributes list2">
-                            <?= get_fields_line($product_id, 1); ?>
+                            <?= get_fields_line($product_id, 1); ?> , <?= $city ?>
                         </div>
                         <div class="list_attributes list2">
                             <?= get_fields_line($product_id, 2); ?>
@@ -392,6 +396,7 @@ $logo='';
                    <a onclick="to_wishlist(<?php echo $product_id; ?>,event)"><i class="fa fa-heart"></i></a>
                         <a href="mailto: <?= $bussniuss_email;?>"><i class="fa fa-envelope"></i></a>
                         <a href="tel:<?= $bussniuss_phone;?>"><i class="fa fa-phone"></i></a>
+                        <a href="tel:<?= $bussniuss_phone;?>"><i class="fa-brands fa-whatsapp"></i></a>
                     </div>
                 <?php
                 }

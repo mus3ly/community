@@ -62,6 +62,149 @@ class Vendor extends CI_Controller
         }
         echo $msg;
     }
+    function address($para1 = '', $para2 = '')
+    {
+        if ($para1 == 'do_add') {
+            $tit = $_POST['title'];
+             unset($_POST['title']);
+            $subids = $_POST;
+            $subids['validate'] = true;
+            $final = http_build_query($subids);
+           
+            $curl = curl_init();
+            
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => 'https://api.goshippo.com/addresses/',
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => '',
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => true,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => 'POST',
+              CURLOPT_POSTFIELDS =>  $final,
+              CURLOPT_HTTPHEADER => array(
+                'Authorization: ShippoToken shippo_test_52bf877b99c795c0e3a73a8dd2483c417db6f730',
+                'Content-Type: application/x-www-form-urlencoded',
+                'Cookie: tracker_sessionid=7ff959a70da74398953017ff97c920a5'
+              ),
+            ));
+            
+            $response = curl_exec($curl);
+            
+            curl_close($curl);
+           $resp = json_decode($response);
+          if(isset($resp->object_id) && isset($resp->is_complete) && $resp->is_complete == true){
+            $type              = 'address';
+            $data['uid']       = $this->session->userdata('vendor_id');
+            $data['name']       = $this->input->post('name');
+            $data['company']     = $this->input->post('company');
+            $data['street1']      = $this->input->post('street1');
+            $data['city']    = $this->input->post('city');
+            $data['state']    = $this->input->post('state');
+            $data['zip']    = $this->input->post('zip');
+            $data['shippo_id']    = $resp->object_id;
+            $data['country']    = $this->input->post('country');
+            $data['title']    = $tit;
+            $data['create_at']    =date('Y-m-d H:i:s');
+            $data['raw']       = $response;
+            $data['email']       = $this->input->post('email');
+            $this->db->insert('address', $data);
+            // echo $this->db->last_query();
+            $id = $this->db->insert_id();
+          }else{
+             $this->session->set_flashdata('error',translate('Invalid Data'));
+            redirect($_SERVER['HTTP_REFERER']);
+          }
+       
+            $this->crud_model->set_category_data(0);
+            recache();
+        } elseif ($para1 == "update") {
+            $tit = $_POST['title'];
+             unset($_POST['title']);
+            $subids = $_POST;
+            $subids['validate'] = true;
+            $final = http_build_query($subids);
+           
+            $curl = curl_init();
+            
+            curl_setopt_array($curl, array(
+              CURLOPT_URL => 'https://api.goshippo.com/addresses/',
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => '',
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => true,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => 'POST',
+              CURLOPT_POSTFIELDS =>  $final,
+              CURLOPT_HTTPHEADER => array(
+                'Authorization: ShippoToken shippo_test_52bf877b99c795c0e3a73a8dd2483c417db6f730',
+                'Content-Type: application/x-www-form-urlencoded',
+                'Cookie: tracker_sessionid=7ff959a70da74398953017ff97c920a5'
+              ),
+            ));
+            
+            $response = curl_exec($curl);
+            
+            curl_close($curl);
+           $resp = json_decode($response);
+          if(isset($resp->object_id) && isset($resp->is_complete) && $resp->is_complete == true){
+            $type              = 'address';
+            $data['uid']       = $this->session->userdata('vendor_id');
+            $data['name']       = $this->input->post('name');
+            $data['company']     = $this->input->post('company');
+            $data['title']    = $tit;
+            $data['street1']      = $this->input->post('street1');
+            $data['city']    = $this->input->post('city');
+            $data['state']    = $this->input->post('state');
+            $data['zip']    = $this->input->post('zip');
+            $data['country']    = $this->input->post('country');
+            $data['shippo_id']    = $resp->object_id;
+            $data['create_at']    =date('Y-m-d H:i:s');
+            $data['raw']       = $response;
+            $data['email']       = $this->input->post('email');
+              $this->db->where('address_id', $para2);
+            $this->db->update('address', $data);
+            // echo $this->db->last_query();
+          }else{
+             $this->session->set_flashdata('error',translate('Invalid Data'));
+            redirect($_SERVER['HTTP_REFERER']);
+          }
+       
+            $this->crud_model->set_category_data(0);
+            recache();
+        } elseif ($para1 == 'delete') {
+            if(!demo()){
+                $this->db->where('address_id', $para2);
+                $this->db->delete('address');
+                $this->crud_model->set_category_data(0);
+                recache();
+            }
+        } elseif ($para1 == 'multi_delete') {
+            if(!demo()){
+                $ids = explode('-', $param2);
+                $this->crud_model->multi_delete('address', $ids);
+            }
+        } else if ($para1 == 'edit') {
+            $page_data['brand_data'] = $this->db->get_where('address', array(
+                'address_id' => $para2
+            ))->result_array();
+            $this->load->view('back/vendor/address_edit', $page_data);
+        } elseif ($para1 == 'list') {
+            $vid = $this->session->userdata('vendor_id');
+            $this->db->where('uid', $vid);
+            $this->db->order_by('address_id', 'asc');
+            $page_data['all_brands'] = $this->db->get('address')->result_array();
+            $this->load->view('back/vendor/address_list', $page_data);
+        } elseif ($para1 == 'add') {
+            $this->load->view('back/vendor/address_add');
+        } else {
+            $page_data['page_name']  = "address";
+            $page_data['all_brands'] = $this->db->get('address')->result_array();
+            $this->load->view('back/index', $page_data);
+        }
+    } 
     function brand($para1 = '', $para2 = '')
     {
         if ($para1 == 'do_add') {
@@ -96,11 +239,11 @@ class Vendor extends CI_Controller
                 }
             }
             }
-            die($id);
+            // die($id);
             $this->crud_model->set_category_data(0);
             recache();
         } elseif ($para1 == "update") {
-            var_dump($para2);
+            // var_dump($para2);
             $data['vid']        = $this->session->userdata('vendor_id');
             $data['title']        = $this->input->post('name');
             $data['icon']        = $this->input->post('fa_icon');
@@ -218,13 +361,13 @@ class Vendor extends CI_Controller
     }
         if($_REQUEST['select'] == '1'){
                   $amn = $this->db->where('amenity_id',$_REQUEST['sid'])->get('amenity')->row_array();
-                  echo '<option value="'.$amn['name'].'" selected>'.$amn['name'].'</option>';
+                  echo $amn['name'];
 
         } 
         if($_REQUEST['add_to_table'] == '1'){
               $this->db->insert('amenity', array('name'  => $_REQUEST['value']));
               $id = $this->db->insert_id();
-              echo '<option selected value="'.$_REQUEST['value'].'">'.$_REQUEST['value'].'<option>';
+              echo $_REQUEST['value'];
               
 
         }
@@ -767,6 +910,8 @@ class Vendor extends CI_Controller
         }
         
         if ($para1 == 'do_add') {
+            //             var_dump($this->input->post('amenities'));
+            // die();
             $option              = $this->input->post('option');
             $options = array();
             $num_of_imgs = 0;
@@ -780,6 +925,7 @@ class Vendor extends CI_Controller
                 $data['seats']              = $this->input->post('no_of_seats');   
                 $data['pid']                = $this->input->post('car_id');
                 $data['purchase_price']     = $this->input->post('carprice');
+                $data['sale_price']     = $this->input->post('sale_price');
                 $data['posted_date']        = $this->input->post('cardate_posted');
                 $data['about_desc']        = $this->input->post('about_us');
                 $data['mot']        = $this->input->post('about_us');
@@ -826,6 +972,8 @@ class Vendor extends CI_Controller
                 // var_dump(slugify($this->input->post('title')));
             $data['is_product']          = 1;
             $data['current_stock']      = $this->input->post('current_stock');
+            $data['sale_price']      = $this->input->post('sale_price');
+            $data['product_link']      = $this->input->post('product_link');
             // $data['slug']               = slugify($this->input->post('title'));
             }
    
@@ -848,7 +996,8 @@ class Vendor extends CI_Controller
             $data['whatsapp_number']      = $this->input->post('whatsapp_number');
             $data['lat']                  = $this->input->post('lat');
             $data['lng']                  = $this->input->post('lng');
-            $data['listing_amenities']    = json_encode($this->input->post('listingamenities'));
+            $data['warehouse_id']         = $this->input->post('warehouse');
+            // $data['listing_amenities']    = json_encode($this->input->post('listingamenities'));
              $additional_value['name']    = json_encode($this->input->post('ad_field_names_custom'));
             $additional_value['value']    = json_encode($this->input->post('ad_field_values_custom'));
             $data['checkbox_xtra_fields'] = json_encode($this->input->post('checkboxinfo'));
@@ -864,7 +1013,12 @@ class Vendor extends CI_Controller
             $data['color']                = json_encode($option);
             $data['num_of_imgs']          = $num_of_imgs;
             $data['current_stock']        = $this->input->post('current_stock');
-            $data['amenities']        = $this->input->post('amenities');
+            if(is_array($this->input->post('amenities'))){
+                $arr = $this->input->post('amenities');
+                    $data['amenities']  =  implode(",",$arr);
+            }else{
+            $data['amenities']         = $this->input->post('amenities');
+            }
             $data['front_image']          = 0;
             $additional_fields['name']    = json_encode($this->input->post('ad_field_names'));
             $additional_fields['value']   = json_encode($this->input->post('ad_field_values'));
@@ -876,7 +1030,7 @@ class Vendor extends CI_Controller
             $data['additional_fields']    = json_encode($additional_fields);
             $data['additional_fields_new']    = json_encode($additional_fields1);
             $data['brand']                = $this->input->post('brand');
-            
+             $data['city']                  = $this->input->post('city');
             $data['unit']                 = $this->input->post('unit');
             if($this->input->post('slug'))
             $data['slug']                 = $this->input->post('slug');
@@ -954,6 +1108,7 @@ class Vendor extends CI_Controller
             $this->crud_model->set_category_data(0);
             recache();
         }  else if ($para1 == "update") {
+
             $option              = $this->input->post('option');
             $options = array();
             if ($_FILES["images"]['name'][0] == '') {
@@ -982,6 +1137,7 @@ class Vendor extends CI_Controller
                 $data['seats']              = $this->input->post('no_of_seats');   
                 $data['pid']                = $this->input->post('car_id');
                 $data['purchase_price']     = $_POST['carprice'];
+                $data['sale_price']     = $_POST['sale_price'];
                 $data['posted_date']        = $this->input->post('cardate_posted');
                 $data['about_desc']        = $this->input->post('about_us');
                 $data['mot']        = $this->input->post('about_us');
@@ -1040,6 +1196,7 @@ class Vendor extends CI_Controller
             $data['text']               = ($this->input->post('text'))?json_encode($this->input->post('text')):'';
             $data['lat']                = $this->input->post('lat');
             $data['lng']                = $this->input->post('lng');
+            $data['warehouse_id']         = $this->input->post('warehouse');
             $data['category']           = $this->input->post('category');
             $data['description']        = $this->input->post('description');
             $data['sub_category']       = $this->input->post('sub_category');
@@ -1077,10 +1234,19 @@ class Vendor extends CI_Controller
             $data['gallery_lable']      = $this->input->post('gtitle');
             $data['gdesc']             = $this->input->post('gdesc1');
             $data['gtitle']             = $this->input->post('gtitle1');
+                if($this->input->post('slug'))
+            $data['slug']                 = $this->input->post('slug');
+            else
+            $data['slug']               = slugify($this->input->post('title'));
             $data['cats']               = $this->input->post('cats');
             $data['info_button']        = $this->input->post('button_txt');
             $data['button_url']         = $this->input->post('button_url');
+            if(is_array($this->input->post('amenities'))){
+                $arr = $this->input->post('amenities');
+                    $data['amenities']  =  implode(",",$arr);
+            }else{
             $data['amenities']         = $this->input->post('amenities');
+            }
             $data['openig_time']         = $this->input->post('openig_time');
             $data['closing_time']         = $this->input->post('closing_time');
             $data['social_media']       = json_encode($this->input->post('social'));
@@ -1125,6 +1291,11 @@ class Vendor extends CI_Controller
                                                 );
                 }
             }
+            if(isset($_REQUEST['is_product']))
+            {
+                $data['product_link']      = $this->input->post('product_link');
+                $data['sale_price']                  = $this->input->post('sale_price');
+            }
             $data['options']            = json_encode($options);
             
 
@@ -1132,7 +1303,7 @@ class Vendor extends CI_Controller
             // var_dump($data);
             // die();
             $this->db->update('product', $data);
-            // var_dump($this->db->last_query());
+            var_dump($this->db->last_query());
             $this->load->library('cloudinarylib');
             $id = $para2;
             filter_add($id);
@@ -1200,6 +1371,7 @@ class Vendor extends CI_Controller
             $this->crud_model->set_category_data(0);
             recache();
         } else if ($para1 == 'edit') {
+            
             $sing = $this->db->where('product_id' , $para2)->get('product')->row();
             $page_data['brandss'] =  $this->db->where('pcat', '369')->get('category')->result_array();
             $attrs = $this->db->where('product_id' , $para2)->get('attribute_to_values')->result_array();
@@ -1211,6 +1383,8 @@ class Vendor extends CI_Controller
                 'product_id' => $para2
             ))->result_array();
             $page_data['row'] =(array) $sing;
+             $vid = $this->session->userdata('vendor_id');
+                $page_data['warehouse'] =  $this->db->where('uid',$vid)->get('address')->result_array();
             $page_data['brands'] =  $this->db->get('category')->result_array();
              $page_data['social_media']= $this->db->get('bpkg')->result_array();
             $page_data['page_name']   = ($sing->is_bpage)?"bpage_edit":"product_edit";
@@ -1532,9 +1706,18 @@ class Vendor extends CI_Controller
                         {
                             $cat[] = $v;
                             $row = $this->db->where('category_id',$v)->get('category')->row();
+                            if($para3 == 'add')
+                            {
                             ?>
-                            <li onclick="selecttype('<?= implode(',',$cat);?>',1)"><?= $row->category_name;?></li>
+                            <li onclick="selecttype('<?= implode(',',$cat);?>',<?= $v ?>,1)"><?= $row->category_name;?></li>
+                            <?php    
+                            }
+                            else
+                            {
+                            ?>
+                            <li onclick="selecttype('<?= implode(',',$cat);?>',0,1)"><?= $row->category_name;?></li>
                             <?php
+                            }
                         }
                         ?>
 
@@ -1588,6 +1771,8 @@ class Vendor extends CI_Controller
             if($this->crud_model->can_add_product($this->session->userdata('vendor_id'))){
                 $page_data = array();
                 $page_data['brand'] =  $this->db->get('brand')->result_array();
+                $vid = $this->session->userdata('vendor_id');
+                $page_data['warehouse'] =  $this->db->where('uid',$vid)->get('address')->result_array();
                 $page_data['brandss'] =  $this->db->where('pcat', '369')->get('category')->result_array();
                
                 if($this->crud_model->can_add_product($this->session->userdata('vendor_id'))){

@@ -1,9 +1,13 @@
-
+<style>
+    #sidebar ul li a{
+        color:#000;
+    }
+</style>
 <aside class="col-md-2 sidebar new_sidebar" id="sidebar">
     <!-- widget shop categories -->
     <!-- widget price filter -->
                <?php
-            if(isset($_GET['is_listing']) && ($_GET['is_listing'] == 'shop_listing' || $_GET['is_listing'] == 'car_listing')){
+            if(isset($is_listing) && ($is_listing == 'shop_listing' || $is_listing == 'car_listing')){
                     ?>
             <div class="widget widget-filter-price">
                 <div class="Amenities1">
@@ -85,7 +89,7 @@
             }
             ?>
     <?php
-            if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'car_listing'){
+            if(isset($is_listing) && $is_listing == 'car_listing'){
                 $all_makes =  $this->db->get('makes')->result_array();
 
                     ?>
@@ -115,7 +119,7 @@
                 }
                 ?>
                 <?php
-            if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'property_listing'){
+            if(isset($is_listing) && $is_listing == 'property_listing'){
                     ?>
                     
                  
@@ -135,7 +139,7 @@
                 }
                 ?>
                 <?php
-            if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'jobs_listing'){
+            if(isset($is_listing) && $is_listing == 'jobs_listing'){
                     ?>
                     
                  
@@ -160,7 +164,7 @@
                     <?php
                 }
                 ?>       <?php
-            if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'event_listing'){
+            if(isset($is_listing) && $is_listing == 'event_listing'){
                     ?>
                     
                         <input type="date" id="event_date_input" onchange="do_product_search('0')" class="add_padding form-control">
@@ -211,7 +215,7 @@
                                                           
                 <?php
                 $all_category = '' ; 
-                if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'shop_listing'){
+                if(isset($is_listing) && $is_listing == 'shop_listing'){
                         $all_category =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 87))->row()->value,true);
                     
                         foreach($all_category as $k=> $v)
@@ -243,11 +247,11 @@
                 }
                     foreach($all_category as $key => $row)
                     {
-						if(true){
+						if($row['category_id'] && $row['category_name']){
                 ?>
                 <li>
-                    <input style="display: none;" type="checkbox" name="cats[]" class="cat_check" style="float:left" id="cat_<?php echo $row['category_id']; ?>" value="<?php echo $row['category_id']; ?>">
-                    <label for="cat_<?php echo $row['category_id']; ?>"><?php echo $row['category_name']; ?>   <i  class="fa fa-angle-down angle_rightdown"></i></label>
+                    
+                    <a href="<?= base_url('/directory'); ?>/<?= $row['slug'] ?>" for="cat_<?php echo $row['category_id']; ?>"><?php echo $row['category_name']; ?>   <i  class="fa fa-angle-down angle_rightdown"></i></a>
                     <!--<i  class="fa fa-angle-down angle_rightdown"></i>-->
                     <div class="cat_result" id="cat_r<?php echo $row['category_id']; ?>"></div>
                     

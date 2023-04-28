@@ -1,0 +1,4 @@
+[11-Apr-2023 11:11:40 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function translate() in /home4/arkethu2/public_html/application/views/admin_f.php:14
+Stack trace:
+#0 {main}
+  thrown in /home4/arkethu2/public_html/application/views/admin_f.php on line 14

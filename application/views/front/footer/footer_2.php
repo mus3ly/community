@@ -14,7 +14,7 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
     border-radius: 100%;
     width: 50px;
     height: 50px;
-    padding: 0;
+    padding: 0; 
     font-size: 42px;
     text-align: center;
 }
@@ -29,13 +29,30 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 <footer class="footer_warp">
     <div class="container">
         <div class="row">
-            <div class="col-sm-5 col-12 fotter_logo">
-                <a href="#"><img src="<?= base_url(); ?>/template/front/images/logo.png" alt=""></a>
+        <div class="col-md-12 fotter_logo p-0">
+             <a href="#"><img src="<?= base_url(); ?>/template/front/images/logo.png" alt=""></a>
+            </div>
+            </div>
+            </div>
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-md-5 col-sm-12 fotter_logo">
+               
                 
-                <div class="footer_search">
-                    <input type="input" placeholder="Enter Your Mail" name="">
-                    <button type="button">Contact us</button>
-                </div>
+                <?php
+							echo form_open(base_url() . 'home/subscribe', array(
+								'class' => 'mhl_subscribe_fields',
+								'method' => 'post'
+							));
+						?>    
+							<div class="form-group row">
+                            	<div class="col-md-12 p-0 footer_form">
+									<input type="text" class="form-control col-md-12" name="email" id="subscr" placeholder="<?php echo translate('enter_your_email_address'); ?>">
+                                	<span class="btn btn-subcribe subscriber  enterer center_btn2"><?php echo translate('subscribe'); ?></span>
+                                </div>
+							</div>                
+					   </form> 
                 <div class="row">
                     <div class="col-sm-5 left_ftbaner">
                         <img src="https://markethubland.com//template/front/images/footer_btmimg.png" alt="">
@@ -45,7 +62,7 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                     </div>
                 </div>
             </div>
-            <div class="col-sm-7 col-12">
+            <div class="col-md-7 col-sm-12">
                 <div class="row">  
             <div class="col-sm-5 widget_colum">
                 <h4>Community Pegs</h4>
@@ -149,13 +166,16 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                 <!--</ul>-->
             </div>
             <div class="footerbtn">
-             <a href="<?= base_url('vendor_logup/registration'); ?>"><button>SIGN-UP to Add a Listing</button></a>
-             <a href="<?= base_url('directory'); ?>"><button>Visit Directory</button></a>
-             <a href="<?= base_url('home/login_set/registration'); ?>"><button>Join Our Affiliate Marketing</button></a>
+             <a href="<?= base_url('vendor_logup/registration'); ?>"><button class="btn_anim from-top">SIGN-UP to Add a Listing</button></a>
+             <a href="<?= base_url('directory'); ?>"><button class="btn_anim from-top">Visit Directory</button></a>
+             <a href="<?= base_url('home/login_set/registration'); ?>"><button class="btn_anim from-top">Join Our Affiliate Marketing</button></a>
             </div>
             </div>
         </div>
     </div>
+    </div>
+    <div class="mhl_copyright_footer">
+        <span>Copyright @ 2023 </span><span><a href="<?php base_url(); ?>">Markethubland</a></span>
     </div>
 </footer>
 
@@ -170,7 +190,29 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
      $("#shareit").click(function(){
         $(".social_mediabox").toggle(500);
+    }); 
+    
+     $('.dropdown_box a').click(function(e){
+        location.href=$(this).attr('href')
+    })
+    $(document).on('click',".set-pad-tb",function(e){
+        var ths=$(this);
+        if($(window).width()<768){
+           
+            var thsdrop=$('.dropdown_box',ths);
+             if(thsdrop.length){ 
+                 e.preventDefault();
+            }
+            $('.dropdown_box').slideUp();
+            if(thsdrop.hasClass('open')){
+            thsdrop.slideUp();
+            thsdrop.removeClass('open');
+            }else{
+            thsdrop.addClass('open');
+            thsdrop.slideDown();
+            }
+        }
     });
+   
+    
 </script>
-
- 

@@ -7,10 +7,31 @@
     }
     .ellipse{display: none;}
     #new_checkout .col-md-8{padding: 0;}
-    #new_checkout .col-md-12{padding: 0 0 12px;}
+    #new_checkout .col-md-12{}
 #new_checkout .btn-theme-dark{
     background: #f26122;
     margin: 0 9px 0 0;
+}
+.sec_icon_drop {
+    background-color:#000;
+    color:#fff;
+    margin:10px 0;
+}
+#stats_select{
+        margin: 15px 0 15px 0;
+}
+#city_select{
+        margin: 0 0 15px 0;
+}
+.add_margin_to{
+    margin:10px 0;
+}
+.carter_table{
+    text-align:center;
+}
+#trasher{
+        position: relative;
+    right: 11px;
 }
 </style>
 <?php
@@ -26,15 +47,15 @@ echo form_open(base_url() . 'home/cart_finish/go', array(
 <section class="page-section color" id="new_checkout">>
     <input type="hidden" name="r_id" id="r_id" />
     <div class="container box_shadow" >
-        <h3 class="block-title alt">
-            <i style=" padding: 1px 5px;" class="fa fa-angle-down"></i>
+        <h3 class="block-title akshd alt">
+            <i style=" padding: 1px 5px;" class="first_icon fa fa-angle-down"></i>
             <?php echo translate('1');?>.
             <?php echo translate('customer_information');?>
         </h3>
         <div action="#" class="form-delivery delivery_address">
         </div
         <h3 class="block-title alt">
-            <i class="fa fa-angle-down" style=" padding: 1px 5px;"></i>
+            <i class="sec_icon_drop fa fa-angle-down" style=" padding: 1px 5px;"></i>
             <?php echo translate('2');?>.
             <?php echo translate('orders');?>
         </h3>
@@ -51,7 +72,7 @@ echo form_open(base_url() . 'home/cart_finish/go', array(
         </h3>
         <div class="panel-group payments-options" id="accordion" role="tablist" aria-multiselectable="true">
         </div>
-        <div class="overflowed">
+        <div class="col-md-12 overflowed">
             <a class="btn btn-theme-dark" href="<?php echo base_url(); ?>home/cancel_order">
                 <?php echo translate('cancel_order');?>
             </a>
@@ -114,6 +135,8 @@ function other(){
         
         if(true)
         {
+            $(".ship_btn").attr("disabled", true);
+
         $('.orders').show();
         $('.orders').html('<div style="text-align:center;width:100%;height:'+(top*2)+'px; position:relative;top:'+top+'px;"><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>');
         var param = {
@@ -130,8 +153,19 @@ function other(){
         console.log(param);
         $.get('<?php echo base_url(); ?>home/cart_checkout/cal_shipping',param,
   function(data, status){
-      $('#r_id').val(data);
+      data = JSON.parse(data)
+      if(data['status'])
+      {
+      $('#r_id').val(data['msg']);
     load_orders();
+      }
+      else
+      {
+          $('.orders').hide();
+          $(".ship_btn").attr("disabled", false);
+          $('#shoip_error').html(data['msg']);
+          alert('Something working wrong!');
+      }
   });
         }
     }

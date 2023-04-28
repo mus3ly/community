@@ -20,12 +20,35 @@
                     <input type="text" name="title" value="<?php echo $row['title']; ?>" placeholder="<?php echo translate('title'); ?>" class="form-control required">
                 </div>
             </div>
+             <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1">
+                	<?php echo translate('membership_category');?>
+                    	</label>
+                <div class="col-sm-6">
+                    <select class="form-control required" name="mcat">
+                        <?php
+                        foreach($category as $k => $v){
+                        ?>
+                        <option value="<?= $v['id']; ?>" <?php if($v['id'] ==  $row['mcat']){echo 'selected'; } ?>><?= $v['name']; ?></option>
+                        <?php } ?>
+                    </select>
+                   
+                </div>
+            </div>
             <div class="form-group">
                 <label class="col-sm-4 control-label" for="demo-hor-1">
-                    <?php echo translate('maximum_products');?>
+                    <?php echo translate('no_of_listings');?>
                         </label>
                 <div class="col-sm-6">
-                    <input type="number" name="product_limit" value="<?php echo $row['product_limit']; ?>" placeholder="<?php echo translate('maximum_products'); ?>" class="form-control required">
+                    <input type="number" name="product_limit" value="<?php echo $row['product_limit']; ?>" placeholder="<?php echo translate('no_of_listings'); ?>" class="form-control required">
+                </div>
+            </div>
+              <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1">
+                    <?php echo translate('discount');?>
+                        </label>
+                <div class="col-sm-6">
+                    <input type="text" name="discount"  value="<?php echo $row['discount']; ?>" placeholder="<?php echo translate('discount'); ?>" class="form-control required">
                 </div>
             </div>
             <div class="form-group">

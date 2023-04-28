@@ -30,12 +30,13 @@
 			$col_sm = 12;
 			$col_xs = 12;
 		} elseif($viewtype == 'grid'){
-			$col_md = 6;
-			$col_sm = 6;
-			$col_xs = 6;
+			$col_md = 4;
+			$col_sm = 4;
+			$col_xs = 4;
 		}
         foreach ($all_products as $row) {
-            // var_dump($all_products);
+            
+            //  var_dump($row);
             $f= 6;
             $type = 'blog';
             if($row['is_product'])

@@ -108,7 +108,45 @@ class Admin extends CI_Controller
             $this->load->view('back/index', $page_data);
         }
     }
-
+    function membership_category($para1 = '', $para2 = ''){
+        {
+          
+        // if (!$this->crud_model->admin_permission('blog')) {
+        //     redirect(base_url() . 'admin');
+        // }
+        if ($para1 == 'do_add') {
+            $data['name'] = $this->input->post('name');
+            $this->db->insert('member_cat', $data);
+            recache();
+        } else if ($para1 == 'edit') {
+            $page_data['blog_category_data'] = $this->db->get_where('member_cat', array(
+                'id' => $para2
+            ))->result_array();
+            $this->load->view('back/admin/member_category_edit', $page_data);
+        } elseif ($para1 == "update") {
+            $data['name'] = $this->input->post('name');
+            $this->db->where('id', $para2);
+            $this->db->update('member_cat', $data);
+            recache();
+        } elseif ($para1 == 'delete') {
+            if(!demo()){
+                $this->db->where('id', $para2);
+                $this->db->delete('member_cat');
+                recache();
+            }
+        } elseif ($para1 == 'list') {
+            $this->db->order_by('id', 'ASC');
+            $page_data['all_categories'] = $this->db->get('member_cat')->result_array();
+            $this->load->view('back/admin/member_category_list', $page_data);
+        } elseif ($para1 == 'add') {
+            $this->load->view('back/admin/member_category_add');
+        } else {
+            $page_data['page_name']      = "member_category";
+            $page_data['all_categories'] = $this->db->get('member_cat')->result_array();
+            $this->load->view('back/index', $page_data);
+        }
+    }
+    }
     /*Product Category add, edit, view, delete */
     function category($para1 = '', $para2 = '')
     {
@@ -190,7 +228,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['fa_icon'] = $this->input->post('fa_icon');
             $data['pcat'] = $this->input->post('pcat');
             $data['level'] = 0;
-            $dara['slug'] = $this->input->post('slug');
+            $data['slug'] = $this->input->post('slug');
             $this->db->where('category_id', $para2);
             $this->db->update('category', $data);
             if($_FILES['img']['name']!== ''){
@@ -354,6 +392,10 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         }
     }
     function cat_slug(){
+        if(isset($_REQUEST['cat']) && $_REQUEST['cat'])
+        {
+            $this->db->where('category_id !=',$_REQUEST['cat']);
+        }
         $this->db->where('slug', $_REQUEST['val']);
         $q = $this->db->get('category')->num_rows();
         if($q > 0){
@@ -1600,6 +1642,64 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
 
             $page_data['page_name']  = "bpkg";
             $page_data['all_brands'] = $this->db->get('bpkg')->result_array();
+            $this->load->view('back/index', $page_data);
+        }
+    }
+    function subject($para1 = '', $para2 = '')
+    {
+        if (!$this->crud_model->admin_permission('brand')) {
+            redirect(base_url() . 'admin');
+        }
+        if ($this->crud_model->get_type_name_by_id('general_settings','68','value') !== 'ok') {
+            redirect(base_url() . 'admin');
+        }
+        if ($para1 == 'do_add') {
+		
+            // $type                = 'subject';
+            $data['subject']        = $this->input->post('name');
+            $data['email']        = $this->input->post('email');
+            $data['created_at']        = date('Y:m:d H:i:s');
+            $this->db->insert('subject', $data);
+          
+            $id = $this->db->insert_id();
+                recache();
+        } elseif ($para1 == "update") {
+             $data['subject']        = $this->input->post('name');
+              $data['email']        = $this->input->post('email');
+            $data['updated_at']        = date('Y:m:d H:i:s');
+            $this->db->where('id', $para2);
+            $this->db->update('subject', $data);
+        
+            recache();
+        } elseif ($para1 == 'delete') {
+
+            if(!demo()){
+
+                $this->db->where('id', $para2);
+                $this->db->delete('subject');
+                $this->crud_model->set_category_data(0);
+                recache();
+            }
+        } elseif ($para1 == 'multi_delete') {
+            if(!demo()){
+                $ids = explode('-', $param2);
+                $this->crud_model->multi_delete('subject', $ids);
+            }
+        } else if ($para1 == 'edit') {
+
+            $page_data['data'] = $this->db->get_where('subject', array(
+                'id' => $para2
+            ))->result_array();
+            $this->load->view('back/admin/subject_edit', $page_data);
+        } elseif ($para1 == 'list') {
+            $this->db->order_by('id', 'desc');
+            $page_data['all_brands'] = $this->db->get('subject')->result_array();
+            $this->load->view('back/admin/subject_list', $page_data);
+        } elseif ($para1 == 'add') {
+            $this->load->view('back/admin/subject_add');
+        } else {
+            $page_data['page_name']  = "subject";
+            $page_data['all_brands'] = $this->db->get('subject')->result_array();
             $this->load->view('back/index', $page_data);
         }
     }
@@ -4807,6 +4907,8 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['price']    = $this->input->post('price');
             $data['timespan']    = $this->input->post('timespan');
             $data['product_limit']    = $this->input->post('product_limit');
+            $data['mcat']    = $this->input->post('mcat');
+            $data['discount']    = $this->input->post('discount');
             $data['stripe_id']    = $this->input->post('stripe_id');
             $this->db->insert('membership', $data);
             $id = $this->db->insert_id();
@@ -4817,13 +4919,16 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $page_data['membership_data'] = $this->db->get_where('membership', array(
                 'membership_id' => $para2
             ))->result_array();
+             $page_data['category'] = $this->db->get('member_cat')->result_array();
             $this->load->view('back/admin/membership_edit', $page_data);
         } elseif ($para1 == "update") {
             $data['title']    = $this->input->post('title');
             $data['price']    = $this->input->post('price');
             $data['timespan']    = $this->input->post('timespan');
             $data['product_limit']    = $this->input->post('product_limit');
+            $data['discount']    = $this->input->post('discount');
             $data['stripe_id']    = $this->input->post('stripe_id');
+            $data['mcat']    = $this->input->post('mcat');
             $this->db->where('membership_id', $para2);
             $this->db->update('membership', $data);
             if(!demo()){
@@ -4844,8 +4949,11 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             }
 
         } elseif ($para1 == 'list') {
+            $this->db->select('*');
+            $this->db->from('membership');
+            $this->db->join('member_cat','member_cat.id = membership.mcat');
             $this->db->order_by('membership_id', 'desc');
-            $page_data['all_memberships'] = $this->db->get('membership')->result_array();
+            $page_data['all_memberships'] = $this->db->get()->result_array();
             $this->load->view('back/admin/membership_list', $page_data);
         } elseif ($para1 == 'view') {
             $page_data['membership_data'] = $this->db->get_where('membership', array(
@@ -4853,7 +4961,8 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             ))->result_array();
             $this->load->view('back/admin/membership_view', $page_data);
         } elseif ($para1 == 'add') {
-            $this->load->view('back/admin/membership_add');
+            $page_data['category'] = $this->db->get('member_cat')->result_array();
+            $this->load->view('back/admin/membership_add', $page_data);
         } elseif ($para1 == 'default') {
             $this->load->view('back/admin/membership_default');
         } elseif ($para1 == 'publish_set') {

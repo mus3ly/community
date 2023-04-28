@@ -15,6 +15,53 @@
     margin-top: 0;
     margin: 0 0 17px;
 }
+
+nav > .nav.nav-tabs{
+
+  border: none;
+    color:#fff;
+    background:#272e38;
+    border-radius:0;
+
+}
+nav > div a.nav-item.nav-link,
+nav > div a.nav-item.nav-link.active
+{
+  border: 1px solid #cccccc38;
+    padding: 18px 25px;
+    color:#fff;
+    background:#272e38;
+    border-radius:0;
+}
+nav > div a.nav-item.nav-link.active:after {
+    content: "";
+    position: relative;
+    bottom: -63px;
+    left: -17%;
+    border: 15px solid transparent;
+    border-top-color: #d1d1d1;
+}
+.tab-content{
+     background: #fdfdfd;
+    line-height: 25px;
+    border: 1px solid #ddd;
+    padding: 30px 25px;
+    display: -webkit-box;
+    width: 100%;
+}
+#pricing-table li {
+    font-size: 16px;
+}
+
+nav > div a.nav-item.nav-link:hover,
+nav > div a.nav-item.nav-link:focus
+{
+  border: 1px solid transparent;
+    background: #f26129;
+    color:#fff;
+    border-radius:0;
+    transition:background 0.20s linear;
+}
 </style>
 
                  <style>
@@ -23,11 +70,7 @@
 	text-align: center;
     transition: 0.3s;
 }
-#pricing-table:hover{
-      transform: scale(1.1);
-      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    
-}
+
 #pricing-table .plan {
 	font: 12px 'Lucida Sans', 'trebuchet MS', Arial, Helvetica;
 	text-shadow: 0 1px rgba(255,255,255,.8);        
@@ -41,7 +84,7 @@
 }
 #pricing-table h3 {
 	font-size: 20px;
-	font-weight: normal;
+	font-weight: 600 !important;
 	padding: 20px;
 	margin: -20px -20px 50px -20px;
 	background-color: #eee;
@@ -126,31 +169,108 @@
     -webkit-box-shadow: 0 5px 20px #ddd inset, 0 3px 0 #999 inset;
     box-shadow: 0 5px 20px #ddd inset, 0 3px 0 #999 inset;
 }
+.skip_box {
+    text-align: center;
+    clear: both;
+    width: 100%;
+    padding: 32px 0 0;
+}
+.skip_box a {
+    background: #e15b04;
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px 19px;
+    display: inline-block;
+}
+#nav-tab .active{
+  background: #f26129;
+}
+.sidgapp{
+  padding: 0 5px;
+}
+
+@media(max-width: 1024px){
+  .container{
+    width: 100%;
+    max-width: 100%;
+  }
+  #pricing-table li {
+    font-size: 13px;
+}
+
+}
+
+@media(max-width: 767px){
+  .container{
+    width: auto;
+    max-width: 100%;
+  }
+   #pricing-table li {
+    font-size: 14px;
+}
+
+  .vendor_box {
+    margin-top: 0;
+}
+.nav-fill .nav-item {
+    text-align: center;
+    width: 33%;
+    padding: 11px 3px !important;
+    text-align: center;
+    display: inline-block;
+    font-size: 11px;
+}
+nav > div a.nav-item.nav-link.active:after {
+    border-top-color: transparent;
+}
+.tab-content>.tab-pane {
+    padding: 0;
+}
+  .col-sm-12,.col-xs-12 {
+    padding: 0;
+  }
+
+}
+
+
 
 </style>
 
-                      <div class="row container" style="width:104%;">
+                      <div class="container ">
                         
-					  <div class="col-md-3 col-sm-12 col-xs-12">
-                             <!-- here -->
-                              <div id="pricing-table" class="clear">
-                                <div class="plan">
-                                    <h3>Free<span><img src="<?php echo $this->crud_model->file_view('membership',0,'100','','thumb','src','','','.png') ?>" 
-                        width="48.5%" id='blah' > </span></h3>
-                                    <a class="signup" href="<?= base_url('vendor_logup/registration'); ?>?pack=0">Sign up</a>         
-                                    <ul>
-                                        <li><b><?php echo $this->db->get_where('general_settings',array('type'=>'default_member_product_limit'))->row()->value; ?> </b> Products limit</li>
-                                        <li><b>30 day </b> Time span</li>
-                                        <li>Buy in <b>Free</b></li>
-                                    </ul> 
-                                </div>
-                                </div>
-                              
-                          </div>
-						<?php
-                        foreach ($pkgs as $k => $v) {
+					  
+                          <!--start-->
+                          
+                          
+                          <div class="">
+              <div class="row">
+                <div class="col-xs-12 ">
+                  <nav>
+                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                        <?php
+                        foreach($cat as $k => $v){
+                            $nav = str_replace(' ','', $v['name']);
+                        ?>
+                      <a class="nav-item nav-link <?= (!$k)?"active":"";?>" id="<?= $v['id']; ?>" data-toggle="tab" href="#<?php echo $nav; ?>" role="tab" aria-controls="nav-<?php echo $nav; ?>" aria-selected="true"><?php echo $v['name']; ?></a>
+                      <?php
+                        }
+                      ?>
+                      <!--<a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Platinum</a>-->
+                      <!--<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Gold</a>-->
+                    </div>
+                  </nav>
+                  
+                  <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                    <?php
+                        foreach($cat as $k => $v){
+                            $nav = str_replace(' ','', $v['name']);
+                        ?>
+                    <div class="col-md-12 tab-pane fade <?= (!$k)?" active in ":"";?>" id="<?php echo $nav; ?>" role="tabpanel" aria-labelledby="<?= $v['id']; ?>">
+                      <?php
+                      $pkg = $this->db->where('mcat', $v['id'])->get('membership')->result_array();
+                        foreach ($pkg as $k => $v) {
                           ?>
-                          <div class="col-md-3 col-sm-12 col-xs-12">
+                          <div class="col-sm-3 sidgapp">
                              <!-- here -->
                               <div id="pricing-table" class="clear">
                                 <div class="plan">
@@ -160,7 +280,7 @@
                                     <ul>
                                         <li><b><?=  $v['product_limit'] ?> </b> Avalible Ads</li>
                                         <li><b><?=  $v['timespan'] ?> day </b> Time span</li>
-                                        <li>Buy in<b><?=  $v['price'] ?> £ </b></li>
+                                        <li>Buy in <b><?=  $v['price'] ?> £ </b></li>
                                     </ul> 
                                 </div>
                                 </div>
@@ -169,5 +289,28 @@
                           <?php
                         }
                         ?>
-                          <a class="pkg_skip" href="<?= base_url('vendor_logup/registration'); ?>?pack=0">Skip and continue</a>
+                    </div>
+                   <?php
+                        }
+                      ?>
+                  </div>
+                 
+                </div>
+              </div>
+
+
+              <div class="skip_box">
+                            <a class="pkg_skip" href="<?= base_url('vendor_logup/registration'); ?>?pack=0">Skip and continue</a>
+                          </div>
+        </div>
+      </div>
+</div>
+
+                          
+                          
+                          
+                          <!--start-->
+                            
+						
+                          
                       </div>

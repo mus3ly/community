@@ -2,6 +2,17 @@
 $row = (array) $product_data;
 ?>
 <style>
+ #select_amn2{
+    display: flex;
+}
+#select_amn2 p{
+ background-color: #F26122;
+    padding: 9px;
+    width: auto;
+    margin: 2px;
+    color: white;
+
+}
     #mainnav-container{
         left :0px !important;
     }ima
@@ -290,9 +301,9 @@ btn1 .fa{
                             <h4 class="text-thin text-center"><?php echo translate('top_banner'); ?></h4> 
                             <div class="form-group btm_border">
                             <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('listing_title');?></label>
+                                <label class="col-sm-4 control-label" for="listing_title"><?php echo translate('listing_title');?></label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="title" id="demo-hor-1" value="<?php echo $row['title']; ?>" placeholder="<?php echo translate('listing_title');?>" class="form-control required">
+                                    <input type="text" name="title" id="listing_title" value="<?php echo $row['title']; ?>" placeholder="<?php echo translate('listing_title');?>" class="form-control required">
                                 </div>
                             </div>
                             <div class="form-group btm_border">
@@ -329,6 +340,26 @@ btn1 .fa{
                                 <label class="col-sm-4 control-label" for="demo-hor-6"><?php echo translate('business_phone');?></label>
                                 <div class="col-sm-4">
                                     <input type="number" name="bussniuss_phone" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('business_phone');?>" value="<?= $row['bussniuss_phone'] ?>" class="form-control ">
+                                </div>
+                            </div>
+                              <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-6"><?php echo translate('city');?></label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="city" id="demo-hor-6" min='0' step='.01' placeholder="<?php echo translate('city');?>" value="<?= $row['city'] ?>" class="form-control required">
+                                </div>
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-6"><?php echo translate('address');?></label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" name= "warehouse">
+                                        <?php
+                                        foreach($warehouse as $k => $v){
+                                        ?>
+                                        <option value="<?= $v['address_id'];?>"><?= $v['title'];?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                    </select>
                                 </div>
                             </div>
                                     <label class="col-sm-4 control-label" for="demo-hor-12">Feature image</label>
@@ -635,22 +666,26 @@ btn1 .fa{
                             </div>
                             
                         </div>
-                         <div id="amenitys" class="tab-pane fade ">
+                          <div id="amenitys" class="tab-pane fade ">
                      <div class="form-group btm_border">
                                     <label class="col-sm-4 control-label" for="demo-hor-1">Select Amenities</label>
                                     <div class="col-sm-6">
                                                                                 
                              <input type="text" class="amnty form-control" id="amnty">
                              <button type="button" class="btn btn-primary" id="amn_btn">Add</button>
-                            <div id="add_amn"></div>
+                             
+                            <div id="add_amn">
+                                
+                            </div>
                             <hr>
-                            <!--<div id="select_amn">-->
-                                
-                            <!--</div>-->
-                            <select name="listingamenities[]" id="select_amn" class="form-control js-example-basic-single" multiple="multiple">
-                                <!--<option></option>-->
-                                
-                            </select>
+                          
+                            <div id="select_amn2">
+                        </div>
+                               
+                            <div class="select_amn" style="display: none;">
+                            <!--<input type="text" name="amenities[]"  class="form-control ">-->
+                             
+                          </div>
                                 </div>
                             </div>
                         </div>
@@ -705,6 +740,20 @@ btn1 .fa{
                         </div>
                              
                         <div id="seo_section" class="tab-pane fade ">
+                            <div class="form-group btm_border">
+                                <div class="col-sm-4"></div>
+                                <div class="col-sm-8"></div>
+                                <label class="col-sm-4 control-label" for="">
+                                    <?php echo translate('slug');?>
+                                </label>
+                                <div class="col-sm-6">
+                                    <input type="text" id="slug" name="slug" value="<?php echo $row['slug']; ?>"
+                                           placeholder="<?php echo translate('productslug')?>"
+                                           class="form-control required">
+                                           <small id="slug_error_msg" style="display:none;color:red">Slug already exists, choose the new and unique one..</small>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
                         <div class="form-group btm_border">
                                 <div class="col-sm-4"></div>
                                 <div class="col-sm-8"><small>*<?php echo translate('Write an seo friendly title within 60 characters')?></small></div>
@@ -946,7 +995,7 @@ btn1 .fa{
                     </div>
                     
                     <div class="col-md-1">
-                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="validate_listing();" ><?php echo translate('upload');?></span>
+                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" id="registerbutton" onclick="validate_listing();" ><?php echo translate('upload');?></span>
                     </div>
                     
                 </div>
@@ -2014,7 +2063,10 @@ $('.exra_chnge').change(function(){
         async: true,
         data: {add_to_table:1,value:value },
         success: function (data) {
-           $('#select_amn').append(data);
+        var html = '<input type="text" name="amenities[]" value="'+data+'">';
+        $('.select_amn').append(html);
+        var text = '<p><span onclick="delete('+data+')">x</span>'+data+'</p>';
+        $('#select_amn2').append(text);
         },
         error: function (xhr, exception) {
            
@@ -2030,13 +2082,49 @@ $('.exra_chnge').change(function(){
         async: true,
         data: { select:1,sid:id},
         success: function (data) {
-        //   alert(data);select_amn
-        $('#select_amn').append(data);
+       var html = '<input type="text" name="amenities[]" value="'+data+'">';
+        $('.select_amn').append(html);
+        var text = '<p><span onclick="delete('+data+')">x</span>'+data+'</p>';
+        $('#select_amn2').append(text);
         },
     });
     }
 </script>
-
+    <script>
+        $('#slug').on('keyup',function(){
+            $('#registerbutton').attr("disabled", false);
+            $('#slug').removeClass('error');
+            $('#slug_error_msg').css({'display':'none'});
+            var val = $(this).val();
+            var url='<?= base_url('vendor/productslug') ?>';
+              if(val){
+              $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { value:val},
+        success: function (data) {
+           if(data == 'error'){
+               $('#slug').addClass('error');
+               $('#slug_error_msg').css({'display':'block'});
+               $('#registerbutton').attr("disabled", true);
+               
+           }
+        },
+    });
+        }
+        });
+        
+    </script>
+    <script>
+        $("#listing_title").keyup(function() {
+          var Text = $(this).val();
+          Text = Text.toLowerCase();
+          Text = Text.replace(/[^a-zA-Z0-9]+/g,'-');
+          $("#slug").val(Text);    
+          $('#slug').keyup();
+        });
+    </script>
 <style>
     .btm_border{
         border-bottom: 1px solid #ebebeb;

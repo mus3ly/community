@@ -17,11 +17,6 @@ $pro = array();
         $pro = $product_data[0];
     }
     $vid = json_decode($pro['added_by']);
- 
-if(($_SESSION['login'] != 'yes') && ($vid->id != $_SESSION['vendor_id']) ){
-    echo 'You are not authorized to open this...  Login first!!';
-    die();
-}
   
 ?>
 <a href="<?=base_url($pro['slug']);?>" target="_blank" class="btn btn-info pre_btnn">Preview<span><i class="fa-regular fa-eye"></i></span></a>
@@ -60,6 +55,16 @@ if(($_SESSION['login'] != 'yes') && ($vid->id != $_SESSION['vendor_id']) ){
 	           <div class="form-group">
 	            
                 <input type="text" ng-model="detail.closing_time" id="appt" name="appt" class="form-control">
+                </div>
+                <label>Text gallary Title</label>
+	           <div class="form-group">
+	            
+                <input type="text" ng-model="detail.gtitle" id="appt" name="appt" class="form-control">
+                </div>
+                <label>Text gallary Discription</label>
+	           <div class="form-group">
+	            
+                <textarea ng-model="detail.gdesc"  class="form-control" ></textarea> 
                 </div>
 	        </ul>
 	        
@@ -409,6 +414,56 @@ app.controller('myCtrl', function($scope, $http) {
     $scope.update_btn = 'Update';
     $scope.detail = {};
     $scope.extra_info = false;
+    $scope.add_cats = function(id)
+    {
+        var val = $('#cattxt').val();
+        $scope.detail.cats.push(val);
+        $('#cattxt').val(' ');
+    }
+    $scope.btn_text = '';
+    $scope.btn_url = '';
+    $scope.add_btn = function()
+    {
+        alert();
+        if($scope.btn_text)
+        {
+        var nobj = {
+            txt:$scope.btn_text,
+            url:$scope.btn_url,
+        };
+        var i = $scope.detail.buttons.length +1;
+        $scope.detail.buttons[i] = nobj;
+        console.log($scope.detail.buttons);
+        $scope.update_product();
+        }
+        
+    }
+    $scope.del_btn = function(id)
+    {
+        var i = id;
+        delete $scope.detail.buttons[i];
+        console.log($scope.detail.buttons);
+        $scope.update_product();
+        
+    }
+    $scope.del_am = function(id)
+    {
+        var i = id-1;
+        delete $scope.detail.amenities[i];
+        $scope.update_product();
+    }
+    $scope.del_cat = function(id)
+    {
+        var i = id-1;
+        delete $scope.detail.cats[i];
+        $scope.update_product();
+    }
+    $scope.add_amen = function()
+    {
+        var val = $('#amtxt').val();
+        $scope.detail.amenities.push(val);
+        $('#amtxt').val(' ');
+    }
     $scope.change_checks = function(id)
     {
         console.log($scope.enable_checks);
@@ -447,6 +502,7 @@ $http.post(url, $scope.detail, config).then(function (response) {
     $scope.hide_loader();
     if(response.data)
     {
+        $scope.onload();
         
         $scope.update_btn = 'Update';
     }
@@ -502,14 +558,17 @@ $http.post(url, $scope.detail, config).then(function (response) {
   .then(function(response) {
       $scope.hide_loader();
     $scope.detail = response.data;
-    $scope.detail.enable_checks = JSON.parse($scope.detail.enable_checks);
-    $scope.detail.feature = JSON.parse($scope.detail.feature);
-    $scope.detail.etra_content = JSON.parse($scope.detail.etra_content);
+    console.log($scope.detail);
+    // alert($scope.detail.gtitle);
+    // $scope.detail.feature = JSON.parse($scope.detail.feature);
+    // $scope.detail.etra_content = JSON.parse($scope.detail.etra_content);
+    console.log("$scope.detail.etra_content");
+    console.log($scope.detail.etra_content);
     // $scope.detail.gallary = JSON.parse($scope.detail.etra_content);
-    if(!$scope.detail.gallary.length)
+    if(!$scope.detail.tgallary.length)
     {
         // $scope.detail.detail.gallery_text = '';
-        $scope.detail.gallary = 0;
+        $scope.detail.tgallary = 0;
     }
 
     if(!$scope.detail.etra_content)
@@ -522,18 +581,12 @@ $http.post(url, $scope.detail, config).then(function (response) {
         }
             //  $feature  = json_decode($pro['text'],true);
     $scope.detail.text = JSON.parse($scope.detail.text);
-     if(!$scope.detail.text)
-        {
-            $scope.detail.text = [];
-            for(var i = 0;i < 7;i++)
-        {
-            $scope.detail.text.push(' ');
-        }
-        }
+     
     console.log("detail.text");
     console.log($scope.detail.text);
     console.log("detail.etra_content");
     console.log($scope.detail.etra_content);
+    $scope.make_col();
     $scope.add_feature = function(){
         var obj = {
             'fhead':'',
@@ -551,15 +604,19 @@ $http.post(url, $scope.detail, config).then(function (response) {
   });
     };
     $scope.edit_col= 0;
-    $scope.update_col = function()
+    $scope.three_column = [];
+    $scope.make_col = function()
     {
+        $scope.three_column = [];
         for(var i = 0;i < $scope.detail.number_of_column;i++)
         {
-            if($scope.detail.etra_content[i])
-            {
-                $scope.detail.etra_content.push(i);
-            }
+            $scope.three_column.push(i);
         }
+    };
+    $scope.update_col = function()
+    {
+        $scope.make_col();
+        $scope.update_product();
         console.log($scope.detail.etra_content);
     }
    
@@ -580,6 +637,10 @@ $http.post(url, $scope.detail, config).then(function (response) {
         console.log($scope.detail.etra_content);
         // alert($scope.detail.etra_content[i]);
     };
+    $scope.getcolcode = function(i)
+    {
+        return $scope.detail.etra_content[i];
+    }
     $scope.extra_col = function()
     {
         var clss="col-md-12";
@@ -911,6 +972,7 @@ $scope.getBase64(file_id, file);
                      <input type="time" ng-model="detail.closing_time" />
                 </li>
                 
+                
             </ul>
             </li>
             <li role="tab" id="heading7" class="border__">  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse7" aria-expanded="true" aria-controls="collapse7">
@@ -1172,27 +1234,19 @@ $scope.getBase64(file_id, file);
                                 </div>
                                 <div id="equal_btnw1" style="    margin-bottom: 15px;">
                                     <div class="learn_more_btns">
-                                    <?php
-                                    if(isset($pro['buttons']) && !empty($pro['buttons'])){
-                                    $btns  = json_decode($pro['buttons'],true);
-                                    $i = 0;
+                                        <div ng-repeat="(key, value) in detail.buttons" ng-if="value && value.txt">
+                                            <button ng-click="del_btn(key)">Delete</button>
+                                         <a href="value.url" ng-if="key%2 == 0" class="our_projects">{{value.txt}}</a>
+                                         <a href="value.url" ng-if="key%2 != 0" >{{value.txt}}</a>
+                                        </div>
+                                        <form>
+                                            <input ng-model="btn_text"/>
+                                            <input ng-model="btn_url"/>
+                                            <button ng-click = add_btn();>Save</button>
+                                        </form>
+                                        <button class="btn btn-primary">Add New button</button>
 
-                                    foreach ($btns as $key => $value) {
-                                        $i++;
-                                        if($i %2 !=  0)
-                                        {
-                                            ?>
-                                            <a href="<?= $value['url'] ?>" class="our_projects"><?= $value['txt'] ?></a>
-                                            <?php
-                                        }
-                                        else{
-                                            ?>
-                                            <a href="<?= $value['url'] ?>"><?= $value['txt'] ?></a>
-                                            <?php
-                                        }
-                                    }
-                                    }
-                                    ?>
+                                         
                                 </div>
                                 </div>
                                 
@@ -1231,7 +1285,6 @@ $scope.getBase64(file_id, file);
                         <div class="pro_business" id="boxes___3">
                                 <h3 ng-click="detail.extra_section_heading_edit = 1" ng-if="!detail.extra_section_heading_edit">{{ detail.extra_section_heading}}</h3>
                                 <label>Number of colums</label>
-                        {{detail.number_of_column}}
                         <select ng-model="detail.number_of_column" ng-change="update_col()">
                             <option value="1">1</option>
                             <option  value="2">2</option>
@@ -1243,16 +1296,11 @@ $scope.getBase64(file_id, file);
                                     </form>
                         </div>
                         
-
-                            <div class=" webdesign" ng-repeat="x in detail.etra_content"  ng-class="extra_col()">
-                                    <button class="btn btn-info" ng-click="update_edit_col($index);">Edit it</button>
-                                <div class="inner_box_design height_auto scroll" style="margin-top: 10px;overflow-y: scroll;height:324px;min-height: 324px;max-height: 324px;" ng-bind-html="x" ng-if="edit_col != ($index+1)">
+                            <div class=" webdesign" ng-repeat="x in three_column"  ng-class="extra_col()">Test
                                 
+                                    <button class="btn btn-info" ng-click="update_edit_col($index);">Edit it</button>
+                                <div class="inner_box_design height_auto scroll" style="margin-top: 10px;overflow-y: scroll;height:324px;min-height: 324px;max-height: 324px;" ng-bind-html="getcolcode(x)" ng-if="edit_col != ($index+1)">
                                 </div>
-                                <dform ng-if="edit_col == ($index+1)">
-                                    <textarea style="width:100%; height:320px" id="extra{{$index}}">{{x}}</textarea>
-                                    <button class="btn btn-primary" ng-click="update_edit_col(-1, $index)">Save</button>
-                                </form>
                             </div>
                             <?php
                             /*for($i= 1; $i<=$num; $i++)
@@ -1367,6 +1415,12 @@ $scope.getBase64(file_id, file);
                                 </div>
                         </div> -->
                         </div>
+                        <!--Text gallery start-->
+                        <div ng-if="!detail.tgallary" >
+                                    <a href="<?= base_url('/vendor/brand'); ?>" target="_blank"><p style="    text-align: center;">Click here to add you Text Gallery contents</p></a>
+                                    <img src="<?= base_url('/uploads/gal.png'); ?>" style="width:100%" />
+                                </div>
+                        <!--Text gallery end-->
                 <?php
                         if(true){
                         ?>
@@ -1392,10 +1446,7 @@ $scope.getBase64(file_id, file);
                             ?>
                         <div class="container gallery_div">
                             <div class="flex_ittt">
-                                <div ng-if="!detail.gallary" >
-                                    <a href="<?= base_url('/vendor/brand'); ?>" target="_blank"><p style="    text-align: center;">Click here to add you Text Gallery contents</p></a>
-                                    <img src="<?= base_url('/uploads/gal.png'); ?>" style="width:100%" />
-                                </div>
+                                
                             <ul  ng-if="detail.gallary">
                                 <li ng-repeat="x in detail.gallary" class="icon_flex"><img  src="{{x.img}}" /><a ng-click="del_gallery(x.id)" class="cross_icon"><i class="fa-solid fa-trash-can"></i></a></li> 
                                 <li  onclick="click_id('gallery')"><button class="add_buton"><i class="fa-solid fa-plus icon_button"></i></button></li>
@@ -1578,6 +1629,7 @@ $scope.getBase64(file_id, file);
                         {
                             ?>
                             <a href="<?= base_url('/vendor/brand'); ?>"><p>To include a text gallery to your business page, go to Text Gallery in the left column of your vendor panel and include your detail there. This will show on your public page automatically</p></a>
+                                                
                             <?php
                         }
                         ?>
@@ -1797,6 +1849,43 @@ $scope.getBase64(file_id, file);
                             </div>
                             <!--{{detail.button_url}}-->
                         </div>
+                        
+                        <div class="container mt-5">
+                            <h1>Amenities</h1>
+                            <div class="row">
+                                
+                                <div ng-repeat="x in detail.amenities" class="btn m-2 mt-4 add_cross_flex">{{x}}<i ng-if="x" ng-click="del_am($index +1)" class="fa-solid fa-xmark"></i></div>
+
+                            </div>
+                            <div class="row">
+                                
+                             <form class="mt-5">
+                                 <div class="form-group ">
+                                    <input type="text" placeholder="Add amenities" id="amtxt" class="form-control">
+                                 </div>
+                                 <button class="btn bg-light text-dark" ng-click="add_amen()">Add Here</button>
+                             </form>
+
+                            </div>
+                        </div>
+                        <div class="container mt-5">
+                            <h1>Categories</h1>
+                            <div class="row">
+                                
+                                <div ng-repeat="x in detail.cats" class="btn m-2 mt-4 add_cross_flex">{{x}}<i ng-if="x" ng-click="del_cat($index +1)" class="fa-solid fa-xmark"></i></div>
+
+                            </div>
+                            <div class="row">
+                                
+                             <form class="mt-5">
+                                 <div class="form-group ">
+                                    <input type="text" placeholder="Add amenities" id="cattxt" class="form-control">
+                                 </div>
+                                 <button class="btn bg-light text-dark" ng-click="add_cats()">Add Here</button>
+                             </form>
+
+                            </div>
+                        </div>
                         <div class="container">
                                 </div>
                                 
@@ -1873,70 +1962,6 @@ $scope.getBase64(file_id, file);
            
                         <div class="purple_line" id="intrested">
                             <img src="<?= base_url(); ?>template/front/images/base-icon.png" alt="">
-                        </div>
-                     
-                        <div class="container" style="padding-top: 165px ;">
-                            <div class="container">
-                            <div class="verify_head" style="    padding: 0 23px 0;">
-                                <h3>You May Also be Interested In</h3>
-                                <p>You can now list your business in less than 5 minutes</p>
-                            </div>
-                        </div>
-                                    <div class="row" id="rowmarign">
-            <?php
-                        $box_style =6;//  $this->db->get_where('ui_settings',array('ui_settings_id' => 29))->row()->value;
-                        $limit = 3;// $this->db->get_where('ui_settings',array('ui_settings_id' => 20))->row()->value;
-                        $featured=$this->crud_model->product_list_set('featured',$limit);
-                        foreach($featured as $row){
-                            ?>
-                            <div class="col-md-4">
-                            <?php
-                            echo $this->html_model->product_box($row, 'grid', $box_style);
-                            ?>
-                            </div>
-                            <?php
-                        }
-                    ?>
-            </div>
-
-                            <!--<div class="row">-->
-                            <!--    <div class="col-sm-4 bottom_box">-->
-                            <!--        <div class="inner_bottombox">-->
-                            <!--            <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">-->
-                            <!--            <div class="sidegapp_bottom">-->
-                            <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
-                            <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
-                            <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
-                            <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
-                            <!--            </div>-->
-                            <!--        </div>-->
-                            <!--    </div>-->
-                            <!--    <div class="col-sm-4 bottom_box">-->
-                            <!--        <div class="inner_bottombox">-->
-                            <!--            <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">-->
-                            <!--            <div class="sidegapp_bottom">-->
-                            <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
-                            <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
-                            <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
-                            <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
-                            <!--            </div>-->
-                            <!--        </div>-->
-                            <!--    </div>-->
-                            <!--    <div class="col-sm-4 bottom_box">-->
-                            <!--        <div class="inner_bottombox">-->
-                            <!--            <img src="<?= base_url(); ?>template/front/images/img-3.png" alt="">-->
-                            <!--            <div class="sidegapp_bottom">-->
-                            <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
-                            <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
-                            <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
-                            <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
-                            <!--            </div>-->
-                            <!--        </div>-->
-                            <!--    </div>-->
-                            <!--</div>-->
-                            <div class="info_tooltip">
-                                <a href="#"><img src="<?= base_url(); ?>template/front/images/info-orange.png" alt=""></a>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -2187,15 +2212,6 @@ $scope.getBase64(file_id, file);
             </div>
         </form>
     </div>
-</div>
-
-    <div class="container">
-        
-        <div class="disqus_comment" >
-                                <div id="disqus_thread"></div></div>
-    </div>
-    <div class="flgicon">
-    <a href="#"><i class="fa fa-flag"></i></a>
 </div>
 </div><!--data div end-->
 <script>

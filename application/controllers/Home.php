@@ -85,7 +85,7 @@ class Home extends CI_Controller
         $this->load->library('paypal');
         $this->load->library('twoCheckout_Lib');
         $this->load->library('vouguepay');
-        $this->load->library('pum');
+        // $this->load->library('pum');
         //add affliate log
         if(isset($_GET['aff_id']))
         {
@@ -176,6 +176,25 @@ class Home extends CI_Controller
   return $text;
 }
     /* FUNCTION: Loads Homepage*/
+    public function update_dcats()
+    {
+        $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value, true);
+                       $result=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $c = $this->db->where('cat_id',$row)->get('direct_cats')->row();
+                                                    if(!$c)
+                                                    {
+                                                        $in = array(
+                                                            'cat_id'=> $row,
+                                                            );
+                                                        $this->db->insert('direct_cats',$in);
+                                                    }
+                                                    find_main($row);
+                                                }
+                                            }
+    }
+    
     public function update_slug()
     {
                $this->db->limit(15, 0);
@@ -195,7 +214,7 @@ class Home extends CI_Controller
         $org = $col;
         $ex = explode('-',$col);
         $num = -1;
-        if(count($ex))
+        if(count($ex) > 1)
         {
             $col = $ex[0];
             $num = $ex[1];
@@ -219,7 +238,7 @@ class Home extends CI_Controller
       $org = $col;
         $ex = explode('-',$col);
         $num = -1;
-        if(count($ex))
+        if(count($ex) > 1)
         {
             $col = $ex[0];
             $old = $this->db->where('product_id',$pid)->get('product')->row()->$col;
@@ -244,20 +263,38 @@ echo 1;
     
     public function update_slug_cat()
     {
-               $this->db->limit(15, 0);
+        ini_set('max_execution_time', '300'); //300 seconds = 5 minutes
+
+               $this->db->limit(1, 0);
 
         $pros = $this->db->where('slug',NULL)->get('category')->result_array();
         // var_dump($this->db->last_query());
         foreach($pros as $k=> $v)
         {
-            echo $v['category_id'].'<br>';
-         echo create_cat_slug($v['category_id']).'<br>';
-        echo '1';
+
+
+         // create_cat_slug($v['category_id']);
+            var_dump(full_path($v['category_id']));
+            die('OK');
+            
         //slugify
         }
+        $pros = $this->db->where('slug',NULL)->get('category')->result_array();
+        echo count($pros);
+        exit();
+        
     }
     public function business_unique_name(){
         $company = $this->db->where('company',$_REQUEST['val'])->get('vendor')->num_rows();
+        if($company > 0){
+            echo 'error';
+        }
+        else{
+            echo 'success';
+        }
+    }
+    public function unique_name(){
+        $company = $this->db->where('title',$_REQUEST['val'])->get('product')->num_rows();
         if($company > 0){
             echo 'error';
         }
@@ -2939,6 +2976,15 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     {
         $this->category("", "", "", "", $text);
     }
+    function directory($slug = '')
+    {
+        $fixed = array('business','affiliate-business','shop-online');
+        if(in_array($slug,$fixed))
+        {
+            $_SESSION['slug'] = $slug;
+        }
+        $this->category();
+    }
     function category($para1 = "", $para2 = "", $min = "", $max = "", $text = '')
     {
         
@@ -2983,11 +3029,51 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $page_data['cur_sub_category'] = $sub;
         $page_data['cur_brand'] = $brand;
         $page_data['cur_category'] = $para1;
+        $cid = array();
+        if($para1)
+        {
+        $sql = 'SELECT *
+FROM direct_cats
+WHERE FIND_IN_SET( '.$para1.' , childs)';
+$cid = $this->db->query($sql)->row(); 
+}
+if(isset($cid->cat_id))
+{
+    $page_data['opn_category'] = $cid->cat_id;
+}
+else
+{
+    $page_data['opn_category'] = $para1;
+}
+
         $page_data['text'] = $text;
         $page_data['text_url'] = $text_url;
-        $page_data['category_data'] = $this->db->get_where('category', array(
+        $page_data['category_data'] = $cat= $this->db->get_where('category', array(
             'category_id' => $para1
         ))->result_array();
+        if(isset($cat[0]['slug']))
+        {
+            $page_data['cur_slug'] = $cat[0]['slug'];
+        }
+        else if(isset($_SESSION['slug'])){
+            $page_data['cur_slug'] = $_SESSION['slug'];
+        }
+        $listing_types = array(
+            'blogs' => 'blog_listing',
+            'cars' => 'car_listing',
+            'jobs' => 'jobs_listing',
+            'charities' => 'charity_listing',
+            'business' => 'buss_listing',
+            'news' => 'news_listing',
+            'events' => 'event_listing',
+            'properties' => 'property_listing',
+            'shop-online' => 'shop_listing',
+            'affiliate-business' => 'affliate_listing',
+            );
+            if(isset($page_data['cur_slug']))
+            {
+                $page_data['is_listing'] = (isset($listing_types[$page_data['cur_slug']]))?$listing_types[$page_data['cur_slug']]:"";
+            }
         $this->load->view('front/index', $page_data);
     }
 
@@ -3058,10 +3144,9 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                     $row = (array) $value;
                 ?>
                 <li>
-                    <input type="checkbox" name="cats[]" class="cat_check" style="float:left" id="cat_<?php echo $row['category_id']; ?>" value="<?php echo $row['category_id']; ?>">
-                    <label for="cat_<?php echo $row['category_id']; ?>"><?php echo $row['category_name']; ?></label>
+                    <a href="<?= base_url('/directory'); ?>/<?= $row['slug'] ?>" for="cat_<?php echo $row['category_id']; ?>"><?php echo $row['category_name']; ?>   <i  class="fa fa-angle-down angle_rightdown"></i></a>
+                    <!--<i  class="fa fa-angle-down angle_rightdown"></i>-->
                     <div class="cat_result" id="cat_r<?php echo $row['category_id']; ?>"></div>
-                    <div class="children" style="margin-left:20px" cat="<?= $row['category_id'] ?>" id="child_<?= $row['category_id'] ?>"></div>
                     
                     
                 </li>
@@ -3506,7 +3591,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             }
             else
             {
-                $this->db->where('comp_cover > 1');
+                // $this->db->where('comp_cover > 1');
             }
             $this->db->order_by('product_id', 'desc');
 
@@ -3623,12 +3708,13 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             {
                 $this->db->select('product.*');
             }
-            $befor = $this->db;
+            $befor = $this->db; 
             $all = $this->db->get('product')->result_array();
             // print_r($this->db->last_query());    
             // die();
 
             $config['total_rows'] = count($all);
+            // var_dump($config['total_rows']);
             $config['base_url'] = base_url() . 'index.php?home/listed/';
             if ($featured !== 'ok') {
                 $config['per_page'] = 9;
@@ -3885,7 +3971,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             }
             else
             {
-                $this->db->where('comp_cover > 1');
+                // $this->db->where('comp_cover > 1');
             }
             
             if ($lat && $lng) {
@@ -3956,6 +4042,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
 
 
     /* FUNCTION: Loads Custom Pages */
+    
     function page($parmalink = '')
     {
         $pagef = $this->db->get_where('page', array(
@@ -3997,7 +4084,7 @@ foreach($data as $k=> $v)
         if(isset($data['product_id']))
         {
             $pid = $data['product_id'];
-        $unset = array('product_id','comp_logo','comp_cover','gallary','title_edit','sub_category','category');
+        $unset = array('product_id','comp_logo','comp_cover','gallary','title_edit','sub_category','category','slug');
         foreach($unset as $k=> $v)
         {
             if(isset($data[$v]))
@@ -4005,9 +4092,33 @@ foreach($data as $k=> $v)
             unset($data[$v]);
             }
         }
-        $json = array('feature','etra_content','text','enable_checks');
+        $exp = array('amenities','cats');
+         foreach($exp as $k=> $v)
+        {
+            foreach($data[$v] as $kk=> $vv)
+            {
+                if(!$vv)
+                {
+                    unset($data[$v][$kk]);
+                }
+            }
+            if(isset($data[$v]))
+            $data[$v] = implode(',',$data[$v]);
+        }
+        
+        $json = array('feature','etra_content','text','enable_checks','buttons');
          foreach($json as $k=> $v)
         {
+            if($k == 'buttons')
+            {
+                foreach($data[$v] as $kk=> $vv)
+                {
+                    if(!$vv)
+                    {
+                        unset($data[$v][$kk]);
+                    }
+                }
+            }
             if(isset($data[$v]))
             $data[$v] = json_encode($data[$v]);
         }
@@ -4031,6 +4142,12 @@ foreach($data as $k=> $v)
         $dpage = 665;
         $product_data = $this->db->get_where('product', array('product_id' => $id))->row();
         $gallary = $this->db->get_where('product_to_images', array('pid' => $id))->result_array();
+        $added_by = json_decode($product_data->added_by, true);
+                        if(isset($added_by['type']) && $added_by['type'] == 'vendor')
+                        {
+                            $vid = $added_by['id'];
+                        }
+                                $tgallary  = $this->db->where('vid',$vid)->get('textg')->result_array();
         if(!$gallary)
         {
             $gallary = $this->db->get_where('product_to_images', array('pid' => $dpage))->result_array();
@@ -4066,12 +4183,45 @@ foreach($data as $k=> $v)
             $product_data['comp_logo'] = $this->crud_model->size_img($product_data['comp_logo'],100,100);
             
         }
+        if($product_data['cats'])
+        {
+            $product_data['cats'] = explode(',',$product_data['cats']);
+            
+        }
+        if($product_data['amenities'])
+        {
+            $product_data['amenities'] = explode(',',$product_data['amenities']);
+            
+        }
+        if($product_data['etra_content'])
+        {
+            
+            $product_data['etra_content'] = json_decode($product_data['etra_content'], true);
+            $product_data['buttons'] = json_decode($product_data['buttons'], true);
+            $product_data['tgallary'] = $tgallary;
+            foreach($product_data['etra_content'] as $k =>$v)
+            {
+                $i = $k+1;
+                $nv = trim($product_data['etra_content'][$k]);
+                if($nv && $v)
+                {
+                $product_data['etra_content'][$k] = $v;
+                }
+                else
+                {
+                    $product_data['etra_content'][$k] = $v; 
+                }
+            }
+            // var_dump($product_data['etra_content']);
+            // die();
+            
+            
+        }
         echo json_encode($product_data);
         die();
     }
     function product_view($para1 = "", $para2 = "")
     {
-        // die('ok');
         $user_id = $this->session->userdata('user_id') ? $this->session->userdata('user_id') : 0;
         $this->crud_model->_set_variation($para1);
         $vendors = array();
@@ -4091,10 +4241,14 @@ foreach($data as $k=> $v)
             'last_viewed' => time()
         ));
         $vid = json_decode($product_data->row()->added_by);
-        if(isset($_GET['edit']) && ($_SESSION['login'] != 'yes') && ($vid->id != $_SESSION['vendor_id']) ){
+        if(isset($_GET['edit']) && isset($_SESSION['admin_login']) && $_SESSION['admin_login'] == 'yes' &&  $para1 == 665)
+        {
+        }
+        else if(isset($_GET['edit']) && ($_SESSION['login'] != 'yes') && ($vid->id != $_SESSION['vendor_id'])){
             $this->error();
             exit();
         }
+        
 
         $type = 'other';
         if($product_data->row()->is_bpage)
@@ -4520,9 +4674,9 @@ foreach($data as $k=> $v)
         $user = $this->db->where('vendor_id',$id)->get('vendor')->row();
         
         $added_by = array (
-  'type' => 'vendor',
-  'id' => $id,
-);
+          'type' => 'vendor',
+          'id' => $id,
+        );
         $in = array();
         $in['title'] = $user->company;
         $in['brand'] = $user->cat1;
@@ -4541,11 +4695,11 @@ foreach($data as $k=> $v)
         $in['zip'] = $user->zip;
         $in['added_by'] = json_encode($added_by);
         $in['is_bpage'] = 1;
+        $in['slug'] = slugify($user->company);
     
         $this->db->insert('product',$in);
-        //  var_dump($this->db->last_query());
-        //  die();
         $pid = $this->db->insert_id();
+        // create_slug($pid);
         $v = $this->db->where('vendor_id', $id)->update('vendor',array('bpage'=>$pid));
         //s
         if($user->pack)
@@ -4569,8 +4723,10 @@ foreach($data as $k=> $v)
             );
             $this->cart->insert($data);
             $_SESSION['subscription_vendor'] = $id;
+            return true;
             echo "checkout";
-            exit();
+            
+            // exit();
 
         }
         else
@@ -4616,14 +4772,14 @@ foreach($data as $k=> $v)
             $this->load->library('form_validation');
             $safe = 'yes';
             $char = '';
-            foreach ($_POST as $k => $row) {
+            /*foreach ($_POST as $k => $row) {
                 if (preg_match('/[\'^":()}{#~><>|=¬]/', $row, $match)) {
                     if ($k !== 'password1' && $k !== 'password2') {
                         $safe = 'no';
                         $char = $match[0];
                     }
                 }
-            }
+            }*/
 
             $this->form_validation->set_rules('name', 'First Name', 'required');
             $this->form_validation->set_rules('email', 'Email', 'valid_email|required|is_unique[vendor.email]', array('required' => 'You have not provided %s.', 'is_unique' => 'This %s already exists.'));
@@ -4635,20 +4791,31 @@ foreach($data as $k=> $v)
             $this->form_validation->set_rules('country', 'Country', 'required');
             $this->form_validation->set_rules('zip', 'Zip', 'required');
             $this->form_validation->set_rules('city', 'City', 'required');
-            $this->form_validation->set_rules('middle_name', 'Middle Name', 'required');
+            // $this->form_validation->set_rules('middle_name', 'Middle Name', 'required');
             $this->form_validation->set_rules('last_name', 'Last Name', 'required');
+            if($this->input->post('company')){
+                $num = $this->db->where('title',$this->input->post('company'))->get('product');
+                if($num->num_rows() > 0){
+                    echo"Company Already exit";
+                $this->form_validation->set_rules('company', 'Company', 'required', array('required' => translate('company_name_already_teken_please_try_unique_name')));
+                }
+            }
+            
             if($this->input->post('affiliate') == 'yes'){
             $this->form_validation->set_rules('affiliate_terms_check', 'Affiliate Terms of Use', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
             }
+            
+            
             $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
+            
             if ($this->form_validation->run() == FALSE) {
                 echo validation_errors();
+                
             } else {
+                 
                 if ($safe == 'yes') {
-                    if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
-                        $captcha_answer = $this->input->post('g-recaptcha-response');
-                        $response = $this->recaptcha->verifyResponse($captcha_answer);
-                        if ($response['success']) {
+                    if (true) {
+                        if (true) {
                             $data['name'] = $this->input->post('name');
                             $data['email'] = $this->input->post('email');
                             $data['address1'] = $this->input->post('address1');
@@ -4677,6 +4844,11 @@ foreach($data as $k=> $v)
                                 $password = $this->input->post('password1');
                                 $data['password'] = sha1($password);
                                 $this->db->insert('vendor', $data);
+                                $this->vendor_page($this->db->insert_id());
+                                $msg = 'done_and_sent';
+                            echo $msg;
+                            exit();
+                                
 
                                 $msg = 'done';
                                 if ($this->email_model->account_opening('vendor', $data['email'], $password) == false) {
@@ -4685,7 +4857,8 @@ foreach($data as $k=> $v)
                                     $msg = 'done_and_sent';
                                 }
                             }
-                            $this->vendor_page($this->db->insert_id());
+                            
+                            // $this->vendor_page($this->db->insert_id());
                             $msg = 'done_and_sent';
                             echo $msg;
                             exit();
@@ -4727,23 +4900,27 @@ foreach($data as $k=> $v)
                             $password = $this->input->post('password1');
                             $data['password'] = sha1($password);
                             $this->db->insert('vendor', $data);
+                             
                             // print_r($this->db->last_query());    
                             // die();
-                            $this->vendor_page($this->db->insert_id());
-                            $msg = 'done_and_sent';
-                            echo $msg;
-                            exit();
-
-                            $msg = 'done';
+                            if($this->vendor_page($this->db->insert_id()) == true){
                             if ($this->email_model->account_opening('vendor', $data['email'], $password) == true) {
                                 if ($this->email_model->vendor_reg_email_to_admin($data['email'], $password) == false) {
                                     $msg = 'done_but_not_sent';
                                 } else {
+                                    
                                     $msg = 'done_and_sent';
                                 }
                             } else {
                                 $msg = 'done_and_sent';
                             }
+                            }
+                            
+                            echo $msg;
+                            exit();
+
+                            $msg = 'done';
+                            
                         }
                     }
                 } else {
@@ -4751,14 +4928,13 @@ foreach($data as $k=> $v)
                 }
             }
         } else if ($para1 == 'registration') {
-            if ($this->crud_model->get_settings_value('general_settings', 'vendor_system') !== 'ok') {
-                redirect(base_url());
-            }
+            
             if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
                 $page_data['recaptcha_html'] = $this->recaptcha->render();
             }
 
             $page_data['pkgs'] = $this->db->get('membership')->result_array();
+            $page_data['cat'] = $this->db->get('member_cat')->result_array();
             // $page_data['def'] = $this->db->where('def',1)->get('package')->row();
             $page_data['page_name'] = "vendor/register";
             $page_data['asset_page'] = "register";
@@ -4879,21 +5055,22 @@ foreach($data as $k=> $v)
             if($report){
                 $email = $this->email_model->report_email($lastid);
                 if ($email) {
-                       
-                         $ret = array(
-                        "email"=>'1',
-                        "msg"=>'email sent'
-                        );
+                       echo 1;
+                        //  $ret = array(
+                        // "email"=>'1',
+                        // "msg"=>'email sent'
+                        // );
                     } else{
-                       $ret = array(
-                        "email"=>'0',
-                        "msg"=>'email not sent'
-                         );
+                        echo 0;
+                    //   $ret = array(
+                    //     "email"=>'0',
+                    //     "msg"=>'email not sent'
+                    //      );
                     }
                    
             }
             
-            echo json_encode($ret);
+            // echo json_encode($ret);
        
     }
     function contact_us(){
@@ -4904,35 +5081,41 @@ foreach($data as $k=> $v)
             $phone = $_GET['phone'];
             $msg = $_GET['message'];
             $pid = $_GET['pid'];
+            $bname = $_GET['bname'];
+            $submail = $_GET['submail'];
+            $sub = $_GET['sub'];
             $data = array(
                 "first_name" =>$fname,
                 "last_name"=>$lname,
                 "email" =>$email,
                 "phone"=>$phone,
                 "msg" =>$msg,
-                'pid'=>$pid
+                'pid'=>$pid,
+                'bname'=>$bname,
+                'submail'=>$submail,
+                'subject'=>$sub
                 );
             
             $report = $this->db->insert('contact_us', $data);
             $lastid = $this->db->insert_id();
             if($report){
-                $email = $this->email_model->contact_email($lastid);
-                    var_dump($email);
-                    die('ok');
-               if ($email) {
-                    //   echo 'ok';
-                         $ret = array(
-                        "email"=>'1',
-                        "msg"=>'email sent'
-                        );
+                $email = $this->email_model->contact_email($lastid,$submail);
+                    // var_dump($email);
+                    // die('ok');
+               if ($email == "true") {
+                      echo '1';
+                        //  $ret = array(
+                        // "email"=>'1',
+                        // "msg"=>'email sent'
+                        // );
                     } else{
-                        // echo 'no';
-                       $ret = array(
-                        "email"=>'0',
-                        "msg"=>'email not sent'
-                         );
+                        echo '0';
+                    //   $ret = array(
+                    //     "email"=>'0',
+                    //     "msg"=>'email not sent'
+                    //      );
                     }
-                   return json_encode($ret);
+                //   echo json_encode($ret);
             }
             
             
@@ -5436,15 +5619,16 @@ foreach($data as $k=> $v)
         $weight = 1;
         $mass_unit = 'kg';
         $vproduct = $this->db->where('product_id',$pid)->get('product')->row();
-        if($vproduct)
+        if(isset($vproduct->warehouse_id) && $vproduct->warehouse_id)
         {
-            $added = json_decode($vproduct->added_by,true);
-            if(isset($added['type']) && $added['type'] == 'vendor')
-            {
-                $vendor = $this->db->where('vendor_id',$added['id'])->get('vendor')->row();
-                $from = $this->get_shippo_rate($vendor->name,$vendor->vendor_id,$vendor->city,$vendor->address1,$vendor->email,$vendor->phone,$vendor->zip);
+                $address = $this->db->where('address_id',$vproduct->warehouse_id)->get('address')->row();
+                if($address)
+                {
+                    $from = $address->shippo_id;
+                }
+                // $from = $this->get_shippo_rate($vendor->name,$vendor->vendor_id,$vendor->city,$vendor->address1,$vendor->email,$vendor->phone,$vendor->zip);
             
-            }
+            
             
             if($aproduct->weight)
             {
@@ -5499,7 +5683,7 @@ curl_setopt_array($curl, array(
 $response = curl_exec($curl);
 
 curl_close($curl);
-$response = json_decode($response,true);
+$response = json_decode($response,true); 
 if(isset($response['rates']))
 {
     
@@ -5507,7 +5691,7 @@ return $response['rates'];
 }
 else
 {
-    return $response;
+    return false;
 }
         }
     }
@@ -5556,24 +5740,14 @@ $err = curl_error($curl);
 curl_close($curl);
         }
     }
-    function get_shippo_rate($fname,$lname,$city,$address1,$email,$phone,$zip = '')
+    function get_shippo_rate($fname,$lname,$country,$state,$city,$address1,$email,$phone,$zip = '')
     {
             //curl request here 
-            $country = $this->db->where('cities_id',$city)->get('cities')->row();
-            $city= '';
-            $state= '';
-            $city= '';
+            $country = $this->db->where('countries_id',$country)->get('countries')->row();
             $country_ios= '';
             if(!empty($country))
             {
-                $city= $country->name;
-            $state= $country->state_id;
-            $state = $this->db->where('states_id',$state)->get('states')->row();
-            if(!empty($state))
-            {
-                $state= $state->iso2;
-            }
-            $country_ios= $country->country_code;
+                $country_ios= $country->iso2;
             }
             $curl = curl_init();
             $param = array(
@@ -5892,6 +6066,17 @@ if(isset($obj->object_id) && $obj->object_id)
                     $this->cart->update($data);
                 }
             }
+            $img = $this->crud_model->file_view('product',$product_id,'','','thumb','src','multi','one');
+            $comp_cover = $this->crud_model->get_type_name_by_id('product', $para2, 'comp_logo');
+            if($comp_cover)
+                        {
+                            $img = $this->crud_model->get_img($comp_cover);
+                            if(isset($img->secure_url))
+                            {
+                                $img = $img->secure_url;
+                            }
+
+                        }
 
             $data = array(
                 'id' => $para2,
@@ -5901,7 +6086,7 @@ if(isset($obj->object_id) && $obj->object_id)
                 'name' => $this->crud_model->get_type_name_by_id('product', $para2, 'title'),
                 'shipping' => $this->crud_model->get_shipping_cost($para2),
                 'tax' => $this->crud_model->get_product_tax($para2),
-                'image' => $this->crud_model->file_view('product', $para2, '', '', 'thumb', 'src', 'multi', 'one'),
+                'image' => $img,
                 'coupon' => ''
             );
 
@@ -6332,7 +6517,27 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
             if(isset($_GET['firstname']) && isset($_GET['lastname'])&& isset($_GET['address1'])&& isset($_GET['email']) && isset($_GET['country']) && isset($_GET['phone']) && isset($_GET['city']))
             {
             // $obj = $this->get_shippo_rate($_GET['firstname'],$_GET['lastname'],$_GET['country'],$_GET['address1'],$_GET['email'],$_GET['phone']);
-            $obj = $this->get_shippo_rate($_GET['firstname'],$_GET['lastname'],$_GET['city'],$_GET['address1'],$_GET['email'],$_GET['phone'],$_GET['zip']);
+            $obj = $this->get_shippo_rate($_GET['firstname'],$_GET['lastname'],$_GET['country'],$_GET['state'],$_GET['city'],$_GET['address1'],$_GET['email'],$_GET['phone'],$_GET['zip']);
+            if(is_object($obj))
+            {
+                $obj = (array) $obj;
+                $msg = '';
+                foreach($obj as $k=> $v)
+                {
+                    
+                    if(isset($v[0]))
+                    $msg = $msg.$v[0].'<br>';
+                    else
+                    $msg = $msg.$v.'<br>';
+                }
+                $ret = array(
+                    'status'=>0,
+                    'msg'=>$msg
+                    );
+                    echo json_encode($ret);
+                    exit();
+                
+            } 
             $r_id = time();
             $carted = $this->cart->contents();
             foreach($carted as $k => $v)
@@ -6340,7 +6545,21 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 $rate = array();
                 if($obj)
                 {
-                $rate = $this->get_rate_object($v['id'],$v['address'],$obj);
+                    
+                $rate = $this->get_rate_object($v['id'],0,$obj);
+                }
+                if(!$rate)
+                {
+                    $ret = array(
+                    'status'=>0,
+                    'msg'=>'Shippo did not support your diliver location please try annother address!',
+                    'data'=>$rate,
+                    'address'=>$obj 
+                    );
+                    echo json_encode($ret);
+                    exit();
+                }
+                    
                 }
                 
                 $ship_id = 0;
@@ -6420,9 +6639,13 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 $methods[$sk]['price'] = round($tot*$con_rate, 2);
             }
             $data = array('methods'=>$methods,'r_id'=>$r_id);
-            echo $r_id;
-            die();
-            }
+            $ret = array(
+                    'status'=>1,
+                    'msg'=>$r_id
+                    );
+                    echo json_encode($ret);
+                    exit();
+            
         } elseif ($para1 == "delivery_address") {
             $this->load->view('front/shopping_cart/delivery_address');
         } elseif ($para1 == "payments_options") {
@@ -7953,6 +8176,7 @@ $expire_time = strtotime($expire);
         $page_data['page_name'] = 'blog';
         $page_data['asset_page'] = 'blog';
         $page_data['page_title'] = translate('blog');
+          $page_data['blogs'] = $this->db->get('blog')->result_array();
         $this->load->view('front/index', $page_data);
     }
 
