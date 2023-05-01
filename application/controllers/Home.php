@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
 class Home extends CI_Controller
 {
 
-    /*n
+    /*nn
      *  Developed by: Active IT zone
      *  Date    : 14 July, 2015
      *  Active Supershop eCommerce CMS
@@ -85,7 +85,7 @@ class Home extends CI_Controller
         $this->load->library('paypal');
         $this->load->library('twoCheckout_Lib');
         $this->load->library('vouguepay');
-        // $this->load->library('pum');
+        $this->load->library('pum');
         //add affliate log
         if(isset($_GET['aff_id']))
         {
@@ -260,23 +260,40 @@ echo 1;
       }
       
     }
-    
+   public function update_cats(){
+        $this->db->limit(1, 0);
+        $pros = $this->db->where('path_status','0')->get('category')->row_array();
+        if(!$pros['path']){
+            $r = $this->db->where('category_id',$pros['category_id'])->update('category',array('path' => $pros['category_id']));
+            
+        }else{
+            $array = explode(',', $pros['path']);
+            $lastid =  end($array);
+            $pros1 = $this->db->where('category_id',$lastid)->get('category')->row_array();
+            
+            if($pros1['pcat'] == 0){
+                 $this->db->where('category_id',$pros['category_id'])->update('category',array('path_status' => 1));
+            }else{
+                  $array = $ex =  explode(',', $pros['path']);
+                  $array[] =$pros1['pcat'];
+                  $im = implode(',',$array);
+                  $this->db->where('category_id',$pros['category_id'])->update('category',array('path' =>$im)); 
+            }
+        // $this->db->where('category_id',$pros['category_id'])->update('category',array('path_status' => 1));  
+        
+        }
+        $all = $this->db->where('path_status','0')->get('category')->result_array();
+        echo count($all);
+   } 
     public function update_slug_cat()
     {
-        ini_set('max_execution_time', '300'); //300 seconds = 5 minutes
-
-               $this->db->limit(1, 0);
+               $this->db->limit(15, 0);
 
         $pros = $this->db->where('slug',NULL)->get('category')->result_array();
         // var_dump($this->db->last_query());
         foreach($pros as $k=> $v)
         {
-
-
-         // create_cat_slug($v['category_id']);
-            var_dump(full_path($v['category_id']));
-            die('OK');
-            
+         create_cat_slug($v['category_id']);
         //slugify
         }
         $pros = $this->db->where('slug',NULL)->get('category')->result_array();
@@ -3030,16 +3047,14 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $page_data['cur_brand'] = $brand;
         $page_data['cur_category'] = $para1;
         $cid = array();
+        
         if($para1)
         {
-        $sql = 'SELECT *
-FROM direct_cats
-WHERE FIND_IN_SET( '.$para1.' , childs)';
-$cid = $this->db->query($sql)->row(); 
+            $cid = $this->db->where('category_id',$para1)->get('category')->row();
 }
-if(isset($cid->cat_id))
+if(isset($cid->path))
 {
-    $page_data['opn_category'] = $cid->cat_id;
+    $page_data['opn_category'] = implode(' , ',array_reverse(explode(',',$cid->path)));
 }
 else
 {

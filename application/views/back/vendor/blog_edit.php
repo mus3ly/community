@@ -27,7 +27,7 @@
                                     <?php echo translate('blog_title');?>
                                         </label>
                                 <div class="col-sm-6">
-                                    <input type="text" name="title" id="demo-hor-1" value="<?php echo $row['title']; ?>" placeholder="<?php echo translate('blog_title');?>" class="form-control required">
+                                    <input type="text" name="title" id="blog_title" value="<?php echo $row['title']; ?>" placeholder="<?php echo translate('blog_title');?>" class="form-control required">
                                 </div>
                             </div>
                             <div class="form-group btm_border">
@@ -127,6 +127,7 @@
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('slug');?></label>
                                 <div class="col-sm-6">
                                     <input type="text" name="slug" id="slug" value="<?php echo $row['slug']; ?>" class="form-control required">
+                                    <small id="slug_error_msg" style="display:none;color:red">Slug already exists, choose the new and unique one..</small>
                                 </div>
                             </div>
                             
@@ -146,7 +147,7 @@
                     </div>
                     
                     <div class="col-md-1">
-                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');" ><?php echo translate('upload');?></span>
+                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" id="registerbtn" onclick="form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');" ><?php echo translate('upload');?></span>
                     </div>
                     
                 </div>
@@ -161,38 +162,27 @@
 <script src="<?php echo base_url(); ?>template/back/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
   <script>
         $('#slug').on('keyup',function(){
+              $('#registerbtn').attr("disabled", false);
+            $('#slug').removeClass('error');
+            $('#slug_error_msg').css({'display':'none'});
             var val = $(this).val();
             var url='<?= base_url('vendor/productslug') ?>';
-              $.ajax({
-        url: url,
-        type: "Post",
-        async: true,
-        data: { value:val},
-        success: function (data) {
-           if(data == 'error'){
-               $('#slug').addClass('error');
-           }
-        },
-        error: function (xhr, exception) {
-            var msg = "";
-            if (xhr.status === 0) {
-                msg = "Not connect.\n Verify Network." + xhr.responseText;
-            } else if (xhr.status == 404) {
-                msg = "Requested page not found. [404]" + xhr.responseText;
-            } else if (xhr.status == 500) {
-                msg = "Internal Server Error [500]." +  xhr.responseText;
-            } else if (exception === "parsererror") {
-                msg = "Requested JSON parse failed.";
-            } else if (exception === "timeout") {
-                msg = "Time out error." + xhr.responseText;
-            } else if (exception === "abort") {
-                msg = "Ajax request aborted.";
-            } else {
-                msg = "Error:" + xhr.status + " " + xhr.responseText;
+             if(val){
+                $.ajax({
+                url: url,
+                type: "Post",
+                async: true,
+                data: { value:val},
+                success: function (data) {
+                     if(data == 'error'){
+                       $('#slug').addClass('error');
+                       $('#slug_error_msg').css({'display':'block'});
+                       $('#registerbtn').attr("disabled", true);
+                       
+                   }
+                 },
+                });
             }
-           
-        }
-    });
         });
         
     </script>
@@ -464,6 +454,15 @@
     var dlt_cont_func = 'delete';
     var feature = 0;
 </script>
+  <script>
+        $("#blog_title").keyup(function() {
+          var Text = $(this).val();
+          Text = Text.toLowerCase();
+          Text = Text.replace(/[^a-zA-Z0-9]+/g,'-');
+          $("#slug").val(Text);    
+          $('#slug').keyup();
+        });
+    </script>
 <style>
 	.btm_border{
 		border-bottom: 1px solid #ebebeb;

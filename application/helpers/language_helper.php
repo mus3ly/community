@@ -343,8 +343,7 @@ function create_cat_slug($id)
              }
              if($slug)
              {
-                 $path = implode(',',full_path($v['category_id']));
-                 $r = $CI->db->where('category_id',$v['category_id'])->update('category',array('slug'=>$slug,'path'=>$path));
+                 $r = $CI->db->where('category_id',$v['category_id'])->update('category',array('slug'=>$slug));
                 //  var_dump($r);
                 //  var_dump($v['product_id']);
                 return  $slug;

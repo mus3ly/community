@@ -66,3 +66,25 @@ $route['directory'] = 'home/sneaker';
 $route['404_override'] = 'home/error';
 $route['sitemap.xml'] = 'home/sitemap';
 $route['translate_uri_dashes'] = FALSE;
+
+require_once( BASEPATH .'database/DB.php');
+$db =& DB();
+
+$query = $db->query("select * from product where slug != '' ")->result_array();
+foreach ($query as $v){
+    
+    $route[$v['slug']] = 'home/product_view/'.$v['product_id'];
+}
+$query1 = $db->query("select * from category where slug != '' ")->result_array();
+foreach ($query1 as $v){
+    
+    $route['directory/'.$v['slug']] = 'home/category/'.$v['category_id'];
+    
+}
+$query1 = $db->query("select * from page where parmalink != '' ")->result_array();
+foreach ($query1 as $v){
+    
+    $route[$v['parmalink']] = 'home/page/'.$v['parmalink'];
+    
+}
+$route['directory/(:any)'] = 'home/directory/$1';
