@@ -1,3 +1,16 @@
+<?php
+	    if($this->session->flashdata('message'))
+	    {
+	    ?>
+	    <div class="alert alert-success" id="success-alert">
+               <button type="button" class="close" data-dismiss="alert">x</button>
+               <?= $this->session->flashdata('message');
+               unset($_SESSION['message'])
+               ?>
+            </div>
+            <?php
+	    }
+            ?>
 <div class="row">
 	<div class="col-sm-8">
 		<div class="pagination-wrapper top">

@@ -1,98 +1,99 @@
-       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+<style>
+    .height_auto{
+        height:auto !important;
+        overflow: auto !important;;
+    }
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+<?php
 
-    <?php
+if(isset($_GET['test'])) {
+    include "index_new.php";
+    die();
+}
 
-    if(isset($_GET['test']))
+?>
+<?php
+
+$pro = array();
+
+
+
+if(isset($product_data[0]))
+
+{
+
+    $pro = $product_data[0];
+
+}
+
+$checks = array();
+
+if($pro['enable_checks'])
+
+{
+    if(!is_array($pro['enable_checks'])){
+        $checks = json_decode($pro['enable_checks']);
+    } else {
+        $checks = $pro['enable_checks'];
+    }
+
+}
+
+
+
+$vid = 0;
+
+$ad = json_decode($pro['added_by'],true);
+
+if(isset($ad['id']))
+
+{
+
+    $vid = $ad['id'];
+
+}
+
+$pros = $this->db->where("`added_by` LIKE '%".$vid."%' AND `added_by` LIKE '%vendor%'")->get('product')->result_array();
+
+
+
+//galary
+
+$imgs = $this->db->where('pid',$pro['product_id'])->get('product_to_images')->result_array();
+
+$logo = '';
+
+$cat = '';
+
+if($pro['category'])
+
+{
+
+    $c = $this->db->where('category_id',$pro['category'])->get('category')->row();
+
+    if(isset($c->category_name))
 
     {
 
-        include "index_new.php";
-
-        die();
+        $cat = $c->category_name;
 
     }
 
-    ?>
+}
 
-    <?php
+$address = '';
 
-    $pro = array();
+if($pro['lat'] && $pro['lng'])
 
- 
+{
 
-    if(isset($product_data[0]))
+    $lat = $pro['lat'];
 
-    {
+    $long = $pro['lng'];
 
-        $pro = $product_data[0];
-
-    }
-
-    $checks = array();
-
-        if($pro['enable_checks'])
-
-        {
-
-            $checks = json_decode($pro['enable_checks']);
-
-        }
-
-        
-
-     $vid = 0;   
-
-    $ad = json_decode($pro['added_by'],true);
-
-    if(isset($ad['id']))
-
-    {
-
-        $vid = $ad['id'];
-
-    }
-
-    $pros = $this->db->where("`added_by` LIKE '%".$vid."%' AND `added_by` LIKE '%vendor%'")->get('product')->result_array();
-
-    
-
-    //galary
-
-    $imgs = $this->db->where('pid',$pro['product_id'])->get('product_to_images')->result_array();
-
-    $logo = '';
-
-    $cat = '';
-
-    if($pro['category'])
-
-    {
-
-        $c = $this->db->where('category_id',$pro['category'])->get('category')->row();
-
-        if(isset($c->category_name))
-
-        {
-
-            $cat = $c->category_name;
-
-        }
-
-    }
-
-        $address = '';
-
-        if($pro['lat'] && $pro['lng'])
-
-        {
-
-            $lat = $pro['lat'];
-
-            $long = $pro['lng'];
-
-            $url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$long&sensor=false&key=".$this->config->item('map_key');
+    $url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$long&sensor=false&key=".$this->config->item('map_key');
 
     ;
 
@@ -128,37 +129,37 @@
 
 
 
-        }
+}
 
-    if(true)
+if(true)
 
-                                                {
+{
 
-                                                    $logo = $this->crud_model->get_img($pro['comp_logo']);
+    $logo = $this->crud_model->get_img($pro['comp_logo']);
 
-                                                    if(isset($logo->path))
+    if(isset($logo->path))
 
-                                                    {
+    {
 
-                                                        $logo = base_url().$logo->path;
+        $logo = base_url().$logo->path;
 
-                                                    }
+    }
 
-                                                }
+}
 
-                                                $cover = '';
+$cover = '';
 
-    if(true)
+if(true)
 
-                                                {
+{
 
-                                                    $cover = $this->crud_model->size_img($pro['comp_cover'],820,312);
+    $cover = $this->crud_model->size_img($pro['comp_cover'],820,312);
 
-                                                }
+}
 
-                                                
 
-                                                
+
+
 
 // function getConfig($key){
 
@@ -170,41 +171,40 @@
 
 // var_dump(getConfig('title'));
 
-    ?>
+?>
+<!DOCTYPE html>
 
-    <!DOCTYPE html>
+<head>
 
-    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Community Hubland</title>
 
-        <title>Community Hubland</title>
+    <!-- meta tag -->
 
-        <!-- meta tag -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="Content-Language" content="en-us"/>
 
-        <meta http-equiv="Content-Language" content="en-us"/>
+    <meta name="description" content=""/>
 
-        <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
 
-        <meta name="keywords" content=""/>
+    <meta name="distribution" content="global"/>
 
-        <meta name="distribution" content="global"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link id="favicon" rel="icon"  type="<?= base_url(); ?>template/front/images/favicon.png" href="<?= base_url(); ?>template/front/images/favicon.png">
 
-        <link id="favicon" rel="icon"  type="<?= base_url(); ?>template/front/images/favicon.png" href="<?= base_url(); ?>template/front/images/favicon.png">
+    <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/font-awesome.min.css" />
 
-        <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/font-awesome.min.css" />
+    <link rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/bootstrap.min.css">
 
-        <link rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/bootstrap.min.css">
-
-        <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/style.css" />
+    <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/style.css" />
 
     <style type="text/css">
 
@@ -226,7 +226,7 @@
 
         .social_media img{    width: 50px;
 
-        height: 50px;}
+            height: 50px;}
 
         .rating {direction: ltr!important;}
 
@@ -238,21 +238,19 @@
 
     </style>
 
-    </head>
+</head>
 
-    <body id="page-name">
-
-
+<body id="page-name">
 
 
 
-    <div class="lines_shape">
-
-        <img src="<?= base_url(); ?>template/front/images/lines-shape.png" alt="">
-
-    </div>
 
 
+<div class="lines_shape">
+
+    <img src="<?= base_url(); ?>template/front/images/lines-shape.png" alt="">
+
+</div>
 
 
 
@@ -260,23 +258,29 @@
 
 
 
-    <div class="business_card">
 
-        <div class="container">
 
-            <?php
+<div class="business_card">
 
-            if(in_array('banner_section',$checks) || true)
+    <div class="container">
 
-            {
+        <?php
+        if(!is_array($pro['enable_checks'])){
+            $checks = explode(',', $pro['enable_checks']);
+        } else {
+            $checks = $pro['enable_checks'];
+        }
+        if(in_array('banner_section', $checks) || true)
 
-                ?>
+        {
 
-            <div class="business_banner"  style="background: url('<?= $cover ?>');background-position:center;background-size:100% 100%;">
+            ?>
+
+            <div class="business_banner"  style="background: url('<?= $cover ?>');background-position:center;background-size:cover;">
 
                 <div class="overlay_banner__box"></div>
 
-         <?php  /* ?>
+                <?php  /* ?>
 
          <div class="social_links_box">
 
@@ -296,7 +300,7 @@
 
                     $img = $this->crud_model->get_img($row->img)->secure_url;
 
-                                 } 
+                                 }
 
                                  if($v)
 
@@ -326,7 +330,7 @@
 
                     <a href="tel:<?= $pro['bussniuss_phone']?>"><img src="<?= base_url(); ?>template/front/images/phone-white4.png" alt="" id="left_align"></a>
 
-                     <!--<a href="#"><i class="fa fa-map-marker"></i></a>-->
+                    <!--<a href="#"><i class="fa fa-map-marker"></i></a>-->
 
                 </div>
 
@@ -334,25 +338,25 @@
 
                     <ul>
 
-                        
+
 
                         <li><a href="#" id="shareit"><img src="<?= base_url(); ?>template/front/images/share.png" alt=""></a>
 
-                        <div class="social_mediabox">
+                            <div class="social_mediabox">
 
-                            <ul>
+                                <ul>
 
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
 
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
 
-                                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-instagram"></i></a></li>
 
-                                <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
 
-                            </ul>
+                                </ul>
 
-                        </div>
+                            </div>
 
                         </li>
 
@@ -378,15 +382,15 @@
 
                         <p><?= $pro['slog'] ;?>
 
-                        
+
 
                         </p>
 
                         <?php
 
-                                    echo $this->crud_model->rate_html($pro['rating_num']);
+                        echo $this->crud_model->rate_html($pro['rating_num']);
 
-                                    ?>
+                        ?>
 
 
 
@@ -400,45 +404,45 @@
 
                             <li><a target = "_blank" href="https://www.google.com/maps/?q=<?= $pro['lat'];?>,<?= $pro['lng'];?>"><img src="<?= base_url(); ?>template/front/images/maplocation-s.png" alt="" ></a></li>
 
-                                <?php
+                            <?php
 
-                        if ($this->session->userdata('user_login') == "yes") {
+                            if ($this->session->userdata('user_login') == "yes") {
 
-                            
 
-                            $user_id = $this->session->userdata('user_id');
 
-                        ?>
+                                $user_id = $this->session->userdata('user_id');
 
-                        Here
+                                ?>
 
-                            <li><a target = "_blank" href="<?php echo $this->crud_model->product_link($pro['product_id']); ?>?rate=1"><i class="fa-solid fa-star"></i></a></li>
+                                Here
 
-                            <li><span class="btn" onclick="to_wishlist(<?= $pro['product_id']?>,event)" data-toggle="tooltip" data-placement="right" data-original-title="Add To Wishlist">
+                                <li><a target = "_blank" href="<?php echo $this->crud_model->product_link($pro['product_id']); ?>?rate=1"><i class="fa-solid fa-star"></i></a></li>
+
+                                <li><span class="btn" onclick="to_wishlist(<?= $pro['product_id']?>,event)" data-toggle="tooltip" data-placement="right" data-original-title="Add To Wishlist">
 
                             <i class="fa fa-heart"></i>
 
                         </span></li>
 
-                            <?php
+                                <?php
 
-                        }
+                            }
 
-                        else
+                            else
 
-                        {
+                            {
+
+                                ?>
+
+                                <li><a target = "_blank" href="<?php echo base_url('home/login_set/login'); ?>"><i class="fa-solid fa-star"></i> </a></li>
+
+                                <?php
+
+                            }
 
                             ?>
 
-                            <li><a target = "_blank" href="<?php echo base_url('home/login_set/login'); ?>"><i class="fa-solid fa-star"></i> </a></li>
 
-                            <?php
-
-                        }
-
-                            ?>
-
-                            
 
                         </ul>
 
@@ -450,61 +454,39 @@
 
             <?php
 
-            }
+        }
 
-            ?>
+        ?>
 
-            
 
-        </div>
 
     </div>
 
+</div>
 
 
 
 
 
 
-    <div class="tabs_wrap">
 
-        <div class="container">
+<div class="tabs_wrap">
 
-            <div class="inner_tabs">
+    <div class="container">
 
-                <ul class="tabs__box">
+        <div class="inner_tabs">
 
-                    <?php
+            <ul class="tabs__box">
 
-                        if($pro['default_tab'] == 'tab_3'){?>
+                <?php
 
-                <li class="tab-link__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_3' ?"current":""; ?>" data-tab="tab_3">Blogs</li>
+                if($pro['default_tab'] == 'tab_3'){?>
 
-                <li class="tab-link__box" data-tab="tab_1">Profile</li>
+                    <li class="tab-link__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_3' ?"current":""; ?>" data-tab="tab_3">Blogs</li>
 
-                <li class="tab-link__box" data-tab="tab_2">Events</li>
-
-                <li class="tab-link__box" data-tab="tab_4">Jobs</li>
-
-                <li class="tab-link__box" data-tab="tab_5">Store</li>
-
-                <li class="tab-link__box" data-tab="tab_6">Reviews</li>
-
-                    <?php
-
-                        }else{
-
-                    
-
-                    ?>
-
-                    <li class="tab-link__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_1' ?"current":""; ?>" data-tab="tab_1">Profile</li>
-
-                    <li class="tab-link__box" data-tab="tab_3">Blogs</li>
+                    <li class="tab-link__box" data-tab="tab_1">Profile</li>
 
                     <li class="tab-link__box" data-tab="tab_2">Events</li>
-
-                    
 
                     <li class="tab-link__box" data-tab="tab_4">Jobs</li>
 
@@ -514,79 +496,101 @@
 
                     <?php
 
-                        }
+                }else{
+
+
 
                     ?>
 
-                </ul>
+                    <li class="tab-link__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_1' ?"current":""; ?>" data-tab="tab_1">Profile</li>
+
+                    <li class="tab-link__box" data-tab="tab_3">Blogs</li>
+
+                    <li class="tab-link__box" data-tab="tab_2">Events</li>
 
 
 
-                
+                    <li class="tab-link__box" data-tab="tab_4">Jobs</li>
 
-            </div>
+                    <li class="tab-link__box" data-tab="tab_5">Store</li>
 
-        </div>
+                    <li class="tab-link__box" data-tab="tab_6">Reviews</li>
 
-        <div id="tab_1" class="tab-content__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_1' ?"current":""; ?>">
+                    <?php
 
-
-
-                    
-
-                    <div class="advertise_wrap" style="padding-bottom: 0;">
-
-                        <div class="clipart">
-
-                            <?php
-
-                            
-
-                            // $cover = base_url().'template/front/images/info-graphic.png';
-
-                            if($pro['firstImg']) {
-
-                                                                            $cover = $this->crud_model->size_img($pro['firstImg'],820,312);
-
-                            }
-
-                            ?>
-
-                            <!--<img src="<?= base_url(); ?>template/front/images/business_graphic-clipart.png" alt="">-->
-
-                        </div>
-
-                        <div class="container">
-
-                            <?php
-
-            if(in_array('service_description',$checks) || true)
-
-            {
+                }
 
                 ?>
 
-                            <div class="row" id="advertise_info">
+            </ul>
 
-                            <div class="col-sm-4 business_graphic" id="business__graphic">
 
-                                
 
-                                <img src="<?= $cover; ?>" alt="">
 
-                            </div>
 
-                            <div class="col-sm-8 communitybox"  >
+        </div>
 
-                                <b><?= $pro['slogan'] ?></b>
+    </div>
 
-                                <h3><?= $pro['main_heading'] ?></h3>
+    <div id="tab_1" class="tab-content__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_1' ?"current":""; ?>">
 
-                                <div class="scroll" id="scrol_9sec" >
+
+
+
+
+        <div class="advertise_wrap" style="padding-bottom: 0;">
+
+            <div class="clipart">
+
+                <?php
+
+
+
+                // $cover = base_url().'template/front/images/info-graphic.png';
+
+                if($pro['firstImg']) {
+
+                    $cover = $this->crud_model->size_img($pro['firstImg'],820,312);
+
+                }
+
+                ?>
+
+                <!--<img src="<?= base_url(); ?>template/front/images/business_graphic-clipart.png" alt="">-->
+
+            </div>
+
+            <div class="container">
+
+                <?php
+
+                if(in_array('service_description',$checks) || true)
+
+                {
+
+                    ?>
+
+                    <div class="row" id="advertise_info">
+
+                        <div class="col-sm-4 business_graphic" id="business__graphic">
+
+
+
+                            <img src="<?= $cover; ?>" alt="">
+
+                        </div>
+
+                        <div class="col-sm-8 communitybox"  >
+
+                            <b><?= $pro['slogan'] ?></b>
+
+                            <h3><?= $pro['main_heading'] ?></h3>
+
+                            <div class="scroll" id="scrol_9sec" >
 
                                 <div class="desc">
-
-                                <p ><?= $pro['description'] ?></p></div>
+                                    <p ><?= nl2br($pro['description']) ?></p>
+                                </div>
 
                                 <ul class="listing_none">
 
@@ -602,15 +606,15 @@
 
                                             ?>
 
-                                             <li>
+                                            <li>
 
-                                        <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
+                                                <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
 
-                                         <?= $value['fhead'] ?>
+                                                <?= $value['fhead'] ?>
 
-                                         <p>- <?= $value['fdet'] ?></p>
+                                                <p>- <?= $value['fdet'] ?></p>
 
-                                    </li>
+                                            </li>
 
                                             <?php
 
@@ -622,49 +626,49 @@
 
                                 </ul>
 
-                                </div>
+                            </div>
 
-                                <div id="equal_btnw1" style="    margin-bottom: 15px;">
+                            <div id="equal_btnw1" style="    margin-bottom: 15px;">
 
-                                    <div class="learn_more_btns">
+                                <div class="learn_more_btns" style="padding:0px;">
 
                                     <?php
 
                                     if(isset($pro['buttons']) && !empty($pro['buttons'])){
 
-                                    $btns  = json_decode($pro['buttons'],true);
+                                        $btns  = json_decode($pro['buttons'],true);
 
-                                    $i = 0;
+                                        $i = 0;
 
 
 
-                                    foreach ($btns as $key => $value) {
+                                        foreach ($btns as $key => $value) {
 
-                                        $i++;
+                                            $i++;
 
-                                        if($i %2 !=  0)
+                                            if($i %2 !=  0)
 
-                                        {
+                                            {
 
-                                            ?>
+                                                ?>
 
-                                            <a href="<?= $value['url'] ?>" class="our_projects"><?= $value['txt'] ?></a>
+                                                <a href="<?= $value['url'] ?>" class="our_projects"><?= $value['txt'] ?></a>
 
-                                            <?php
+                                                <?php
+
+                                            }
+
+                                            else{
+
+                                                ?>
+
+                                                <a href="<?= $value['url'] ?>"><?= $value['txt'] ?></a>
+
+                                                <?php
+
+                                            }
 
                                         }
-
-                                        else{
-
-                                            ?>
-
-                                            <a href="<?= $value['url'] ?>"><?= $value['txt'] ?></a>
-
-                                            <?php
-
-                                        }
-
-                                    }
 
                                     }
 
@@ -672,616 +676,470 @@
 
                                 </div>
 
-                                </div>
-
-                                
-
                             </div>
 
+
+
                         </div>
 
+                    </div>
+
+                    <?php
+
+                }
+
+                ?>
+
+                <?php
+
+                //extra_info
+
+
+
+                if(in_array('extra_info',$checks) || true)
+
+                {
+
+                    $content = json_decode($pro['etra_content'],true);
+
+                    $num = $pro['number_of_column'];
+
+                    $class="12";
+
+                    if($num == 1)
+
+                    {
+
+                        $class = 12;
+
+                    }
+
+                    else if($num == 2)
+
+                    {
+
+                        $class = 6;
+
+                    }
+
+                    else if($num == 3)
+
+                    {
+
+                        $class = 4;
+
+                    }
+
+                    ?>
+
+                    <div class="pro_business" id="boxes___3">
+
+                        <h3><?= $pro['extra_section_heading'] ?></h3>
+
+                    </div>
+
+                    <div class="row" id="left_gp">
+
                         <?php
 
-            }
-
-                        ?>
-
-                        <?php
-
-                        //extra_info
-
-                        
-
-                        if(in_array('extra_info',$checks) || true)
+                        for($i= 1; $i<=$num; $i++)
 
                         {
-
-                            $content = json_decode($pro['etra_content'],true);
-
-                            $num = $pro['number_of_column'];
-
-                            $class="12";
-
-                            if($num == 1)
-
-                            {
-
-                                $class = 12;
-
-                            }
-
-                            else if($num == 2)
-
-                            {
-
-                                $class = 6;
-
-                            }
-
-                            else if($num == 3)
-
-                            {
-
+                            $k = $i -1;
+                            if(strip_tags($content[0]) != "" && strip_tags($content[1]) != "" && strip_tags($content[2]) != ""){
                                 $class = 4;
-
+                            } elseif(strip_tags($content[0]) != "" && strip_tags($content[1]) != "" && strip_tags($content[2]) == ""){
+                                $class = 6;
+                            } elseif(strip_tags($content[0]) != "" && strip_tags($content[1]) == "" && strip_tags($content[2]) == ""){
+                                $class = 12;
                             }
-
-                            ?>
-
-                        <div class="pro_business" id="boxes___3">
-
-                            <h3><?= $pro['extra_section_heading'] ?></h3>
-
-                        </div>
-
-                        <div class="row" id="left_gp">
-
-                            <?php
-
-                            for($i= 1; $i<=$num; $i++)
-
-                            {
-
+                            if(strip_tags($content[$k]) != "") {
                                 ?>
 
                                 <div class="col-sm-<?= $class ?> webdesign">
 
-                                <div class="inner_box_design height_auto scroll" style="overflow-y: scroll;height:324px;min-height: 324px;max-height: 324px;">
+                                    <div class="inner_box_design height_auto scroll"
+                                         style="overflow-y: scroll;height:324px;min-height: 324px;max-height: 324px;">
 
-                                    <?php
+                                        <p>
+                                            <?php echo $content[$k]; ?>
+                                        </p>
 
-                                    $k = $i -1;
-
-                                    echo $content[$k];
-
-                                    ?>
+                                    </div>
 
                                 </div>
 
-                            </div>
-
                                 <?php
+
 
                             }
-
-                            ?>
-
-                        </div>
-
-                        <?php
-
                         }
 
                         ?>
 
-                        <?php
+                    </div>
 
-                        // if(in_array('event_images',$checks) && )
-                        if($imgs)
+                    <?php
 
-                        {
+                }
 
-                            ?>
-
-                            
-
-                        <div class="verify_head" id="left_gp">
-
-                            <h3><?= $pro['gallery_lable']; ?></h3>
-
-                            <p><?= $pro['gallery_text']; ?></p>
-
-                        </div>
-
-                        <?php
-
-                        }
-
-                        ?>
-
-                        <!-- <div class="container">
-
-                            <div class="verify_head " style="    padding: 10px 16px;">
-
-                                  <h3><?= $pro['gallery_lable']; ?></h3>
-
-                            <p><?= $pro['gallery_text']; ?></p>
-
-                        </div>
-
-                        </div> -->
-
-                        <!-- <div class="gallerybox">
-
-                            <div class="row">
-
-                            <?php
-
-                            $i = 0;
-
-                    foreach ($imgs as $key => $value) {
-
-                        $i++;
-
-                        $img = $this->crud_model->size_img($value['img'],500,500);
-
-                        if($i % 2 != 0)
-
-                        {
-
-                            ?>
-
-                            <div class="col-sm-8 left_box">
-
-                                    <div class="bigbox_gallery inner_gallery">
-
-                                        <img src="<?= $img; ?>" alt="">
-
-                                        <div class="overlay_box">
-
-                                            <h4>Marketing Strategy</h4>
-
-                                            <h2>Digital Agency Template</h2>
-
-                                            <p>
-
-                                                <img src="<?= base_url(); ?>template/front/images/girl.png" alt=""> 
-
-                                                <span class="name_avatar">Tamim Islam</span> 
-
-                                                <span class="star_box">
-
-                                                    <img src="<?= base_url(); ?>template/front/images/Star.png">
-
-                                                    <img src="<?= base_url(); ?>template/front/images/Star.png">
-
-                                                    <img src="<?= base_url(); ?>template/front/images/Star.png">
-
-                                                    <img src="<?= base_url(); ?>template/front/images/Star.png">
-
-                                                    <img src="<?= base_url(); ?>template/front/images/Star.png">
-
-                                                </span>
-
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-
-
-                            <?php
-
-
-
-                        }
-
-                        else{
-
-                            ?>
-
-                            <div class="col-sm-4 right_box">
-
-                                    <div class="small_box_gallery inner_gallery">
-
-                                        <img src="<?= base_url(); ?>template/front/images/gallery_2.png" alt="">
-
-                                        <div class="overlay_box">
-
-                                            <h4>Marketing Strategy</h4>
-
-                                            <h2>Digital Agency Template</h2>
-
-                                            <p>
-
-                                                <img src="<?= base_url(); ?>template/front/images/girl.png" alt=""> 
-
-                                                <span class="name_avatar">Tamim Islam</span> 
-
-                                                <span class="star_box">
-
-                                                    <img src="<?= base_url(); ?>template/front/images/Star.png">
-
-                                                    <img src="<?= base_url(); ?>template/front/images/Star.png">
-
-                                                    <img src="<?= base_url(); ?>template/front/images/Star.png">
-
-                                                    <img src="<?= base_url(); ?>template/front/images/Star.png">
-
-                                                    <img src="<?= base_url(); ?>template/front/images/Star.png">
-
-                                                </span>
-
-                                            </p>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            <?php
-
-
-
-                        }
-
-                        ?>
-
-                                
-
-                                <?php
-
-                                    }
-
-                                ?>
-
-                                
-
-                                </div>
-
-                        </div> -->
-
-                        </div>
+                ?>
 
                 <?php
 
-                        if(true){
+                // if(in_array('event_images',$checks) && )
+                if($imgs)
 
-                        ?>
+                {
 
-                        
+                    ?>
 
-                        <?php
 
-                        if($imgs)
 
-                        {
+                    <div class="verify_head" id="left_gp">
 
-                            $first = '';
+                        <h3><?= $pro['gallery_lable']; ?></h3>
 
-                            if(isset($imgs[0]))
+                        <p><?= $pro['gallery_text']; ?></p>
 
-                            {
+                    </div>
 
-                                $first =  $this->crud_model->size_img($imgs[0]['img'],500,500);
+                    <?php
 
-                            }
+                }
 
-                            $scd = '';
+                ?>
 
-                            if(isset($imgs[1]))
 
-                            {
+            </div>
 
-                                $scd =  $this->crud_model->size_img($imgs[1]['img'],500,500);
+            <?php
 
-                            }
+            if(true){
 
-                            $thrd = '';
+            ?>
 
-                            if(isset($imgs[2]))
 
-                            {
 
-                                $thrd =  $this->crud_model->size_img($imgs[2]['img'],500,500);
+        <?php
 
-                            }
+        if($imgs)
 
-                            ?>
+        {
 
-                        <div class="container">
+            $first = '';
 
+            if(isset($imgs[0]))
 
+            {
 
-                            <!-- new slider -->
+                $first =  $this->crud_model->size_img($imgs[0]['img'],500,500);
 
+            }
 
+            $scd = '';
 
-                            <div class="slider_gallery__box">
+            if(isset($imgs[1]))
 
-                                <div class="row">
+            {
 
-                                    <div class="col-sm-9 left__slidebos">
+                $scd =  $this->crud_model->size_img($imgs[1]['img'],500,500);
 
-                                        <div class="large_sliderbox">
+            }
 
-                                            <img src="<?= $first ?>" data-src="<?= $first ?>" id="large_img" cur="0" ondblclick="opengal('0')" class="galimg" index="0" alt="">
+            $thrd = '';
 
-                                        </div>
+            if(isset($imgs[2]))
 
-                                        <div class="arrow__left">
+            {
 
-                                            <a href="javascript:void(0)" onclick="gopre()"><i class="fa fa-angle-left"></i></a>
+                $thrd =  $this->crud_model->size_img($imgs[2]['img'],500,500);
 
-                                        </div>
+            }
 
-                                        <div class="arrow__right">
+            ?>
 
-                                            <a href="javascript:void(0)"  onclick="gonext()"><i class="fa fa-angle-right"></i></a>
+            <div class="container">
 
-                                        </div>
 
-                                    </div>
 
+                <!-- new slider -->
 
 
-                                    <div class="col-sm-3 right__boxlighbox" id="right_slider">
 
-                                        
+                <div class="slider_gallery__box">
 
-                                    <a>
+                    <div class="row">
 
-                                      <img src="<?= $scd ?>" class="galimg thumb" onclick="selImg(1)"  ondblclick="opengal('1')" index="1">
+                        <div class="col-sm-9 left__slidebos">
 
-                                    </a>
+                            <div class="large_sliderbox">
 
-                                    <!-- first image box webdevtrick.com -->
+                                <img src="<?= $first ?>" data-src="<?= $first ?>" id="large_img" cur="0" ondblclick="opengal('0')" class="galimg" index="0" alt="">
 
-                                    <a >
+                            </div>
 
-                                      <img  style="margin-bottom: 13px;" src="<?= $thrd ?>"  onclick="selImg(2)" class="galimg thumb" index="2"  ondblclick="opengal('2')">
+                            <div class="arrow__left">
 
-                                    </a>
+                                <a href="javascript:void(0)" onclick="gopre()"><i class="fa fa-angle-left"></i></a>
 
-                                    <!-- second image box webdevtrick.com -->
+                            </div>
 
-                                    
+                            <div class="arrow__right">
 
-                                    </div>
+                                <a href="javascript:void(0)"  onclick="gonext()"><i class="fa fa-angle-right"></i></a>
 
-                                    
+                            </div>
 
-                                    <div class="col-sm-12 right__boxlighbox">
+                        </div>
 
-                                    <?php
 
-                                    $i = 0;
 
-                                    foreach($imgs as $k=> $v)
+                        <div class="col-sm-3 right__boxlighbox" id="right_slider">
 
-                                    {
 
-                                        $i = $i+1;
 
-                                        if($k > 2 && $k <= 6)
+                            <a>
 
-                                        {
+                                <img src="<?= $scd ?>" class="galimg thumb" onclick="selImg(1)"  ondblclick="opengal('1')" index="1">
 
-                                            
+                            </a>
 
-                                            $img =  $this->crud_model->size_img($v['img'],500,500);
+                            <!-- first image box webdevtrick.com -->
 
-                                            ?>
+                            <a >
 
-                                            <a href="#img<?= $k ?>">
+                                <img  style="margin-bottom: 13px;" src="<?= $thrd ?>"  onclick="selImg(2)" class="galimg thumb" index="2"  ondblclick="opengal('2')">
 
-                                      <img src="<?= $img ?>" class="galimg thumb" index="<?= $k ?>" onclick="selImg(<?= $k ?>)" ondblclick="opengal('0')" />
+                            </a>
 
-                                    </a>        
+                            <!-- second image box webdevtrick.com -->
 
-                                    <!-- first image box webdevtrick.com -->
 
-                                    
 
-                                            <?php
+                        </div>
 
-                                        }
 
-                                        elseif($k > 6)
 
-                                        {
+                        <div class="col-sm-12 right__boxlighbox">
 
-                                            $img =  $this->crud_model->size_img($v['img'],500,500);
+                            <?php
 
-                                            ?>
+                            $i = 0;
+                            if(count($imgs) >6 ) {
+                                foreach ($imgs as $k => $v) {
 
-                                            <input type="hidden" class="galimg" src="<?= $img ?>" index="<?= $k; ?>"  />
+                                    $i = $i + 1;
 
-                                            <?php
+                                    if ($k > 2 && $k <= 6) {
 
-                                        }
+
+                                        $img = $this->crud_model->size_img($v['img'], 500, 500);
+
+                                        ?>
+
+                                        <a href="#img<?= $k ?>">
+
+                                            <img src="<?= $img ?>" class="galimg thumb" index="<?= $k ?>"
+                                                 onclick="selImg(<?= $k ?>)" ondblclick="opengal('0')"/>
+
+                                        </a>
+
+                                        <!-- first image box webdevtrick.com -->
+
+
+                                        <?php
+
+                                    } elseif ($k > 6) {
+
+                                        $img = $this->crud_model->size_img($v['img'], 500, 500);
+
+                                        ?>
+
+                                        <input type="hidden" class="galimg" src="<?= $img ?>"
+                                               index="<?= $k; ?>"/>
+
+                                        <?php
 
                                     }
 
-                                    ?>
-
-                                    
-
-
-
-                                    </div>
+                                }
+                            }
+                            ?>
 
 
 
-                                    <!-- popup -->
 
-                                    <div class="lightbox" id="popup_lightbox">
 
-                                      <a onclick="gopre(1)" class="light-btn btn-prev"><i class="fa fa-angle-left"></i></a>
+                        </div>
 
-                                      <a   class="btn-close"><i class="fa fa-close"></i></a>
 
-                                      <img src="<?= $first ?>" id="glarge" style="opacity:1;" cur= "0">
 
-                                      <a href="" onclick="gonext(1)" class="light-btn btn-next"><i class="fa fa-angle-right"></i></a>
+                        <!-- popup -->
 
-                                    </div>
+                        <div class="lightbox" id="popup_lightbox">
+
+                            <a onclick="gopre(1)" class="light-btn btn-prev"><i class="fa fa-angle-left"></i></a>
+
+                            <a   class="btn-close"><i class="fa fa-close"></i></a>
+
+                            <img src="<?= $first ?>" id="glarge" style="opacity:1;" cur= "0">
+
+                            <a href="" onclick="gonext(1)" class="light-btn btn-next"><i class="fa fa-angle-right"></i></a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+
+                <div class="gallerybox" style="display: none;">
+
+                    <div class="row">
+
+                        <div class="col-sm-8 left_box">
+
+                            <div class="bigbox_gallery inner_gallery">
+
+                                <img src="<?= $first; ?>" alt="">
+
+                                <div class="overlay_box">
+
+                                    <!--<h4>Marketing Strategy</h4>-->
+
+                                    <!--<h2>Digital Agency Template</h2>-->
+
+                                    <!--<p>-->
+
+                                    <!--    <img src="<?= base_url(); ?>template/front/images/girl.png" alt=""> -->
+
+                                    <!--    <span class="name_avatar">Tamim Islam</span> -->
+
+                                    <!--    <span class="star_box">-->
+
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
+
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
+
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
+
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
+
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
+
+                                    <!--    </span>-->
+
+                                    <!--</p>-->
 
                                 </div>
 
                             </div>
 
+                        </div>
 
+                        <div class="col-sm-4 right_box">
 
+                            <div class="small_box_gallery inner_gallery">
 
+                                <img src="<?= $scd; ?>" alt="">
 
-                            <div class="gallerybox" style="display: none;">
+                                <div class="overlay_box">
 
-                            <div class="row">
+                                    <!--<h4>Marketing Strategy 2nd</h4>-->
 
-                             <div class="col-sm-8 left_box">
+                                    <!--<h2>Digital Agency Template</h2>-->
 
-                                    <div class="bigbox_gallery inner_gallery">
+                                    <!--<p>-->
 
-                                        <img src="<?= $first; ?>" alt="">
+                                    <!--    <img src="<?= base_url(); ?>template/front/images/girl.png" alt=""> -->
 
-                                        <div class="overlay_box">
+                                    <!--    <span class="name_avatar">Tamim Islam</span> -->
 
-                                            <!--<h4>Marketing Strategy</h4>-->
+                                    <!--    <span class="star_box">-->
 
-                                            <!--<h2>Digital Agency Template</h2>-->
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
 
-                                            <!--<p>-->
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
 
-                                            <!--    <img src="<?= base_url(); ?>template/front/images/girl.png" alt=""> -->
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
 
-                                            <!--    <span class="name_avatar">Tamim Islam</span> -->
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
 
-                                            <!--    <span class="star_box">-->
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
 
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
+                                    <!--    </span>-->
 
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
-
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
-
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
-
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
-
-                                            <!--    </span>-->
-
-                                            <!--</p>-->
-
-                                        </div>
-
-                                    </div>
+                                    <!--</p>-->
 
                                 </div>
 
-                                <div class="col-sm-4 right_box">
+                            </div>
 
-                                    <div class="small_box_gallery inner_gallery">
+                            <div class="small_box_gallery inner_gallery">
 
-                                        <img src="<?= $scd; ?>" alt="">
+                                <img src="<?= $thrd; ?>" alt="">
 
-                                        <div class="overlay_box">
+                                <div class="overlay_box">
 
-                                            <!--<h4>Marketing Strategy 2nd</h4>-->
+                                    <!--<h4>Marketing Strategy 3rd</h4>-->
 
-                                            <!--<h2>Digital Agency Template</h2>-->
+                                    <!--<h2>Digital Agency Template</h2>-->
 
-                                            <!--<p>-->
+                                    <!--<p>-->
 
-                                            <!--    <img src="<?= base_url(); ?>template/front/images/girl.png" alt=""> -->
+                                    <!--    <img src="<?= base_url(); ?>template/front/images/girl.png" alt=""> -->
 
-                                            <!--    <span class="name_avatar">Tamim Islam</span> -->
+                                    <!--    <span class="name_avatar">Tamim Islam</span> -->
 
-                                            <!--    <span class="star_box">-->
+                                    <!--    <span class="star_box">-->
 
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
 
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
 
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
 
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
 
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
+                                    <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
 
-                                            <!--    </span>-->
+                                    <!--    </span>-->
 
-                                            <!--</p>-->
-
-                                        </div>
-
-                                    </div>
-
-                                    <div class="small_box_gallery inner_gallery">
-
-                                        <img src="<?= $thrd; ?>" alt="">
-
-                                        <div class="overlay_box">
-
-                                            <!--<h4>Marketing Strategy 3rd</h4>-->
-
-                                            <!--<h2>Digital Agency Template</h2>-->
-
-                                            <!--<p>-->
-
-                                            <!--    <img src="<?= base_url(); ?>template/front/images/girl.png" alt=""> -->
-
-                                            <!--    <span class="name_avatar">Tamim Islam</span> -->
-
-                                            <!--    <span class="star_box">-->
-
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
-
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
-
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
-
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
-
-                                            <!--        <img src="<?= base_url(); ?>template/front/images/Star.png">-->
-
-                                            <!--    </span>-->
-
-                                            <!--</p>-->
-
-                                        </div>
-
-                                    </div>
+                                    <!--</p>-->
 
                                 </div>
+
+                            </div>
 
                         </div>
 
-                        
+                    </div>
 
-                        <div class="row">
 
-                            <?php
 
-                            $i = 0;
+                    <div class="row">
 
-                    foreach ($imgs as $key => $value) {
+                        <?php
 
-                        $i++;
+                        $i = 0;
 
-                        $img = $this->crud_model->size_img($value['img'],500,500);
+                        foreach ($imgs as $key => $value) {
 
-                        if($key > 2)
+                            $i++;
 
-                        {
+                            $img = $this->crud_model->size_img($value['img'],500,500);
 
-                        ?>
+                            if($key > 2)
 
-                            <div class="col-sm-4 right_box">
+                            {
+
+                                ?>
+
+                                <div class="col-sm-4 right_box">
 
                                     <div class="small_box_gallery inner_gallery">
 
@@ -1291,31 +1149,29 @@
 
                                     </div>
 
-                                    
+
 
                                 </div>
 
                                 <?php
 
-                    }
-
-                    }
-
-                                ?>
-
-                        </div>
-
-                        </div>
-
-                        </div>
-
-                        <?php
+                            }
 
                         }
 
                         ?>
 
-                        
+                    </div>
+
+                </div>
+
+            </div>
+
+            <?php
+
+        }
+
+        ?>
 
 
 
@@ -1325,101 +1181,103 @@
 
 
 
-<?php
 
-                        if(in_array('text_gallery',$checks) || true)
 
-                        {
+        <?php
 
-                            ?>
+        if(in_array('text_gallery',$checks) || true)
 
-                        <div class="container">
+        {
 
-                           <div class="verify_head" style="    padding: 10px 0px;">
+        ?>
 
-                                <h3><?= $pro['gtitle'] ?></h3>
+            <div class="container">
 
-                                <p><?= $pro['gdesc'] ?></p>
+                <div class="verify_head" style="    padding: 10px 0px;">
 
-                            </div>
+                    <h3><?= $pro['gtitle'] ?></h3>
 
-                        <div class="inner_content_tabs">
+                    <p><?= $pro['gdesc'] ?></p>
 
-                        <!--</select>-->
+                </div>
 
-                         <div class="row" id="left_gp">
+                <div class="inner_content_tabs">
 
-                            </div>
+                    <!--</select>-->
 
-                             <div class="row" id="left_gp">
+                    <div class="row" id="left_gp">
 
-                            <ul class="tabs__ gtxt">
+                    </div>
 
-                                <?php
+                    <div class="row" id="left_gp">
 
-                                $vid = 0;
+                        <ul class="tabs__ gtxt">
 
-                        $added_by = json_decode($pro['added_by'], true);
+                            <?php
 
-                        if(isset($added_by['type']) && $added_by['type'] == 'vendor')
+                            $vid = 0;
 
-                        {
+                            $added_by = json_decode($pro['added_by'], true);
 
-                            $vid = $added_by['id'];
+                            if(isset($added_by['type']) && $added_by['type'] == 'vendor')
 
-                        }
+                            {
 
-                                $feature  = $this->db->where('vid',$vid)->get('textg')->result_array();
+                                $vid = $added_by['id'];
 
-                                // var_dump($feature);
+                            }
 
-                                $count = count($feature);
+                            $feature  = $this->db->where('vid',$vid)->get('textg')->result_array();
 
-                                // echo $count;
+                            // var_dump($feature);
 
-                                if($feature && $count == 1)
+                            $count = count($feature);
+
+                            // echo $count;
+
+                            if($feature && $count == 1)
+
+                            {
+
+                                $i = 0;
+
+                                foreach($feature as $k=> $value)
 
                                 {
 
-                                    $i = 0;
+                                    $value['ficon'] = $value['icon'];
 
-                                    foreach($feature as $k=> $value)
+                                    // var_dump($value);
 
-                                    {
+                                    $i++;
 
-                                        $value['ficon'] = $value['icon'];
-
-                                        // var_dump($value);
-
-                                        $i++;
-
-                                        $tab = 'tab-'.$i.'__';
+                                    $tab = 'tab-'.$i.'__';
 
                                     ?>
 
-                                    
+
 
                                     <?php
 
-                                    }
+                                }
 
-                                }  elseif($feature && $count == '2' )
+                            }  elseif($feature && $count == '2' )
+
+                            {
+
+                                $i = 0;
+
+                                foreach($feature as $k=> $value)
 
                                 {
 
-                                    $i = 0;
+                                    $value['ficon'] = $value['icon'];
 
-                                    foreach($feature as $k=> $value)
+                                    // var_dump($value);
 
-                                    {
+                                    $i++;
 
-                                        $value['ficon'] = $value['icon'];
-
-                                        // var_dump($value);
-
-                                        $i++;
-
-                                        $tab = 'tab-'.$i.'__';
+                                    $tab = 'tab-'.$i.'__';
 
                                     ?>
 
@@ -1427,25 +1285,25 @@
 
                                     <?php
 
-                                    }
+                                }
 
-                                } elseif($feature && $count == '3' )
+                            } elseif($feature && $count == '3' )
+
+                            {
+
+                                $i = 0;
+
+                                foreach($feature as $k=> $value)
 
                                 {
 
-                                    $i = 0;
+                                    $value['ficon'] = $value['icon'];
 
-                                    foreach($feature as $k=> $value)
+                                    // var_dump($value);
 
-                                    {
+                                    $i++;
 
-                                        $value['ficon'] = $value['icon'];
-
-                                        // var_dump($value);
-
-                                        $i++;
-
-                                        $tab = 'tab-'.$i.'__';
+                                    $tab = 'tab-'.$i.'__';
 
                                     ?>
 
@@ -1453,25 +1311,25 @@
 
                                     <?php
 
-                                    }
+                                }
 
-                                }elseif($feature && $count == '4' )
+                            }elseif($feature && $count == '4' )
+
+                            {
+
+                                $i = 0;
+
+                                foreach($feature as $k=> $value)
 
                                 {
 
-                                    $i = 0;
+                                    $value['ficon'] = $value['icon'];
 
-                                    foreach($feature as $k=> $value)
+                                    // var_dump($value);
 
-                                    {
+                                    $i++;
 
-                                        $value['ficon'] = $value['icon'];
-
-                                        // var_dump($value);
-
-                                        $i++;
-
-                                        $tab = 'tab-'.$i.'__';
+                                    $tab = 'tab-'.$i.'__';
 
                                     ?>
 
@@ -1479,25 +1337,25 @@
 
                                     <?php
 
-                                    }
+                                }
 
-                                }elseif($feature && $count == '5' )
+                            }elseif($feature && $count == '5' )
+
+                            {
+
+                                $i = 0;
+
+                                foreach($feature as $k=> $value)
 
                                 {
 
-                                    $i = 0;
+                                    $value['ficon'] = $value['icon'];
 
-                                    foreach($feature as $k=> $value)
+                                    // var_dump($value);
 
-                                    {
+                                    $i++;
 
-                                        $value['ficon'] = $value['icon'];
-
-                                        // var_dump($value);
-
-                                        $i++;
-
-                                        $tab = 'tab-'.$i.'__';
+                                    $tab = 'tab-'.$i.'__';
 
                                     ?>
 
@@ -1505,25 +1363,25 @@
 
                                     <?php
 
-                                    }
+                                }
 
-                                }elseif($feature && $count == '6' )
+                            }elseif($feature && $count == '6' )
+
+                            {
+
+                                $i = 0;
+
+                                foreach($feature as $k=> $value)
 
                                 {
 
-                                    $i = 0;
+                                    $value['ficon'] = $value['icon'];
 
-                                    foreach($feature as $k=> $value)
+                                    // var_dump($value);
 
-                                    {
+                                    $i++;
 
-                                        $value['ficon'] = $value['icon'];
-
-                                        // var_dump($value);
-
-                                        $i++;
-
-                                        $tab = 'tab-'.$i.'__';
+                                    $tab = 'tab-'.$i.'__';
 
                                     ?>
 
@@ -1531,25 +1389,25 @@
 
                                     <?php
 
-                                    }
+                                }
 
-                                }elseif($feature && $count == '7' )
+                            }elseif($feature && $count == '7' )
+
+                            {
+
+                                $i = 0;
+
+                                foreach($feature as $k=> $value)
 
                                 {
 
-                                    $i = 0;
+                                    $value['ficon'] = $value['icon'];
 
-                                    foreach($feature as $k=> $value)
+                                    // var_dump($value);
 
-                                    {
+                                    $i++;
 
-                                        $value['ficon'] = $value['icon'];
-
-                                        // var_dump($value);
-
-                                        $i++;
-
-                                        $tab = 'tab-'.$i.'__';
+                                    $tab = 'tab-'.$i.'__';
 
                                     ?>
 
@@ -1557,519 +1415,521 @@
 
                                     <?php
 
-                                    }
-
                                 }
+
+                            }
+
+                            ?>
+
+
+
+                        </ul>
+
+                        <?php
+
+                        if($feature)
+
+                        {
+
+                            $i = 0;
+
+                            foreach($feature as $k=> $value)
+
+                            {
+
+                                $value['ficon'] = $value['icon'];
+
+                                $value['img'] = $this->crud_model->get_img($value['img'])->secure_url;
+
+                                $i++;
+
+                                $tab = 'tab-'.$i.'__';
 
                                 ?>
 
-                                
-
-                            </ul>
-
-                            <?php
-
-                                if($feature)
-
-                                {
-
-                                    $i = 0;
-
-                                    foreach($feature as $k=> $value)
-
-                                    {
-
-                                        $value['ficon'] = $value['icon'];
-
-                                        $value['img'] = $this->crud_model->get_img($value['img'])->secure_url;
-
-                                        $i++;
-
-                                        $tab = 'tab-'.$i.'__';
-
-                                    ?>
-
-                            <div id="<?= $tab ?>" class="tab-content__ <?= ($i == 1)?"current__":""; ?>">
-
-                                <?php
-
-                                if(!$value['img']){
-
-                                    ?>
-
-                                    <div class="row" id="advertise_info" style="">
-
-                    
-
-                                 <div class="col-sm-12 communitybox " id="community">
-
-                                     <h3> <?= $value['title'] ?></h3>
-
-                                     <div class="desc">
-
-                                       <p> <?= $value['detail'] ?></p>
-
-                                     </div>
-
-                                    </div>
-
-                                   </div>
+                                <div id="<?= $tab ?>" class="tab-content__ <?= ($i == 1)?"current__":""; ?>">
 
                                     <?php
 
-                                }else{
+                                    if(!$value['img']){
 
-                                ?>
+                                        ?>
 
-                <div class="row" id="advertise_info" style="padding-top:16px;">
+                                        <div class="row" id="advertise_info" style="">
 
-                    <div class="col-sm-4 business_graphic" id="leftboxx">
 
-                     <img src=" <?= $value['img'] ?>" alt="">
 
-                    </div>
+                                            <div class="col-sm-12 communitybox " id="community">
 
-                 <div class="col-sm-8 communitybox no_box_bd inner_box_design" id="equal_btnw">
+                                                <h3> <?= $value['title'] ?></h3>
 
-                     <h3> <?= $value['title'] ?></h3>
+                                                <div class="desc">
 
-                     <div class="desc">
+                                                    <p> <?= $value['detail'] ?></p>
 
-                       <p> <?= $value['detail'] ?></p>
+                                                </div>
 
-                     </div>
+                                            </div>
 
-                    </div>
+                                        </div>
 
-                </div>
+                                        <?php
 
-                <?php
+                                    }else{
 
-                                }
+                                        ?>
 
-                ?>
+                                        <div class="row" id="advertise_info" style="padding-top:16px;">
 
-                              
+                                            <div class="col-sm-4 business_graphic" id="leftboxx">
 
-                            </div>
+                                                <img src=" <?= $value['img'] ?>" alt="">
 
-                              <?php
+                                            </div>
+
+                                            <div class="col-sm-8 communitybox no_box_bd inner_box_design" id="equal_btnw">
+
+                                                <h3> <?= $value['title'] ?></h3>
+
+                                                <div class="desc">
+
+                                                    <p> <?= $value['detail'] ?></p>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                        <?php
 
                                     }
 
-                                }
-
-                                ?>
+                                    ?>
 
 
 
-                        </div>
+                                </div>
 
-                        </div>
+                                <?php
 
-                        
-
-                        <?php
+                            }
 
                         }
 
                         ?>
 
-        <?php
 
-        }
 
-        ?>
+                    </div>
 
-    </div>
+                </div>
 
 
 
-        <!--about-->
+                <?php
 
-        <?php
-
-                        if(in_array('about',$checks) || true)
-
-                        {
-
-                            ?>
-
-    <div class="container"><div class="main_wrp">
-
-        
-
-        <div class="verify_head">
-
-            <h3><?= $pro['about_title']; ?></h3>
-
-        </div>
-
-        <div class="row">
-
-            <?php
-
-            if(trim($pro['about_desc']))
-
-            {  // var_dump($pro['about_desc']);
+                }
 
                 ?>
 
-            <div class="col-sm-8 left_9bx">
+                <?php
 
-                <div class="shadow_9" id="__space">
+                }
 
-                   <div style="padding-bottom:10px;"> <?= $pro['about_desc']; ?></div>
-
-                   
-
-                 <!--nimra code-->
-
-                    <div class="learn_more_btns" style="text-align: center;">
-
-                    <?php 
-
-                    $user = $this->session->userdata('user_id');
-
-                    if($pro['is_affiliate'] = '1' && $user)
-
-                    {
-
-                        $vid = 0;
-
-                        $added_by = json_decode($pro['added_by'], true);
-
-                        if(isset($added_by['type']) && $added_by['type'] == 'vendor')
-
-                        {
-
-                            $vid = $added_by['id'];
-
-                        }
-
-                        
-
-                        $wish = $this->crud_model->is_aff($pro['id']); 
-
-                    ?>
-
-                    <button class="btn btn-add-to <?php if($wish == 'yes'){ echo 'wished';} else{ echo 'wishlist';} ?>" onclick="to_affliate(<?php echo $vid; ?>,event)" style="background: #f26922;color: #fff;">
-
-                        <i class="fa fa-heart"></i>
-
-                        <span class="hidden-sm hidden-xs">
-
-							<?php if($wish == 'yes'){ 
-
-                                echo translate('_added_to_affliate'); 
-
-                                } else { 
-
-                                echo translate('_add_to_affliate');
-
-                                } 
-
-                            ?>
-
-                        
-
-                        </span>
-
-                    </button>
-
-                    <?php
-
-                    }
-
-                    ?>
-
-        
-
-                </div>
-
-                 <!--nimra code-->
-
-                    <!--<div class="learn_more_btns" style="text-align: center;">-->
-
-                    <!--    <a href="#" class="our_projects" style="">Add to Affiliates</a>-->
-
-                    <!--</div>-->
-
-                    <!--<h4>Company Introduction</h4>-->
-
-                    <!--<p>Hire our experienced team of programmers, digital designers, and marketing professionals, who know how to deliver results. With your requirements, we will help you identify your needs to reach solutions</p>-->
-
-                </div>
-
-                <div class="container"> 
-
-                                <div class="row">
-
-                                    <?php
-
-                                    if($pro['amen_check'] == 'yes'){
-
-                                    ?>
-
-                                    <div class="no_pdding" id="add_rigth">
-
-                                        <div class="tag_sec_wrapper">
-
-                                            <div class="head_section">
-
-                                               <h4>Amenities</h4> 
-
-                                            </div>
-
-                                            <div class="inner_sec">
-
-                                                <div class="tag_container">
-
-                                                      <?php
-
-                                                    $cat = explode(',',$pro['amenities']);
-
-                                                    foreach($cat as $k){
-
-                                                    ?>
-
-                                                    <div class="tags_in">
-
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-
-                                                        <span><?= $k; ?></span>
-
-                                                    </div>
-
-                                                    <?php
-
-                                                    }
-
-                                                    ?>
-
-                                                </div>
-
-                                                
-
-                                                </div>
-
-                                            </div>
-
-                                        
-
-                                    </div>
-
-                                    <?php
-
-                                    }
-
-                                    ?>
-
-                                    <div class="no_pdding">
-
-                                         <div class="tag_sec_wrapper">
-
-                                            <div class="head_section">
-
-                                               <h4>CATEGORIES</h4> 
-
-                                            </div>
-
-                                            <div class="inner_sec">
-
-                                                <div class="tag_container">
-
-                                                    <?php
-
-                                                    $cat = explode(',',$pro['cats']);
-
-                                                    foreach($cat as $k){
-
-                                                    ?>
-
-                                                    <div class="tags_in">
-
-                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
-
-                                                        <span><?= $k; ?></span>
-
-                                                    </div>
-
-                                                    <?php
-
-                                                    }
-
-                                                    ?>
-
-                                                  
-
-                                                </div>
-
-                                        </div>        
-
-                                                </div>
-
-                                            </div>
-
-                                        
-
-                                        
-
-                                    </div>   
-
-                                </div>
-
-                      
+                ?>
 
             </div>
 
+
+
+            <!--about-->
+
             <?php
 
-                        }
-
-            if(trim($pro['about_address']))
+            if(in_array('about',$checks) || true)
 
             {
 
                 ?>
 
-            <div class="col-sm-4 left_9bx" id="right___gap">
-
-                <div class="shadow_9 icons_links" id="bg__social">
-
-                    
-
-                   <?php if(isset($pro['about_address']) && !empty($pro['about_address'])){ 
-
-                   ?>
-
-                   <div class="margin-bottom"><i class="fa fa-map-marker"></i> <?= $pro['about_address'];?></div>
-
-                   <?php
-
-                       }if(isset($pro['bussniuss_phone']) && !empty($pro['bussniuss_phone'])){
-
-                       
-
-                   ?>
-
-                   <div class="margin-bottom"><i class="fa fa-phone"></i> <?= $pro['bussniuss_phone'];?></div>
-
-                   <?php
-
-                       }if(isset($pro['whatsapp_number']) && !empty($pro['whatsapp_number'])){
+                <div class="container"><div class="main_wrp">
 
 
 
-                   ?>
+                        <div class="verify_head">
 
-                   <div class="margin-bottom"><i class="fa fa-whatsapp"></i> <?= $pro['whatsapp_number'];?></div>
+                            <h3><?= $pro['about_title']; ?></h3>
 
-                    <?php
+                        </div>
 
-                       }if(isset($pro['bussniuss_email']) && !empty($pro['bussniuss_email'])){
+                        <div class="row">
+
+                            <?php
+
+                            if(trim($pro['about_desc']))
+
+                            {  // var_dump($pro['about_desc']);
+
+                                ?>
+
+                                <div class="col-sm-8 left_9bx">
+
+                                    <div class="shadow_9" id="__space">
+
+                                        <div style="padding-bottom:10px;"> <?= $pro['about_desc']; ?></div>
 
 
 
-                   ?>
+                                        <!--nimra code-->
 
-                   <div class="margin-bottom"><i class="fa fa-envelope"></i> <?= $pro['bussniuss_email'];?></div>
+                                        <div class="learn_more_btns" style="text-align: center;">
 
-                   <?php
+                                            <?php
 
-                       }if(isset($pro['openig_time']) && !empty($pro['openig_time'])){
+                                            $user = $this->session->userdata('user_id');
+
+                                            if($pro['is_affiliate'] = '1' && $user)
+
+                                            {
+
+                                                $vid = 0;
+
+                                                $added_by = json_decode($pro['added_by'], true);
+
+                                                if(isset($added_by['type']) && $added_by['type'] == 'vendor')
+
+                                                {
+
+                                                    $vid = $added_by['id'];
+
+                                                }
 
 
 
-                   ?>
+                                                $wish = $this->crud_model->is_aff($pro['id']);
 
-                   <div  class="margin-bottom"><i class="fa fa-clock"></i> <?= date("g:ia", strtotime( $pro['openig_time'])) .' - '.date("g:ia", strtotime( $pro['closing_time'])) ;?></div>
+                                                ?>
 
-                      <?php
+                                                <button class="btn btn-add-to <?php if($wish == 'yes'){ echo 'wished';} else{ echo 'wishlist';} ?>" onclick="to_affliate(<?php echo $vid; ?>,event)" style="background: #f26922;color: #fff;">
 
-                       }
+                                                    <i class="fa fa-heart"></i>
 
-                      ?>
+                                                    <span class="hidden-sm hidden-xs">
 
-                      <div class="" style="margin-top: 10px;">
+							<?php if($wish == 'yes'){
 
-                    <?php
+                                echo translate('_added_to_affliate');
 
-           $img='';
+                            } else {
 
-           $social_image = json_decode($pro['social_media']);
+                                echo translate('_add_to_affliate');
 
-                foreach($social_image as $k =>$v){
-
-                    // var_dump($k);
-
-                    $row = $this->db->where('id', $k)->get('bpkg')->row();
-
-                    if($row->img){
-
-                    $img = $this->crud_model->get_img($row->img)->secure_url;
-
-                                 } 
-
-                                 if($v)
-
-                                 {
-
-                ?>
-
-                <a href="<?= $v; ?>" target="_blank"><img style="width:25px;background: #fff; padding: 3px;margin-top: 10px;border-radius: 0px;" src="<?= $img; ?>"></a>
-
-                <?php
-
-                                 }
-
-               }
-
-                ?>
-
-                </div>
-
-                    <!--<h4>Address</h4>-->
-
-                    <!--<p>Hire our experienced team of programmers, digital designers, and marketing professionals</p>-->
-
-                </div>
-
-            </div>
-
-            <?php
-
-            }
-
-            ?>
-
-        </div>
-
-    </div></div>
-
-<?php
-
-                        }
+                            }
 
                             ?>
 
 
 
-       <!--<div class="container">-->
+                        </span>
 
-       <!--         <div class="inner_box_info" style="    padding: 10px 16px;">-->
+                                                </button>
 
-       <!--         <h2>Tags</h2>-->
+                                                <?php
 
-       <!--         <p>You can now list your</p>-->
+                                            }
 
-       <!--     </div>-->
+                                            ?>
 
 
 
-       <!--</div>-->
+                                        </div>
 
-     
+                                        <!--nimra code-->
+
+                                        <!--<div class="learn_more_btns" style="text-align: center;">-->
+
+                                        <!--    <a href="#" class="our_projects" style="">Add to Affiliates</a>-->
+
+                                        <!--</div>-->
+
+                                        <!--<h4>Company Introduction</h4>-->
+
+                                        <!--<p>Hire our experienced team of programmers, digital designers, and marketing professionals, who know how to deliver results. With your requirements, we will help you identify your needs to reach solutions</p>-->
+
+                                    </div>
+
+                                    <div class="container">
+
+                                        <div class="row">
+
+                                            <?php
+
+                                            if($pro['amen_check'] == 'yes'){
+
+                                                ?>
+
+                                                <div class="no_pdding" id="add_rigth">
+
+                                                    <div class="tag_sec_wrapper">
+
+                                                        <div class="head_section">
+
+                                                            <h4>Amenities</h4>
+
+                                                        </div>
+
+                                                        <div class="inner_sec">
+
+                                                            <div class="tag_container ammen_container" style="height:120px; overflow: hidden;">
+
+                                                                <?php
+
+                                                                $cat = explode(',',$pro['amenities']);
+
+                                                                foreach($cat as $k){
+
+                                                                    ?>
+
+                                                                    <div class="tags_in">
+
+                                                                        <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
+
+                                                                        <span><?= $k; ?></span>
+
+                                                                    </div>
+
+                                                                    <?php
+
+                                                                }
+
+                                                                ?>
+
+                                                            </div>
+
+                                                            <div class="more-link" align="center" style="width: 100%;
+    border-top: 1px solid #ccc;
+    background: #fdfbfb; padding:10px; cursor:pointer;" >View More</div>
+
+                                                        </div>
+
+                                                    </div>
+
+
+
+                                                </div>
+
+                                                <?php
+
+                                            }
+
+                                            ?>
+
+                                            <div class="no_pdding">
+
+                                                <div class="tag_sec_wrapper">
+
+                                                    <div class="head_section">
+
+                                                        <h4>CATEGORIES</h4>
+
+                                                    </div>
+
+                                                    <div class="inner_sec">
+
+                                                        <div class="tag_container">
+
+                                                            <?php
+
+                                                            $cat = explode(',',$pro['cats']);
+
+                                                            foreach($cat as $k){
+
+                                                                ?>
+
+                                                                <div class="tags_in">
+
+                                                                    <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span>
+
+                                                                    <span><?= $k; ?></span>
+
+                                                                </div>
+
+                                                                <?php
+
+                                                            }
+
+                                                            ?>
+
+
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+                                <?php
+
+                            }
+
+                            if(trim($pro['about_address']))
+
+                            {
+
+                                ?>
+
+                                <div class="col-sm-4 left_9bx" id="right___gap">
+
+                                    <div class="shadow_9 icons_links" id="bg__social">
+
+
+
+                                        <?php if(isset($pro['about_address']) && !empty($pro['about_address'])){
+
+                                            ?>
+
+                                            <div class="margin-bottom"><i class="fa fa-map-marker"></i> <?= $pro['about_address'];?></div>
+
+                                            <?php
+
+                                        }if(isset($pro['bussniuss_phone']) && !empty($pro['bussniuss_phone'])){
+
+
+
+                                            ?>
+
+                                            <div class="margin-bottom"><i class="fa fa-phone"></i> <?= $pro['bussniuss_phone'];?></div>
+
+                                            <?php
+
+                                        }if(isset($pro['whatsapp_number']) && !empty($pro['whatsapp_number'])){
+
+
+
+                                            ?>
+
+                                            <div class="margin-bottom"><i class="fa fa-whatsapp"></i> <?= $pro['whatsapp_number'];?></div>
+
+                                            <?php
+
+                                        }if(isset($pro['bussniuss_email']) && !empty($pro['bussniuss_email'])){
+
+
+
+                                            ?>
+
+                                            <div class="margin-bottom"><i class="fa fa-envelope"></i> <?= $pro['bussniuss_email'];?></div>
+
+                                            <?php
+
+                                        }if(isset($pro['openig_time']) && !empty($pro['openig_time'])){
+
+
+
+                                            ?>
+
+                                            <div  class="margin-bottom"><i class="fa fa-clock"></i> <?= date("g:ia", strtotime( $pro['openig_time'])) .' - '.date("g:ia", strtotime( $pro['closing_time'])) ;?></div>
+
+                                            <?php
+
+                                        }
+
+                                        ?>
+
+                                        <div class="" style="margin-top: 10px;">
+
+                                            <?php
+
+                                            $img='';
+
+                                            $social_image = json_decode($pro['social_media']);
+
+                                            foreach($social_image as $k =>$v){
+
+                                                // var_dump($k);
+
+                                                $row = $this->db->where('id', $k)->get('bpkg')->row();
+
+                                                if($row->img){
+
+                                                    $img = $this->crud_model->get_img($row->img)->secure_url;
+
+                                                }
+
+                                                if($v)
+
+                                                {
+
+                                                    ?>
+
+                                                    <a href="<?= $v; ?>" target="_blank"><img style="width:25px;background: #fff; padding: 3px;margin-top: 10px;border-radius: 0px;" src="<?= $img; ?>"></a>
+
+                                                    <?php
+
+                                                }
+
+                                            }
+
+                                            ?>
+
+                                        </div>
+
+                                        <!--<h4>Address</h4>-->
+
+                                        <!--<p>Hire our experienced team of programmers, digital designers, and marketing professionals</p>-->
+
+                                    </div>
+
+                                </div>
+
+                                <?php
+
+                            }
+
+                            ?>
+
+                        </div>
+
+                    </div></div>
+
+                <?php
+
+            }
+
+            ?>
+
+
+
+            <!--<div class="container">-->
+
+            <!--         <div class="inner_box_info" style="    padding: 10px 16px;">-->
+
+            <!--         <h2>Tags</h2>-->
+
+            <!--         <p>You can now list your</p>-->
+
+            <!--     </div>-->
+
+
+
+            <!--</div>-->
+
+
 
             <!-- <div class="tags_box">
 
@@ -2077,575 +1937,546 @@
 
                     <?php
 
-                    $tags = $pro['tag'];
+            $tags = $pro['tag'];
 
-                    $x = (explode(",",$tags));
+            $x = (explode(",",$tags));
 
-                    foreach($x as $K => $v){
+            foreach($x as $K => $v){
 
-                    ?>
+                ?>
 
                     <li><a href="#"><img src="#" alt=""> <?=  $v;?></a></li>
 
                     <?php
 
-                    }
+            }
 
-                    
 
-                    ?>
+
+            ?>
 
                    </ul>
 
             </div> -->
 
-                         <div class="container" style="display:<?= ($pro['info_desc'])?"block":"none" ?>">
+            <div class="container" style="display:<?= ($pro['info_desc'])?"block":"none" ?>">
 
-                            <div class="mixcher_orange">
+                <div class="mixcher_orange">
 
-                                <div class="shape_doted_mix">
+                    <div class="shape_doted_mix">
 
-                                    <img src="<?= base_url(); ?>template/front/images/mixcher-orange.png" alt="">
+                        <img src="<?= base_url(); ?>template/front/images/mixcher-orange.png" alt="">
 
-                                </div>
+                    </div>
 
-                                
 
-                                <h4><?= $pro['info_head']; ?></h4>
 
-                                <p><?= $pro['info_desc']; ?></p>
+                    <h4><?= $pro['info_head']; ?></h4>
 
-                                <?php
+                    <p><?= $pro['info_desc']; ?></p>
 
-                                if(isset($pro['info_button']) && !empty($pro['info_button']) && isset($pro['button_url']) &&!empty($pro['button_url'])){
+                    <?php
 
-                                ?><a href="<?= $pro['button_url']; ?>"><?= $pro['info_button']; ?></a>
+                    if(isset($pro['info_button']) && !empty($pro['info_button']) && isset($pro['button_url']) &&!empty($pro['button_url'])){
 
-                                <?php
+                        ?><a href="<?= $pro['button_url']; ?>"><?= $pro['info_button']; ?></a>
 
-                                }
+                        <?php
 
-                                ?>
-
-                            </div>
-
-                        </div>
-
-                        
-
-                        
-
-                        
-
-                          
-
-                         <div class="orange_pathwrap" id="bpage_form">
-
-                            <div class="container">
-
-                                <div class="iframe_box">
-
-                                <div id="googleMap" style="width:100%;height:550px;"></div>
-
-                               
-
-
-
-                                    <div class="getin_touch">
-
-                                        <div class="alert alert-success d-none" id="success" role="alert">
-
-                                          Email Send Successfully!
-
-                                        </div>
-
-                                        <div class="alert alert-danger d-none" id="danger" role="alert">
-
-                                          Please Try Again!
-
-                                        </div>
-
-                                        <h3>Get In Touch <img src="<?= base_url(); ?>upload/phone_2.png" alt=""></h3>
-
-                                        <form action="" method="">
-
-                                            <input type="hidden" name="pid" id="pid1" value="<?= $pro['product_id']?>">
-
-                                            <div class="row">
-
-                                                <div class="col-sm-6 form_gapp">
-
-                                                    <div class="form_box">
-
-                                                        <label for="First name">First name</label>
-
-                                                        <input type="text" placeholder="Type Your First Name" name="" id="fname__">
-
-                                                        <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="col-sm-6 form_gapp">
-
-                                                    <div class="form_box">
-
-                                                        <label for="Last name">Last name</label>
-
-                                                        <input type="text" placeholder="Type Your Last Name" name="" id="lname">
-
-                                                        <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
-                                            <div class="row">
-
-                                                <div class="col-sm-12 form_gapp">
-
-                                                    <div class="form_box">
-
-                                                        <label for="Email">Email</label>
-
-                                                        <input type="email" placeholder="Type Your Email" name="" id="email__">
-
-                                                        <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
-                                             <div class="row">
-
-                                                <div class="col-sm-12 form_gapp">
-
-                                                    <div class="form_box">
-
-                                                        <label for="Phone number">Phone number</label>
-
-                                                        <input type="number" placeholder="Type phone number" name="" id="phone">
-
-                                                        <img class="phone_iconn" src="<?= base_url(); ?>upload/phone_icon.png" alt="">
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
-                                            <div class="row">
-
-                                                <div class="col-sm-12 form_gapp">
-
-                                                    <div class="form_box">
-
-                                                        <label for="Message">Message</label>
-
-                                                        <textarea placeholder="Type Message" id="message__"></textarea>
-
-                                                        <img class="msg_iconn" src="<?= base_url(); ?>upload/message_1.png" alt="">
-
-                                                    </div>
-
-                                                </div>
-
-                                                </div>
-
-                                            <div class="row">
-
-                                                <div class="col-sm-12 form_gapp">
-
-                                                    <div class="form_box">
-
-                                                        <button type="button" id="send">Send</button>
-
-                                                        <a href="https://maps.google.com/?q=<?= $pro['lat'] ?>,<?= $pro['lng'] ?>"><button type="submit">GET DIRECTION</button></a>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
-                                        </form>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-
-
-
-           
-
-                        <div class="purple_line" id="intrested">
-
-                            <img src="<?= base_url(); ?>template/front/images/base-icon.png" alt="">
-
-                        </div>
-
-                     
-
-                        <div class="container" style="padding-top: 165px ;">
-
-                            <div class="container">
-
-                            <div class="verify_head" style="    padding: 0 23px 0;">
-
-                                <h3>You May Also be Interested In</h3>
-
-                                <p>You can now list your business in less than 5 minutes</p>
-
-                            </div>
-
-                        </div>
-
-                                    <div class="row" id="rowmarign">
-
-            <?php
-
-                        $box_style =6;//  $this->db->get_where('ui_settings',array('ui_settings_id' => 29))->row()->value;
-
-                        $limit = 3;// $this->db->get_where('ui_settings',array('ui_settings_id' => 20))->row()->value;
-
-                        $featured=$this->crud_model->product_list_set('featured',$limit);
-
-                        foreach($featured as $row){
-
-                            ?>
-
-                            <div class="col-md-4">
-
-                            <?php
-
-                            echo $this->html_model->product_box($row, 'grid', $box_style);
-
-                            ?>
-
-                            </div>
-
-                            <?php
-
-                        }
+                    }
 
                     ?>
+
+                </div>
 
             </div>
 
 
 
-                            <!--<div class="row">-->
 
-                            <!--    <div class="col-sm-4 bottom_box">-->
 
-                            <!--        <div class="inner_bottombox">-->
 
-                            <!--            <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">-->
 
-                            <!--            <div class="sidegapp_bottom">-->
 
-                            <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
 
-                            <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
+            <div class="orange_pathwrap" id="bpage_form">
 
-                            <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
+                <div class="container">
 
-                            <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
+                    <div class="iframe_box">
 
-                            <!--            </div>-->
+                        <div id="googleMap" style="width:100%;height:550px;"></div>
 
-                            <!--        </div>-->
 
-                            <!--    </div>-->
 
-                            <!--    <div class="col-sm-4 bottom_box">-->
 
-                            <!--        <div class="inner_bottombox">-->
 
-                            <!--            <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">-->
+                        <div class="getin_touch">
 
-                            <!--            <div class="sidegapp_bottom">-->
+                            <div class="alert alert-success d-none" id="success" role="alert">
 
-                            <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
-
-                            <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
-
-                            <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
-
-                            <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
-
-                            <!--            </div>-->
-
-                            <!--        </div>-->
-
-                            <!--    </div>-->
-
-                            <!--    <div class="col-sm-4 bottom_box">-->
-
-                            <!--        <div class="inner_bottombox">-->
-
-                            <!--            <img src="<?= base_url(); ?>template/front/images/img-3.png" alt="">-->
-
-                            <!--            <div class="sidegapp_bottom">-->
-
-                            <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
-
-                            <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
-
-                            <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
-
-                            <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
-
-                            <!--            </div>-->
-
-                            <!--        </div>-->
-
-                            <!--    </div>-->
-
-                            <!--</div>-->
-
-                            <div class="info_tooltip">
-
-                                <a href="#"><img src="<?= base_url(); ?>template/front/images/info-orange.png" alt=""></a>
+                                Email Send Successfully!
 
                             </div>
 
+                            <div class="alert alert-danger d-none" id="danger" role="alert">
+
+                                Please Try Again!
+
+                            </div>
+
+                            <h3>Get In Touch <img src="<?= base_url(); ?>upload/phone_2.png" alt=""></h3>
+
+                            <form action="" method="">
+
+                                <input type="hidden" name="pid" id="pid1" value="<?= $pro['product_id']?>">
+
+                                <div class="row">
+
+                                    <div class="col-sm-6 form_gapp">
+
+                                        <div class="form_box">
+
+                                            <label for="First name">First name</label>
+
+                                            <input type="text" placeholder="Type Your First Name" name="" id="fname__">
+
+                                            <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-sm-6 form_gapp">
+
+                                        <div class="form_box">
+
+                                            <label for="Last name">Last name</label>
+
+                                            <input type="text" placeholder="Type Your Last Name" name="" id="lname">
+
+                                            <img src="<?= base_url(); ?>template/front/images/user-icon.png" alt="">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-sm-12 form_gapp">
+
+                                        <div class="form_box">
+
+                                            <label for="Email">Email</label>
+
+                                            <input type="email" placeholder="Type Your Email" name="" id="email__">
+
+                                            <img src="<?= base_url(); ?>template/front/images/email.png" alt="">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-sm-12 form_gapp">
+
+                                        <div class="form_box">
+
+                                            <label for="Phone number">Phone number</label>
+
+                                            <input type="number" placeholder="Type phone number" name="" id="phone">
+
+                                            <img class="phone_iconn" src="<?= base_url(); ?>upload/phone_icon.png" alt="">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-sm-12 form_gapp">
+
+                                        <div class="form_box">
+
+                                            <label for="Message">Message</label>
+
+                                            <textarea placeholder="Type Message" id="message__"></textarea>
+
+                                            <img class="msg_iconn" src="<?= base_url(); ?>upload/message_1.png" alt="">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-sm-12 form_gapp">
+
+                                        <div class="form_box">
+
+                                            <button type="button" id="send">Send</button>
+
+                                            <a style="    background: #F26122;
+    border-radius: 4.28081px;
+    Padding: 6px 83px;
+    border: none;
+    color: #fff;
+    text-transform: uppercase;
+    outline: 0;" href="https://maps.google.com/?q=<?= $pro['lat'] ?>,<?= $pro['lng'] ?>">
+                                                GET DIRECTION
+                                            </a>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+
                         </div>
 
                     </div>
 
                 </div>
 
-                <div id="tab_2" class="tab-content__box">
+            </div>
 
-                    <div class="container">
 
-                        <?php
 
-                                foreach($pros as $sing)
 
-                                {
 
-                                
 
-                                if ($sing['is_event'] == 1)
 
-                                  {
+            <div class="purple_line" id="intrested">
 
-                                      ?>
+                <img src="<?= base_url(); ?>template/front/images/base-icon.png" alt="">
 
-                                    <div class="col-md-4">
+            </div>
 
-                                <?php
 
-                                      echo $this->html_model->product_box($sing, 'grid', 1);
 
-                                      ?>
+            <div class="container" style="padding-top: 165px ;">
 
-                                      </div>
+                <div class="container">
 
-                             <?php
+                    <div class="verify_head" style="    padding: 0 23px 0;">
 
-                                  }
+                        <h3>You May Also be Interested In</h3>
 
-                                }
-
-                                  ?>
-
-                       
+                        <p>You can now list your business in less than 5 minutes</p>
 
                     </div>
 
                 </div>
 
-                <div id="tab_3" class="tab-content__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_3' ?"current":""; ?>">
+                <div class="row" id="rowmarign">
+                    <?php
+        include "feature_products.php";
+        ?>
+                    
+                </div>
 
-                                        <div class="container">
 
-                            <div class="row">
 
-                         <?php
+                <!--<div class="row">-->
 
-                         foreach($pros as $sing)
+                <!--    <div class="col-sm-4 bottom_box">-->
 
-                                {
+                <!--        <div class="inner_bottombox">-->
 
-                                
+                <!--            <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">-->
 
-                                if ($sing['is_blog'] == 1)
+                <!--            <div class="sidegapp_bottom">-->
 
-                                  {
+                <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
 
-                                      ?>
+                <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
 
-                                    <div class="col-md-4">
+                <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
 
-                                <?php
+                <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
 
-                                      echo $this->html_model->product_box($sing, 'grid', 1);
+                <!--            </div>-->
 
-                                      ?>
+                <!--        </div>-->
 
-                                      </div>
+                <!--    </div>-->
 
-                             <?php
+                <!--    <div class="col-sm-4 bottom_box">-->
 
-                                  }
+                <!--        <div class="inner_bottombox">-->
 
-                                }
+                <!--            <img src="<?= base_url(); ?>template/front/images/img-2.png" alt="">-->
 
-                           ?>
+                <!--            <div class="sidegapp_bottom">-->
 
-                       </div>
+                <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
 
-                            <!--<div class="info_tooltip">-->
+                <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
 
-                            <!--    <a href="#"><img src="<?= base_url(); ?>template/front/images/info-orange.png" alt=""></a>-->
+                <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
 
-                            <!--</div>-->
+                <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
+
+                <!--            </div>-->
+
+                <!--        </div>-->
+
+                <!--    </div>-->
+
+                <!--    <div class="col-sm-4 bottom_box">-->
+
+                <!--        <div class="inner_bottombox">-->
+
+                <!--            <img src="<?= base_url(); ?>template/front/images/img-3.png" alt="">-->
+
+                <!--            <div class="sidegapp_bottom">-->
+
+                <!--                <h5>Jan 21, 2019      45 Comments       10 Share</h5>-->
+
+                <!--                <h3>Shrimp and Avocado Salad with Miso Dressing</h3>-->
+
+                <!--                <p>This Shrimp and Avocado Salad is topped with spicy shrimp, crisp cucumbers, spinach, creamy avocado, and a generous drizzle of miso dressing. The happiest green salad ever!</p>-->
+
+                <!--                <a href="#">Read more <img src="<?= base_url(); ?>template/front/images/arrow-right1.png" alt=""></a>-->
+
+                <!--            </div>-->
+
+                <!--        </div>-->
+
+                <!--    </div>-->
+
+                <!--</div>-->
+
+                <div class="info_tooltip">
+
+                    <a href="#"><img src="<?= base_url(); ?>template/front/images/info-orange.png" alt=""></a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="tab_2" class="tab-content__box">
+
+        <div class="container">
+
+            <?php
+
+            foreach($pros as $sing)
+
+            {
+
+
+
+                if ($sing['is_event'] == 1)
+
+                {
+
+                    ?>
+
+                    <div class="col-md-4">
+
+                        <?php
+
+                        echo $this->html_model->product_box($sing, 'grid', 1);
+
+                        ?>
+
+                    </div>
+
+                    <?php
+
+                }
+
+            }
+
+            ?>
+
+
+
+        </div>
+
+    </div>
+
+    <div id="tab_3" class="tab-content__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_3' ?"current":""; ?>">
+
+        <div class="container">
+
+            <div class="row">
+
+                <?php
+
+                foreach($pros as $sing)
+                {
+                    if ($sing['is_blog'] == 1)
+                    {
+                        ?>
+                        <div class="col-md-4">
+                            <?php
+                            echo $this->html_model->product_box($sing, 'grid', 1);
+                            ?>
+                        </div>
+                        <?php
+
+                    }
+
+                }
+
+                ?>
+
+            </div>
+
+            <!--<div class="info_tooltip">-->
+
+            <!--    <a href="#"><img src="<?= base_url(); ?>template/front/images/info-orange.png" alt=""></a>-->
+
+            <!--</div>-->
+
+        </div>
+
+
+
+
+
+    </div><div id="tab_4" class="tab-content__box">
+
+        <div class="container">
+
+            <div class="row">
+
+                <?php
+
+                foreach($pros as $sing)
+
+                {
+
+
+
+                    $cats = explode(',', $sing['category']);
+
+                    if (in_array(78, $cats) && $sing['is_bpage'] == 0)
+
+                    {
+
+                        ?>
+
+                        <div class="col-md-4">
+
+                            <?php
+
+                            echo $this->html_model->product_box($sing, 'grid', 1);
+
+                            ?>
 
                         </div>
 
+                        <?php
+
+                    }
 
 
-                    
 
-                </div><div id="tab_4" class="tab-content__box">
+                }
 
-                    <div class="container">
+                ?>
 
-                       <div class="row">
+            </div>
 
-                               <?php
 
-                                foreach($pros as $sing)
 
-                                {
+        </div>
 
-                                    
 
-                                $cats = explode(',', $sing['category']);
 
-                                if (in_array(78, $cats) && $sing['is_bpage'] == 0)
+    </div>
 
-                                  {
+    <div id="tab_5" class="tab-content__box">
 
-                                      ?>
+        <div class="container">
 
-                                    <div class="col-md-4">
+            <div class="row">
 
-                                <?php
+                <?php
 
-                                      echo $this->html_model->product_box($sing, 'grid', 1);
+                foreach($pros as $sing)
 
-                                      ?>
+                {
 
-                                      </div>
 
-                             <?php
 
-                                  }
+                    if ( $sing['is_bpage'] == 0 && $sing['is_blog'] == 0 && $sing['is_event'] == 0 && $sing['is_job'] == 0)
 
-                                  
+                    {
 
-                             }
+                        ?>
 
-                                  ?>
+                        <div class="col-md-4">
 
-                       </div>
+                            <?php
 
-                       
+                            echo $this->html_model->product_box($sing, 'grid', 1);
 
-                    </div>
+                            ?>
 
-                    
-
-                </div>
-
-                <div id="tab_5" class="tab-content__box">
-
-                    <div class="container">
-
-                       <div class="row">
-
-                               <?php
-
-                                foreach($pros as $sing)
-
-                                {
-
-                                    
-
-                                if ( $sing['is_bpage'] == 0 && $sing['is_blog'] == 0 && $sing['is_event'] == 0 && $sing['is_job'] == 0)
-
-                                  {
-
-                                      ?>
-
-                                    <div class="col-md-4">
-
-                                <?php
-
-                                      echo $this->html_model->product_box($sing, 'grid', 1);
-
-                                      ?>
-
-                                      </div>
-
-                             <?php
-
-                                  }
-
-                                  
-
-                             }
-
-                                  ?>
-
-                       </div>
-
-                       
-
-                    </div>
-
-                </div>
-
-                <div id="tab_6" class="tab-content__box">
-
-                    <div class="container">
-
-                    <div class="clients_box">
-
-                        <h3>Take a look what our client Says</h3>
-
-                        <h4>Reviews</h4>
-
-                        
-
-                    </div>
-
-                    <div class="col-sm-8 left__review">
-
-                        <div class="row">
+                        </div>
 
                         <?php
 
-                        // var_dump($pro);
+                    }
 
-                        $rating = $this->db->where('product_id', $pro['product_id'])->get('user_rating')->result_array();
 
-                        foreach($rating as $k=> $v){
+
+                }
+
+                ?>
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <div id="tab_6" class="tab-content__box">
+
+        <div class="container">
+
+            <div class="clients_box">
+
+                <h3>Take a look what our client Says</h3>
+
+                <h4>Reviews</h4>
+
+
+
+            </div>
+
+            <div class="col-sm-8 left__review">
+
+                <div class="row">
+
+                    <?php
+
+                    // var_dump($pro);
+
+                    $rating = $this->db->where('product_id', $pro['product_id'])->get('user_rating')->result_array();
+
+                    foreach($rating as $k=> $v){
 
                         ?>
 
@@ -2655,7 +2486,7 @@
 
                                 <?php
 
-                                
+
 
                                 $user_id = $v['user_id'];
 
@@ -2667,29 +2498,29 @@
 
                                 <img src="
 
-                                <?php 
+                                <?php
 
-                                    // $user_id = $v['user_id'];
+                                // $user_id = $v['user_id'];
 
-                                    if(file_exists('uploads/user_image/user_'.$user_id.'.jpg')){ 
+                                if(file_exists('uploads/user_image/user_'.$user_id.'.jpg')){
 
-                                        
 
-                                        echo $this->crud_model->file_view('user',$user_id,'100','100','no','src','','','.jpg').'?t='.time();
 
-                                    } else if(empty($row['fb_id']) !== true){ 
+                                    echo $this->crud_model->file_view('user',$user_id,'100','100','no','src','','','.jpg').'?t='.time();
 
-                                        echo 'https://graph.facebook.com/'. $row['fb_id'] .'/picture?type=large';
+                                } else if(empty($row['fb_id']) !== true){
 
-                                    } else if(empty($row['g_id']) !== true ){
+                                    echo 'https://graph.facebook.com/'. $row['fb_id'] .'/picture?type=large';
 
-                                        echo $row['g_photo'];
+                                } else if(empty($row['g_id']) !== true ){
 
-                                    } else {
+                                    echo $row['g_photo'];
 
-                                        echo base_url().'uploads/user_image/default.jpg';
+                                } else {
 
-                                    } 
+                                    echo base_url().'uploads/user_image/default.jpg';
+
+                                }
 
                                 ?>
 
@@ -2707,7 +2538,7 @@
 
                                     ?>
 
-                                <span><?= $v['rating'];?></span>
+                                    <span><?= $v['rating'];?></span>
 
                                 </div>
 
@@ -2717,105 +2548,105 @@
 
                         <?php
 
-                        }
-
-                        ?>
-
-                    </div>
-
-                    </div>
-
-                    <div class="col-sm-4 add__new_review" id="review_coment">
-
-                        <label> add new reviews</label>
-
-                        <form class="" action="<?= base_url('home/add_rate') ?>" id="rform" >
-
-                     <div class=" border-color--default__09f24__NPAKY">
-
-                        <div class=" css-14s1wf padding-t3__09f24__TMrIW padding-r3__09f24__eaF7p padding-b3__09f24__S8R2d padding-l3__09f24__IOjKY border-color--default__09f24__NPAKY" role="presentation">
-
-                           <div class=" css-10687n6 margin-b3__09f24__l9v5d border-color--default__09f24__NPAKY" gap="1">
-
-                              <div class=" css-1r871ch border-color--default__09f24__NPAKY">
-
-                                 <fieldset class=" rating-selector__09f24__LNhhs">
-
-                                    <div id="rateYo"></div>
-
-                                    <input type="hidden" value="0" name="rating" id="rate" />
-
-                                    <input type="hidden" value="<?= $pro['product_id'] ?>" name="pid" id="pid" />
-
-                                    <div class=" description__09f24__qRKe3 border-color--default__09f24__NPAKY" aria-hidden="true">
-
-                                       <p class="description-text--non-zero__09f24__Ln52s css-qgunke"></p>
-
-                                    </div>
-
-                                 </fieldset>
-
-                              </div>
-
-                              <div class=" css-aurft1 border-color--default__09f24__NPAKY nowrap__09f24__lBkC2"></div>
-
-                           </div>
-
-                           <div class=" css-1bqnmih border-color--default__09f24__NPAKY">
-
-                              <!-- <div class="css-1sdb4og" contenteditable="true" spellcheck="true" data-lexical-editor="true" style="user-select: text; white-space: pre-wrap; word-break: break-word;" role="textbox">
-
-                                 <p><br></p>
-
-                              </div> -->
-
-                              <textarea name="comment" class="summernote" placeholder="Add comment here"></textarea>
-
-                           </div>
-
-                           <div class=" css-c7yo1x margin-t3__09f24__riq4X border-color--default__09f24__NPAKY background-color--white__09f24__ulvSM"></div>
-
-                        </div>
-
-                     </div>
-
-                     <?php
-
-                        $user = $this->session->userdata('user_id');
-
-                        if($user){
-
-                     ?>
-
-                     <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:200px"><button type="button"  id="rate_form" class=" css-hv9ohz" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></div>
-
-                    <?php
-
-                    }else{
+                    }
 
                     ?>
 
-                   <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:200px"><a href="<?= base_url('/login_set/login'); ?>"><button type="button"  id="rate_form" class=" css-hv9ohz" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></a></div>
+                </div>
 
+            </div>
 
+            <div class="col-sm-4 add__new_review" id="review_coment">
+
+                <label> add new reviews</label>
+
+                <form class="" action="<?= base_url('home/add_rate') ?>" id="rform" >
+
+                    <div class=" border-color--default__09f24__NPAKY">
+
+                        <div class=" css-14s1wf padding-t3__09f24__TMrIW padding-r3__09f24__eaF7p padding-b3__09f24__S8R2d padding-l3__09f24__IOjKY border-color--default__09f24__NPAKY" role="presentation">
+
+                            <div class=" css-10687n6 margin-b3__09f24__l9v5d border-color--default__09f24__NPAKY" gap="1">
+
+                                <div class=" css-1r871ch border-color--default__09f24__NPAKY">
+
+                                    <fieldset class=" rating-selector__09f24__LNhhs">
+
+                                        <div id="rateYo"></div>
+
+                                        <input type="hidden" value="0" name="rating" id="rate" />
+
+                                        <input type="hidden" value="<?= $pro['product_id'] ?>" name="pid" id="pid" />
+
+                                        <div class=" description__09f24__qRKe3 border-color--default__09f24__NPAKY" aria-hidden="true">
+
+                                            <p class="description-text--non-zero__09f24__Ln52s css-qgunke"></p>
+
+                                        </div>
+
+                                    </fieldset>
+
+                                </div>
+
+                                <div class=" css-aurft1 border-color--default__09f24__NPAKY nowrap__09f24__lBkC2"></div>
+
+                            </div>
+
+                            <div class=" css-1bqnmih border-color--default__09f24__NPAKY">
+
+                                <!-- <div class="css-1sdb4og" contenteditable="true" spellcheck="true" data-lexical-editor="true" style="user-select: text; white-space: pre-wrap; word-break: break-word;" role="textbox">
+
+                                   <p><br></p>
+
+                                </div> -->
+
+                                <textarea name="comment" class="summernote" placeholder="Add comment here"></textarea>
+
+                            </div>
+
+                            <div class=" css-c7yo1x margin-t3__09f24__riq4X border-color--default__09f24__NPAKY background-color--white__09f24__ulvSM"></div>
+
+                        </div>
+
+                    </div>
 
                     <?php
+
+                    $user = $this->session->userdata('user_id');
+
+                    if($user){
+
+                        ?>
+
+                        <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:200px"><button type="button" class=" css-hv9ohz" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></div>
+
+                        <?php
+
+                    }else{
+
+                        ?>
+
+                        <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:200px"><a href="<?= base_url('/login_set/login'); ?>"><button type="button"  id="rate_form" class=" css-hv9ohz" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></a></div>
+
+
+
+                        <?php
 
                     }
 
                     ?>
 
-                  </form>
+                </form>
 
-                    </div>
+            </div>
 
-                </div>
+        </div>
 
-                    
 
-                </div>
 
     </div>
+
+</div>
 
 
 
@@ -2823,23 +2654,23 @@
 
 <div class="popup_box">
 
-   
+
 
     <div class="innerbox">
 
-        
 
-            <div class="alert alert-success d-none" id="success" role="alert">
 
-              Reported Successfully!
+        <div class="alert alert-success d-none" id="success" role="alert">
 
-            </div>
+            Reported Successfully!
 
-            <div class="alert alert-danger d-none" id="danger" role="alert">
+        </div>
 
-              Please Try Again!
+        <div class="alert alert-danger d-none" id="danger" role="alert">
 
-            </div>
+            Please Try Again!
+
+        </div>
 
         <div class="logo1">
 
@@ -2899,11 +2730,11 @@
 
                     <div class="forminput ">
 
-                            <!--<input type="button" class="submit" id="submit" value="Submit">-->
+                        <!--<input type="button" class="submit" id="submit" value="Submit">-->
 
-                           <button class="submit" name="report" id="report_submit" type="button">Submit</button>
+                        <button class="submit" name="report" id="report_submit" type="button">Submit</button>
 
-                           <button type="button" class="close_btn">Close</button>
+                        <button type="button" class="close_btn">Close</button>
 
                     </div>
 
@@ -2919,257 +2750,216 @@
 
 
 
-    <div class="container">
+<div class="container">
 
-        
 
-        <div class="disqus_comment" >
 
-                                <div id="disqus_thread"></div></div>
+    <div class="disqus_comment" >
 
-    </div>
+        <div id="disqus_thread"></div></div>
 
-    <div class="flgicon">
+</div>
+
+<div class="flgicon">
 
     <a href="#"><i class="fa fa-flag"></i></a>
 
 </div>
-
+<script>
+    $(".more-link").click(function () {
+        var moreAndLess = $(this).html() == 'View More' ? 'View Less' : 'View More';
+        $(this).text(moreAndLess);
+        if($(".ammen_container").hasClass('height_auto')){
+            $(".ammen_container").removeClass('height_auto');
+        } else {
+            $(".ammen_container").addClass('height_auto');
+        }
+    });
+</script>
 <script>
 
     $('#report_submit'). on ('click', function(e){
 
-           
 
-       
+
+
 
         $('.error').text('');
 
-          var fname = $('#name').val();
+        var fname = $('#name').val();
 
-          var email = $('#email').val();
+        var email = $('#email').val();
 
-          var msg = $('#msg').val();
+        var msg = $('#msg').val();
 
-          var pid = $('#pid').val();
+        var pid = $('#pid').val();
 
         // alert(x);
 
         var url = "<?php echo base_url('home/report');?>"
 
-      
 
-     $.ajax({
 
-        url: url,
+        $.ajax({
 
-        type: "get",
+            url: url,
 
-        async: true,
+            type: "get",
 
-        data: {  fname:fname, email:email, message:msg,pid:pid },
+            async: true,
 
-        
+            data: {  fname:fname, email:email, message:msg,pid:pid },
 
-        success: function (data) {
 
-            
 
-              if(data == 1){
+            success: function (data) {
 
-                  alert('Email Sent');
 
-                $("#success").attr("class", "alert alert-success d-block");
 
-              }else{
+                if(data == 1){
 
-                  $("#danger").attr("class", "alert alert-danger d-block");
+                    alert('Email Sent');
 
-              }
+                    $("#success").attr("class", "alert alert-success d-block");
 
-                
+                }else{
 
-            }
-
-        
-
-    }); 
-
-});
-
-// $('#send'). on ('click', function(e){
-
-           
-
-       
-
-//         $('.error').text('');
-
-//           var x = $("form").serialize();
-
-//         // alert(x);
-
-//         var url = "<?php echo base_url('home/contact_us');?>"
-
-      
-
-//      $.ajax({
-
-//         url: url,
-
-//         type: "get",
-
-//         async: true,
-
-//         data: x,
-
-//         dataType:"json",
-
-//         success: function (data) {
-
-//             if(data.email == 1)
-
-//               {
-
-//                 $("#success").attr("class", "alert alert-success d-block");
-
-//               }else{
-
-//                   $("#danger").attr("class", "alert alert-danger d-block");
-
-//               }
-
-                
-
-//             }
-
-        
-
-//     }); 
-
-// });
-
-</script>
-
-<script>
-
-        $('#send').on('click' , function(e){
-
-            e.preventDefault();
-
-            
-
-            var url = '<?php echo base_url('home/contact_us')?>';
-
-            var fname = $('#fname__').val();
-
-            var lname = $('#lname').val();
-
-            var email = $('#email__').val();
-
-            var msg = $('#message__').val();
-
-            var phone = $('#phone').val();
-
-            var pid = $('#pid1').val();
-
-               $.ajax({
-
-                url: url,
-
-                type: "get",
-
-                async: true,
-
-                
-
-                data: {  fname:fname, email:email, message:msg,phone:phone,lname:lname,pid:pid },
-
-                success: function (data) {
-
-                    // const myArr = JSON.parse(JSON.stringify(data));
-
-              if(data == 1){
-
-                        $("#success").attr("class", "alert alert-success d-block");
-
-                      }else{
-
-                          $("#danger").attr("class", "alert alert-danger d-block");
-
-                      }
-
-                },
-
-                error: function (xhr, exception) {
-
-                    var msg = "";
-
-                    if (xhr.status === 0) {
-
-                        msg = "Not connect.\n Verify Network." + xhr.responseText;
-
-                    } else if (xhr.status == 404) {
-
-                        msg = "Requested page not found. [404]" + xhr.responseText;
-
-                    } else if (xhr.status == 500) {
-
-                        msg = "Internal Server Error [500]." +  xhr.responseText;
-
-                    } else if (exception === "parsererror") {
-
-                        msg = "Requested JSON parse failed.";
-
-                    } else if (exception === "timeout") {
-
-                        msg = "Time out error." + xhr.responseText;
-
-                    } else if (exception === "abort") {
-
-                        msg = "Ajax request aborted.";
-
-                    } else {
-
-                        msg = "Error:" + xhr.status + " " + xhr.responseText;
-
-                    }
-
-                   
+                    $("#danger").attr("class", "alert alert-danger d-block");
 
                 }
 
-            }); 
 
 
+            }
 
 
 
         });
 
-    </script>
+    });
 
-    <script>
 
-        /**
+</script>
 
-        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+<script>
 
-        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+    $('#send').on('click' , function(e){
 
-        /*
+        e.preventDefault();
 
-        var disqus_config = function () {
 
-        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
 
-        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        var url = '<?php echo base_url('home/contact_us')?>';
 
-        };
+        var fname = $('#fname__').val();
 
-        */
+        var lname = $('#lname').val();
 
-        (function() { // DON'T EDIT BELOW THIS LINE
+        var email = $('#email__').val();
+
+        var msg = $('#message__').val();
+
+        var phone = $('#phone').val();
+
+        var pid = $('#pid1').val();
+
+        $.ajax({
+
+            url: url,
+
+            type: "get",
+
+            async: true,
+
+
+
+            data: {  fname:fname, email:email, message:msg,phone:phone,lname:lname,pid:pid },
+
+            success: function (data) {
+
+                // const myArr = JSON.parse(JSON.stringify(data));
+
+                if(data == 1){
+
+                    $("#success").attr("class", "alert alert-success d-block");
+
+                }else{
+
+                    $("#danger").attr("class", "alert alert-danger d-block");
+
+                }
+
+            },
+
+            error: function (xhr, exception) {
+
+                var msg = "";
+
+                if (xhr.status === 0) {
+
+                    msg = "Not connect.\n Verify Network." + xhr.responseText;
+
+                } else if (xhr.status == 404) {
+
+                    msg = "Requested page not found. [404]" + xhr.responseText;
+
+                } else if (xhr.status == 500) {
+
+                    msg = "Internal Server Error [500]." +  xhr.responseText;
+
+                } else if (exception === "parsererror") {
+
+                    msg = "Requested JSON parse failed.";
+
+                } else if (exception === "timeout") {
+
+                    msg = "Time out error." + xhr.responseText;
+
+                } else if (exception === "abort") {
+
+                    msg = "Ajax request aborted.";
+
+                } else {
+
+                    msg = "Error:" + xhr.status + " " + xhr.responseText;
+
+                }
+
+
+
+            }
+
+        });
+
+
+
+
+
+    });
+
+</script>
+
+<script>
+
+    /**
+
+     *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+
+     *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+
+    /*
+
+    var disqus_config = function () {
+
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+
+    };
+
+    */
+
+    (function() { // DON'T EDIT BELOW THIS LINE
 
         var d = document, s = d.createElement('script');
 
@@ -3179,19 +2969,19 @@
 
         (d.head || d.body).appendChild(s);
 
-        })();
+    })();
 
-    </script>
+</script>
 
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
-                            </div>
+</div>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        $(document).ready(function(){
+    $(document).ready(function(){
 
-        
+
 
         $('ul.tabss li').click(function(){
 
@@ -3225,11 +3015,11 @@
 
 
 
-    </script>
+</script>
 
-    <!--slider-->
+<!--slider-->
 
-    <script>
+<script>
 
     function find_pre(cur)
 
@@ -3239,39 +3029,39 @@
 
         cur = cur -1;
 
-    //      var is_find = 0;
+        //      var is_find = 0;
 
-    //      var ocur = cur
+        //      var ocur = cur
 
-    //     $('.galimg').each(function(i, obj) {
+        //     $('.galimg').each(function(i, obj) {
 
-    //         var num = parseInt($(this).attr('index'));
+        //         var num = parseInt($(this).attr('index'));
 
-    //         console.log(num+' test '+cur);
+        //         console.log(num+' test '+cur);
 
-    // if(num < cur)
+        // if(num < cur)
 
-    // {
+        // {
 
-    //     cur = num;
+        //     cur = num;
 
-    //     is_find = 1;
+        //     is_find = 1;
 
-    // }
+        // }
 
-    
+
 
 // });
 
-if(cur < 0)
+        if(cur < 0)
 
-{
+        {
 
-    cur = $('.galimg').size() -1;
+            cur = $('.galimg').size() -1;
 
-}
+        }
 
-return cur;
+        return cur;
 
     }
 
@@ -3279,17 +3069,17 @@ return cur;
 
     {
 
-    $("#popup_lightbox").show();
+        $("#popup_lightbox").show();
 
-    $("#popup_lightbox").css("opacity","1");
+        $("#popup_lightbox").css("opacity","1");
 
-    $("#popup_lightbox").css("display","block");
+        $("#popup_lightbox").css("display","block");
 
-    $("#popup_lightbox").css("width","100%");
+        $("#popup_lightbox").css("width","100%");
 
-    $("#popup_lightbox").css("height","100vh");
+        $("#popup_lightbox").css("height","100vh");
 
-    var src = show_img(next);
+        var src = show_img(next);
 
         $('#glarge').attr('src',src);
 
@@ -3303,7 +3093,7 @@ return cur;
 
         cur = parseInt(cur);
 
-         var is_find = 0;
+        var is_find = 0;
 
         $('.galimg').each(function(i, obj) {
 
@@ -3311,29 +3101,29 @@ return cur;
 
             console.log(num);
 
-    if(is_find == 0 && num > cur)
+            if(is_find == 0 && num > cur)
 
-    {
+            {
 
-        cur = num;
+                cur = num;
 
-        is_find = 1;
+                is_find = 1;
 
-    }
+            }
 
-    
 
-});
 
-if(is_find == 0)
+        });
 
-{
+        if(is_find == 0)
 
-    cur = 0;
+        {
 
-}
+            cur = 0;
 
-return cur;
+        }
+
+        return cur;
 
     }
 
@@ -3341,13 +3131,13 @@ return cur;
 
     {
 
-        
+
 
         ind = parseInt(ind);
 
         var src = '';
 
-        
+
 
         $('.galimg').each(function(i, obj) {
 
@@ -3355,39 +3145,39 @@ return cur;
 
             // console.log(num+' test '+ ind);
 
-    if(num == ind)
+            if(num == ind)
 
-    {
+            {
 
-        if(!ind)
+                if(!ind)
 
-        {
+                {
 
-            src = $(this).attr('data-src');
+                    src = $(this).attr('data-src');
 
-        }
+                }
 
-        else
+                else
 
-        {
+                {
 
-            src = $(this).attr('src');
+                    src = $(this).attr('src');
 
-        }
+                }
 
-        // is_find = 1;
+                // is_find = 1;
+
+            }
+
+
+
+        });
+
+        return src;
 
     }
 
-    
 
-});
-
-return src;
-
-    }
-
-    
 
     function selImg(next)
 
@@ -3399,7 +3189,7 @@ return src;
 
         $('#large_img').attr('cur',next);
 
-     
+
 
     }
 
@@ -3417,7 +3207,7 @@ return src;
 
         }
 
-         var next = find_pre(cur);
+        var next = find_pre(cur);
 
         var src = show_img(next);
 
@@ -3427,7 +3217,7 @@ return src;
 
             $('#glarge').attr('src',src);
 
-        $('#glarge').attr('cur',next);
+            $('#glarge').attr('cur',next);
 
         }
 
@@ -3435,13 +3225,13 @@ return src;
 
         {
 
-        $('#large_img').attr('src',src);
+            $('#large_img').attr('src',src);
 
-        $('#large_img').attr('cur',next);
+            $('#large_img').attr('cur',next);
 
         }
 
-        
+
 
     }
 
@@ -3459,7 +3249,7 @@ return src;
 
         }
 
-         var next = find_next(cur);
+        var next = find_next(cur);
 
         var src = show_img(next);
 
@@ -3469,7 +3259,7 @@ return src;
 
             $('#glarge').attr('src',src);
 
-        $('#glarge').attr('cur',next);
+            $('#glarge').attr('cur',next);
 
         }
 
@@ -3477,15 +3267,15 @@ return src;
 
         {
 
-        $('#large_img').attr('src',src);
+            $('#large_img').attr('src',src);
 
-        $('#large_img').attr('cur',next);
+            $('#large_img').attr('cur',next);
 
         }
 
-        
 
-        
+
+
 
     }
 
@@ -3495,176 +3285,172 @@ return src;
 
     });
 
-    </script>
+</script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        $(".btn-close").click(function(){
+    $(".btn-close").click(function(){
 
-            $("#popup_lightbox").hide();
+        $("#popup_lightbox").hide();
 
-        });
+    });
 
-    </script>
+</script>
 
-    <script>
+<script>
 
     function myMap() {
 
-    var mapProp= {
+        var mapProp= {
 
-      center:new google.maps.LatLng(<?= $pro['lat'] ?>,<?= $pro['lng'] ?>),
+            center:new google.maps.LatLng(<?= $pro['lat'] ?>,<?= $pro['lng'] ?>),
 
-      zoom:12,
+            zoom:12,
 
-    };
+        };
 
-    var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+        var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
 
-            var myLatLng = {lat: <?= $pro['lat'] ?>, lng: <?= $pro['lng'] ?>};
+        var myLatLng = {lat: <?= $pro['lat'] ?>, lng: <?= $pro['lng'] ?>};
 
 
 
-    var marker = new google.maps.Marker({
+        var marker = new google.maps.Marker({
 
-              position: myLatLng,
+            position: myLatLng,
 
-              map: map,
+            map: map,
 
-              title: 'Hello World!'
+            title: 'Hello World!'
 
-            });
-
-    }
-
-     $(function () {
-
- 
-
-  $("#rateYo").rateYo({
-
-    starWidth: "40px",
-
-    fullStar: true,
-
-    onSet: function (rating, rateYoInstance) {
-
-        $('#rate').val(rating);
+        });
 
     }
 
-  });
+    $(function () {
 
- 
 
-});
+
+        $("#rateYo").rateYo({
+
+            starWidth: "40px",
+
+            fullStar: true,
+
+            onSet: function (rating, rateYoInstance) {
+
+                $('#rate').val(rating);
+
+            }
+
+        });
+
+
+
+    });
 
     $('#rate_form').click(function(){
 
-    var form = $('#rform');
+        var form = $('#rform');
 
-    var here = $(this);
+        var here = $(this);
 
-    alert(form.attr('action'));
+        $.ajax({
 
-    $.ajax({
+            url: form.attr('action')+'?'+form.serialize(), // form action url
 
-				url: form.attr('action')+'?'+form.serialize(), // form action url
+            type: 'POST', // form submit method get/post
 
-				type: 'POST', // form submit method get/post
+            dataType: 'html', // request type html/json/xml
 
-				dataType: 'html', // request type html/json/xml
+            data: form.serialize(), // serialize form data
 
-				data: form.serialize(), // serialize form data 
+            cache       : false,
 
-				cache       : false,
+            contentType : false,
 
-				contentType : false,
+            processData : false,
 
-				processData : false,
+            beforeSend: function() {
 
-				beforeSend: function() {
+                here.addClass('disabled');
 
-					here.addClass('disabled');
+                here.html('submitting'); // change submit button text
 
-					here.html('submitting'); // change submit button text
+            },
 
-				},
+            success: function(data) {
 
-				success: function(data) {
+                here.fadeIn();
 
-					here.fadeIn();
+                here.html('Post Review');
 
-					here.html('Post Review');
+                here.removeClass('disabled');
 
-					here.removeClass('disabled');
+                if(data == '1'){
 
-					if(data == '1'){
+                    notify('Review add successfully!','success','bottom','right');
 
-						notify('Review add successfully!','success','bottom','right');
-
-						window.location.replace("<?php echo $this->crud_model->product_link($pro['product_id']); ?>");
+                    window.location.replace("<?php echo $this->crud_model->product_link($pro['product_id']); ?>");
 
 
 
-					}else {
+                }else {
 
-						notify(data,'warning','bottom','right');
+                    notify(data,'warning','bottom','right');
 
-					}
+                }
 
-				},
+            },
 
-				error: function(e) {
+            error: function(e) {
 
-					console.log(e)
+                console.log(e)
 
-				}
+            }
 
-			});
+        });
 
-});
+    });
 
-    </script>
+</script>
 
 
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=<?= $this->config->item('map_key'); ?>&callback=myMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?= $this->config->item('map_key'); ?>&callback=myMap"></script>
 
-    <script src="<?= base_url();?>template/front/js-files/custom.js"></script>
+<script src="<?= base_url();?>template/front/js-files/custom.js"></script>
 
-    <script>
+<script>
 
-        $('#shareit').click(function(){
+    $('#shareit').click(function(){
 
-            // alert();
+        // alert();
 
-            // sharethis-inline-share-buttons
+        // sharethis-inline-share-buttons
 
-            $('.sharethis-inline-share-buttons').show();
+        $('.sharethis-inline-share-buttons').show();
 
-        })
+    })
 
-    </script>
+</script>
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
 
-    
+
+
+
+
+
+
+
+
 
 <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=63788bcc6611ec0019d8d89c&product=inline-share-buttons&source=platform" async="async"></script>

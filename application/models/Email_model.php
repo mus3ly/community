@@ -67,6 +67,84 @@ class Email_model extends CI_Model
     }
     
     
+    function payment_success($id, $amount)
+    {
+        //$this->load->database();
+        $from_name  = $this->db->get_where('general_settings',array('type' => 'system_name'))->row()->value;
+        $protocol = $this->db->get_where('general_settings', array('type' => 'mail_status'))->row()->value;
+        if($protocol == 'smtp'){
+            $from = $this->db->get_where('general_settings',array('type' => 'smtp_user'))->row()->value;
+        }
+        else if($protocol == 'mail'){
+            $from = $this->db->get_where('general_settings', array('type' => 'system_email'))->row()->value;
+        }
+
+            $sub    = $this->db->get_where('email_template', array('email_template_id' => 12))->row()->subject;
+            $user = $this->db->where('email', $id)->get('vendor')->row();
+            $to     = $user->email;
+            $to_name =$user->name;
+			
+			$email_body      = $this->db->get_where('email_template', array('email_template_id' => 12))->row()->body;
+
+            $background = $this->db->get_where('ui_settings',array('type' => 'email_theme_style'))->row()->value;
+            
+		    $final_email = str_replace('[from]',$to_name,$email_body);
+		    $final_email = str_replace('[amount]',$amount,$email_body);
+			if($background !== 'style_1'){
+				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
+			}else{
+				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $email_body);
+			}
+            if($send_mail == true){
+            return $send_mail;
+            }else{
+                return false;
+            }
+            
+    }
+    
+    function subscription_cancellation($id)
+    {
+        //$this->load->database();
+        $from_name  = $this->db->get_where('general_settings',array('type' => 'system_name'))->row()->value;
+        $protocol = $this->db->get_where('general_settings', array('type' => 'mail_status'))->row()->value;
+        if($protocol == 'smtp'){
+            $from = $this->db->get_where('general_settings',array('type' => 'smtp_user'))->row()->value;
+        }
+        else if($protocol == 'mail'){
+            $from = $this->db->get_where('general_settings', array('type' => 'system_email'))->row()->value;
+        }
+
+            $sub    = $this->db->get_where('email_template', array('email_template_id' => 13))->row()->subject;
+            $mail =$this->db->get_where('product', array('product_id' => $query->row()->pid))->row()->bussniuss_email;
+
+            // $sub    = $this->db->get_where('email_template', array('email_template_id' => 10))->row()->subject;
+            $to     = '';
+            $to_name ='' ;
+			
+			$email_body      = $this->db->get_where('email_template', array('email_template_id' => 13))->row()->body;
+
+            $background = $this->db->get_where('ui_settings',array('type' => 'email_theme_style'))->row()->value;
+            
+		
+			if($background !== 'style_1'){
+				$final_email = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
+				$final_email = str_replace('[[body]]',$email_body,$final_email);
+				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
+				$this->do_email($from, $from_name, $mail, $sub, $final_email);
+			}else{
+				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $email_body);
+				$this->do_email($from, $from_name, $mail, $sub, $final_email);
+			}
+            if($send_mail == true){
+            return $send_mail;
+            }else{
+                return false;
+            }
+            
+    }
+    
+    
     function report_email( $id)
     {
         //$this->load->database();
@@ -161,8 +239,11 @@ class Email_model extends CI_Model
 
             $background = $this->db->get_where('ui_settings',array('type' => 'email_theme_style'))->row()->value;
 			if($background !== 'style_1'){
+			    
 				$final_email = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
 				$final_email = str_replace('[[body]]',$email_body,$final_email);
+				var_dump($final_email);
+				die();
 				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
 				if($send_mail){
 				$this->do_email($from, $from_name, $mail, $sub, $final_email);
@@ -600,6 +681,7 @@ class Email_model extends CI_Model
         }
 
         $to   = $email;
+        $to1= $this->db->get_where('general_settings', array('type' => 'system_email'))->row()->value;
         $query = $this->db->get_where($account_type, array('email' => $email));
 
         if ($query->num_rows() > 0) {
@@ -643,8 +725,10 @@ class Email_model extends CI_Model
       				}
       				$final_email = str_replace('[[body]]',$email_body,$final_email);
       				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
+      				 $this->do_email($from,$from_name,$to1, $sub, $final_email);
       			}else{
       				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $email_body);
+      				$this->do_email($from,$from_name,$to1, $sub, $final_email);
       			}
 
             return $send_mail;
@@ -735,13 +819,15 @@ class Email_model extends CI_Model
         $msg        = $this->load->view('front/shopping_cart/invoice_email', $page_data, TRUE);
 
         // customer invoice mail
+       
         $this->do_email($from, $from_name, $to, $subject, $msg);
 
         // Admin full invoice mail
         $admins     = $this->db->get_where('admin',array('role'=>'1'))->result_array();
         foreach ($admins as $row) {
             $subject = $subject.' '.'(Full Invoice)';
-            $this->do_email($from, $from_name, $row['email'], $subject, $msg);
+            $admin_mail = $this->db->get_where('general_settings', array('type' => 'system_email'))->row()->value;
+            $this->do_email($from, $from_name, $admin_mail, $subject, $msg);
         }
 
         //Admin Split invoice mail
@@ -759,6 +845,8 @@ class Email_model extends CI_Model
           $this->do_email($from, $from_name, $vendor_email, $subject, $msg);
         }
     }
+    
+    
 
     /***custom email sender****/
 

@@ -21,6 +21,8 @@ $root=(isset($_SERVER['HTTPS']) ? "https://" : "http://").$_SERVER['HTTP_HOST'];
 $root.= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 // $root = 'https://marketplace.hypeplug.paris/';
 $config['base_url'] = $root;
+$config['log_threshold'] = 1;
+
 // $config['base_url'] = '';
 $config['shippo_token'] = 'shippo_test_52bf877b99c795c0e3a73a8dd2483c417db6f730';
 //  $config['shippo_token'] = 'shippo_live_e6a934d119a9d004a9aa6ab16172fbaea6f2e135';
@@ -39,11 +41,11 @@ $config['demo'] = false;
 $config['lat'] = '51.509865';
 $config['lng'] = '-0.118092';
 $config['charity_cat'] = '134';
-$config['property_cat'] = '808';
+$config['property_cat'] = '80';
 $config['event_cat'] = '917';
 $config['job_cat'] = '78';
 $config['car_cat'] = '807';
-$config['places_cat'] = '87';
+$config['places_cat'] = '81';
 $config['index_page'] = 'index.php';
 $key = 'QUl6YVN5QjZxZ2pVeU1Temx1MDhNU0FJVHFjYzI2T3ltcFUwM3ZR';
 $config['map_key'] = base64_decode($key);
@@ -374,15 +376,23 @@ $config['encryption_key'] = 'and2015';
 */
 
 $sessDir = session_save_path();
-$sessDir = "{$sessDir}/sessionPath";
-is_dir($sessDir)?:mkdir($sessDir);
+// $sessDir = "{$sessDir}/sessionPath";
+
+// is_dir($sessDir)?:mkdir($sessDir);
 
 $config['sess_driver'] = 'files';
+
 $config['sess_cookie_name'] = 'ci_session';
+
 $config['sess_expiration'] = 7200;
-$config['sess_save_path'] = $sessDir;
+
+$config['sess_save_path'] = sys_get_temp_dir();
+
+
 $config['sess_match_ip'] = FALSE;
+
 $config['sess_time_to_update'] = 300;
+
 $config['sess_regenerate_destroy'] = FALSE;
 
 /*
@@ -456,14 +466,12 @@ $config['csrf_expire'] 			= 7200;
 $config['csrf_regenerate'] 		= FALSE;
 $config['csrf_exclude_uris'] 	= array('home/paypal_success',
 									'admin/product/api_add',
-									'admin/cat_slug',
 									'home/contactus',  
 									'vendor/login',  
 									'home/upload_bpage',  
 									'home/delete_gallery',  
 									'home/paypal_ipn',
 									'admin/paypal_success',
-									'admin/list_fields/list',
 									'admin/paypal_ipn',
 									'vendor/paypal_success',
 									'vendor/paypal_ipn',
@@ -476,8 +484,6 @@ $config['csrf_exclude_uris'] 	= array('home/paypal_success',
 									'home/text_search',
 									'home/email',
 									'home/add_rate',
-									'home/business_unique_name',
-									'home/unique_name',
 									'admin/display_settings',
 									'home/twocheckout_success',
 									'admin/twocheckout_success',
@@ -509,7 +515,6 @@ $config['csrf_exclude_uris'] 	= array('home/paypal_success',
 									'home/cus_pum_failure',
 									'home/sslcommerz_success',
 									'home/sslcommerz_fail',
-									'admin/amenity/list',
 									'home/sslcommerz_cancel',
 									'home/wallet_sslcommerz_success',
 									'home/wallet_sslcommerz_fail',
@@ -527,7 +532,6 @@ $config['csrf_exclude_uris'] 	= array('home/paypal_success',
                                     'home/ajax_post_user_rating',
 									'home/message_to_seller_reply/[0-9]+',
 									'home/update_product+',
-									'home/save',
 									'webhook/payment_webhook',
 								);
 /*

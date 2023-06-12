@@ -330,6 +330,7 @@ height: 600px;margin-top: 40px;}
  <!-- PAGE WITH SIDEBAR -->
  
 <section class="page-section with-sidebar">
+    
     <div class="container_side section_bg">
         <div class="container listAndProducts">
             <!--id="top_fixedc"-->

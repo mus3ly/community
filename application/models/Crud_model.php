@@ -15,7 +15,7 @@ class Crud_model extends CI_Model
     {
         parent::__construct();
     }
-    
+
     public function rate_html($rate)
     {
         $rate = ceil($rate);
@@ -25,11 +25,11 @@ class Crud_model extends CI_Model
         {
             if($i <= $rate)
             {
-                $html .= '<i class="fa fa-star"></i>';
+                $html .= '<i class="fa fa-star" style="color:#f26122 !important;"></i>';
             }
             else
             {
-                $html .= '<i class="fa fa-star-o" ></i>
+                $html .= '<i class="fa fa-star" style="color:#cdcdcd !important;"></i>
 ';
             }
         }
@@ -41,7 +41,7 @@ class Crud_model extends CI_Model
         if($sing->amenities)
         {
             $all = explode(',',$sing->amenities);
-            
+
             foreach($all as $k=> $v)
             {
                 $already = $this->db->where('name',$v)->where('status',0)->get('amenity')->row();
@@ -57,22 +57,24 @@ class Crud_model extends CI_Model
                         'catid' => 0,
                         );
                         $r = $this->db->insert('amenity',$add);
-                        
+
                 }
             }
         }
-        
+
     }
     public function size_img($id,$height, $width)
     {
         $public_id = 'default_sg7wzq';
         $row =  $this->db->where('id',$id)->get('media')->row();
-        if($row)
+        if(isset($row->webp_url) && $row->webp_url)
         {
-            $public_id = $row->public_id;
-
+            $url = base_url().$row->webp_url;
         }
-        $url = 'https://res.cloudinary.com/community-hubland-ltd/image/upload/c_scale,h_'.$height.',q_'.$width.'/'.$public_id.'.jpg';
+        else
+        {
+            $url = base_url().$row->path;
+        }
         // var_dump($url);
         return $url;
 
@@ -88,12 +90,21 @@ class Crud_model extends CI_Model
         return $this->db->where('id',$id)->get('media')->row();
 
     }
-    public function add_img($path, $data)
+    public function add_img($path, $data = array())
     {
+        $web = '';
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        if($ext == 'webp')
+        {
+            $web = $path;
+        }
+
+        
         $in = array(
             'path'=> $path,
             'public_id'=> (isset($data['public_id'])?$data['public_id']:''),
-            'secure_url'=> (isset($data['secure_url'])?$data['secure_url']:''),
+            'secure_url'=> base_url().$path,
+            'webp_url'=> $web,
         );
         $this->db->insert('media',$in);
         return $this->db->insert_id();
@@ -164,7 +175,7 @@ foreach($vendors as $kk=> $vv)
             $price = array();
             $stock = array();
             $color = json_decode($product->color,true);
-            
+
             if(isset($color['price']))
             $price = $color['price'];
             if(isset($color['stock']))
@@ -187,14 +198,14 @@ foreach($vendors as $kk=> $vv)
             $srr = array();
             // $ret = $this->db->where('product_id',$para2)->delete('attribute_to_products');
             foreach($attributes as $k=>$v)
-            { 
-                
-                //attribute id 
+            {
+
+                //attribute id
                 $arttribute_id = 0;
                 $row = $this->db->where('name',$k)->get('attribute')->row();
                 if($row)
                 {
-                    //get id 
+                    //get id
                     $arttribute_id = $row->id;
                 }
                 else
@@ -216,13 +227,13 @@ foreach($vendors as $kk=> $vv)
                         $already = $this->db->where($in)->get('attribute_to_products')->row();
                         if($already)
                         {
-                            
+
                         }
                         else
                         {
                             $this->db->insert('attribute_to_products', $in);
                         }
-                        
+
                 }
                 $srr[$arttribute_id] = $v;
             }
@@ -236,7 +247,7 @@ foreach($vendors as $kk=> $vv)
                         'attr_id'=> $attr,
                         'value'=> $ov,
                         );
-                        
+
                         $already = $this->db->where($in)->get('attribute_to_values')->row();
                         if($already)
                         {
@@ -263,11 +274,11 @@ foreach($vendors as $kk=> $vv)
                             'product'=> $para2,
                             'attribute'=> $v[$ok],
                             );
-                        
+
                         $already = $this->db->where($wh)->get('stock')->row();
                         if($already && $already->stock_id)
                         {
-                            
+
                             $v['stock'][$ok] = $already->stock_id;
                             $r = $this->db->where('stock_id',$already->stock_id)->update('stock', $in);
                         }
@@ -277,7 +288,7 @@ foreach($vendors as $kk=> $vv)
                         $v['stock'][$ok] = $this->db->insert_id();
                         }
                         }
-                        
+
                 }
                 $srr[$k] = $v;
             }
@@ -407,11 +418,11 @@ foreach($vendors as $kk=> $vv)
     }
 
     // FILE_UPLOAD
-    function file_up($name, $type, $id, $multi = '', $no_thumb = '', $ext = '.jpg')
+    function file_up($name, $type, $id, $multi = '', $no_thumb = '', $ext = '.webp')
     {
         if ($multi == '') {
             move_uploaded_file($_FILES[$name]['tmp_name'], 'uploads/' . $type . '_image/' . $type . '_' . $id . $ext);
-            
+
             if ($no_thumb == '') {
                 $this->crud_model->img_thumb($type, $id, $ext);
             }
@@ -426,7 +437,7 @@ foreach($vendors as $kk=> $vv)
                 }
             }
         }
-        
+
     }
 
     /*function file_up_from_urls($urls, $type, $id, $no_thumb = '')
@@ -488,12 +499,12 @@ foreach($vendors as $kk=> $vv)
     // FILE_VIEW
     function file_view($type, $id, $width = '100', $height = '100', $thumb = 'no', $src = 'no', $multi = '', $multi_num = '', $ext = '.jpg')
     {
-        
+
         if ($multi == '') {
             $file = 'uploads/' . $type . '_image/' . $type . '_' . $id . $ext;
             if($type == 'bpkg')
             {
-               $file = 'uploads/' . $type . '_image/'  . $id . $ext; 
+               $file = 'uploads/' . $type . '_image/'  . $id . $ext;
             }
             if (file_exists($file)) {
                 if ($thumb == 'no') {
@@ -513,7 +524,7 @@ foreach($vendors as $kk=> $vv)
 
         } else if ($multi == 'multi') {
             $num = $this->crud_model->get_type_name_by_id($type, $id, 'num_of_imgs');
-            
+
             //$num = 2;
             $i = 0;
             $p = 0;
@@ -703,7 +714,7 @@ foreach($vendors as $kk=> $vv)
             if ($condition == '') {
                 $all = $this->db->get($from)->result_array();
             } else if ($condition !== '') {
-                
+
                 if ($condition_type == 'single') {
                     $all = $this->db->get_where($from, array($condition => $c_match))->result_array();
                 } else if ($condition_type == 'multi') {
@@ -1981,7 +1992,7 @@ foreach($vendors as $kk=> $vv)
         }
     }
 
-    
+
     function can_add_product($vendor)
     {
         $membership = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->membership;
@@ -2124,7 +2135,7 @@ foreach($vendors as $kk=> $vv)
         $timespan = $membership_spec->row()->timespan;
         //$new_expire       = $cur_expire+($timespan*24*60*60);
         $new_expire = time() + ($timespan * 24 * 60 * 60);
-        
+
         $data['member_expire_timestamp'] = $new_expire;
         $data['membership'] = $membership;
         $this->db->where('vendor_id', $vendor);
@@ -2215,7 +2226,7 @@ foreach($vendors as $kk=> $vv)
             $r = $this->db->update('user', array(
                 'affliate' => json_encode($wished)
             ));
-            
+
         }
     }
 
@@ -2248,7 +2259,9 @@ foreach($vendors as $kk=> $vv)
             $wished = json_decode($this->get_type_name_by_id('user', $user, 'wishlist'));
         } else {
             $wished = array();
+            
         }
+        if($user){
         if ($this->is_wished($product_id) == 'no') {
             array_push($wished, $product_id);
             $this->db->where('user_id', $user);
@@ -2256,8 +2269,29 @@ foreach($vendors as $kk=> $vv)
                 'wishlist' => json_encode($wished)
             ));
         }
+        $html = 'Item add tio wishlist successfully! click here to <a href="'.base_url('home/wish_listed').'">View Wishlist</a>';
+        $this->session->set_flashdata('message', $html);
+        redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        }else{
+            redirect(base_url().'/login_set/login', 'refresh');
+        }
     }
-
+// function add_wish($product_id)
+//     {
+//         $user = $this->session->userdata('user_id');
+//         if ($this->get_type_name_by_id('user', $user, 'wishlist') !== 'null') {
+//             $wished = json_decode($this->get_type_name_by_id('user', $user, 'wishlist'));
+//         } else {
+//             $wished = array();
+//         }
+//         if ($this->is_wished($product_id) == 'no') {
+//             array_push($wished, $product_id);
+//             $this->db->where('user_id', $user);
+//             $this->db->update('user', array(
+//                 'wishlist' => json_encode($wished)
+//             ));
+//         }
+//     }
     //REMOVING PRODUCT FROM WISHLIST
     function remove_wish($product_id)
     {
@@ -3081,7 +3115,7 @@ foreach($vendors as $kk=> $vv)
         $this->db->order_by('product_id', 'desc');
         $res = $this->db->get('product')->result_array();
         //  echo $this->db->last_query();
-        
+
 
         return $res;
         /*
@@ -3170,12 +3204,12 @@ foreach($vendors as $kk=> $vv)
         }
         else
         {
-            
+
             $in = array('name'=>$cname);
             $r = $this->db->insert('brand',$in);
-            
+
             return $product_id = $this->db->insert_id();
-            
+
         }
     }
 

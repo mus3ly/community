@@ -1,6 +1,7 @@
 <script>
     var base_url = "<?php echo base_url(); ?>";
 </script>
+<script type="text/javascript" src="https://unpkg.com/default-passive-events"></script>
 <script src="<?php echo base_url(); ?>template/front/js/ajax_method.js"></script>
 <script src="<?php echo base_url(); ?>template/front/js/bootstrap-notify.min.js"></script>
 <script src="<?php echo base_url(); ?>template/front/plugins/jquery-ui/jquery-ui.min.js"></script>

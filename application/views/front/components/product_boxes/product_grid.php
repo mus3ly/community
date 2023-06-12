@@ -10,8 +10,11 @@ $vendorlogo= '';
   if($vendor['comp_logo']) 
                         {
                             $vendorlogo = $this->crud_model->get_img($vendor['comp_logo']);
-                            if(isset($vendorlogo->secure_url))
+                            if(isset($vendorlogo->webp_url))
                             {
+                                $vendorlogo = $vendorlogo->webp_url;
+                                
+                            }else{
                                 $vendorlogo = $vendorlogo->secure_url;
                             }
 
@@ -25,8 +28,11 @@ $vendorlogo= '';
                         if($comp_logo)
                         {
                             $img = $this->crud_model->get_img($comp_logo);
-                            if(isset($img->secure_url))
+                            if(isset($img->webp_url))
                             {
+                                $img = $img->webp_url;
+                                
+                            }else{
                                 $img = $img->secure_url;
                             }
 
@@ -111,7 +117,7 @@ $vendorlogo= '';
                 <ins><?php echo currency($this->crud_model->get_product_price($product_id)); ?> </ins> 
                 <del itemprop="price"><?php echo currency($sale_price); ?></del>
             <?php } else { ?>
-                <ins itemprop="price"><?php echo currency($sale_price); ?></ins>
+                <ins itemprop="price"><?php echo currency($sale_price); ?>z</ins>
             <?php }?>
         </div>
         <?php if ($this->db->get_where('general_settings', array('general_settings_id' => '58'))->row()->value == 'ok' and $this->db->get_where('general_settings', array('general_settings_id' => '81'))->row()->value == 'ok'): ?>
@@ -147,10 +153,14 @@ $vendorlogo= '';
             
                 <a href="<?= $pro->product_link?>" class="btn btn-add-to cart"> Go To Shop</a>
             <?php }else{?>
-            <span class="icon-view right " onclick="to_cart(<?php echo $product_id; ?>,event)" data-toggle="tooltip" 
-                data-original-title="<?php if($this->crud_model->is_added_to_cart($product_id)){ echo translate('added_to_cart'); } else { echo translate('add_to_cart'); } ?>">
-                <strong><i class="fa fa-shopping-cart"></i></strong>
-            </span>
+            <form action ="<?= base_url('home/cart/add/'.$product_id.'/pp'); ?>" method="post">
+                        <input type="hidden" name="qty" value="1">
+                        <button style="background-color:#0e004a" type="submit" class="primary-btn">ADD TO CART</button>
+            <!--<span class="icon-view right " onclick="to_cart(<?php echo $product_id; ?>,event)" data-toggle="tooltip" -->
+            <!--    data-original-title="<?php if($this->crud_model->is_added_to_cart($product_id)){ echo translate('added_to_cart'); } else { echo translate('add_to_cart'); } ?>">-->
+            <!--    <strong><i class="fa fa-shopping-cart"></i></strong>-->
+            <!--</span>-->
+            </form>
             <?php }?>
             <?php 
                     $user = $this->session->userdata('user_id');

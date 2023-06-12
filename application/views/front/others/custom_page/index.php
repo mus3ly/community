@@ -2,6 +2,7 @@
     <div class="container">
         <div class="row">
 		<?php 
+// 		echo 'nimra';
             foreach($page_items as $item){
             $parts	= json_decode($item['parts'],true); 
                 foreach($parts as $row){

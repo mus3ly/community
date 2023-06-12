@@ -69,7 +69,17 @@
                 ?>
             </td>
             <td class="text-right">
-
+                <a class="btn btn-danger btn-xs btn-labeled fa fa-eye-slash" data-toggle="tooltip"
+                   onclick="
+                           ajax_set_full(
+                               'track',
+                               '<?php echo translate('title'); ?>',
+                               '<?php echo translate('successfully_edited!'); ?>',
+                               'sales_view',
+                               '<?php echo $row['sale_id']; ?>')"
+                   data-original-title="Edit" data-container="body">
+                    Track Shipment
+                </a>
                 <a class="btn btn-info btn-xs btn-labeled fa fa-file-text" data-toggle="tooltip"
                     onclick="ajax_set_full('view','<?php echo translate('title'); ?>','<?php echo translate('successfully_edited!'); ?>','sales_view','<?php echo $row['sale_id']; ?>')"
                         data-original-title="Edit" data-container="body"><?php echo translate('full_invoice'); ?>

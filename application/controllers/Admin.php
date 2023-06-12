@@ -1,4 +1,5 @@
 <?php
+
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -15,6 +16,7 @@ class Admin extends CI_Controller
     {
         
         parent::__construct();
+        
         $this->load->database();
         $this->load->library('spreadsheet');
         $this->load->library('paypal');
@@ -30,16 +32,30 @@ class Admin extends CI_Controller
     }
 
     /* index of the admin. Default: Dashboard; On No Login Session: Back to login page. */
-    public function index()
+    public function main_login()
     {
         if ($this->session->userdata('admin_login') == 'yes') {
             $page_data['page_name'] = "dashboard";
-            
-            $this->load->view('back/index', $page_data);
+
+            echo $this->load->view('back/index', $page_data,true);
         } else {
             
+
             $page_data['control'] = "admin";
-            $this->load->view('back/login',$page_data);
+            echo $this->load->view('back/login',$page_data,true);
+        }
+    }
+    public function index()
+    { 
+        if ($this->session->userdata('admin_login') == 'yes') {
+            $page_data['page_name'] = "dashboard";
+
+            echo $this->load->view('back/index', $page_data,true);
+        } else {
+            
+
+            $page_data['control'] = "admin";
+            echo $this->load->view('back/login',$page_data,true);
         }
     }
     // public function testingByNimra(){
@@ -48,7 +64,7 @@ class Admin extends CI_Controller
     //     {
     //       $data['key'] =  $field->name;
     //       $this->db->insert( 'default_business',$data);
-          
+
     //     }
     //     echo $this->db->last_query();
 
@@ -110,7 +126,7 @@ class Admin extends CI_Controller
     }
     function membership_category($para1 = '', $para2 = ''){
         {
-          
+
         // if (!$this->crud_model->admin_permission('blog')) {
         //     redirect(base_url() . 'admin');
         // }
@@ -155,18 +171,18 @@ class Admin extends CI_Controller
             $ids = array();
             if($para2 == 1)
             {
-                
+
             $d= $this->db->where('pcat',0)->get('category')->result_array();
             foreach($d as $k => $v)
             {
                 $ids[] = $v['category_id'];
             }
-            $ids = join("','",$ids);   
+            $ids = join("','",$ids);
 $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `category_id`  IN ('$ids')";
             $query = $this->db->query($sql);
             if($query)
             {
-             echo $para2 +1;   
+             echo $para2 +1;
             }
             }
             else
@@ -177,23 +193,23 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `category_id`  IN ('
                     echo "0";
                     exit();
                 }
-                
+
             foreach($d as $k => $v)
             {
                 $ids[] = $v['category_id'];
             }
             // var_dump($ids);
             // die();
-            $ids = join("','",$ids);   
-            
+            $ids = join("','",$ids);
+
 $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')";
 // echo $sql;
 // die();
             $query = $this->db->query($sql);
-            
+
             if($query)
             {
-             echo $para2 +1;   
+             echo $para2 +1;
             }
             }
             exit();
@@ -205,7 +221,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         if ($this->crud_model->get_type_name_by_id('general_settings','68','value') !== 'ok') {
             redirect(base_url() . 'admin');
         }
-        
+
         if ($para1 == 'do_add') {
             $name = $this->input->post('category_name');
             $exp = explode(',', $name);
@@ -213,7 +229,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $data['category_name'] = $value;
             $data['fa_icon'] = $this->input->post('fa_icon');
             $data['pcat'] = $this->input->post('pcat');
-            
+
             $this->db->insert('category', $data);
             $id = $this->db->insert_id();
             }
@@ -290,7 +306,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                                             $json = json_encode($result);
                                             $this->db->where('ui_settings_id', 71)->update('ui_settings',array('value'=>$json));
         } elseif ($para1 == 'signup_main_cat') {
-                                                
+
                                         $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 72))->row()->value,true);
                                             $result=array();
                                             foreach($categories as $row){
@@ -298,11 +314,11 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                                                     $result[]=$row;
                                                 }
                                             }
-                                            
+
                                             if(in_array($para2, $result))
                                             {
                                                 $key = array_search($para2, $result);
-                                                
+
                                                 unset($result[$key]);
 
 
@@ -312,11 +328,11 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                                                 $result[] = $para2;
 
                                             }
-                                            
+
                                             echo $json = json_encode($result);
                                             die();
                                             $r  = $this->db->where('ui_settings_id', 72)->update('ui_settings',array('value'=>$json));
-                                            
+
         } elseif ($para1 == 'main_cat') {
             $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value,true);
                                             $result=array();
@@ -406,7 +422,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
     }
     function cat_child(){
         if($_REQUEST['del'] == 1){
-            
+
             echo $this->db->where('category_id',$_REQUEST['id'])->delete('category');
             exit();
         }
@@ -418,7 +434,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
     		     echo '<span class="label label-info" style="margin: 5px;    font-size: 13px;">'.$row1['category_name'].'<span class="cat_del_btn" style="    font-size: 16px;margin: 10px;" onclick="del_cat('.$row1['category_id'].','.$_REQUEST['id'].','.$_REQUEST['col'].')">x</span></span>';
     		}
     		echo '</div>';
-          } 
+          }
         }
         if($_REQUEST['add_child'] == 1){
            $data = array(
@@ -444,7 +460,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
               echo '</div>';
           }
           echo '</ul>';
-        
+
         }
         if($_REQUEST['select'] == 1){
        $cat = $this->db->where('category_id',$_REQUEST['sid'])->get('category')->row_array();
@@ -453,8 +469,8 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             'pcat' => $_REQUEST['id'],
             );
         $this->db->insert('category',$data);
-        
-        
+
+
             // $data = array(
             //     'pcat' => $_REQUEST['id']
             //     );
@@ -723,24 +739,24 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         $data= array(
             'status'=>2
             );
-        
+
         $this->db->where('id', $id);
         $this->db->update('withdraw_request', $data);
         // var_dump($this->db->last_query());
        redirect( $_SERVER['HTTP_REFERER']);
-        
+
     }
     public function approve($id){
         // 2 for cancel
         $data= array(
             'status'=>1
             );
-        
+
         $this->db->where('id', $id);
         $this->db->update('withdraw_request', $data);
         // var_dump($this->db->last_query());
        redirect( $_SERVER['HTTP_REFERER']);
-        
+
     }
     /*Product Sub-category add, edit, view, delete */
     function sub_category($para1 = '', $para2 = '')
@@ -757,7 +773,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             foreach ($exp as $key => $value) {
                 $data['sub_category_name'] = $value;
             $data['category']          = $this->input->post('category');
-            
+
             $this->db->insert('sub_category', $data);
             $id = $this->db->insert_id();
             }
@@ -830,7 +846,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             foreach ($exp as $key => $value) {
                 $data['sub_category_name'] = $value;
             $data['category']          = $this->input->post('category');
-            
+
             $this->db->insert('sub3_category', $data);
             $id = $this->db->insert_id();
             }
@@ -843,11 +859,11 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         } elseif ($para1 == "update") {
             $data['sub_category_name'] = $this->input->post('category_name');
             $data['category']          = $this->input->post('category');
-            
+
             $this->db->where('sub_category_id', $para2);
             $this->db->update('sub3_category', $data);
 
-            
+
             recache();
         } elseif ($para1 == 'delete') {
             if(!demo()){
@@ -1018,7 +1034,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $page_data['all_brands'] = $this->db->get('brand')->result_array();
             $this->load->view('back/index', $page_data);
         }
-    }    
+    }
     function makes($para1 = '', $para2 = '')
     {
         if (!$this->crud_model->admin_permission('makes')) {
@@ -1038,12 +1054,12 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['name']        = $this->input->post('name');
             $this->db->where('id', $para2);
             $this->db->update('makes', $data);
-        
+
             // $this->crud_model->set_category_data(0);
             recache();
         } elseif ($para1 == 'delete') {
             if(!demo()){
-                $data['status'] = '1'; 
+                $data['status'] = '1';
                 $this->db->where('id', $para2);
                 $this->db->update('makes', $data);
                 // $this->crud_model->set_category_data(0);
@@ -1062,7 +1078,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         } elseif ($para1 == 'list') {
             $this->db->order_by('id', 'desc');
             $page_data['all_amenitys'] = $this->db->get('makes')->result_array();
-                
+
             $this->load->view('back/admin/makes_list', $page_data);
         } elseif ($para1 == 'add') {
             $this->load->view('back/admin/makes_add');
@@ -1091,8 +1107,8 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $this->db->insert('amenity', $data);
                 //  var_dump($data);
             }
-           
-                
+
+
              $id = $this->db->insert_id();
             // var_dump($this->db->last_query());
             // $this->crud_model->set_category_data(0);
@@ -1102,12 +1118,12 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['catid']        = $this->input->post('cat');
             $this->db->where('amenity_id', $para2);
             $this->db->update('amenity', $data);
-        
+
             // $this->crud_model->set_category_data(0);
             recache();
         } elseif ($para1 == 'delete') {
             if(!demo()){
-                $data['status'] = '0'; 
+                $data['status'] = '0';
                 $this->db->where('amenity_id', $para2);
                 $this->db->update('amenity', $data);
                 // $this->crud_model->set_category_data(0);
@@ -1124,7 +1140,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             ))->result_array();
             $this->load->view('back/admin/amenity_edit', $page_data);
         } elseif ($para1 == 'list') {
-            
+
             if(isset($_GET['level'])){
                if($_GET['level'] == '0'){
                    $this->db->where('status', '1');
@@ -1134,17 +1150,17 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                }else{
                $this->db->select('amenity.*,category.*');
                 $this->db->from('amenity');
-                $this->db->join('category', 'amenity.catid = category.category_id'); 
+                $this->db->join('category', 'amenity.catid = category.category_id');
                 $this->db->where('amenity.status', '1');
                 $this->db->where('amenity.catid', $_GET['level']);
                 $this->db->order_by('amenity_id', 'desc');
                  $page_data['all_amenitys'] = $this->db->get()->result_array();
                }
-            
+
             }else{
                 $this->db->select('amenity.*,category.*');
                 $this->db->from('amenity');
-                $this->db->join('category', 'amenity.catid = category.category_id'); 
+                $this->db->join('category', 'amenity.catid = category.category_id');
                 $this->db->where('amenity.status', '1');
                 $this->db->order_by('amenity_id', 'desc');
                  $page_data['all_amenitys'] = $this->db->get()->result_array();
@@ -1163,7 +1179,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         if (!$this->crud_model->admin_permission('list_fields')) {
             redirect(base_url() . 'admin');
         }
-       
+
         if ($para1 == 'do_add') {
                 $data['name'] = $this->input->post('name');
                 $data['label'] = $this->input->post('label');
@@ -1200,7 +1216,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             // $this->crud_model->set_category_data(0);
             recache();
         } elseif ($para1 == 'delete') {
-            if(!demo()){ 
+            if(!demo()){
                 $this->db->where('id', $para2);
                 $this->db->delete('list_fields');
                 // $this->crud_model->set_category_data(0);
@@ -1221,17 +1237,17 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                     //  var_dump($_REQUEST);
                $this->db->select('list_fields.*,category.*');
                 $this->db->from('list_fields');
-                $this->db->join('category', 'list_fields.category = category.category_id'); 
+                $this->db->join('category', 'list_fields.category = category.category_id');
                 // $this->db->where('list_fields.status', '1');
                 if(isset($_GET['level']) && $_GET['level'])
                 $this->db->where('list_fields.category', $_GET['level']);
                 $this->db->order_by('sort', 'asc');
-                 $page_data['all_amenitys'] = $this->db->get()->result_array(); 
+                 $page_data['all_amenitys'] = $this->db->get()->result_array();
                 //  var_dump($page_data['all_amenitys']);
                  $this->load->view('back/admin/fields_list', $page_data);
             }
-            
-        
+
+
         } elseif ($para1 == 'add') {
             $this->load->view('back/admin/fields_add');
         } else {
@@ -1245,26 +1261,26 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         {
           // replace non letter or digits by divider
           $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
-        
+
           // transliterate
           $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-        
+
           // remove unwanted characters
           $text = preg_replace('~[^-\w]+~', '', $text);
-        
+
           // trim
           $text = trim($text, $divider);
-        
+
           // remove duplicate divider
           $text = preg_replace('~-+~', $divider, $text);
-        
+
           // lowercase
           $text = strtolower($text);
-        
+
           if (empty($text)) {
             return 'n-a';
           }
-        
+
           return $text;
         }
            function withdraw_request($para1 = '', $para2 = '')
@@ -1288,7 +1304,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             // var_dump($this->db->last_query());
 
             $id = $this->db->insert_id();
-		
+
         } elseif ($para1 == "update") {
 		    $check = $this->input->post('check');
            $data = array(
@@ -1347,7 +1363,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
 
             $this->load->view('back/index', $page_data);
         }
-    } 
+    }
            function affliate($para1 = '', $para2 = '')
             {
         if (!$this->crud_model->admin_permission('brand')) {
@@ -1357,7 +1373,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             redirect(base_url() . 'admin');
         }
         if ($para1 == 'preview') {
-            
+
             $page_data['res'] = $sing = $this->db->where('compain_id',$para2)->get('compain')->row();
             $html = '';
             if($sing->compain_type == 'text_compain')
@@ -1393,7 +1409,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 'percentage' =>$this->input->post('percentage')
                 );
             $this->db->insert('compain', $data);
-            
+
             // var_dump($this->db->last_query());
 
             $id = $this->db->insert_id();
@@ -1418,7 +1434,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                     }
                 }
                 recache();
-		
+
         } elseif ($para1 == "update") {
             // die();
 		    $check = $this->input->post('check');
@@ -1461,7 +1477,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $this->db->order_by('compain_id', 'desc');
             $page_data['all_brands'] = $this->db->get('compain')->result_array();
             $this->load->view('back/admin/compain_list', $page_data);
-        } 
+        }
         elseif ($para1 == 'add') {
             $data['res'] =$this->db->get('compain')->result_array();
             $page_data['page_name'] = 'compain_add';
@@ -1479,7 +1495,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $page_data['all_brands'] = $this->db->get('compain')->result_array();
             $this->load->view('back/index', $page_data);
         }
-    } 
+    }
            function bpkg1($para1 = '', $para2 = '')
             {
         if (!$this->crud_model->admin_permission('brand')) {
@@ -1501,7 +1517,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             // var_dump($this->db->last_query());
 
             $id = $this->db->insert_id();
-		
+
         } elseif ($para1 == "update") {
             // die('ok');
 		    $check = $this->input->post('check');
@@ -1552,7 +1568,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $page_data['all_brands'] = $this->db->get('menu')->result_array();
             $this->load->view('back/index', $page_data);
         }
-    } 
+    }
     function bpkg($para1 = '', $para2 = '')
     {
         if (!$this->crud_model->admin_permission('brand')) {
@@ -1562,12 +1578,12 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             redirect(base_url() . 'admin');
         }
         if ($para1 == 'do_add') {
-		
+
             $type                = 'bpkg';
             $data['name']        = $this->input->post('name');
             $this->db->insert('bpkg', $data);
             $id = $this->db->insert_id();
-		
+
             $path = $_FILES['file_upload']['tmp_name'];
             $this->load->library('cloudinarylib');
                 if($_FILES["file_upload"]['tmp_name']){
@@ -1654,13 +1670,13 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             redirect(base_url() . 'admin');
         }
         if ($para1 == 'do_add') {
-		
+
             // $type                = 'subject';
             $data['subject']        = $this->input->post('name');
             $data['email']        = $this->input->post('email');
             $data['created_at']        = date('Y:m:d H:i:s');
             $this->db->insert('subject', $data);
-          
+
             $id = $this->db->insert_id();
                 recache();
         } elseif ($para1 == "update") {
@@ -1669,7 +1685,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['updated_at']        = date('Y:m:d H:i:s');
             $this->db->where('id', $para2);
             $this->db->update('subject', $data);
-        
+
             recache();
         } elseif ($para1 == 'delete') {
 
@@ -1713,12 +1729,12 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             redirect(base_url() . 'admin');
         }
         if ($para1 == 'do_add') {
-		
+
             $type                = 'default_business';
             $data['value']        = $this->input->post('value');
             $this->db->insert('default_business', $data);
             $id = $this->db->insert_id();
-		
+
             $path = $_FILES['file_upload']['tmp_name'];
             $this->load->library('cloudinarylib');
                 if($_FILES["file_upload"]['tmp_name']){
@@ -1742,7 +1758,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 }
                 recache();
         } elseif ($para1 == "update") {
-            
+
             $data['name']        = $this->input->post('name');
             $data['value']        = $this->input->post('value');
             $this->db->where('id', $para2);
@@ -1901,8 +1917,8 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         // if ($this->crud_model->get_type_name_by_id('general_settings','68','value') !== 'ok') {
         //     redirect(base_url() . 'admin');
         // }
-         
-        
+
+
         if ($para1 == 'api_add') {
             $data = $_POST;
             $all_cats = $this->db->get('category')->result_array();
@@ -1944,7 +1960,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $id = $this->db->insert_id();
             echo $id;
             exit();
-                      
+
         }
         elseif ($para1 == 'do_add') {
             $options = array();
@@ -2028,7 +2044,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             }
             die($id);
             $this->crud_model->set_category_data(0);
-            
+
             recache();
         } else if ($para1 == "update") {
             $options = array();
@@ -2167,7 +2183,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                           $min = '';
                           $max = '';
                           if($child)
-                          { 
+                          {
                           $all_rates = $this->db->where('rate >',0)->where_in('product', $child)->get('stock')->result_array();
                           $gmin = 0;
                           $gmax = 0;
@@ -2196,7 +2212,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                           {
                               $bpage = '<div><i class="fa fa-crown" style="color:#FFD700"></i></div>';
                           }
-                          
+
 
                 $res['item']  = '<img class="img-sm" style="height:auto !important; border:1px solid #ddd;padding:2px; border-radius:2px !important;float: left;" src="'.$img.'"  /><div class="next_div" ><small>'.$cat_name.'</small><p><b>'.$row['title'].'</b>'.$bpage.'</p></div>';
                 $res['min_price']  = $min;
@@ -2261,16 +2277,16 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             }
         }elseif ($para1 == 'sub_by_cat') {
             $brands = $this->db->where('pcat',$para2)->get('category')->result_array();
-            
+
             $level = get_cat_level($para2);
             $breed = array();
             $cid = $para2;
-            for ($i=1; $i <= $level; $i++) { 
+            for ($i=1; $i <= $level; $i++) {
                 // var_dump($i);
                 $breed[] = $cid;
                 $row = $this->db->where('category_id',$cid)->get('category')->row();
                 $cid = $row->pcat;
-                
+
             }
             if($breed)
             {
@@ -2301,7 +2317,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 ';
                 exit();
             }
-            
+
             foreach($brands as $k=>$v){
                 if(true)
                 {
@@ -2319,7 +2335,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 </div>
                 </a>
                 </div>
-                <?php 
+                <?php
                 }
             }
             // echo $this->crud_model->select_html('sub_category', 'sub_category', 'sub_category_name', 'add', 'demo-chosen-select required', '', 'category', $para2, 'get_brnd');
@@ -2381,6 +2397,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             }
             $this->db->where('product_id', $product);
             $this->db->update('product', $data);
+
             $this->crud_model->set_category_data(0);
             recache();
         } elseif ($para1 == 'add_discount_set') {
@@ -2432,7 +2449,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $this->session->set_flashdata('error',translate('File is not selected'));
             redirect('admin/product_bulk_upload');
         }
-        
+
 
         $inputFileName = $_FILES['bulk_file']['tmp_name'];
 
@@ -2470,7 +2487,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
 
         if(!empty($products)){
             foreach ($products as $product){
-                
+
                 $this->product_bulk_upload_save_single($product);
             }
         }
@@ -2480,7 +2497,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         redirect('admin/product_bulk_upload');
 
     }
- 
+
     public function csv_size($id)
     {
         $row = $this->db->where('product_id',$id)->get('product')->row();
@@ -2495,7 +2512,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $size[] = $v[$colum];
             }
             $this->db->where('product_id',$id)->update('product',array('color'=>json_encode($size)));
-            
+
             // if($g == 'men')
             // {
             //     $colum = '';
@@ -2518,7 +2535,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         $product_stock_data = array();
         $product_data['num_of_imgs'] = 0;
         if (!empty($product['Image URL'])) {
-            
+
             $image_urls = array();
             $image_urls[] = $product['Image URL'];
         }
@@ -2531,7 +2548,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         $product_data['brand'] = $this->crud_model->get_csv_brand($product['Brand']);
         /*$product_data['category'] = is_numeric($product['category']) ? $product['category'] : 0;
          $product_data['sub_category'] = is_numeric($product['sub_category']) ? $product['sub_category'] : 0;
-        
+
 
         $product_data['purchase_price'] = is_numeric($product['purchase_price']) ? $product['purchase_price'] : 0;
         $product_data['sale_price'] = is_numeric($product['sale_price']) ? $product['sale_price']: 0;
@@ -2586,7 +2603,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
 
         if(!empty($image_urls) && !empty($product_id)){
             if(!demo()){
-            
+
                 $this->crud_model->file_up_from_urls($image_urls,"product", $product_id);
             }
         }
@@ -2607,11 +2624,11 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $this->session->set_flashdata('error',translate('File is not selected'));
             redirect('admin/product_bulk_upload');
         }
-        
+
 
         $inputFileName = $_FILES['file']['tmp_name'];
         $inputFileType = $this->spreadsheet->identify($inputFileName);
-                
+
         $reader = $this->spreadsheet->createReader($inputFileType);
         $spreadsheet = $reader->load($inputFileName);
         $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
@@ -2659,7 +2676,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
     {
     //   $id = '';
         // var_dump($product);
-       
+
         $product_data['name'] = $product['Name'];
         $product_data['parent'] = $product['Parent'];
         $product_data['icon'] = $product['Fontawsome Icon'];
@@ -2835,7 +2852,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
 
         }
 
-        
+
     }
     function customer_products($para1 = '', $para2 = '', $para3 = '')
     {
@@ -3525,9 +3542,9 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
     function stock($para1 = '', $para2 = '')
     {
         if ($para1 == 'do_add') {
-            
+
             $data['type']         = 'add';
-            
+
             $data['attribute']     = implode(',',$this->input->post('attribute'));
             $data['sub_category'] = $this->input->post('sub_category');
             $data['product']      = $para2;
@@ -3585,7 +3602,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             {
                 $aid = $v['attribute_id'];
                 $row = $this->db->where('id',$aid)->get('attribute')->row();
-                
+
                 if($row)
                 {
                     //get options
@@ -4143,6 +4160,38 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 'sale_id' => $para2
             ))->result_array();
             $this->load->view('back/admin/sales_view', $page_data);
+        }
+        elseif ($para1 == 'track') {
+            $page_data['sale'] = $this->db->get_where('sale', array(
+                'sale_id' => $para2
+            ))->result_array();
+            $items = Array('SHIPPO_PRE_TRANSIT', 'SHIPPO_TRANSIT', 'SHIPPO_DELIVERED', 'SHIPPO_RETURNED', 'SHIPPO_FAILURE', 'SHIPPO_UNKNOWN');
+
+            $fields = array(
+                'carrier' => 'shippo',
+                'tracking_number' => $items[array_rand($items)],
+            );
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://api.goshippo.com/tracks/",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => http_build_query($fields),
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization: ShippoToken ' . $this->config->item('shippo_token'),
+                    "cache-control: no-cache",
+                    "content-type: application/x-www-form-urlencoded",
+                    "postman-token: 89a980c7-e44a-08ab-ff3d-2834d08950d4"
+                ),
+            ));
+            $response = curl_exec($curl);
+            $response = json_decode($response, true);
+            $page_data['tracking'] = $response;
+            $this->load->view('back/admin/sales_track', $page_data);
         }
         elseif ($para1 == 'send_invoice') {
             $page_data['sale'] = $this->db->get_where('sale', array(
@@ -5155,7 +5204,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 if ($query->num_rows() > 0) {
                     $admin_id         = $query->row()->admin_id;
                     $password         = substr(hash('sha512', rand()), 0, 12);
-                    
+
                     $data['password'] = sha1($password);
                     $this->db->where('admin_id', $admin_id);
                     $this->db->update('admin', $data);
@@ -5169,7 +5218,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 }
             }
         } else {
-            
+
             $this->load->library('form_validation');
             $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
             $this->form_validation->set_rules('password', 'Password', 'required');
@@ -5510,7 +5559,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 recache();
             }
             elseif ($para2 == 'digital_services') {
-                
+
                 $this->load->library('cloudinarylib');
                 if($_FILES["par3"]['tmp_name']){
                     if(!demo()){
@@ -5535,7 +5584,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 recache();
             }
             elseif ($para2 == 'advertise_section') {
-                
+
                 $this->load->library('cloudinarylib');
                 if($_FILES["par3"]['tmp_name']){
                     if(!demo()){
@@ -5581,7 +5630,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                         'value' => $this->input->post('section_bullets')
                     ));
                 }
-               
+
                 $this->load->library('cloudinarylib');
                 if($_FILES["par3"]['tmp_name']){
                     if(!demo()){
@@ -5695,12 +5744,12 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 }
                 if($_REQUEST['info_bullets'])
                 {
-                    
+
                     $this->db->where('type', "info_bullets");
                     $r = $this->db->update('ui_settings', array(
                         'value' => $this->input->post('info_bullets')
                     ));
-                    
+
                 }
                  if($_REQUEST['buttons'])
                 {
@@ -5791,7 +5840,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 }
                 if($_REQUEST['box'])
                 {
-                    
+
                     $this->db->where('type', "section2_box");
                     $this->db->update('ui_settings', array(
                         'value' => serialize($_REQUEST['box'])
@@ -7356,6 +7405,8 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['page_name'] = $this->input->post('page_name');
             $data['tag']       = $this->input->post('tag');
             $data['parmalink'] = $this->input->post('parmalink');
+            $data['meta_title'] = $this->input->post('meta_title');
+            $data['meta_description'] = $this->input->post('meta_description');
             $size              = $this->input->post('part_size');
             $type              = $this->input->post('part_content_type');
             $content           = $this->input->post('part_content');
@@ -7383,6 +7434,8 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['page_name'] = $this->input->post('page_name');
             $data['tag']       = $this->input->post('tag');
             $data['parmalink'] = $this->input->post('parmalink');
+            $data['meta_title'] = $this->input->post('meta_title');
+            $data['meta_description'] = $this->input->post('meta_description');
             $size              = $this->input->post('part_size');
             $type              = $this->input->post('part_content_type');
             $content           = $this->input->post('part_content');
@@ -7409,7 +7462,8 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         } elseif ($para1 == 'list') {
             $page_data['all_page'] = $this->db->get('page')->result_array();
             $this->load->view('back/admin/page_list', $page_data);
-        } else if ($para1 == 'page_publish_set') {
+        } else if ($para1 == 'product_publish_set') {
+
             $page = $para2;
             if ($para3 == 'true') {
                 $data['status'] = 'ok';
@@ -7418,6 +7472,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             }
             $this->db->where('page_id', $page);
             $this->db->update('page', $data);
+            //   echo $this->db->last_query();
             recache();
         } elseif ($para1 == 'view') {
             $page_data['page_data'] = $this->db->get_where('page', array(
@@ -7436,7 +7491,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
     /* Manage General Settings */
     function general_settings($para1 = "", $para2 = "")
     {
-        
+
         if (!$this->crud_model->admin_permission('site_settings')) {
             redirect(base_url() . 'admin');
         }
@@ -7557,7 +7612,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $this->db->update('general_settings', array(
                 'value' => $this->input->post('system_name')
             ));
-            
+
             $this->db->where('type', "system_email");
             $this->db->update('general_settings', array(
                 'value' => $this->input->post('system_email')

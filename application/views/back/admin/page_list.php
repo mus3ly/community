@@ -19,7 +19,7 @@
 				<td><?php echo $i; ?></td>
 				<td><?php echo $row['page_name']; ?></td>
                 <td>
-                		<input id="pag_<?php echo $row['page_id']; ?>" class='sw1' type="checkbox" data-id='<?php echo $row['page_id']; ?>' <?php if($row['status'] == 'ok'){ ?>checked<?php } ?> />
+                		<input id="pub_<?php echo $row['page_id']; ?>" class='sw1' type="checkbox" data-id='<?php echo $row['page_id']; ?>' <?php if($row['status'] == 'ok'){ ?>checked<?php } ?> />
                 </td>
 				<td class="text-right">
                     <a class="btn btn-info btn-xs btn-labeled fa fa-location-arrow" 

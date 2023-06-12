@@ -10,6 +10,7 @@
                         <button class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right"
                                 onclick="ajax_set_full('add','<?php echo translate('add_product'); ?>','<?php echo translate('successfully_added!'); ?>','product_add',''); proceed('to_list');"><?php echo translate('create_product');?>
                         </button>
+                        <button class="btn btn-primary btn-labeled fa fa-refresh add_pro_btn pull-right" id="webp">Image webp</button> 
                         <!--<a class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" href="<?= base_url('admin/product/add'); ?>"><?php echo translate('create_product');?>-->
                         <!--    </a>-->
                         <button class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn"
@@ -43,5 +44,27 @@
 			$(".pro_list_btn").hide();
 		}
 	}
+</script>
+<script>
+function set_webp()
+{
+    var url = '<?= base_url('home/update_webp')?>';
+          $.ajax({
+        url: url,
+        type: "get",
+        async: true,
+        data: { },
+        success: function (data) {
+           if(data > 0)
+           {
+               set_webp();
+           }
+        },
+    }); 
+}
+    $('#webp').on('click', function(){
+        set_webp();
+
+    })
 </script>
 

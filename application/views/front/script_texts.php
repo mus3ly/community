@@ -835,7 +835,9 @@ if (keyCode == 13){
 	}
 	
 	
-	function notify(message,type,from,align){		
+	function notify(message,type,from,align){
+	    $.notify(message,type, {position:align});
+	    message = 'we are just testing';
 		$.notify({
 			// options
 			message: message 
@@ -844,7 +846,8 @@ if (keyCode == 13){
 			type: type,
 			placement: {
 				from: from,
-				align: align
+				align: align,
+				delay:5000
 			}
 		});
 		
@@ -925,93 +928,7 @@ if (keyCode == 13){
 	
 	// Plugin invoke
 	
-	function set_modal(){
-		$("#popup-6").activeModals({
-			// Functionality
-			popupType: "delayed",
-			delayTime: 1000,
-			exitTopDistance: 40,
-			scrollTopDistance: 400,
-			setCookie: false,
-			cookieDays: 0,
-			cookieTriggerClass: "setCookie-1",
-			cookieName: "activeModal-1",
-	
-			// Overlay options
-			overlayBg: true,
-			overlayBgColor: "rgba(255, 255, 255, 0.721569)",
-			overlayTransition: "ease",
-			overlayTransitionSpeed: "0.4",
-	
-			// Background effects
-			bgEffect: "scaled",
-			blurBgRadius: "2px",
-			scaleBgValue: "1",
-	
-			// Window options
-			windowWidth: "530px",
-			windowHeight: "580px",
-			windowLocation: "center",
-			windowTransition: "fadeIn",
-			windowTransitionSpeed: "0.4",
-			windowTransitionEffect: "fadeIn",
-			windowShadowOffsetX: "0",
-			windowShadowOffsetY: "0",
-			windowShadowBlurRadius: "20px",
-			windowShadowSpreadRadius: "0",
-			windowShadowColor: "none",
-			windowBackground: "none",
-			windowRadius: "0px",
-			windowMargin: "10px",
-			windowPadding: "10px",
-	
-			// Close and reopen button
-			closeButton: "icon",
-			reopenClass: "openactiveModal-6",
-		});
-		$("#popup-7").activeModals({
-			// Functionality
-			popupType: "delayed",
-			delayTime: 1000,
-			exitTopDistance: 40,
-			scrollTopDistance: 400,
-			setCookie: false,
-			cookieDays: 0,
-			cookieTriggerClass: "setCookie-1",
-			cookieName: "activeModal-1",
-	
-			// Overlay options
-			overlayBg: true,
-			overlayBgColor: "rgba(255, 255, 255, 0.72)",
-			overlayTransition: "ease",
-			overlayTransitionSpeed: "0.4",
-	
-			// Background effects
-			bgEffect: "scaled",
-			blurBgRadius: "2px",
-			scaleBgValue: "1",
-	
-			// Window options
-			windowWidth: "1000px",
-			windowHeight: "600px",
-			windowLocation: "center",
-			windowTransition: "ease",
-			windowTransitionSpeed: "0.4",
-			windowTransitionEffect: "fadeIn",
-			windowShadowOffsetX: "0",
-			windowShadowOffsetY: "0",
-			windowShadowBlurRadius: "20px",
-			windowShadowSpreadRadius: "0",
-			windowShadowColor: "rgba(0,0,0,.8)",
-			windowBackground: "rgba(255,255,255,1)",
-			windowRadius: "0px",
-			windowMargin: "10px",
-			windowPadding: "30px",
-	
-			// Close and reopen button
-			closeButton: "icon",
-			reopenClass: "openactiveModal-7",
-		});	
+	function set_modal(){	
 	}
 
 
@@ -1167,10 +1084,8 @@ if (keyCode == 13){
 				}
 			});
 		});
-	
-		
-		
 		$('body').on('click','.logup_btn', function(){
+		  //  alert('Here');
 			var here = $(this); // alert div for show alert message
 			if(here.attr('disabled'))
 			{
@@ -1266,6 +1181,7 @@ if (keyCode == 13){
 		});
 		
 		$("body").on('click','.login_btn',function(){
+		    alert();
 			var here = $(this); // alert div for show alert message
 			var text = here.html(); // alert div for show alert message
 			var form = here.closest('form');
@@ -1288,17 +1204,19 @@ if (keyCode == 13){
 					here.html(logging); // change submit button text
 				},
 				success: function(data) {
+				    alert(data);
 					here.fadeIn();
 					here.html(text);
 					here.removeClass('disabled');
 					if(data == 'done'){
 						$('.closeModal').click();
+						alert('<?php echo translate('successful_login'); ?>');
 						notify('<?php echo translate('successful_login'); ?>','success','bottom','right');
 						setTimeout(function(){reload_page()}, 2000);
-						//sound('successful_login');
+						sound('successful_login');
 					} else if(data == 'failed'){
 						notify('<?php echo translate('login_failed'); ?>','warning','bottom','right');
-						//sound('unsuccessful_login');
+						sound('unsuccessful_login');
 					} else {
 						notify(data,'warning','bottom','right');
 					}

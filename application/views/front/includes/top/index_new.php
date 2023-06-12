@@ -171,7 +171,7 @@ include 'meta/'.$asset_page.'.php';
 
 
 <!-- CSS Global -->
-
+<?php if($asset_page != 'home' ){?>
 <link href="<?php echo base_url(); ?>template/front/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 <link href="<?php echo base_url(); ?>template/front/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet">
@@ -186,7 +186,7 @@ include 'meta/'.$asset_page.'.php';
 <link href="<?php echo base_url(); ?>template/front/modal/css/sm.css" rel="stylesheet">
 
 <link href="<?php echo base_url(); ?>template/front/rateit/rateit.css" rel="stylesheet">
-
+<?php } ?>
 
 
 
@@ -195,13 +195,6 @@ include 'meta/'.$asset_page.'.php';
 
 <?php $theme =  $this->db->get_where('ui_settings',array('type' => 'header_color'))->row()->value;?>
 
-<link href="<?php echo base_url(); ?>template/front/css/theme.css" rel="stylesheet">
-
-<link href="<?php echo base_url(); ?>template/front/css/theme-<?php echo $theme; ?>.css" rel="stylesheet" id="theme-config-link">
-
-
-
-<link href="<?php echo base_url(); ?>template/front/plugins/smedia/custom-1.css" rel="stylesheet">
 
 
 
@@ -216,7 +209,6 @@ $font =  $this->db->get_where('ui_settings',array('type' => 'font'))->row()->val
 
 ?>
 
-<link href='https://fonts.googleapis.com/css?family=<?php echo $font; ?>:400,500,600,700,800,900' rel='stylesheet' type='text/css'>
 
 <style>
 
@@ -253,7 +245,4 @@ include $asset_page.'.php';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link id="favicon" rel="icon"  type="<?= base_url()?>template/front/images/favicon.png" href="<?= base_url()?>template/front/images/favicon.png">
-    <link type="text/css" rel="stylesheet" href="<?= base_url()?>template/front/css-files/font-awesome.min.css" />
-    <link rel="stylesheet" href="<?= base_url()?>template/front/css-files/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" href="<?= base_url()?>template/front/css-files/style.css" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url()?>template/front/css-files/owl.carousel.css" />

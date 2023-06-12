@@ -1,121 +1,22 @@
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+  
+  *{
+      font-family: 'Roboto', sans-serif;
+  }
+</style>
 <section class="page-section with-sidebar">
     <div class="container">
         <div class="row">
             <!-- SIDEBAR -->
-            <aside class="col-md-3 sidebar hidden-sm hidden-xs" id="sidebar">
-                <!-- widget shop categories -->
-                <div class="widget shop-categories">
-                    <div class="widget-content">
-                        <ul>
-                            <li><a href="<?php echo base_url(); ?>home/blog/"><?php echo translate('all_blogs');?></a></li>
-                            <?php
-                                $categories=$this->db->get('blog_category')->result_array();
-                                foreach($categories as $row){
-                            ?>
-                                <li>
-                                    <a href="<?php echo base_url(); ?>home/blog/<?php echo $row['blog_category_id']; ?>">
-                                        <?php echo $row['name']; ?> 
-                                    </a>
-                                </li>
-                            <?php 
-                                }
-                            ?>
-                        </ul>
-                    </div>
-                </div>
-                <!-- /widget shop categories -->
-                <!-- widget tabs -->
-                <div class="widget widget-tabs">
-                    <div class="widget-content special-blogs">
-                        <ul id="tabs" class="nav nav-justified">
-                            <li class="active">
-                                <a href="#tab-s1" data-toggle="tab">
-                                    <?php echo translate('recent');?>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#tab-s2" data-toggle="tab">
-                                    <?php echo translate('popular');?>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <!-- tab 1 -->
-                            <div class="tab-pane fade in active" id="tab-s1">
-                                <div class="product-list">
-                                <?php
-                                    $this->db->limit(3);
-                                    $this->db->order_by("blog_id", "desc");
-                                    $latest=$this->db->get('blog')->result_array();
-                                    foreach($latest as $row){
-                                ?>
-                                    <div class="media">
-                                        <a class="pull-left media-link" href="<?php echo $this->crud_model->blog_link($row['blog_id']); ?>">
-                                            <img class="img-responsive" src="<?php echo $this->crud_model->file_view('blog',$row['blog_id'],'','','thumb','src','',''); ?>" alt=""/>
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                        <div class="media-body">
-                                            <h6 class="media-heading">
-                                                <a href="<?php echo $this->crud_model->blog_link($row['blog_id']); ?>">
-                                                    <?php echo $row['title']; ?>
-                                                </a>
-                                            </h6>
-                                            <div class="date">
-                                                <ins><?php echo $row['date']; ?></ins>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php
-                                    }
-                                ?>
-                                </div>
-                            </div>
-                            <!-- tab 2 -->
-                            <div class="tab-pane fade" id="tab-s2">
-                                <div class="product-list">
-                                    <?php
-                                    $this->db->limit(3);
-                                    $this->db->order_by("number_of_view", "desc");
-                                    $popular=$this->db->get('blog')->result_array();
-                                    foreach($popular as $row){
-                                ?>
-                                    <div class="media">
-                                        <a class="pull-left media-link" href="<?php echo $this->crud_model->blog_link($row['blog_id']); ?>">
-                                            <img class="img-responsive" src="<?php echo $this->crud_model->file_view('blog',$row['blog_id'],'','','thumb','src','',''); ?>" alt=""/>
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                        <div class="media-body">
-                                            <h6 class="media-heading">
-                                                <a href="<?php echo $this->crud_model->blog_link($row['blog_id']); ?>">
-                                                    <?php echo $row['title']; ?>
-                                                </a>
-                                            </h6>
-                                            <div class="date">
-                                                <ins><?php echo $row['date']; ?></ins>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php
-                                    }
-                                ?>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /widget tabs -->
-            </aside>
             <!-- /SIDEBAR -->
             <!-- CONTENT -->
-            <div class="col-md-9 content" id="content">
+            <div class="col-md-12 content" id="content">
             	<?php
                 	foreach($blog as $row){
 				?>
             	<article class="post-wrap post-single">
-                    <div class="post-media">
-                        <img class="img-responsive" src="<?php echo $this->crud_model->file_view('blog',$row['blog_id'],'','','no','src','',''); ?>" alt=""/>
-                    </div>
-                    <div class="post-header">
+            	    <div class="post-header">
                         <h2 class="post-title">
                         	<?php echo $row['title']; ?>
                         </h2>
@@ -125,6 +26,10 @@
                             <?php echo $row['date']; ?>
                         </div>
                     </div>
+                    <div class="post-media">
+                        <img class="img-responsive" src="<?php echo $this->crud_model->file_view('blog',$row['blog_id'],'','','no','src','',''); ?>" alt=""/>
+                    </div>
+                    
                     <div class="buttons">
                         <div id="share"></div>
                     </div>

@@ -83,6 +83,9 @@ if(isset($_GET['test']))
 ?>
 
 <!DOCTYPE html>
+<?php
+/*
+?>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -147,6 +150,9 @@ if(isset($_GET['test']))
 </style>
 </head>
 <body id="page-name">
+<?php
+*/
+?>
 <div class="lines_shape">
     <img src="<?= base_url(); ?>template/front/images/lines-shape.png" alt="">
 </div>
@@ -1307,6 +1313,12 @@ var marker = new google.maps.Marker({
  // ___Owl-carousel-icons
 
 })(jQuery);
+<?php
+/*
+?>
 </script>
 </body>
 </html>
+<?php
+*/
+?>

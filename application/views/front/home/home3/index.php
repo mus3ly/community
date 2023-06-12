@@ -1,5 +1,7 @@
 
-
+<?php
+    die();
+?>
 <div class="arrowbox">
         <img class="textbox" src="https://ads.strokedev.net/uploads/logo_image/h1-slider-img-1.png" alt="">
         <img class="arrow_box" src="https://ads.strokedev.net/uploads/logo_image/h1-slider-img-2.png" alt="">

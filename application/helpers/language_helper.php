@@ -207,7 +207,7 @@
              unset($vl[$k]);
          }
      }
-     return implode(',&nbsp',$vl);
+     return implode(',&nbsp;&nbsp;&nbsp;&nbsp;',$vl);
  }
  function get_product_meta($pid, $k= '')
  {

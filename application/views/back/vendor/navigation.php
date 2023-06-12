@@ -22,7 +22,7 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                 </span>
                             </a>
                         </li>
-                        <li 
+                        <li
                         	style="border-top:1px solid rgba(69, 74, 84, 0.7);">
                             <a target="_blank" href="<?php echo base_url(); ?>home/affiliate">
                                 <i class="fa fa-dashboard"></i>
@@ -31,6 +31,7 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                 </span>
                             </a>
                         </li>
+
 
             			<?php
 						if($physical_check == 'ok' && $digital_check == 'ok'){
@@ -86,7 +87,7 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                             <li <?php if($page_name=="product"){?> class="active-link" <?php } ?> >
                                                 <a href="<?php echo base_url(); ?>vendor/product">
                                                     <i class="fa fa-circle fs_i"></i>
-                                                        <?php echo translate('all_listings');?> 
+                                                        <?php echo translate('all_listings');?>
                                                 </a>
                                             </li>
                                             <li <?php if($page_name=="product" && isset($_GET['is_blog'])){?> class="active-link" <?php } ?> >
@@ -240,9 +241,9 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                     </span>
                             </a>
                         </li>
-                        <?php 
+                        <?php
 							}
-						*/	
+						*/
 						?>
 
                         <!--  Payment from Admin -->
@@ -293,7 +294,7 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                             if($this->crud_model->vendor_permission('site_settings')){
                         ?>
                         <!--Menu list item-->
-                        <li <?php if($page_name=="site_settings"){?> class="active-link" <?php } 
+                        <li <?php if($page_name=="site_settings"){?> class="active-link" <?php }
 
                         ?> >
                         <?php
@@ -314,7 +315,7 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                             if($this->crud_model->vendor_permission('site_settings')){
                         ?>
                         <!--Menu list item-->
-                        <li <?php if($page_name=="site_settings"){?> class="active-link" <?php } 
+                        <li <?php if($page_name=="site_settings"){?> class="active-link" <?php }
 
                         ?> >
                         <?php
@@ -327,10 +328,10 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                     </span>
                             </a>
                         </li>
-                        <li <?php if($page_name=="site_settings"){?> class="active-link" <?php } 
+                        <li <?php if($page_name=="site_settings"){?> class="active-link" <?php }
 
                         ?> >
-                        
+
                             <a href="<?php echo base_url('vendor/brand');?>" target="_blank">
                                 <i class="fa fa-wrench"></i>
                                     <span class="menu-title">
@@ -373,6 +374,13 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                 	<?php echo translate('Affiliates');?>
                                 </span>
                         </a></li>
+                        <li
+                                style="border-top:1px solid rgba(69, 74, 84, 0.7);">
+                            <a href="<?php echo base_url(); ?>vendor/package">
+                                <i class="fa fa-user-plus   "></i>
+                                <span class="menu-title"> Upgrade Membership</span>
+                            </a>
+                        </li>
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@
     <!-- widget shop categories -->
     <!-- widget price filter -->
                <?php
+               var_dump($is_listing);
             if(isset($is_listing) && ($is_listing == 'shop_listing' || $is_listing == 'car_listing')){
                     ?>
             <div class="widget widget-filter-price">
@@ -89,6 +90,7 @@
             }
             ?>
     <?php
+    
             if(isset($is_listing) && $is_listing == 'car_listing'){
                 $all_makes =  $this->db->get('makes')->result_array();
 
@@ -191,7 +193,7 @@
                 }
                 ?>
     <!-- /widget price filter -->
-    <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="close_sidebar();" style="border-radius:50%; position: absolute; top:0;right:0">
+    <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="close_sidebar();" style="border-radius:50%; position: absolute; top:0;right:10px;color:white;">
         <i class="fa fa-times"></i>
     </span>
     <div class="widget shop-categories">

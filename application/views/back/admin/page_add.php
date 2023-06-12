@@ -26,6 +26,18 @@
                 </div>
                                                
                 <div class="form-group btm_border">
+                    <label class="col-sm-4 control-label" ><?php echo translate('meta_title');?></label>
+                    <div class="col-sm-6">
+                        <input type="text" name="meta_title"  placeholder="<?php echo translate('meta_title');?>" class="form-control">
+                    </div>
+                </div> 
+                <div class="form-group btm_border">
+                    <label class="col-sm-4 control-label" ><?php echo translate('meta_description');?></label>
+                    <div class="col-sm-6">
+                        <textarea name="meta_description"  rows="7" placeholder="<?php echo translate('meta_description');?>" class="form-control"></textarea>
+                    </div>
+                </div> 
+                <div class="form-group btm_border">
                     <label class="col-sm-4 control-label" ><?php echo translate('tags');?></label>
                     <div class="col-sm-6">
                         <input type="text" name="tag" data-role="tagsinput" placeholder="<?php echo translate('tags');?>" class="form-control">

@@ -4,7 +4,7 @@
     $thumbs = $this->crud_model->file_view('product',$row['product_id'],'','','thumb','src','multi','all');
     $mains = $this->crud_model->file_view('product',$row['product_id'],'','','no','src','multi','all'); 
 ?>
-<section class="page-section light" style="    background: #fff;" itemscope itemtype="http://schema.org/Product">
+<section class="page-section light page_spacing" style="    background: #fff;" itemscope itemtype="http://schema.org/Product">
     <div class="container">
         <div class="row product-single py-5">
             <div class="col-md-6 col-sm-12 col-xs-12 slider_thumbnail">
@@ -23,7 +23,7 @@
                             }
                         ?>
                     </div>
-                    <div class="col-md-10 col-sm-10 col-xs-10 zoom">
+                    <div class="col-md-10 col-sm-10 col-xs-10 zoom right_img_height">
                         <div class="badges">
                             <?php if($row['featured'] == 'ok'){ ?>
                             <div class="hot"><?php echo translate('featured'); ?></div>

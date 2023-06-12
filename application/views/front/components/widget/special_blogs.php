@@ -1,4 +1,4 @@
-<div class="col-md-12">
+<div class="col-md-12 padding_remv">
 	<div class="widget widget-tabs">
         <div class="widget-content special-blogs">
             <ul id="tabs" class="nav nav-justified">
@@ -21,11 +21,12 @@
                     	$this->db->limit(3);
 						$this->db->order_by("blog_id", "desc");
 						$latest=$this->db->get('blog')->result_array();
-						foreach($latest as $row){
+						foreach($latest as $k=>$row){
+						    $i = $k+1;
 					?>
-                        <div class="media">
+                        <div class="media  <?= ($i%2 == 0)?'even':'odd'; ?>">
                             <a class="left_media-body pull-left media-link" href="<?php echo $this->crud_model->blog_link($row['blog_id']); ?>">
-                                <img class="img-responsive" src="<?php echo $this->crud_model->file_view('blog',$row['blog_id'],'','','thumb','src','',''); ?>" alt=""/>
+                                <!--<img class="img-responsive" src="<?php echo $this->crud_model->file_view('blog',$row['blog_id'],'','','thumb','src','',''); ?>" alt=""/>-->
                             </a>
                             <div class="media-body right_media_body">
                                 <h6 class="media-heading">

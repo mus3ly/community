@@ -1,6 +1,7 @@
-<?php
+ <?php
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
+
 class Home extends CI_Controller
 {
 
@@ -10,109 +11,115 @@ class Home extends CI_Controller
      *  Active Supershop eCommerce CMS
      *  http://codecanyon.net/user/activeitezone
      */
-     function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE) {
-    $output = NULL;
-    if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE) {
-        $ip = $_SERVER["REMOTE_ADDR"];
-        if ($deep_detect) {
-            if (filter_var(@$_SERVER['HTTP_X_FORWARDED _FOR'], FILTER_VALIDATE_IP))
-                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            if (filter_var(@$_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP))
-                $ip = $_SERVER['HTTP_CLIENT_IP'];
-        }
-    }
-    $purpose    = str_replace(array("name", "\n", "\t", " ", "-", "_"), NULL, strtolower(trim($purpose)));
-    $support    = array("country", "countrycode", "state", "region", "city", "location", "address");
-    $continents = array(
-        "AF" => "Africa",
-        "AN" => "Antarctica",
-        "AS" => "Asia",
-        "EU" => "Europe",
-        "OC" => "Australia (Oceania)",
-        "NA" => "North America",
-        "SA" => "South America"
-    );
-    if (filter_var($ip, FILTER_VALIDATE_IP) && in_array($purpose, $support)) {
-        $ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $ip));
-        if (@strlen(trim($ipdat->geoplugin_countryCode)) == 2) {
-            switch ($purpose) {
-                case "location":
-                    $output = array(
-                        "city"           => @$ipdat->geoplugin_city,
-                        "state"          => @$ipdat->geoplugin_regionName,
-                        "country"        => @$ipdat->geoplugin_countryName,
-                        "country_code"   => @$ipdat->geoplugin_countryCode,
-                        "continent"      => @$continents[strtoupper($ipdat->geoplugin_continentCode)],
-                        "continent_code" => @$ipdat->geoplugin_continentCode
-                    );
-                    break;
-                case "address":
-                    $address = array($ipdat->geoplugin_countryName);
-                    if (@strlen($ipdat->geoplugin_regionName) >= 1)
-                        $address[] = $ipdat->geoplugin_regionName;
-                    if (@strlen($ipdat->geoplugin_city) >= 1)
-                        $address[] = $ipdat->geoplugin_city;
-                    $output = implode(", ", array_reverse($address));
-                    break;
-                case "city":
-                    $output = @$ipdat->geoplugin_city;
-                    break;
-                case "state":
-                    $output = @$ipdat->geoplugin_regionName;
-                    break;
-                case "region":
-                    $output = @$ipdat->geoplugin_regionName;
-                    break;
-                case "country":
-                    $output = @$ipdat->geoplugin_countryName;
-                    break;
-                case "countrycode":
-                    $output = @$ipdat->geoplugin_countryCode;
-                    break;
+    function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE)
+    {
+        $output = NULL;
+        if (filter_var($ip, FILTER_VALIDATE_IP) === FALSE) {
+            $ip = $_SERVER["REMOTE_ADDR"];
+            if ($deep_detect) {
+                if (filter_var(@$_SERVER['HTTP_X_FORWARDED _FOR'], FILTER_VALIDATE_IP))
+                    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+                if (filter_var(@$_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP))
+                    $ip = $_SERVER['HTTP_CLIENT_IP'];
             }
         }
+        $purpose = str_replace(array("name", "\n", "\t", " ", "-", "_"), NULL, strtolower(trim($purpose)));
+        $support = array("country", "countrycode", "state", "region", "city", "location", "address");
+        $continents = array(
+            "AF" => "Africa",
+            "AN" => "Antarctica",
+            "AS" => "Asia",
+            "EU" => "Europe",
+            "OC" => "Australia (Oceania)",
+            "NA" => "North America",
+            "SA" => "South America"
+        );
+        if (filter_var($ip, FILTER_VALIDATE_IP) && in_array($purpose, $support)) {
+            $ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $ip));
+            if (@strlen(trim($ipdat->geoplugin_countryCode)) == 2) {
+                switch ($purpose) {
+                    case "location":
+                        $output = array(
+                            "city" => @$ipdat->geoplugin_city,
+                            "state" => @$ipdat->geoplugin_regionName,
+                            "country" => @$ipdat->geoplugin_countryName,
+                            "country_code" => @$ipdat->geoplugin_countryCode,
+                            "continent" => @$continents[strtoupper($ipdat->geoplugin_continentCode)],
+                            "continent_code" => @$ipdat->geoplugin_continentCode
+                        );
+                        break;
+                    case "address":
+                        $address = array($ipdat->geoplugin_countryName);
+                        if (@strlen($ipdat->geoplugin_regionName) >= 1)
+                            $address[] = $ipdat->geoplugin_regionName;
+                        if (@strlen($ipdat->geoplugin_city) >= 1)
+                            $address[] = $ipdat->geoplugin_city;
+                        $output = implode(", ", array_reverse($address));
+                        break;
+                    case "city":
+                        $output = @$ipdat->geoplugin_city;
+                        break;
+                    case "state":
+                        $output = @$ipdat->geoplugin_regionName;
+                        break;
+                    case "region":
+                        $output = @$ipdat->geoplugin_regionName;
+                        break;
+                    case "country":
+                        $output = @$ipdat->geoplugin_countryName;
+                        break;
+                    case "countrycode":
+                        $output = @$ipdat->geoplugin_countryCode;
+                        break;
+                }
+            }
+        }
+        return $output;
     }
-    return $output;
-}
+    public function decide($slug)
+    {
+        $product = $this->db->where('slug',$slug)->get('product')->row();
+        if($product)
+        {
+            $this->product_view($product->product_id);
+        }
+    }
 
     function __construct()
     {
-        
+
         parent::__construct();
         //$this->output->enable_profile r(TRUE);
+        $this->load->library('session');
         $this->load->database();
         $this->load->library('spreadsheet');
         $this->load->library('paypal');
         $this->load->library('twoCheckout_Lib');
         $this->load->library('vouguepay');
         $this->load->library('pum');
+        $this->load->library("pagination");
         //add affliate log
-        if(isset($_GET['aff_id']))
-        {
-            setcookie('aff_id',$_GET['aff_id'],strtotime( '+7 days' ));
+        if (isset($_GET['aff_id'])) {
+            setcookie('aff_id', $_GET['aff_id'], strtotime('+7 days'));
 
             $ip = $_SERVER['REMOTE_ADDR'];
             $key = base64_decode($_GET['aff_id']);
-            $exp = explode('-',$key);
+            $exp = explode('-', $key);
             $country = $this->ip_info("Visitor", "Country Code");
-            if( count($exp) == 2)
-            {
+            if (count($exp) == 2) {
                 $wh = array(
                     'ip' => $ip,
-                    'aff_id' =>$exp[0],
-                    'comp_id' =>$exp[1],
-                    'country' =>$country,
-                
+                    'aff_id' => $exp[0],
+                    'comp_id' => $exp[1],
+                    'country' => $country,
+
                 );
                 $row = $this->db->where($wh)->get('aff_log')->row();
-                $wh['expire_at'] =  date("Y-m-d H:i:s", strtotime( '+7 days' ));
-                if($row)
-                {
-                    $this->db->where('id',$row->id)->update('aff_log',$wh);
-                }
-                else
-                {
-                    $this->db->insert('aff_log',$wh);
+                $wh['expire_at'] = date("Y-m-d H:i:s", strtotime('+7 days'));
+                if ($row) {
+                    $this->db->where('id', $row->id)->update('aff_log', $wh);
+                } else {
+                    $this->db->insert('aff_log', $wh);
                 }
             }
         }
@@ -149,402 +156,695 @@ class Home extends CI_Controller
         setcookie('curr', $this->session->userdata('currency'), time() + (86400), "/");
         //echo $_COOKIE['lang'];
     }
-       public function slugify($text, string $divider = '-')
-{
-  // replace non letter or digits by divider
-  $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
 
-  // transliterate
-  $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+    public function slugify($text, string $divider = '-')
+    {
+        // replace non letter or digits by divider
+        $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
 
-  // remove unwanted characters
-  $text = preg_replace('~[^-\w]+~', '', $text);
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
 
-  // trim
-  $text = trim($text, $divider);
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
 
-  // remove duplicate divider
-  $text = preg_replace('~-+~', $divider, $text);
+        // trim
+        $text = trim($text, $divider);
 
-  // lowercase
-  $text = strtolower($text);
+        // remove duplicate divider
+        $text = preg_replace('~-+~', $divider, $text);
 
-  if (empty($text)) {
-    return 'n-a';
-  }
+        // lowercase
+        $text = strtolower($text);
 
-  return $text;
-}
+        if (empty($text)) {
+            return 'n-a';
+        }
+
+        return $text;
+    }
+
     /* FUNCTION: Loads Homepage*/
+    public function import_product()
+    {
+
+
+    }
+
+    public function update_webp()
+    {
+        $media = $this->db->where('webp_url', NULL)->where('error', 0)->limit('1')->get('media')->row();
+        if ($media) {
+            if (file_exists($media->path)) {
+                $extension = strrchr($media->path, '.');
+                $string = $media->path;
+                $string = str_replace($extension, ".webp", $string);
+                $n_name = basename($string);
+                $o_name = basename($media->path);
+
+                $url = base_url() . $media->path;
+
+
+                $img_name = $n_name;
+
+                // Image path
+                $img = $string;
+
+                // Save image
+                $ch = curl_init($url);
+                $fp = fopen($img, 'wb');
+                curl_setopt($ch, CURLOPT_FILE, $fp);
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_exec($ch);
+                curl_close($ch);
+                fclose($fp);
+
+                $data = array(
+
+                    "webp_url" => $string
+
+                );
+                $insert = $this->db->where('id', $media->id)->update('media', $data);
+
+            } else {
+                $insert = $this->db->where('id', $media->id)->update('media', array('error' => 1));
+            }
+
+        }
+        $r = $this->db->where('webp_url', NULL)->where('error', 0)->get('media')->result_array();
+        echo count($r);
+    }
+
     public function update_dcats()
     {
-        $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value, true);
-                       $result=array();
-                                            foreach($categories as $row){
-                                                if($this->crud_model->if_publishable_category($row)){
-                                                    $c = $this->db->where('cat_id',$row)->get('direct_cats')->row();
-                                                    if(!$c)
-                                                    {
-                                                        $in = array(
-                                                            'cat_id'=> $row,
-                                                            );
-                                                        $this->db->insert('direct_cats',$in);
-                                                    }
-                                                    find_main($row);
-                                                }
-                                            }
+        $categories = json_decode($this->db->get_where('ui_settings', array('ui_settings_id' => 35))->row()->value, true);
+        $result = array();
+        foreach ($categories as $row) {
+            if ($this->crud_model->if_publishable_category($row)) {
+                $c = $this->db->where('cat_id', $row)->get('direct_cats')->row();
+                if (!$c) {
+                    $in = array(
+                        'cat_id' => $row,
+                    );
+                    $this->db->insert('direct_cats', $in);
+                }
+                find_main($row);
+            }
+        }
     }
-    
+
     public function update_slug()
     {
-               $this->db->limit(15, 0);
+        $this->db->limit(15, 0);
 
-        $pros = $this->db->where('slug','')->get('product')->result_array();
-        foreach($pros as $k=> $v)
-        {
-            echo $v['product_id'].'<br>';
-         echo create_slug($v['product_id']).'<br>';
-        
-        //slugify
+        $pros = $this->db->where('slug', '')->get('product')->result_array();
+        foreach ($pros as $k => $v) {
+            echo $v['product_id'] . '<br>';
+            echo create_slug($v['product_id']) . '<br>';
+
+            //slugify
         }
     }
-    
-    public function ckeditor($id='', $col='')
+
+    public function ckeditor($id = '', $col = '')
     {
         $org = $col;
-        $ex = explode('-',$col);
+        $ex = explode('-', $col);
         $num = -1;
-        if(count($ex) > 1)
-        {
+        if (count($ex) > 1) {
             $col = $ex[0];
             $num = $ex[1];
-            
+
         }
-        $page_data['product']=$this->db->where('product_id',$id)->get('product')->row()->$col;
-        if($num > -1)
-        {
-            $arr = json_decode($page_data['product'],true);
+        $page_data['product'] = $this->db->where('product_id', $id)->get('product')->row()->$col;
+        if ($num > -1) {
+            $arr = json_decode($page_data['product'], true);
             $page_data['product'] = $arr[$num];
         }
-        $page_data['pid']=$id;
-        $page_data['col']=$org;
-        $this->load->view('editor',$page_data);
+        $page_data['pid'] = $id;
+        $page_data['col'] = $org;
+        $this->load->view('editor', $page_data);
     }
-     public function save()
+
+    public function save()
     {
-      $val = $_POST['val'];
-      $pid = $_POST['pid'];
-      $col = $_POST['col'];
-      $org = $col;
-        $ex = explode('-',$col);
+        $val = $_POST['val'];
+        $pid = $_POST['pid'];
+        $col = $_POST['col'];
+        $org = $col;
+        $ex = explode('-', $col);
         $num = -1;
-        if(count($ex) > 1)
-        {
+        if (count($ex) > 1) {
             $col = $ex[0];
-            $old = $this->db->where('product_id',$pid)->get('product')->row()->$col;
+            $old = $this->db->where('product_id', $pid)->get('product')->row()->$col;
             $num = $ex[1];
-            $arr = json_decode($old,true);
+            $arr = json_decode($old, true);
             $arr[$num] = $val;
-            $val =  json_encode($arr);
-            
+            $val = json_encode($arr);
+
         }
-      $save = $this->db->where('product_id',$pid)->update('product',array($col => $val));
-    //   var_dump($save);
-      if($save){
-          $cookie_name = "is_save";
-$cookie_value = $pid;
-setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); 
-echo 1;
-      }else{
-          echo'0';
-      }
-      
+        $save = $this->db->where('product_id', $pid)->update('product', array($col => $val));
+        //   var_dump($save);
+        if ($save) {
+            $cookie_name = "is_save";
+            $cookie_value = $pid;
+            setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/");
+            echo 1;
+        } else {
+            echo '0';
+        }
+
     }
-   public function update_cats(){
+
+    public function update_cats()
+    {
         $this->db->limit(1, 0);
-        $pros = $this->db->where('path_status','0')->get('category')->row_array();
-        if(!$pros['path']){
-            $r = $this->db->where('category_id',$pros['category_id'])->update('category',array('path' => $pros['category_id']));
-            
-        }else{
+        $pros = $this->db->where('path_status', '0')->get('category')->row_array();
+        if (!$pros['path']) {
+            $r = $this->db->where('category_id', $pros['category_id'])->update('category', array('path' => $pros['category_id']));
+
+        } else {
             $array = explode(',', $pros['path']);
-            $lastid =  end($array);
-            $pros1 = $this->db->where('category_id',$lastid)->get('category')->row_array();
-            
-            if($pros1['pcat'] == 0){
-                 $this->db->where('category_id',$pros['category_id'])->update('category',array('path_status' => 1));
-            }else{
-                  $array = $ex =  explode(',', $pros['path']);
-                  $array[] =$pros1['pcat'];
-                  $im = implode(',',$array);
-                  $this->db->where('category_id',$pros['category_id'])->update('category',array('path' =>$im)); 
+            $lastid = end($array);
+            $pros1 = $this->db->where('category_id', $lastid)->get('category')->row_array();
+
+            if ($pros1['pcat'] == 0) {
+                $this->db->where('category_id', $pros['category_id'])->update('category', array('path_status' => 1));
+            } else {
+                $array = $ex = explode(',', $pros['path']);
+                $array[] = $pros1['pcat'];
+                $im = implode(',', $array);
+                $this->db->where('category_id', $pros['category_id'])->update('category', array('path' => $im));
             }
-        // $this->db->where('category_id',$pros['category_id'])->update('category',array('path_status' => 1));  
-        
+            // $this->db->where('category_id',$pros['category_id'])->update('category',array('path_status' => 1));
+
         }
-        $all = $this->db->where('path_status','0')->get('category')->result_array();
+        $all = $this->db->where('path_status', '0')->get('category')->result_array();
         echo count($all);
-   } 
+    }
+
     public function update_slug_cat()
     {
-               $this->db->limit(15, 0);
+        $this->db->limit(15, 0);
 
-        $pros = $this->db->where('slug',NULL)->get('category')->result_array();
+        $pros = $this->db->where('slug', NULL)->get('category')->result_array();
         // var_dump($this->db->last_query());
-        foreach($pros as $k=> $v)
-        {
-         create_cat_slug($v['category_id']);
-        //slugify
+        foreach ($pros as $k => $v) {
+            create_cat_slug($v['category_id']);
+            //slugify
         }
-        $pros = $this->db->where('slug',NULL)->get('category')->result_array();
+        $pros = $this->db->where('slug', NULL)->get('category')->result_array();
         echo count($pros);
         exit();
-        
+
     }
-    public function business_unique_name(){
-        $company = $this->db->where('company',$_REQUEST['val'])->get('vendor')->num_rows();
-        if($company > 0){
+
+    public function business_unique_name()
+    {
+        $company = $this->db->where('company', $_REQUEST['val'])->get('vendor')->num_rows();
+        if ($company > 0) {
             echo 'error';
-        }
-        else{
+        } else {
             echo 'success';
         }
     }
-    public function unique_name(){
-        $company = $this->db->where('title',$_REQUEST['val'])->get('product')->num_rows();
-        if($company > 0){
+
+    public function unique_name()
+    {
+        $company = $this->db->where('title', $_REQUEST['val'])->get('product')->num_rows();
+        if ($company > 0) {
             echo 'error';
-        }
-        else{
+        } else {
             echo 'success';
         }
     }
+
     public function update_dire()
     {
         $place_id = $this->config->item('places_cat');
-        $places = $this->db->select('product_id')->where('is_place',0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
+        $places = $this->db->select('product_id')->where('is_place', 0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
         $pl_ids = array();
-        foreach($places as $k=> $v)
-        {
+        foreach ($places as $k => $v) {
             $pl_ids[] = $v['product_id'];
         }
-        if($pl_ids)
-        $r = $this->db->where_in('product_id',$pl_ids)->update('product',array('is_place'=>1));
-        //for cars 
+        if ($pl_ids)
+            $r = $this->db->where_in('product_id', $pl_ids)->update('product', array('is_place' => 1));
+        //for cars
         $place_id = $this->config->item('car_cat');
-        $places = $this->db->select('product_id')->where('is_car',0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
+        $places = $this->db->select('product_id')->where('is_car', 0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
         $pl_ids = array();
-        foreach($places as $k=> $v)
-        {
+        foreach ($places as $k => $v) {
             $pl_ids[] = $v['product_id'];
         }
-        if($pl_ids)
-        $r = $this->db->where_in('product_id',$pl_ids)->update('product',array('is_car'=>1));
-        //for cars 
+        if ($pl_ids)
+            $r = $this->db->where_in('product_id', $pl_ids)->update('product', array('is_car' => 1));
+        //for cars
         $place_id = $this->config->item('charity_cat');
-        $places = $this->db->select('product_id')->where('is_charity',0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
+        $places = $this->db->select('product_id')->where('is_charity', 0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
         $pl_ids = array();
-        foreach($places as $k=> $v)
-        {
+        foreach ($places as $k => $v) {
             $pl_ids[] = $v['product_id'];
         }
-        if($pl_ids)
-        $r = $this->db->where_in('product_id',$pl_ids)->update('product',array('is_charity'=>1));
-        //for property 
+        if ($pl_ids)
+            $r = $this->db->where_in('product_id', $pl_ids)->update('product', array('is_charity' => 1));
+        //for property
         $place_id = $this->config->item('property_cat');
-        $places = $this->db->select('product_id')->where('is_property',0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
+        $places = $this->db->select('product_id')->where('is_property', 0)->where("find_in_set($place_id, category)")->get(' product')->result_array();
         $pl_ids = array();
-        foreach($places as $k=> $v)
-        {
+        foreach ($places as $k => $v) {
             $pl_ids[] = $v['product_id'];
         }
-        if($pl_ids)
-        $r = $this->db->where_in('product_id',$pl_ids)->update('product',array('is_property'=>1));
+        if ($pl_ids)
+            $r = $this->db->where_in('product_id', $pl_ids)->update('product', array('is_property' => 1));
     }
+
     public function update_amenities()
     {
         $p = $this->db->select('product_id')->where("amenities != ''")->get('product')->result_array();
-        foreach($p as $k=> $pid)
-        {
-             $this->crud_model->set_amenities($pid['product_id']);
+        foreach ($p as $k => $pid) {
+            $this->crud_model->set_amenities($pid['product_id']);
         }
     }
+
     public function update_rating()
     {
         $rates = $this->db->select('product_id')->distinct('product_id')->get('user_rating')->result_array();
-        foreach($rates as $k=> $v)
-        {
+        foreach ($rates as $k => $v) {
             $pid = $v['product_id'];
             $sing = $this->db->select('count(*) as c, sum(rating) as rate')->where('product_id', $pid)->get('user_rating')->row();
-            if($sing)
-            {
-                $rate = $sing->rate/ $sing->c;
-                $up = array('rating_num'=>$rate);
-                $r = $this->db->where('product_id',$pid)->update('product',$up);
+            if ($sing) {
+                $rate = $sing->rate / $sing->c;
+                $up = array('rating_num' => $rate);
+                $r = $this->db->where('product_id', $pid)->update('product', $up);
             }
         }
     }
-    public function delete_gallery(){
+
+    public function delete_gallery()
+    {
         $this->db->where('id', $_REQUEST['id']);
         $this->db->delete('product_to_images');
         echo '1';
     }
+
     public function upload_bpage()
     {
-        if(isset($_REQUEST['column']) && isset($_REQUEST['product']))
-        {
+        if (isset($_REQUEST['column']) && isset($_REQUEST['product'])) {
             $column = $_REQUEST['column'];
             $pid = $_REQUEST['product'];
-        $this->load->library('cloudinarylib'); 
-            if($_FILES["file"]['tmp_name']){
-                    if(true){
-                        $path = 'uploads/'.time().'.jpg';
-                        move_uploaded_file($_FILES["file"]['tmp_name'], $path);
-                        $data = \Cloudinary\Uploader::upload($path);
-						if(isset($data['public_id']))
-						{
-							$logo_id = $this->crud_model->add_img($path,$data);
-							
-							if($logo_id)
-							{
-							    if($column == 'gallery')
-							    {
-							        $in = array(
-							            'pid'=>$pid,
-							            'img'=>$logo_id,
-							            );
-							        $gallary = $this->db->insert('product_to_images', $in);
-							     //   die("Here");
-							    }
-							    else
-							    {
-                             $this->db->where('product_id', $pid);
-                            $this->db->update('product', array(
-                                $column => $logo_id
-                            ));
-							    }
+            $this->load->library('cloudinarylib');
+            if ($_FILES["file"]['tmp_name']) {
+                if (true) {
+                    $path = 'uploads/' . time() . '.jpg';
+                    move_uploaded_file($_FILES["file"]['tmp_name'], $path);
+                    $data = \Cloudinary\Uploader::upload($path);
+                    if (isset($data['public_id'])) {
+                        $logo_id = $this->crud_model->add_img($path, $data);
+
+                        if ($logo_id) {
+                            if ($column == 'gallery') {
+                                $in = array(
+                                    'pid' => $pid,
+                                    'img' => $logo_id,
+                                );
+                                $gallary = $this->db->insert('product_to_images', $in);
+                                //   die("Here");
+                            } else {
+                                $this->db->where('product_id', $pid);
+                                $this->db->update('product', array(
+                                    $column => $logo_id
+                                ));
+                            }
                             echo 1;
                             die();
-						   }
-						}
-	//top_banner
+                        }
                     }
+                    //top_banner
                 }
+            }
         }
     }
+
     public function srch_loc()
     {
-        if(isset($_GET["str"]))
-        {
-        $curl = curl_init();
+        if (isset($_GET["str"])) {
+            $curl = curl_init();
 
-curl_setopt_array($curl, array(
-  CURLOPT_URL => 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='.$_GET["str"].'&key='.$this->config->item('map_key'),
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'GET',
-));
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' . $_GET["str"] . '&key=' . $this->config->item('map_key'),
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'GET',
+            ));
 
-$response = curl_exec($curl);
+            $response = curl_exec($curl);
 
-curl_close($curl);
-$arr = json_decode($response, true);
-?>
-<ul>
-<?php
-if(isset($arr['predictions']) && count($arr['predictions']))
-{
-    $add = $arr['predictions'];
-    foreach($add as $k=> $v)
-    {
-        ?>
-        <li onclick="select_place('<?= $v['place_id'] ?>','<?= $v['description'] ?>')" ><?= $v['description'] ?></li>
-        <?php
+            curl_close($curl);
+            $arr = json_decode($response, true);
+            ?>
+            <ul>
+                <?php
+                if (isset($arr['predictions']) && count($arr['predictions'])) {
+                    $add = $arr['predictions'];
+                    foreach ($add as $k => $v) {
+                        ?>
+                        <li onclick="select_place('<?= $v['place_id'] ?>','<?= $v['description'] ?>')"><?= $v['description'] ?></li>
+                        <?php
+                    }
+                } else {
+                    ?>
+                    <li>No result found</li>
+                    <?php
+                }
+                ?>
+            </ul>
+            <?php
+
+        }
     }
-}
-else
-{
-    ?>
-    <li>No result found</li>
-    <?php
-}
-?>
-</ul>
-<?php
 
-}
-    }
     public function add_rate()
     {
-        if(isset($_GET['rating']) && isset($_GET['comment']) && isset($_GET['pid']) && $this->session->userdata('user_login') == "yes")
-        
-        {
-            $in =  array(
-                'comment' =>$_GET['comment'],
-                'rating' =>$_GET['rating'],
-                'product_id' =>$_GET['pid'],
-                'user_id' =>$this->session->userdata('user_id'),
-                );
-                $r = $this->db->insert('user_rating', $in);
-                if($r)
-                {
-                    echo 1;
-                    exit();
-                }
-        }
-        else
-        {
+        if (isset($_GET['rating']) && isset($_GET['comment']) && isset($_GET['pid']) && $this->session->userdata('user_login') == "yes") {
+            $in = array(
+                'comment' => $_GET['comment'],
+                'rating' => $_GET['rating'],
+                'product_id' => $_GET['pid'],
+                'user_id' => $this->session->userdata('user_id'),
+            );
+            $r = $this->db->insert('user_rating', $in);
+            if ($r) {
+                echo 1;
+                exit();
+            }
+        } else {
             echo 'invalid request!';
             exit();
         }
     }
+
     public function test1()
     {
         $r = get_fields_line(733, 2);
         var_dump($r);
         die();
     }
+
     public function latest_load()
     {
-        
+
         // $page = (isset($_REQUEST['cpage']))?$_REQUEST['cpage']:1;
-        $page = (isset($_GET['cpage']))?$_GET['cpage']:1;
+        $page = (isset($_GET['cpage'])) ? $_GET['cpage'] : 1;
         // print_r($_GET);
         $page = (int)$page;
-$box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 29))->row()->value;
+        $box_style = 5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 29))->row()->value;
 
-                    $limit =  8;
-                    $st = ($page * $limit)- $limit;
-                               $this->db->limit($limit, $st);
-                    $html = '';
-                    $featured=$this->db->where('parent_id',0)->order_by("product_id", "desc")->get('product')->result();
-                    foreach($featured as $row){
+        $limit = 8;
+        $st = ($page * $limit) - $limit;
+        $this->db->limit($limit, $st);
+        $html = '';
+        $featured = $this->db->where('parent_id', 0)->order_by("product_id", "desc")->get('product')->result();
+        foreach ($featured as $row) {
 
-                        $html = $html.$this->load->view('front/components/product_boxes/product_box_grid_5',$row,TRUE);
+            $html = $html . $this->load->view('front/components/product_boxes/product_box_grid_5', $row, TRUE);
 
-                    }
-                    $next = $page+1;
-                    $ret = array('html'=>$html,'next'=>$next);
-                    echo json_encode($ret);
-                    exit();
+        }
+        $next = $page + 1;
+        $ret = array('html' => $html, 'next' => $next);
+        echo json_encode($ret);
+        exit();
     }
-    public function index()
+
+    public function home_json($ret= 0)
     {
-        
-        //$this->output->enable_profiler(TRUE);
-        //$page_data['min'] = $this->get_range_lvl('product_id !=', '', "min");
-          $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value, true);
-                       $result=array();
+
+        $r = array();
+        $top_banner = base_url().'/uploads/others/parralax_search.webp';
+        // $this->db->limit(10);
+
+        $sect1 = array(
+            'right_img' =>  $top_banner
+            );
+        $r['1st_section'] = $sect1;
+        if($ret)
+        {
+            return $r;
+        }
+        else
+        {
+            //write json file
+        }
+
+    }
+    public function menu_file(){
+        ob_start();
+        ?>
+    <ul  class="make_it_left">
+                       <li class="padd_right set-pad-tb"><a href="#" class="this-padding">Community Pegs</a>
+                    <div class="dropdown_box dropdowon_color drodwn1">
+
+                            <ul>
+                                                   <?php
+                        // die('come');
+                        $brands = $this->db->get('category')->result_array();
+                $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 86))->row()->value,true);
+                                            $result=array();
                                             foreach($categories as $row){
                                                 if($this->crud_model->if_publishable_category($row)){
                                                     $result[]=$row;
                                                 }
                                             }
-                    $page_data['brands'] =  $this->db->where_in('category_id',$result)->get('category')->result_array();
+
+                    foreach ($brands as $key => $value) {
+                        if(in_array($value['category_id'], $result))
+                        {
+                            //  echo $value['category_id'];
+                        ?>
+
+                                <li><a href="<?= base_url('directory/'.$value['slug']); ?>"><?= $value['category_name'] ?></a></li>
+                              <?php
+                        }
+                    }
+                              ?>
+
+                            </ul>
+                        </div>
+
+                    <?php
+                    $login = 'guest';
+
+
+                    if(isset($_SESSION['vendor_id'])){
+                        $login = 'vendor';
+                    }
+                    else if(isset($_SESSION['user_id']))
+                    {
+                        $login = 'customer';
+                    }
+                    else{
+                        $login = 'guest';
+                    }
+
+                    $menu = $this->db->where('parent', '0')->order_by('sorting', 'asc')->get('menu')->result_array();
+
+                     foreach($menu as $k => $v){
+                        $perm = $v['permission'];
+                        $p = explode(",", $perm);
+                        if(in_array($login, $p))
+                        {
+                          $menu1 = $this->db->where('parent', $v['id'])->order_by('sorting', 'asc')->get('menu')->result_array();
+                          $link_class = ( $v['name'] == 'Account' && $login == 'guest' ) ? ' disabled' : '';
+                          ?>
+                          <li class="set-pad-tb">
+                              <a href="<?= base_url().$v['slug']; ?>" class="this-padding<?php echo $link_class; ?>"><b><?= $v['name']?></b>
+                          <?php
+                          if( count($menu1) || $v['id'] == 12 )
+                          {
+                          ?>
+                            <i class="fa fa-angle-down"></i></a>
+                          <?php
+                          }
+                          ?>
+
+                            <?php
+                            if($menu1){
+                                // if($v['id'] == 12)
+                                // {
+                                //  var_dump($menu1);
+                                //  die();
+                                // }
+                            ?>
+                            <div class="dropdown_box dropdowon_color drodwn2 d<?=$v['id']?>">
+                            <ul>
+                                <?php
+                                foreach($menu1 as $k => $v){
+                                    $perm = $v['permission'];
+                                    $p = explode(",", $perm);
+                                    if(in_array($login, $p))
+                                    {
+                                ?>
+                                <li><a href="<?= base_url().$v['slug']; ?>"><?= $v['name']?></a></li>
+                                <?php
+                                }
+                                }
+                                ?>
+                            </ul>
+                        </div>
+                        <?php
+                         }
+                        ?>
+                    </li>
+                    <?php
+                        }
+                     }
+                        ?>
+
+
+<?php
+        $output = ob_get_contents();
+        ob_end_clean();
+         $myfile = fopen(FCPATH."topbar.php", "w") or die("Unable to open file!");
+            fwrite($myfile, $output);
+            fclose($myfile);
+            if($myfile){
+            echo '1';
+            }else{
+                echo '0';
+            }
+
+    }
+    public function feature_products(){
+        ob_start();
+        ?>
+             <div class="row" id="home_p">
+        <?php
+                    $box_style =6;//  $this->db->get_where('ui_settings',array('ui_settings_id' => 29))->row()->value;
+                    $limit = 4;// $this->db->get_where('ui_settings',array('ui_settings_id' => 20))->row()->value;
+                    $featured=$this->crud_model->product_list_set('featured',$limit);
+                    foreach($featured as $k=> $row){
+
+                        if($k <= 2)
+                        {
+                            $type = 'blog';
+                            $viewtype = 'grid';
+                        ?>
+                        <div class="col-sm-4 fullwidth">
+                        <?php echo $this->html_model->product_box1($row, $type . '_' . $viewtype); ?>
+                        </div>
+                        <?php
+                        }
+                    }
+                ?>
+        </div>
+            <?php
+            $output = ob_get_contents();
+            ob_end_clean();
+            $myfile = fopen(FCPATH."feature_products.php", "w") or die("Unable to open file!");
+            fwrite($myfile, $output);
+            fclose($myfile);
+            if($myfile){
+            echo '1';
+            }else{
+                echo '0';
+            }
+    }
+    public function home_file(){
+        ob_start();
+         $all_category =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 87))->row()->value,true);
+          $result=array();
+        foreach($all_category as $k => $row ){
+         if($this->crud_model->if_publishable_category($row)){
+                $result[]=$row;
+            }
+        }
+           $all_cat =  $this->db->where_in('category_id',$result)->get('category')->result_array();
+
+           $cat = array();
+           foreach($all_cat as $key => $row)
+            {
+             $cat[] = $row;
+            }
+            ?>
+            <div id="small-categories" class="owl-carousel owl-carousel-icons owl-loaded owl-drag">
+                  <div class="owl-stage-outer">
+                     <div class="owl-stage" style="transform: translate3d(-3002px, 0px, 0px); transition: all 0.25s ease 0s; width: 4804px;">
+
+                        <?php
+
+                        foreach ($cat as $key => $value) {
+                        $fa_icons = $value['fa_icon'] == 'fa-thin fa-house-building' ? 'fa-building' : $value['fa_icon'];
+                        $fa_icons = $fa_icons == 'fa-shirt-long-sleeve' ? 'fa-shirt' : $fa_icons;
+                        $fa_icons = ($fa_icons)?$fa_icons:'fa-file-image-o';
+
+                            //  echo $value['category_id'];
+                        ?>
+                            <div class="owl-item " >
+                           <div class="item">
+                              <div class="slider_box_icons">
+                                <ul>
+                                    <li ><a href="<?= base_url('directory/'.$value['slug']); ?>"><i class="fas <?= $fa_icons; ?>"></i>  <?= $value['category_name'] ?></a></li>
+                                </ul>
+                            </div>
+                           </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+
+
+                     </div>
+                  </div>
+                  <div class="owl-nav">
+                     <button type="button" role="presentation" class="owl-prev"><i class="fa fa-angle-left"></i></button>
+                     <button type="button" role="presentation" class="owl-next"><i class="fa fa-angle-right"></i> </button>
+                  </div>
+                  <div class="owl-dots disabled"></div>
+               </div>
+            <?php
+            $output = ob_get_contents();
+            ob_end_clean();
+            $myfile = fopen(FCPATH."cat_menu.php", "w") or die("Unable to open file!");
+            fwrite($myfile, $output);
+            fclose($myfile);
+            if($myfile){
+            echo '1';
+            }else{
+                echo '0';
+            }
+    }
+    public function index()
+    {
+        $page_data = array();
+        if(isset($_GET['q']))
+        {
+
+            $this->category();
+            exit();
+        }
+        // if(isset($_GET['home']))
+        if(true)
+        {
+            $page_data['data'] = $this->home_json(1);
+            $page_data['page'] = 'home';
+
+            echo $this->load->view('front/home', $page_data,true);
+            exit();
+        }
+
+        //$this->output->enable_profiler(TRUE);
+        //$page_data['min'] = $this->get_range_lvl('product_id !=', '', "min");
+        $categories = json_decode($this->db->get_where('ui_settings', array('ui_settings_id' => 35))->row()->value, true);
+        $result = array();
+        foreach ($categories as $row) {
+            if ($this->crud_model->if_publishable_category($row)) {
+                $result[] = $row;
+            }
+        }
+        $page_data['brands'] = $this->db->where_in('category_id', $result)->get('category')->result_array();
 
         $this->get_ranger_val();
         $home_style = $this->db->get_where('ui_settings', array('type' => 'home_page_style'))->row()->value;
@@ -558,6 +858,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $page_data['page_title'] = translate('home');
         $page_data['new'] = 1;
         $this->benchmark->mark('code_start');
+
         $this->load->view('front/index', $page_data);
 
         // Some code happens here
@@ -601,8 +902,8 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             if ($status !== 'approved') {
                 redirect(base_url(), 'refresh');
             }
-            $page_data['page_title'] = !empty($this->db->get_where('vendor', array('vendor_id' => $para1))->row()->seo_title) ?$this->db->get_where('vendor', array('vendor_id' => $para1))->row()->seo_title: $this->db->get_where('vendor', array('vendor_id' => $para1))->row()->display_name;
-            $page_data['page_description'] = !empty($this->db->get_where('vendor', array('vendor_id' => $para1))->row()->seo_description) ? $this->db->get_where('vendor', array('vendor_id' => $para1))->row()->seo_description:$this->db->get_where('vendor', array('vendor_id' => $para1))->row()->description;
+            $page_data['page_title'] = !empty($this->db->get_where('vendor', array('vendor_id' => $para1))->row()->seo_title) ? $this->db->get_where('vendor', array('vendor_id' => $para1))->row()->seo_title : $this->db->get_where('vendor', array('vendor_id' => $para1))->row()->display_name;
+            $page_data['page_description'] = !empty($this->db->get_where('vendor', array('vendor_id' => $para1))->row()->seo_description) ? $this->db->get_where('vendor', array('vendor_id' => $para1))->row()->seo_description : $this->db->get_where('vendor', array('vendor_id' => $para1))->row()->description;
 
             $page_data['asset_page'] = "vendor_public_home";
             $page_data['page_name'] = "vendor/public_profile";
@@ -716,7 +1017,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             $config['full_tag_open'] = '<ul class="pagination">';
             $config['full_tag_close'] = '</ul>';
 
-            
+
             $config['cur_tag_open'] = '<li class="active"><a>';
             $config['cur_tag_close'] = '<span class="sr-only">(current)</span></a></li>';
 
@@ -782,8 +1083,8 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             $page_data['all_sub_category'] = $this->db->get('sub_category')->result_array();
             $page_data['page_name'] = 'vendor_home';
             $page_data['vendor'] = $vendor_id;
-            $page_data['page_title'] = !empty($this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->seo_title) ?$this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->seo_title: $this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->display_name;
-            $page_data['page_description'] = !empty($this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->seo_description) ? $this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->seo_description:$this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->description;
+            $page_data['page_title'] = !empty($this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->seo_title) ? $this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->seo_title : $this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->display_name;
+            $page_data['page_description'] = !empty($this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->seo_description) ? $this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->seo_description : $this->db->get_where('vendor', array('vendor_id' => $vendor_id))->row()->description;
             $this->load->view('front/index', $page_data);
         } else {
             redirect(base_url(), 'refresh');
@@ -1055,146 +1356,131 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     {
         $type = '';
         if ($this->session->userdata('user_login') != "yes" && $this->session->userdata('vendor_login') != 'yes') {
-          if($para2 == "ticket" || $para2 == "message_to_vendor"){
-              redirect(base_url() . 'home/login_set/login', 'refresh');
-          }
-          else{
-            redirect(base_url(), 'refresh');
-          }
+            if ($para2 == "ticket" || $para2 == "message_to_vendor") {
+                redirect(base_url() . 'home/login_set/login', 'refresh');
+            } else {
+                redirect(base_url(), 'refresh');
+            }
         }
         $uid = 0;
-        if($this->session->userdata('user_login') == 'yes')
-        {
+        if ($this->session->userdata('user_login') == 'yes') {
             $uid = $this->session->userdata('user_id');
             $type = 'user';
-        }
-        elseif($this->session->userdata('vendor_login') == 'yes')
-        {
+        } elseif ($this->session->userdata('vendor_login') == 'yes') {
             $uid = $this->session->userdata('vendor_id');
             $type = 'vendor';
         }
-        $page_data= array();
-        if($uid)
-        {
-            $already = $this->db->where('type',$type)->where('uid',$uid)->get('affliate_user')->row();
-            if(!$already)
-            {
+        $page_data = array();
+        if ($uid) {
+            $already = $this->db->where('type', $type)->where('uid', $uid)->get('affliate_user')->row();
+            if (!$already) {
                 //add new account
                 $in = array(
                     'type' => $type,
                     'uid' => $uid
-                    );
-                    $r = $this->db->insert('affliate_user', $in);
-                    $page_data['affliate_id'] = $uid = $this->db->insert_id();
+                );
+                $r = $this->db->insert('affliate_user', $in);
+                $page_data['affliate_id'] = $uid = $this->db->insert_id();
 
-            }
-            else
-            {
-                $page_data['affliate_id'] = $uid =  $already->id;
+            } else {
+                $page_data['affliate_id'] = $uid = $already->id;
             }
         }
-        
+
         // die('affliate');
         if ($para1 == "info") {
             $page_data['user_info'] = $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->result_array();
             $this->load->view('front/user/profile', $page_data);
         } elseif ($para1 == "wishlist") {
             $page_data['log'] = $this->db->get('aff_log')->result_array();
-            $this->load->view('front/affliate/wishlist',$page_data); 
+            $this->load->view('front/affliate/wishlist', $page_data);
+        } elseif ($para1 == "affiliation_point_earnings") {
+            echo '1';
+            $this->load->library('Ajax_pagination');
+
+            // $id = $this->session->userdata('user_id');
+            // $this->db->where('from_where', '{"type":"user","id":"' . $id . '"}');
+            // $this->db->or_where('to_where', '{"type":"user","id":"' . $id . '"}');
+            // $config['total_rows'] = $this->db->count_all_results('compain');
+
+            // nimra code
+            if (isset($_GET['vid']) && !empty($_GET['vid'])) {
+                $id = '{"type":"vendor","id":"' . $_GET['vid'] . '"}';
+                $page_data['compain1'] = $this->db->where('added_by', $id)->get('compain')->result_array();
+
+            } elseif ($_SESSION['vendor_login']) {
+                // var_dump($_SESSION);
+                $id = '{"type":"vendor","id":"' . $_SESSION['vendor_id'] . '"}';
+                $page_data['compain1'] = $this->db->where('added_by', $id)->get('compain')->result_array();
+
+            } else {
+                $config['total_rows'] = $this->db->count_all_results('compain');
+            }
+            // nimra code
+
+
+            $config['base_url'] = base_url() . 'home/affiliate/';
+            $config['per_page'] = 3;
+            $config['uri_segment'] = 5;
+            $config['cur_page_giv'] = $para2;
+
+            $function = "ticket_listed('0')";
+            $config['first_link'] = '&laquo;';
+            $config['first_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
+            $config['first_tag_close'] = '</a></li>';
+
+            $rr = ($config['total_rows'] - 1) / $config['per_page'];
+            $last_start = floor($rr) * $config['per_page'];
+            $function = "ticket_listed('" . $last_start . "')";
+            $config['last_link'] = '&raquo;';
+            $config['last_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
+            $config['last_tag_close'] = '</a></li>';
+
+            $function = "ticket_listed('" . ($para2 - $config['per_page']) . "')";
+            $config['prev_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
+            $config['prev_tag_close'] = '</a></li>';
+
+            $function = "ticket_listed('" . ($para2 + $config['per_page']) . "')";
+            $config['next_link'] = '&rsaquo;';
+            $config['next_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
+            $config['next_tag_close'] = '</a></li>';
+
+            $config['full_tag_open'] = '<ul class="pagination pagination-style-2 pagination-sm">';
+            $config['full_tag_close'] = '</ul>';
+
+            $config['cur_tag_open'] = '<li class="active"><a rel="grow" class="btn-u btn-u-red grow" class="active">';
+            $config['cur_tag_close'] = '</a></li>';
+
+            // $function = "ticket_listed(((this.innerHTML)*" . $config['per_page'] . "))";
+            $function = "ticket_listed(this.innerHTML)";
+            $config['num_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
+            $config['num_tag_close'] = '</a></li>';
+            $this->ajax_pagination->initialize($config);
+            // $this->db->where('from_where', '{"type":"user","id":"' . $id . '"}');
+            // $this->db->or_where('to_where', '{"type":"user","id":"' . $id . '"}');
+            if (isset($_GET['vid']) && !empty($_GET['vid'])) {
+                $id = '{"type":"vendor","id":"' . $_GET['vid'] . '"}';
+                $page_data['compain1'] = $this->db->where('added_by', $id)->get('compain', $config['per_page'], $para2)->result_array();
+
+            } elseif ($_SESSION['vendor_login']) {
+                // var_dump($_SESSION);
+                $id = '{"type":"vendor","id":"' . $_SESSION['vendor_id'] . '"}';
+                $page_data['compain1'] = $this->db->where('added_by', $id)->get('compain', $config['per_page'], $para2)->result_array();
+
+            } else {
+                $page_data['compain1'] = $this->db->get('compain', $config['per_page'], $para2)->result_array();
+            }
+            // $page_data['compain1'] = $this->db->get('compain', $config['per_page'], $para2)->result_array();
+            $this->load->view('front/affliate/affiliation_point_earnings', $page_data);
+
+
         }
-         elseif ($para1 == "affiliation_point_earnings") {
-             echo '1';
-         $this->load->library('Ajax_pagination');
-
-        // $id = $this->session->userdata('user_id');
-        // $this->db->where('from_where', '{"type":"user","id":"' . $id . '"}');
-        // $this->db->or_where('to_where', '{"type":"user","id":"' . $id . '"}');
-        // $config['total_rows'] = $this->db->count_all_results('compain');
-        
-        // nimra code
-                if(isset($_GET['vid']) && !empty($_GET['vid'])){
-                $id = '{"type":"vendor","id":"'.$_GET['vid'].'"}';
-                 $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain')->result_array();
-             
-            }
-            elseif($_SESSION['vendor_login']){
-                // var_dump($_SESSION);
-              $id = '{"type":"vendor","id":"'.$_SESSION['vendor_id'].'"}';
-                 $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain')->result_array();
-
-            }
-            else 
-            {
-             $config['total_rows'] = $this->db->count_all_results('compain');
-            }
-        // nimra code
-        
-        
-        $config['base_url'] = base_url() . 'home/affiliate/';
-        $config['per_page'] = 3;
-        $config['uri_segment'] = 5;
-        $config['cur_page_giv'] = $para2;
-
-        $function = "ticket_listed('0')";
-        $config['first_link'] = '&laquo;';
-        $config['first_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
-        $config['first_tag_close'] = '</a></li>';
-
-        $rr = ($config['total_rows'] - 1) / $config['per_page'];
-        $last_start = floor($rr) * $config['per_page'];
-        $function = "ticket_listed('" . $last_start . "')";
-        $config['last_link'] = '&raquo;';
-        $config['last_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
-        $config['last_tag_close'] = '</a></li>';
-
-        $function = "ticket_listed('" . ($para2 - $config['per_page']) . "')";
-        $config['prev_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
-        $config['prev_tag_close'] = '</a></li>';
-
-        $function = "ticket_listed('" . ($para2 + $config['per_page']) . "')";
-        $config['next_link'] = '&rsaquo;';
-        $config['next_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
-        $config['next_tag_close'] = '</a></li>';
-
-        $config['full_tag_open'] = '<ul class="pagination pagination-style-2 pagination-sm">';
-        $config['full_tag_close'] = '</ul>';
-
-        $config['cur_tag_open'] = '<li class="active"><a rel="grow" class="btn-u btn-u-red grow" class="active">';
-        $config['cur_tag_close'] = '</a></li>';
-
-        // $function = "ticket_listed(((this.innerHTML)*" . $config['per_page'] . "))";
-        $function = "ticket_listed(this.innerHTML)";
-        $config['num_tag_open'] = '<li><a rel="grow" class="btn-u btn-u-sea grow" onClick="' . $function . '">';
-        $config['num_tag_close'] = '</a></li>';
-        $this->ajax_pagination->initialize($config);
-        // $this->db->where('from_where', '{"type":"user","id":"' . $id . '"}');
-        // $this->db->or_where('to_where', '{"type":"user","id":"' . $id . '"}');
-                  if(isset($_GET['vid']) && !empty($_GET['vid'])){
-                $id = '{"type":"vendor","id":"'.$_GET['vid'].'"}';
-                 $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain', $config['per_page'], $para2)->result_array();
-             
-            }
-            elseif($_SESSION['vendor_login']){
-                // var_dump($_SESSION);
-              $id = '{"type":"vendor","id":"'.$_SESSION['vendor_id'].'"}';
-                 $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain', $config['per_page'], $para2)->result_array();
-
-            }
-            else 
-            {
-                $page_data['compain1']= $this->db->get('compain', $config['per_page'], $para2)->result_array();
-            }
-        // $page_data['compain1'] = $this->db->get('compain', $config['per_page'], $para2)->result_array();
-         $this->load->view('front/affliate/affiliation_point_earnings',$page_data);
-           
-        
-    }
         //     elseif ($para1 == "affiliation_point_earnings") {
         //     // var_dump($_GET);
         //     if(isset($_GET['vid']) && !empty($_GET['vid'])){
         //         $id = '{"type":"vendor","id":"'.$_GET['vid'].'"}';
         //          $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain')->result_array();
-             
+
         //     }
         //     elseif($_SESSION['vendor_login']){
         //         // var_dump($_SESSION);
@@ -1202,7 +1488,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         //          $page_data['compain1'] = $this->db->where('added_by',$id)->get('compain')->result_array();
 
         //     }
-        //     else 
+        //     else
         //     {
         //         $page_data['compain1']= $this->db->get('compain')->result_array();
         //     }
@@ -1210,18 +1496,17 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         //     //      die();
         //     $this->load->view('front/affliate/affiliation_point_earnings',$page_data);
         // }
-        elseif($para1 == "pnv_affiliate_company"){
-            $y = $this->db->where('user_id',$this->session->userdata('user_id'))->get('user')->row_array();
+        elseif ($para1 == "pnv_affiliate_company") {
+            $y = $this->db->where('user_id', $this->session->userdata('user_id'))->get('user')->row_array();
             $aff = array_unique(json_decode($y['affliate']));
             $ids = $aff;
             //Here I am getting b pages
-            foreach($aff as $k=> $v)
-            {
-                $ids = '{"type":"vendor","id":"'.$v.'"}';
+            foreach ($aff as $k => $v) {
+                $ids = '{"type":"vendor","id":"' . $v . '"}';
             }
-            $page_data['compain'] = $com=  $this->db->where_in('added_by', $ids )->where('is_bpage',1)->get('product')->result_array();
+            $page_data['compain'] = $com = $this->db->where_in('added_by', $ids)->where('is_bpage', 1)->get('product')->result_array();
             // var_dump($com);
-            $this->load->view('front/affliate/affiliation_company',$page_data);
+            $this->load->view('front/affliate/affiliation_company', $page_data);
         } elseif ($para1 == "uploaded_products") {
             $this->load->view('front/user/uploaded_products');
         } elseif ($para1 == "uploaded_product_status") {
@@ -1251,7 +1536,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
 
             echo 'done';
         } elseif ($para1 == "wallet") {
-            
+
             if ($para2 == "add_view") {
                 // die();
                 $this->load->view('front/affliate/wallet');
@@ -1259,43 +1544,36 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                 $format = "%Y-%m-%d %h:%i %A";
                 $time = mdate($format);
                 $uid = 0;
-        if($this->session->userdata('user_login') == 'yes')
-        {
-            $uid = $this->session->userdata('user_id');
-            $type = 'user';
-        }
-        elseif($this->session->userdata('vendor_login') == 'yes')
-        {
-            $uid = $this->session->userdata('vendor_id');
-            $type = 'vendor';
-        }
-        $page_data= array();
-        if($uid)
-        {
-            $already = $this->db->where('type',$type)->where('uid',$uid)->get('affliate_user')->row();
-            if(!$already)
-            {
-                //add new account
-                $in = array(
-                    'type' => $type,
-                    'uid' => $uid
-                    );
-                    $r = $this->db->insert('affliate_user', $in);
-                    $page_data['affliate_id'] = $uid = $this->db->insert_id();
+                if ($this->session->userdata('user_login') == 'yes') {
+                    $uid = $this->session->userdata('user_id');
+                    $type = 'user';
+                } elseif ($this->session->userdata('vendor_login') == 'yes') {
+                    $uid = $this->session->userdata('vendor_id');
+                    $type = 'vendor';
+                }
+                $page_data = array();
+                if ($uid) {
+                    $already = $this->db->where('type', $type)->where('uid', $uid)->get('affliate_user')->row();
+                    if (!$already) {
+                        //add new account
+                        $in = array(
+                            'type' => $type,
+                            'uid' => $uid
+                        );
+                        $r = $this->db->insert('affliate_user', $in);
+                        $page_data['affliate_id'] = $uid = $this->db->insert_id();
 
-            }
-            else
-            {
-                $page_data['affliate_id'] = $uid =  $already->id;
-            }
-        }
+                    } else {
+                        $page_data['affliate_id'] = $uid = $already->id;
+                    }
+                }
                 $data = array(
                     'paypal' => $_GET['email'],
                     'amount' => $_GET['amount'],
                     'status' => '0',
                     'vcreate_at' => $time,
                     'uid' => $uid
-                    );
+                );
                 $this->db->insert('withdraw_request', $data);
                 // $this->load->view('front/user/wallet_info');
             } else if ($para2 == "info_view") {
@@ -1314,11 +1592,11 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                 // $this->email_model->wallet_email('customer_set_payment_info_to_admin', $para3);
                 echo 'done';
             } else {
-                $row = $this->db->where('id',$uid)->get('affliate_user')->row();
-                
-                $data['blc']  = $row->wallet;
-                $data['wallt']  = $this->db->where('aff_id', $uid)->get('aff_log')->row_array();
-                 $data['us']  = $this->db->where('uid', $uid)->get('withdraw_request')->row_array();
+                $row = $this->db->where('id', $uid)->get('affliate_user')->row();
+
+                $data['blc'] = $row->wallet;
+                $data['wallt'] = $this->db->where('aff_id', $uid)->get('aff_log')->row_array();
+                $data['us'] = $this->db->where('uid', $uid)->get('withdraw_request')->row_array();
                 //  var_dump( $data );
                 $this->load->view('front/affliate/wallet', $data);
             }
@@ -1342,22 +1620,18 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             ))->result_array();
             $this->crud_model->ticket_message_viewed($para2, 'user');
             $this->load->view('front/user/message_view', $page_data);
-        }
-        elseif ($para1 == "message_to_vendor_box") {
+        } elseif ($para1 == "message_to_vendor_box") {
             $page_data['message_thread'] = $para2;
             $this->crud_model->message_to_vendor_viewed($para2, 'user');
             $this->load->view('front/user/message_to_vendor_box', $page_data);
-        }
-        elseif ($para1 == "message_to_vendor_view") {
+        } elseif ($para1 == "message_to_vendor_view") {
             $page_data['message_thread'] = $para2;
             $page_data['message_data'] = $this->db->get_where('message_thread', array(
                 'message_thread_id' => $para2
             ))->result_array();
             $this->crud_model->message_to_vendor_viewed($para2, 'user');
             $this->load->view('front/user/message_to_vendor_view', $page_data);
-        }
-
-        elseif ($para1 == "order_tracing") {
+        } elseif ($para1 == "order_tracing") {
             $sale_data = $this->db->get_where('sale', array(
                 'sale_code' => $this->input->post('sale_code')
             ));
@@ -1419,8 +1693,8 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                     } else {
                         $num_of_imgs = count($_FILES["images"]['name']);
                     }
-                    $data['seo_title']          = $this->input->post('seo_title');
-                    $data['seo_description']    = $this->input->post('seo_description');
+                    $data['seo_title'] = $this->input->post('seo_title');
+                    $data['seo_description'] = $this->input->post('seo_description');
                     $data['title'] = $this->input->post('title');
                     $data['category'] = $this->input->post('category');
                     $data['sub_category'] = $this->input->post('sub_category');
@@ -1445,7 +1719,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                     // echo $this->db->last_query();
                     $id = $this->db->insert_id();
                     $this->benchmark->mark_time();
-                    if(!demo()){
+                    if (!demo()) {
                         $this->crud_model->file_up("images", "customer_product", $id, 'multi');
                     }
                     $this->crud_model->set_category_data(0);
@@ -1461,15 +1735,13 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             } else {
                 echo "failed";
             }
-        }
-        elseif ($para1 == "message_to_vendor") {
+        } elseif ($para1 == "message_to_vendor") {
             $msg_page_data['check'] = "";
-            if($para2 != null){
+            if ($para2 != null) {
                 $msg_page_data['seller_id'] = $para2;
             }
-            $this->load->view('front/user/message_to_vendor', $msg_page_data );
-        }
-        else {
+            $this->load->view('front/user/message_to_vendor', $msg_page_data);
+        } else {
             $page_data['part'] = 'info';
             if ($para2 == "info") {
                 $page_data['part'] = 'info';
@@ -1494,12 +1766,10 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                 $page_data['part'] = 'ticket';
             } elseif ($para2 == "post_product") {
                 $page_data['part'] = 'post_product';
-            }
-            elseif ($para2 == "message_to_vendor") {
-                $page_data['part']                = 'message_to_vendor';
+            } elseif ($para2 == "message_to_vendor") {
+                $page_data['part'] = 'message_to_vendor';
                 $page_data['product_added_by_id'] = $para3;
-            }
-            elseif ($para2 == "post_product_bulk") {
+            } elseif ($para2 == "post_product_bulk") {
                 $page_data['part'] = 'post_product_bulk';
 
                 $physical_categories = $this->db->where('digital', null)->or_where('digital', '')->get('category')->result_array();
@@ -1543,12 +1813,11 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     function profile($para1 = "", $para2 = "", $para3 = "")
     {
         if ($this->session->userdata('user_login') != "yes") {
-          if($para2 == "ticket" || $para2 == "message_to_vendor"){
-              redirect(base_url() . 'home/login_set/login', 'refresh');
-          }
-          else{
-            redirect(base_url(), 'refresh');
-          }
+            if ($para2 == "ticket" || $para2 == "message_to_vendor") {
+                redirect(base_url() . 'home/login_set/login', 'refresh');
+            } else {
+                redirect(base_url(), 'refresh');
+            }
         }
         if ($para1 == "info") {
             $page_data['user_info'] = $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->result_array();
@@ -1556,9 +1825,9 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         } elseif ($para1 == "wishlist") {
             $this->load->view('front/user/wishlist');
         } elseif ($para1 == "affiliation_point_earnings") {
-            $page_data['affiliation_point_earnings'] = $this->db->order_by('used_at','desc')->get_where('product_affiliation_code_use', array('affiliator_id ' => $this->session->userdata('user_id')),100)->result_array();
+            $page_data['affiliation_point_earnings'] = $this->db->order_by('used_at', 'desc')->get_where('product_affiliation_code_use', array('affiliator_id ' => $this->session->userdata('user_id')), 100)->result_array();
             $page_data['affiliation_point_earning_total'] = $this->db->get_where('product_affiliation_points_total', array('affiliator_id ' => $this->session->userdata('user_id')))->row_array();
-            $this->load->view('front/user/affiliation_point_earnings',$page_data);
+            $this->load->view('front/user/affiliation_point_earnings', $page_data);
         } elseif ($para1 == "uploaded_products") {
             $this->load->view('front/user/uploaded_products');
         } elseif ($para1 == "uploaded_product_status") {
@@ -1645,11 +1914,11 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                     $id = $this->db->insert_id();
                     $this->session->set_userdata('wallet_id', $id);
 
-                    $bitcoin_coinpayments_merchant = $this->db->get_where('business_settings',array('type'=>'bitcoin_coinpayments_merchant'))->row()->value;
+                    $bitcoin_coinpayments_merchant = $this->db->get_where('business_settings', array('type' => 'bitcoin_coinpayments_merchant'))->row()->value;
                     $exchange = exchange('usd');
-                    $final_amount = $grand_total/$exchange;
+                    $final_amount = $grand_total / $exchange;
 
-                    echo $this->load->view('front/bitcoin_wallet_add_payment_view',compact('bitcoin_coinpayments_merchant','final_amount'),true);
+                    echo $this->load->view('front/bitcoin_wallet_add_payment_view', compact('bitcoin_coinpayments_merchant', 'final_amount'), true);
                     exit;
 
 
@@ -1915,22 +2184,18 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             ))->result_array();
             $this->crud_model->ticket_message_viewed($para2, 'user');
             $this->load->view('front/user/message_view', $page_data);
-        }
-        elseif ($para1 == "message_to_vendor_box") {
+        } elseif ($para1 == "message_to_vendor_box") {
             $page_data['message_thread'] = $para2;
             $this->crud_model->message_to_vendor_viewed($para2, 'user');
             $this->load->view('front/user/message_to_vendor_box', $page_data);
-        }
-        elseif ($para1 == "message_to_vendor_view") {
+        } elseif ($para1 == "message_to_vendor_view") {
             $page_data['message_thread'] = $para2;
             $page_data['message_data'] = $this->db->get_where('message_thread', array(
                 'message_thread_id' => $para2
             ))->result_array();
             $this->crud_model->message_to_vendor_viewed($para2, 'user');
             $this->load->view('front/user/message_to_vendor_view', $page_data);
-        }
-
-        elseif ($para1 == "order_tracing") {
+        } elseif ($para1 == "order_tracing") {
             $sale_data = $this->db->get_where('sale', array(
                 'sale_code' => $this->input->post('sale_code')
             ));
@@ -1992,8 +2257,8 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                     } else {
                         $num_of_imgs = count($_FILES["images"]['name']);
                     }
-                    $data['seo_title']          = $this->input->post('seo_title');
-                    $data['seo_description']    = $this->input->post('seo_description');
+                    $data['seo_title'] = $this->input->post('seo_title');
+                    $data['seo_description'] = $this->input->post('seo_description');
                     $data['title'] = $this->input->post('title');
                     $data['category'] = $this->input->post('category');
                     $data['sub_category'] = $this->input->post('sub_category');
@@ -2018,7 +2283,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                     // echo $this->db->last_query();
                     $id = $this->db->insert_id();
                     $this->benchmark->mark_time();
-                    if(!demo()){
+                    if (!demo()) {
                         $this->crud_model->file_up("images", "customer_product", $id, 'multi');
                     }
                     $this->crud_model->set_category_data(0);
@@ -2034,15 +2299,13 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             } else {
                 echo "failed";
             }
-        }
-        elseif ($para1 == "message_to_vendor") {
+        } elseif ($para1 == "message_to_vendor") {
             $msg_page_data['check'] = "";
-            if($para2 != null){
+            if ($para2 != null) {
                 $msg_page_data['seller_id'] = $para2;
             }
-            $this->load->view('front/user/message_to_vendor', $msg_page_data );
-        }
-        else {
+            $this->load->view('front/user/message_to_vendor', $msg_page_data);
+        } else {
             $page_data['part'] = 'info';
             if ($para2 == "info") {
                 $page_data['part'] = 'info';
@@ -2067,12 +2330,10 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
                 $page_data['part'] = 'ticket';
             } elseif ($para2 == "post_product") {
                 $page_data['part'] = 'post_product';
-            }
-            elseif ($para2 == "message_to_vendor") {
-                $page_data['part']                = 'message_to_vendor';
+            } elseif ($para2 == "message_to_vendor") {
+                $page_data['part'] = 'message_to_vendor';
                 $page_data['product_added_by_id'] = $para3;
-            }
-            elseif ($para2 == "post_product_bulk") {
+            } elseif ($para2 == "post_product_bulk") {
                 $page_data['part'] = 'post_product_bulk';
 
                 $physical_categories = $this->db->where('digital', null)->or_where('digital', '')->get('category')->result_array();
@@ -2141,8 +2402,8 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
 
     public function customer_product_bulk_upload_save()
     {
-        if(demo()){
-            $this->session->set_flashdata('error',translate('This operation is invalid for demo'));
+        if (demo()) {
+            $this->session->set_flashdata('error', translate('This operation is invalid for demo'));
             redirect('home/profile/part/post_product_bulk');
         }
 
@@ -2255,7 +2516,7 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $this->db->update('user', $du);
 
         if (!empty($image_urls)) {
-            if(!demo()){
+            if (!demo()) {
                 $this->crud_model->file_up_from_urls($image_urls, "customer_product", $product_id);
             }
         }
@@ -2432,20 +2693,20 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             echo validation_errors();
         } else {
             if ($safe == 'yes') {
-                $id                             = $this->session->userdata('user_id');
-                $data['time']                   = time();
-                $data['subject']                = $this->input->post('sub');
-                $data['sender']                 = json_encode(array('type' => 'user', 'id' => $id));
-                $data['reciever']               = json_encode(array('type' => 'seller', 'id' => $this->input->post('seller_id')));
-                $data['message_thread_code']    = substr(md5(rand(100, 2147483647)), 0, 15);
+                $id = $this->session->userdata('user_id');
+                $data['time'] = time();
+                $data['subject'] = $this->input->post('sub');
+                $data['sender'] = json_encode(array('type' => 'user', 'id' => $id));
+                $data['reciever'] = json_encode(array('type' => 'seller', 'id' => $this->input->post('seller_id')));
+                $data['message_thread_code'] = substr(md5(rand(100, 2147483647)), 0, 15);
                 $this->db->insert('message_thread', $data);
                 $message_thread_id = $this->db->insert_id();
 
-                $data1['message']               = $this->input->post('reply');
-                $data1['time']                  = time();
-                $data1['message_thread_id']     = $message_thread_id;
-                $data1['sender']                = $data['sender'];
-                $data1['view_status']           = json_encode(array('user_show' => 'ok', 'seller_show' => 'no'));
+                $data1['message'] = $this->input->post('reply');
+                $data1['time'] = time();
+                $data1['message_thread_id'] = $message_thread_id;
+                $data1['sender'] = $data['sender'];
+                $data1['view_status'] = json_encode(array('user_show' => 'ok', 'seller_show' => 'no'));
                 $this->db->insert('message', $data1);
                 echo 'success#-#-#';
             } else {
@@ -2524,17 +2785,16 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             echo validation_errors();
         } else {
             if ($safe == 'yes') {
-                $id                             = $this->session->userdata('user_id');
-                $data1['message']               = $this->input->post('reply');
-                $data1['time']                  = time();
-                $data1['message_thread_id']     = $para1;
-                $data1['sender']                = json_encode(array('type' => 'user', 'id' => $id));
-                $data1['view_status']           = json_encode(array('user_show' => 'ok', 'seller_show' => 'no'));
+                $id = $this->session->userdata('user_id');
+                $data1['message'] = $this->input->post('reply');
+                $data1['time'] = time();
+                $data1['message_thread_id'] = $para1;
+                $data1['sender'] = json_encode(array('type' => 'user', 'id' => $id));
+                $data1['view_status'] = json_encode(array('user_show' => 'ok', 'seller_show' => 'no'));
                 $this->db->insert('message', $data1);
 
                 echo 'success#-#-#';
-            }
-            else {
+            } else {
                 echo 'fail#-#-#Disallowed charecter : " ' . $char . ' " in the POST';
             }
         }
@@ -2592,23 +2852,19 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
     {
         $this->load->library('Ajax_pagination');
         $uid = 0;
-        if($this->session->userdata('user_login') == 'yes')
-        {
+        if ($this->session->userdata('user_login') == 'yes') {
             $uid = $this->session->userdata('user_id');
             $type = 'user';
-        }
-        elseif($this->session->userdata('vendor_login') == 'yes')
-        {
+        } elseif ($this->session->userdata('vendor_login') == 'yes') {
             $uid = $this->session->userdata('vendor_id');
             $type = 'vendor';
         }
-        $wh = array('uid'=>$uid,'type'=> $type);
+        $wh = array('uid' => $uid, 'type' => $type);
         $row = $this->db->where($wh)->get('affliate_user')->row();
-        if(isset($row->id))
-        {
+        if (isset($row->id)) {
             $uid = $row->id;
         }
-        $page_data['query'] = $this->db->where('aff_id',$uid)->get('aff_log')->result_array();
+        $page_data['query'] = $this->db->where('aff_id', $uid)->get('aff_log')->result_array();
         $this->load->view('front/affliate/wish_listed', $page_data);
     }
 
@@ -2768,35 +3024,28 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $this->load->library('Ajax_pagination');
 
         // $id = $this->session->userdata('user_id');
-         $uid = 0;
-        if($this->session->userdata('user_login') == 'yes')
-        {
+        $uid = 0;
+        if ($this->session->userdata('user_login') == 'yes') {
             $uid = $this->session->userdata('user_id');
             $type = 'user';
-        }
-        elseif($this->session->userdata('vendor_login') == 'yes')
-        {
+        } elseif ($this->session->userdata('vendor_login') == 'yes') {
             $uid = $this->session->userdata('vendor_id');
             $type = 'vendor';
         }
-        $page_data= array();
-        if($uid)
-        {
-            $already = $this->db->where('type',$type)->where('uid',$uid)->get('affliate_user')->row();
-            if(!$already)
-            {
+        $page_data = array();
+        if ($uid) {
+            $already = $this->db->where('type', $type)->where('uid', $uid)->get('affliate_user')->row();
+            if (!$already) {
                 //add new account
                 $in = array(
                     'type' => $type,
                     'uid' => $uid
-                    );
-                    $r = $this->db->insert('affliate_user', $in);
-                    $page_data['affliate_id'] = $uid = $this->db->insert_id();
+                );
+                $r = $this->db->insert('affliate_user', $in);
+                $page_data['affliate_id'] = $uid = $this->db->insert_id();
 
-            }
-            else
-            {
-                $page_data['affliate_id'] = $uid =  $already->id;
+            } else {
+                $page_data['affliate_id'] = $uid = $already->id;
             }
         }
         $this->db->where('uid', $uid);
@@ -2974,9 +3223,9 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $page_data['page_title'] = translate('products');
         $page_data['all_category'] = $this->db->get('category')->result_array();
         $brands = $this->db->get('brand')->result_array();
-        
+
         $page_data['all_brands'] = $brands;
-        
+
         $page_data['all_sub_category'] = $this->db->get('sub_category')->result_array();
         $page_data['cur_sub_category'] = $sub;
         $page_data['cur_brand'] = $para1;
@@ -2987,42 +3236,315 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
             'category_id' => $para1
         ))->result_array();
         $this->load->view('front/index', $page_data);
-    } 
+    }
+
     /* FUNCTION: Loads Category filter page */
     function sneaker($text = '')
     {
         $this->category("", "", "", "", $text);
     }
+
     function directory($slug = '')
     {
-        $fixed = array('business','affiliate-business','shop-online');
-        if(in_array($slug,$fixed))
-        {
+        $fixed = array('business', 'affiliate-business', 'shop-online','blogs');
+        if (in_array($slug, $fixed)) {
             $_SESSION['slug'] = $slug;
+            
+            $this->category();
+            exit();
         }
-        $this->category();
+        else
+        {
+            $cid = $this->db->where('slug', $slug)->get('category')->row();
+            $this->category($cid->category_id);
+            exit();
+        }
+
     }
-    function category($para1 = "", $para2 = "", $min = "", $max = "", $text = '')
+    public function category($para1 = "", $para2 = "", $min = "", $max = "", $text = '',$req_type = '', $req_data = '')
     {
+        $this->load->library("pagination");
+        $pag_where = '';
+        if(isset($_GET['q']))
+        {
+            $text= $_GET['q'];
+            // die($text);
+        }
+        $text_url = $text;
+        if($text_url)
+        {
+            $pag_where = "`title` LIKE '%".$text_url."%'";
+        }
+
+        // if ($text !== '') {
+        //     $text1 = $this->session->flashdata('query');
+        //     if (isset($text1)) {
+        //         // $text = $this->modify_for_multi_search($text1);
+        //     }
+        // }
+
+
+        $cat = array();
+        if ($para1) {
+            $cat = $this->db->where('category_id',$para1)->get('category')->result_array();
+            // $pag_where = 'category = '.$para1;
+            $pag_where = 'FIND_IN_SET("'.$para1.'", `category`)';
+            
+        }
+        if ($para2) {
+            $pag_where = 'sub_category = '.$para2;
+        }
+
+
+        if ($para1 == "" || $para1 == "0") {
+            $type = 'other';
+        } else {
+            if ($this->db->get_where('category', array('category_id' => $para1))->row()->digital == 'ok') {
+                $type = 'digital';
+            } else {
+                $type = 'other';
+            }
+        }
+        $page_data['cur_slug'] = 'directory_listing';
+        $page_data['cat_path']  = array();
+        if (isset($cat[0]['slug'])) {
+            $page_data['cur_slug'] = $cat[0]['slug'];
+            $page_data['cat_path'] = explode(',',$cat[0]['path']);
+        } else if (isset($_SESSION['slug'])) {
+            $page_data['cur_slug'] = $_SESSION['slug'];
+        }
+        $page_data['is_listing'] = 'directory_listing';
+        $listing_types = array(
+            'blogs' => 'blog_listing',
+            'vehicles-cars' => 'car_listing',
+            'jobs' => 'jobs_listing',
+            'charities' => 'charity_listing',
+            'business' => 'buss_listing',
+            'news' => 'news_listing',
+            'events' => 'event_listing',
+            'properties' => 'property_listing',
+            'shop' => 'shop_listing',
+            'affiliate-business' => 'affliate_listing',
+        );
+        if (isset($page_data['cur_slug']) && $page_data['cur_slug']) {
+            $page_data['is_listing'] = (isset($listing_types[$page_data['cur_slug']])) ? $listing_types[$page_data['cur_slug']] : "";
+        }
         
+        if(!$page_data['cur_slug'])
+        {
+            $page_data['cur_slug'] = 'directory_listing';
+        }
+
+        $type = 'other';
+        $brand_sub = explode('-', $para2);
+
+        $sub = 0;
+        $brand = 0;
+
+        if (isset($brand_sub[0])) {
+            $sub = $brand_sub[0];
+        }
+        if (isset($brand_sub[1])) {
+            $brand = $brand_sub[1];
+        }
+        // $type = 'theme4';
+        $page_data['type'] = $type;
+        $page_data['range'] = $min . ';' . $max;
+        $page_data['page_name'] = "product_list/" . $type;
+        // $page_data['asset_page'] = "product_list_" . $type;
+        $page_data['page_title'] = translate('products');
+        $page_data['all_category'] = $this->db->get('category')->result_array();
+        $page_data['all_sub_category'] = $this->db->get('sub_category')->result_array();
+        $page_data['cur_sub_category'] = $sub;
+        $page_data['cur_brand'] = $brand;
+
+
+
+        if($para2)
+        {
+            //sub category check
+            $row = $this->db->where('sub_category_id',$para2)->get('sub_category')->row();
+            $page_data['sub_cat'] = $row;
+            if($row)
+            {
+                $page_data['page_title'] = $row->title;
+            }
+            $min = 0;
+            $max = 50000000;
+        }
+        if($para1 && !$para2)
+        {
+
+            //main category check
+            $row = $this->db->where('category_id',$para1)->get('category')->row();
+            $page_data['main_cat'] = $row;
+            if($row)
+            {
+                $page_data['page_title'] = $row->meta_title;
+            }
+            $min = 0;
+            $max = 50000000;
+        }
+
+        if($req_type === 'tag')
+        {
+
+            $tag_data = $req_data;
+            $page_data['nopage'] = 1;
+            $pag_where = 'FIND_IN_SET("'.$tag_data.'", `tags_slug`)';
+            $row = $this->db->where('FIND_IN_SET("'.$tag_data.'", `tags_slug`)')->get('product')->row();
+            $single_product = $this->db->where('FIND_IN_SET("'.$tag_data.'", `tags_slug`)')->get('product')->result_array();
+        $img = $this->crud_model->file_view('products',$single_product[0]['product_id'],'','','no','src','','');
+
+
+        //schema here
+            $slugs = explode(',',$row->tags_slug);
+            $tag = explode(',',$row->tag);
+            $tit = '';
+            foreach($slugs as $k=> $v)
+            {
+                if($tag_data == $v)
+                {
+                    $tit = $tag[$k];
+                }
+            }
+            if($tit)
+            {
+                $page_data['page_title'] = $tit.' | 03331619220 Buy Now';
+                $page_data['pro_tag_list'] = str_replace(["-", "–"], ' ', $tit);
+                $page_data['schema'] = $this->create_schema($single_product,$tit,base_url('tag/'.$tag_data),$tit.' '.$row->seo_description);
+
+            }
+            $min = 0;
+            $max = 50000000;
+            $page_data['tag'] = $tag_data;
+            $page_data['tag_tit'] = $tit;
+            $page_data['pro_tag'] = $tag_data;
+            $page_data['tag_pdet'] = $row;
+            unset($tag_data);
+        }
+
+        if($req_type === 'brand')
+        {
+            $brand_data = $req_data;
+            $brand = $this->db->where('brand_slug',$req_data)->get('brand')->row();
+            if(!$brand)
+            {
+                $this->error();
+                exit();
+            }
+            $min = 0;
+            $max = 50000000;
+            $page_data['nopage'] = 1;
+            $page_data['brand_meta'] = $brand;
+            $page_data['page_title'] = $brand->name.'  - 03007986016 Best Price Shop';
+            $page_data['cat_title'] = $brand->name;
+            $page_data['cur_brand'] = $brand->brand_id;
+            $pag_where = 'brand ='.$brand->brand_id;
+
+            $row = $this->db->where('brand',$brand->brand_id)->get('product')->row();
+            $single_product = $this->db->where('brand',$brand->brand_id)->get('product')->result_array();
+            $page_data['tag_pdet'] = $row;
+            //add here schema for brand
+            //schema here
+            $page_data['schema'] = $this->create_schema($single_product,$brand->name,base_url('brand/'.$brand_data) );
+        //schema here
+
+            unset($brand_data);
+        }
+
+        if($req_type === 'brand_tag')
+        {
+
+
+            $brandtag_data = $req_data;
+
+
+            $min = 0;
+            $page_data['nopage'] = 1;
+            $max = 50000000;
+            $page_data['brand_tag'] = str_replace(["-", "–"], ' ', $brandtag_data->tag_slug);
+            $page_data['page_title'] = $page_data['brand_tag'].'- 03008856924 Buy Now';
+            $row = $this->db->where('brand',$brandtag_data->brand_id)->get('product')->row();
+                $single_product = $this->db->where('brand',$brandtag_data->brand_id)->get('product')->result_array();
+
+            $page_data['tag_pdet'] = $row;
+
+            // if(!$single_product)
+            // {
+            //     $this->error();
+            //     exit();
+            // }
+            $page_data['schema'] = $this->create_schema($single_product,$page_data['brand_tag'],base_url('brand_tags/'.$brandtag_data->brand_slug));
+
+            // $page_data['schema'] = $this->create_schema($single_product, $page_data['brand_tag'], base_url('brand_tags/'.$_SESSION['brand_tags']) );
+            $page_data['tag_pdet'] = $row;
+            $page_data['cur_brand'] = $brandtag_data->brand_id;
+            $pag_where = 'brand ='.$brandtag_data->brand_id;
+        }
+        $page_data['range'] = $min . ';' . $max;
+        $page_data['cur_category'] = $para1;
+        $page_data['cur_sub_category'] = $para2;
+        $page_data['text'] = $text;
+
+        $page_data['text_url'] = $text_url;
+        $page_data['category_data'] = $this->db->get_where('category', array(
+            'category_id' => $para1
+        ))->result_array();
+        //pagination start
+         $config = array();
+
+           $config["per_page"] = 9;
+           $config["uri_segment"] = 4;
+           $page = (isset($_GET['page'])) ? $_GET['page'] : 1;
+           $start =   ($page* $config["per_page"]) - $config["per_page"];
+            $this->db->limit($config["per_page"], $start);
+            if($pag_where)
+            {
+            $page_data['all_products'] = $this->db->where($pag_where)->get('product');
+            $config["total_rows"] = $tot =  count($this->db->where($pag_where)->get('product')->result_array());
+            }
+            else
+            {
+                $page_data['all_products'] = $this->db->get('product');
+                $config["total_rows"] = $tot =  count($this->db->get('product')->result_array());
+            }
+            $page_data['tot'] = $tot;
+            $page_data['cpage'] = $page;
+            $page_data['tpage'] = ceil($tot/$config["per_page"]);
+            $currentPageUrl = $_SERVER["REDIRECT_SCRIPT_URI"];
+            $page_data['link'] = $currentPageUrl;
+                $config ['use_page_numbers'] = TRUE;
+                $config ['query_string_segment'] = 'page';
+                $config ['page_query_string'] = TRUE;
+             $config["base_url"] = $currentPageUrl;
+            //   $config['num_links'] = 4;
+            // $config['first_link'] = 'First';
+            $config['last_link'] = ' ';
+            $this->pagination->initialize($config);
+        //pagination end
+        echo $this->load->view('front/directory', $page_data,true);
+        exit();
+    }
+
+    function category1($para1 = "", $para2 = "", $min = "", $max = "", $text = '')
+    {
+
         $text_url = $text;
         if ($text !== '') {
             $text1 = $this->session->flashdata('query');
             if (isset($text1)) {
                 $text = $this->modify_for_multi_search($text1);
             }
-            
+
         }
-        if($text)
-        {
-        $this->db->like('title', $text);
-        $page_data['all_products'] = $this->db->get('product')->result_array();
-        }
-        else
-        {
+        if ($text) {
+            $this->db->like('title', $text);
+            $page_data['all_products'] = $this->db->get('product')->result_array();
+        } else {
             $page_data['all_products'] = $this->db->get('product')->result_array();
         }
-        
+
 
         $type = 'other';
         $brand_sub = explode('-', $para2);
@@ -3047,30 +3569,24 @@ $box_style =  5;//$this->db->get_where('ui_settings',array('ui_settings_id' => 2
         $page_data['cur_brand'] = $brand;
         $page_data['cur_category'] = $para1;
         $cid = array();
-        
-        if($para1)
-        {
-            $cid = $this->db->where('category_id',$para1)->get('category')->row();
-}
-if(isset($cid->path))
-{
-    $page_data['opn_category'] = implode(' , ',array_reverse(explode(',',$cid->path)));
-}
-else
-{
-    $page_data['opn_category'] = $para1;
-}
+
+        if ($para1) {
+            $cid = $this->db->where('category_id', $para1)->get('category')->row();
+        }
+        if (isset($cid->path)) {
+            $page_data['opn_category'] = implode(' , ', array_reverse(explode(',', $cid->path)));
+        } else {
+            $page_data['opn_category'] = $para1;
+        }
 
         $page_data['text'] = $text;
         $page_data['text_url'] = $text_url;
-        $page_data['category_data'] = $cat= $this->db->get_where('category', array(
+        $page_data['category_data'] = $cat = $this->db->get_where('category', array(
             'category_id' => $para1
         ))->result_array();
-        if(isset($cat[0]['slug']))
-        {
+        if (isset($cat[0]['slug'])) {
             $page_data['cur_slug'] = $cat[0]['slug'];
-        }
-        else if(isset($_SESSION['slug'])){
+        } else if (isset($_SESSION['slug'])) {
             $page_data['cur_slug'] = $_SESSION['slug'];
         }
         $listing_types = array(
@@ -3084,11 +3600,10 @@ else
             'properties' => 'property_listing',
             'shop-online' => 'shop_listing',
             'affiliate-business' => 'affliate_listing',
-            );
-            if(isset($page_data['cur_slug']))
-            {
-                $page_data['is_listing'] = (isset($listing_types[$page_data['cur_slug']]))?$listing_types[$page_data['cur_slug']]:"";
-            }
+        );
+        if (isset($page_data['cur_slug'])) {
+            $page_data['is_listing'] = (isset($listing_types[$page_data['cur_slug']])) ? $listing_types[$page_data['cur_slug']] : "";
+        }
         $this->load->view('front/index', $page_data);
     }
 
@@ -3149,49 +3664,49 @@ else
 
     function pcat($id)
     {
-        $cats = $this->db->where('pcat',$id)->get('category')->result();
-        if($cats)
-        {
+        $cats = $this->db->where('pcat', $id)->get('category')->result();
+        if ($cats) {
             echo "<ul>";
             foreach ($cats as $key => $value) {
-                if($this->crud_model->if_publishable_category($value->category_id))
-                {
-                    $row = (array) $value;
-                ?>
-                <li>
-                    <a href="<?= base_url('/directory'); ?>/<?= $row['slug'] ?>" for="cat_<?php echo $row['category_id']; ?>"><?php echo $row['category_name']; ?>   <i  class="fa fa-angle-down angle_rightdown"></i></a>
-                    <!--<i  class="fa fa-angle-down angle_rightdown"></i>-->
-                    <div class="cat_result" id="cat_r<?php echo $row['category_id']; ?>"></div>
-                    
-                    
-                </li>
-                <?php
+                if ($this->crud_model->if_publishable_category($value->category_id)) {
+                    $row = (array)$value;
+                    ?>
+                    <li>
+                        <a href="<?= base_url('/directory'); ?>/<?= $row['slug'] ?>"
+                           for="cat_<?php echo $row['category_id']; ?>"><?php echo $row['category_name']; ?> <i
+                                    class="fa fa-angle-down angle_rightdown"></i></a>
+                        <!--<i  class="fa fa-angle-down angle_rightdown"></i>-->
+                        <div class="cat_result" id="cat_r<?php echo $row['category_id']; ?>"></div>
+
+
+                    </li>
+                    <?php
                 }
             }
             echo "</ul>";
 
-        }
-        else{
+        } else {
             die('no');
         }
     }
+
     function text_search()
     {
-        $place_id = (isset($_REQUEST['place_id'])?$_REQUEST['place_id']:'');
+        $place_id = (isset($_REQUEST['place_id']) ? $_REQUEST['place_id'] : '');
         $type = 'product';
         $search = $this->modify_for_multi_search(urlencode($this->input->post('query')));
         $category = 0;
-        $loc = '?place_id='.$place_id;
+        $loc = '?place_id=' . $place_id;
         $this->session->set_flashdata('query', $search);
 
-        if ($this->input->post('query')) {  
+        if ($this->input->post('query')) {
 
-            redirect(base_url() . 'home/category/' . $category . '/0-0/0/0/' . $search.$loc, 'refresh');
+            redirect(base_url() . 'home/category/' . $category . '/0-0/0/0/' . $search . $loc, 'refresh');
         } else {
             if ($type == 'vendor') {
-                redirect(base_url() . 'home/store_locator/' . $search.$loc, 'refresh');
+                redirect(base_url() . 'home/store_locator/' . $search . $loc, 'refresh');
             } else if ($type == 'product') {
-                redirect(base_url() . 'home/category/' . $category . '/0-0/0/0/' . $search.$loc, 'refresh');
+                redirect(base_url() . 'home/category/' . $category . '/0-0/0/0/' . $search . $loc, 'refresh');
             }
         }
     }
@@ -3301,76 +3816,70 @@ else
     }
 
     /* FUNCTION: Loads Product List */
-        public function get_product_size($pid)
-        {
+    public function get_product_size($pid)
+    {
+        $size = array();
+        $vendors = $this->db->where('parent_id', $pid)->get('product')->result_array();
+        foreach ($vendors as $k => $v) {
+            $allsizes = $this->db->where('rate >', 0)->where('product', $v['product_id'])->get('stock')->result_array();
             $size = array();
-            $vendors = $this->db->where('parent_id',$pid)->get('product')->result_array();
-          foreach($vendors as $k=> $v)
-          {
-            $allsizes = $this->db->where('rate >',0)->where('product',$v['product_id'])->get('stock')->result_array();
-                          $size = array(); 
-                          foreach($allsizes as $k=> $v)
-                          {
-                              $attr = $this->db->where('id',$v['attribute'])->get('attribute_to_values')->row();
-                              //get value
-                              if(isset($attr->value) && !in_array($attr->value, $size))
-                              $size[] = $attr->value;
-                          }
-          }
-                          return $size;
+            foreach ($allsizes as $k => $v) {
+                $attr = $this->db->where('id', $v['attribute'])->get('attribute_to_values')->row();
+                //get value
+                if (isset($attr->value) && !in_array($attr->value, $size))
+                    $size[] = $attr->value;
+            }
         }
-        public function get_product_min($pid)
-        {
-            $child = array();
-          $vendors = $this->db->where('parent_id',$pid)->get('product')->result_array();
-          foreach($vendors as $k=> $v)
-          {
-              $child[] = $v['product_id'];
-          }
-          $min = '';
-          $max = '';
-          if($child)
-          {
-          $all_rates = $this->db->where('rate >',0)->where_in('product', $child)->get('stock')->result_array();
-          $gmin = 0;
-          $gmax = 0;
-          foreach($all_rates as $k=> $v)
-          {
-              if($k == 0)
-              {
-                  $gmin = $v['rate'];
-                  $gmax = $v['rate'];
-              }
-              if($gmin > $v['rate'])
-              {
-                  $gmin = $v['rate'];
-              }
-              if($gmax < $v['rate'])
-              {
-                  $gmax = $v['rate'];
-              }
-          }
-          return $min = $gmin;
-          $max = $gmax;
+        return $size;
+    }
+
+    public function get_product_min($pid)
+    {
+        $child = array();
+        $vendors = $this->db->where('parent_id', $pid)->get('product')->result_array();
+        foreach ($vendors as $k => $v) {
+            $child[] = $v['product_id'];
         }
+        $min = '';
+        $max = '';
+        if ($child) {
+            $all_rates = $this->db->where('rate >', 0)->where_in('product', $child)->get('stock')->result_array();
+            $gmin = 0;
+            $gmax = 0;
+            foreach ($all_rates as $k => $v) {
+                if ($k == 0) {
+                    $gmin = $v['rate'];
+                    $gmax = $v['rate'];
+                }
+                if ($gmin > $v['rate']) {
+                    $gmin = $v['rate'];
+                }
+                if ($gmax < $v['rate']) {
+                    $gmax = $v['rate'];
+                }
+            }
+            return $min = $gmin;
+            $max = $gmax;
         }
+    }
+
     function fill_db()
     {
-        
-        $pros = $this->db->select('parent_id')->where('parent_id!=',0)->get('product')->result();
-        foreach($pros as $k=> $v)
-        {
+
+        $pros = $this->db->select('parent_id')->where('parent_id!=', 0)->get('product')->result();
+        foreach ($pros as $k => $v) {
             $min = $this->get_product_min($v->parent_id);
             $size = $this->get_product_size($v->parent_id);
-            $size = implode(',',$size);
+            $size = implode(',', $size);
             $up = array();
             $up['sale_price'] = $min;
             $up['avalible_sizes'] = $size;
-            $this->db->where('product_id',$v->parent_id)->update('product',$up);
-            
+            $this->db->where('product_id', $v->parent_id)->update('product', $up);
+
         }
         die("compelete");
     }
+
     /* FUNCTION: Loads Product List */
     function listed($para1 = "", $para2 = "", $para3 = "")
     {
@@ -3408,35 +3917,28 @@ else
             $place_id = $this->input->post('place_id');
             $amenities = $this->input->post('amen');
             $amenities = explode(',', $amenities);
-            foreach($amenities as $k=> $v)
-            {
-                if(!$v)
-                {
+            foreach ($amenities as $k => $v) {
+                if (!$v) {
                     unset($amenities[$k]);
                 }
             }
             $lat = '';
             $lng = '';
-            if($place_id)
-            {
+            if ($place_id) {
                 //$place_id
                 $det = place_details($place_id);
-            if(isset($det['result']))
-            {
-            if(isset($det['result']['geometry']))
-            {
-                $address = $det['result']['geometry'];
-                if(isset($address['location']['lat']))
-                {
-                    $lat = $address['location']['lat'];
+                if (isset($det['result'])) {
+                    if (isset($det['result']['geometry'])) {
+                        $address = $det['result']['geometry'];
+                        if (isset($address['location']['lat'])) {
+                            $lat = $address['location']['lat'];
+                        }
+                        if (isset($address['location']['lng'])) {
+                            $lng = $address['location']['lng'];
+                        }
+
+                    }
                 }
-                if(isset($address['location']['lng']))
-                {
-                    $lng = $address['location']['lng'];
-                }
-                
-            }
-            }
             }
             $brand = $this->input->post('brand');
             $name = '';
@@ -3473,41 +3975,32 @@ else
                     $this->db->where('product_id', '');
                 }
             }
-            if(!empty($event_date))
-            {
-                $this->db->where('event_date',$event_date);
+            if (!empty($event_date)) {
+                $this->db->where('event_date', $event_date);
             }
-            if(!empty($age_restriction))
-            {
-                $this->db->where('age_restriction_event',$age_restriction);
+            if (!empty($age_restriction)) {
+                $this->db->where('age_restriction_event', $age_restriction);
             }
-            if(!empty($event_type))
-            {
-                $this->db->where('event_type',$event_type);
+            if (!empty($event_type)) {
+                $this->db->where('event_type', $event_type);
             }
-            if($make)
-            {
-                $this->db->where('make',$make);
+            if ($make) {
+                $this->db->where('make', $make);
             }
-            if($bedrooms)
-            {
-                $this->db->where('no_of_bedroom',$bedrooms);
+            if ($bedrooms) {
+                $this->db->where('no_of_bedroom', $bedrooms);
             }
-            if($property_type)
-            {
-                $this->db->where('propert_type',$property_type);
+            if ($property_type) {
+                $this->db->where('propert_type', $property_type);
             }
-            if($seats)
-            {
-                $this->db->where('seats',$seats);
+            if ($seats) {
+                $this->db->where('seats', $seats);
             }
-            if($modelf)
-            {
-                $this->db->where('model >=',$modelf);
+            if ($modelf) {
+                $this->db->where('model >=', $modelf);
             }
-            if($modelt)
-            {
-                $this->db->where('model <=',$modelt);
+            if ($modelt) {
+                $this->db->where('model <=', $modelt);
             }
 
 
@@ -3519,7 +4012,7 @@ else
             if ($brand !== '0' && $brand !== '') {
                 $this->db->where('brand', $brand);
             }
-            
+
             if (isset($range)) {
                 $p = explode(';', $range);
                 $this->db->where('sale_price >=', $p[0]);
@@ -3531,81 +4024,51 @@ else
             if (count($category) > 0 && $setter !== 'get') {
                 $i = 0;
                 // $this->db->group_start();
-    foreach($category as $value)
-    {
-        if($value)
-      
-          if(isset($_REQUEST['list_type']) && ($_REQUEST['list_type'] != 'blog_listing') && ($_REQUEST['list_type'] != 'event_listing') )
-            {
-               $this->db->where("find_in_set($value, category)"); 
+                foreach ($category as $value) {
+                    if ($value)
+
+                        if (isset($_REQUEST['list_type']) && ($_REQUEST['list_type'] != 'blog_listing') && ($_REQUEST['list_type'] != 'event_listing')) {
+                            $this->db->where("find_in_set($value, category)");
+                        }
+                }
+
             }
-    }
-    
+
+            if ($amenities) {
+                $this->db->group_start();
+                foreach ($amenities as $value) {
+                    if ($value)
+                        $this->db->where("find_in_set('" . $value . "', amenities)");
+                }
+                $this->db->group_end();
             }
-            
-     if($amenities)
-    {
-        $this->db->group_start();
-    foreach($amenities as $value)
-    {
-        if($value)
-        $this->db->where("find_in_set('".$value."', amenities)");
-    }
-        $this->db->group_end();
-    }
-            if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'affliate_listing')
-            {
+            if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'affliate_listing') {
                 $this->db->where('is_affiliate ', '1');
-            }
-            
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing') {
                 $this->db->where('is_product ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing') {
                 $this->db->where('is_blog ', '1');
-            }
-            
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'places_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'places_listing') {
                 $this->db->where('is_place ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'jobs_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'jobs_listing') {
                 $this->db->where('is_job ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing') {
                 $this->db->where('is_car ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'charity_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'charity_listing') {
                 $this->db->where('is_charity ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'event_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'event_listing') {
                 $this->db->where('is_event ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'news_listing') 
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'news_listing') {
                 $this->db->where('is_blog ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'buss_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'buss_listing') {
                 $this->db->where('is_bpage ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'property_listing')
-            {
-                
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'property_listing') {
+
                 $this->db->where('is_property ', '1');
             }
-            if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing')
-            {
+            if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing') {
                 $this->db->where('comp_logo > 1');
-            }
-            else
-            {
+            } else {
                 // $this->db->where('comp_cover > 1');
             }
             $this->db->order_by('product_id', 'desc');
@@ -3676,7 +4139,6 @@ else
                 }
             }
 
-            
 
             $sort = $this->input->post('sort');
 
@@ -3692,40 +4154,35 @@ else
             if ($sort == 'rating_num') {
                 $this->db->order_by('rating_num', 'desc');
             }
-            
+
             if ($sort == 'distance') {
                 $this->db->order_by('distance', 'desc');
             }
-               if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing')
-             {
-                 $this->db->where("sale_price >=",$mind);
-                 $this->db->where("sale_price <=",$maxd);
-             }
-               if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing')
-             {
-                 $this->db->where("sale_price >=",$mind);
-                 $this->db->where("sale_price <=",$maxd);
-             }
-               if($lat && $lng)
-             {
-                 $this->db->where("getDistance(product.lat,product.lng,'".$lat."','".$lng."') >=",$mind);
-                 $this->db->where("getDistance(product.lat,product.lng,'".$lat."','".$lng."') <=",$maxd);
-             }
-            
-            if ($lat && $lng) {
-                 $mylat= $lat;
-                 $mylng = $lat;
-                 
-            $this->db->select("product.*,getDistance(product.lat,product.lng,'".$mylat."','".$mylng."') as distance");
-             
+            if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing') {
+                $this->db->where("sale_price >=", $mind);
+                $this->db->where("sale_price <=", $maxd);
             }
-            else
-            {
+            if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing') {
+                $this->db->where("sale_price >=", $mind);
+                $this->db->where("sale_price <=", $maxd);
+            }
+            if ($lat && $lng) {
+                $this->db->where("getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') >=", $mind);
+                $this->db->where("getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') <=", $maxd);
+            }
+
+            if ($lat && $lng) {
+                $mylat = $lat;
+                $mylng = $lat;
+
+                $this->db->select("product.*,getDistance(product.lat,product.lng,'" . $mylat . "','" . $mylng . "') as distance");
+
+            } else {
                 $this->db->select('product.*');
             }
-            $befor = $this->db; 
+            $befor = $this->db;
             $all = $this->db->get('product')->result_array();
-            // print_r($this->db->last_query());    
+            // print_r($this->db->last_query());
             // die();
 
             $config['total_rows'] = count($all);
@@ -3806,50 +4263,39 @@ else
                     $this->db->where('product_id', '');
                 }
             }
-            if($job_hours)
-            {
-                $this->db->where('job_hours',$job_hours);
+            if ($job_hours) {
+                $this->db->where('job_hours', $job_hours);
             }
-            if(!empty($job_type))
-            {
-                $this->db->where('job_type',$job_type);
+            if (!empty($job_type)) {
+                $this->db->where('job_type', $job_type);
             }
-            
-            if(!empty($event_date))
-            {
-                $this->db->where('event_date',$event_date);
+
+            if (!empty($event_date)) {
+                $this->db->where('event_date', $event_date);
             }
-            if(!empty($age_restriction))
-            {
-                $this->db->where('age_restriction_event',$age_restriction);
+            if (!empty($age_restriction)) {
+                $this->db->where('age_restriction_event', $age_restriction);
             }
-            if(!empty($event_type))
-            {
-                $this->db->where('event_type',$event_type);
+            if (!empty($event_type)) {
+                $this->db->where('event_type', $event_type);
             }
-            if($make)
-            {
-                $this->db->where('make',$make);
+            if ($make) {
+                $this->db->where('make', $make);
             }
-            if($bedrooms)
-            {
-                $this->db->where('no_of_bedroom',$bedrooms);
+            if ($bedrooms) {
+                $this->db->where('no_of_bedroom', $bedrooms);
             }
-            if($property_type)
-            {
-                $this->db->where('propert_type',$property_type);
+            if ($property_type) {
+                $this->db->where('propert_type', $property_type);
             }
-            if($seats)
-            {
-                $this->db->where('seats',$seats);
+            if ($seats) {
+                $this->db->where('seats', $seats);
             }
-            if($modelf)
-            {
-                $this->db->where('model >=',$modelf);
+            if ($modelf) {
+                $this->db->where('model >=', $modelf);
             }
-            if($modelt)
-            {
-                $this->db->where('model <=',$modelt);
+            if ($modelt) {
+                $this->db->where('model <=', $modelt);
             }
 
 
@@ -3885,66 +4331,41 @@ else
             if (count($category) > 0 && $setter !== 'get') {
                 $i = 0;
                 // $this->db->group_start();
-    foreach($category as $value)
-    {
-        if($value)
-        
-          if(isset($_REQUEST['list_type']) && ($_REQUEST['list_type'] != 'blog_listing') && ($_REQUEST['list_type'] != 'event_listing') )
-            {
-               $this->db->where("find_in_set($value, category)"); 
+                foreach ($category as $value) {
+                    if ($value)
+
+                        if (isset($_REQUEST['list_type']) && ($_REQUEST['list_type'] != 'blog_listing') && ($_REQUEST['list_type'] != 'event_listing')) {
+                            $this->db->where("find_in_set($value, category)");
+                        }
+                }
             }
-    }
+            if ($amenities) {
+                $this->db->group_start();
+                foreach ($amenities as $value) {
+                    if ($value)
+                        $this->db->where("find_in_set('" . $value . "', amenities)");
+                }
+                $this->db->group_end();
             }
-    if($amenities)
-    {
-        $this->db->group_start();
-    foreach($amenities as $value)
-    {
-        if($value)
-        $this->db->where("find_in_set('".$value."', amenities)");
-    }
-        $this->db->group_end();
-    }
-            if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'affliate_listing')
-            {
+            if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'affliate_listing') {
                 $this->db->where('is_affiliate ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing') {
                 $this->db->where('is_product ', '1');
-            } 
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing') {
                 $this->db->where('is_blog ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'jobs_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'jobs_listing') {
                 $this->db->where('is_job ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'event_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'event_listing') {
                 $this->db->where('is_event ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'places_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'places_listing') {
                 $this->db->where('is_place ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing') {
                 $this->db->where('is_car ', '1');
-            }
-            
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'charity_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'charity_listing') {
                 $this->db->where('is_charity ', '1');
-            }
-            
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'buss_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'buss_listing') {
                 $this->db->where('is_bpage ', '1');
-            }
-            else if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'property_listing')
-            {
+            } else if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'property_listing') {
                 $this->db->where('is_property ', '1');
             }
 
@@ -3962,42 +4383,34 @@ else
             if ($sort == 'rating_num') {
                 $this->db->order_by('rating_num', 'desc');
             }
-            
+
             if ($sort == 'distance') {
                 $this->db->order_by('distance', 'desc');
             }
-               if($lat && $lng)
-             {
-                 $this->db->where("getDistance(product.lat,product.lng,'".$lat."','".$lng."') <=",50);
-             }
-               if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing')
-             {
-                 $this->db->where("sale_price >=",$mind);
-                 $this->db->where("sale_price <=",$maxd);
-             }
-              if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing')
-             {
-                 $this->db->where("sale_price >=",$mind);
-                 $this->db->where("sale_price <=",$maxd);
-             }
-             if(isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing')
-            {
-                $this->db->where('comp_logo > 1');
+            if ($lat && $lng) {
+                $this->db->where("getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') <=", 50);
             }
-            else
-            {
+            if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'car_listing') {
+                $this->db->where("sale_price >=", $mind);
+                $this->db->where("sale_price <=", $maxd);
+            }
+            if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'shop_listing') {
+                $this->db->where("sale_price >=", $mind);
+                $this->db->where("sale_price <=", $maxd);
+            }
+            if (isset($_REQUEST['list_type']) && $_REQUEST['list_type'] == 'blog_listing') {
+                $this->db->where('comp_logo > 1');
+            } else {
                 // $this->db->where('comp_cover > 1');
             }
-            
+
             if ($lat && $lng) {
-                 $mylat= $lat;
-                 $mylng = $lat;
-                 
-            $this->db->select("product.*,getDistance(product.lat,product.lng,'".$mylat."','".$mylng."') as distance");
-             
-            }
-            else
-            {
+                $mylat = $lat;
+                $mylng = $lat;
+
+                $this->db->select("product.*,getDistance(product.lat,product.lng,'" . $mylat . "','" . $mylng . "') as distance");
+
+            } else {
                 $this->db->select('product.*');
             }
             $befor = $this->db;
@@ -4026,9 +4439,9 @@ else
 
         } elseif ($para1 == "load") {
             $page_data['all_products'] = $this->db->get('product')->result_array();
-            
+
         }
-        
+
         $page_data['vendor_system'] = $this->db->get_where('general_settings', array('type' => 'vendor_system'))->row()->value;
         $page_data['category_data'] = $category;
         $page_data['viewtype'] = $this->input->post('view_type');
@@ -4036,7 +4449,7 @@ else
         $page_data['count'] = $config['total_rows'];
         // var_dump($config);
         $page_data['grid_items_per_row'] = $grid_items_per_row;
-    //  echo '<pre style="display:none">'; print_r($page_data); echo '</pre>';
+        //  echo '<pre style="display:none">'; print_r($page_data); echo '</pre>';
         $this->load->view('front/product_list/other/listed', $page_data);
     }
 
@@ -4057,12 +4470,13 @@ else
 
 
     /* FUNCTION: Loads Custom Pages */
-    
+
     function page($parmalink = '')
     {
         $pagef = $this->db->get_where('page', array(
             'parmalink' => $parmalink
         ));
+
         if ($pagef->num_rows() > 0) {
             $page_data['page_name'] = "others/custom_page";
             $page_data['asset_page'] = "page";
@@ -4087,154 +4501,126 @@ else
         $json = file_get_contents('php://input');
 
 // decode the json data
-$data = json_decode($json,true);
-foreach($data as $k=> $v)
-{
-    if(!in_array($k,$cols))
-    {
-        unset($data[$k]);
-    }
-    
-}
-        if(isset($data['product_id']))
-        {
-            $pid = $data['product_id'];
-        $unset = array('product_id','comp_logo','comp_cover','gallary','title_edit','sub_category','category','slug');
-        foreach($unset as $k=> $v)
-        {
-            if(isset($data[$v]))
-            {
-            unset($data[$v]);
+        $data = json_decode($json, true);
+        foreach ($data as $k => $v) {
+            if (!in_array($k, $cols)) {
+                unset($data[$k]);
             }
+
         }
-        $exp = array('amenities','cats');
-         foreach($exp as $k=> $v)
-        {
-            foreach($data[$v] as $kk=> $vv)
-            {
-                if(!$vv)
-                {
-                    unset($data[$v][$kk]);
+        if (isset($data['product_id'])) {
+            $pid = $data['product_id'];
+            $unset = array('product_id', 'comp_logo', 'comp_cover', 'gallary', 'title_edit', 'sub_category', 'category', 'slug');
+            foreach ($unset as $k => $v) {
+                if (isset($data[$v])) {
+                    unset($data[$v]);
                 }
             }
-            if(isset($data[$v]))
-            $data[$v] = implode(',',$data[$v]);
-        }
-        
-        $json = array('feature','etra_content','text','enable_checks','buttons');
-         foreach($json as $k=> $v)
-        {
-            if($k == 'buttons')
-            {
-                foreach($data[$v] as $kk=> $vv)
-                {
-                    if(!$vv)
-                    {
+            $exp = array('amenities', 'cats');
+            foreach ($exp as $k => $v) {
+                foreach ($data[$v] as $kk => $vv) {
+                    if (!$vv) {
                         unset($data[$v][$kk]);
                     }
                 }
+                if (isset($data[$v]))
+                    $data[$v] = implode(',', $data[$v]);
             }
-            if(isset($data[$v]))
-            $data[$v] = json_encode($data[$v]);
-        }
-        $r = $this->db->where(array('product_id' => $pid))->update('product',$data);
-        if($r)
-        {
-            echo '1';
-        }
-        else
-        {
-            echo '0';
+
+            $json = array('feature', 'etra_content', 'text', 'enable_checks', 'buttons');
+            foreach ($json as $k => $v) {
+                if ($k == 'buttons') {
+                    foreach ($data[$v] as $kk => $vv) {
+                        if (!$vv) {
+                            unset($data[$v][$kk]);
+                        }
+                    }
+                }
+                if (isset($data[$v]))
+                    $data[$v] = json_encode($data[$v]);
+            }
+            $r = $this->db->where(array('product_id' => $pid))->update('product', $data);
+            if ($r) {
+                echo '1';
+            } else {
+                echo '0';
+            }
+
+            return '';
         }
 
-        return '';
-        }
-        
-        
+
     }
+
     public function product_data($id)
     {
         $dpage = 665;
         $product_data = $this->db->get_where('product', array('product_id' => $id))->row();
         $gallary = $this->db->get_where('product_to_images', array('pid' => $id))->result_array();
         $added_by = json_decode($product_data->added_by, true);
-                        if(isset($added_by['type']) && $added_by['type'] == 'vendor')
-                        {
-                            $vid = $added_by['id'];
-                        }
-                                $tgallary  = $this->db->where('vid',$vid)->get('textg')->result_array();
-        if(!$gallary)
-        {
+        if (isset($added_by['type']) && $added_by['type'] == 'vendor') {
+            $vid = $added_by['id'];
+        }
+        $tgallary = $this->db->where('vid', $vid)->get('textg')->result_array();
+        if (!$gallary) {
             $gallary = $this->db->get_where('product_to_images', array('pid' => $dpage))->result_array();
         }
         // $product_data->comp_cover = $this->crud_model->size_img($product_data->comp_cover,820,312);
-        foreach($gallary as $k=> $v)
-        {
-            $gallary[$k]['img'] = $this->crud_model->size_img($v['img'],100,100);
+        foreach ($gallary as $k => $v) {
+            $gallary[$k]['img'] = $this->crud_model->size_img($v['img'], 100, 100);
         }
         $product_data->gallary = $gallary;
-        
+
         $product_data = json_decode(json_encode($product_data), true);
-        
-        $default = $this->db->where('product_id',$dpage)->get('product')->row_array();
-        foreach($product_data as $k=> $v)
-        {
-            if(!$v)
-            {
-                
-                if(isset($default[$k]))
-                {
-                $product_data[$k] = $default[$k];
+
+        $default = $this->db->where('product_id', $dpage)->get('product')->row_array();
+        foreach ($product_data as $k => $v) {
+            if (!$v) {
+
+                if (isset($default[$k])) {
+                    $product_data[$k] = $default[$k];
                 }
             }
         }
-        if($product_data['comp_cover'])
-        {
-            
-            $product_data['comp_cover'] = $this->crud_model->size_img($product_data['comp_cover'],640,214);
+        if ($product_data['comp_cover']) {
+
+            $product_data['comp_cover'] = $this->crud_model->size_img($product_data['comp_cover'], 640, 214);
         }
-        if($product_data['comp_logo'])
-        {
-            $product_data['comp_logo'] = $this->crud_model->size_img($product_data['comp_logo'],100,100);
-            
+        if ($product_data['comp_logo']) {
+            $product_data['comp_logo'] = $this->crud_model->size_img($product_data['comp_logo'], 100, 100);
+
         }
-        if($product_data['cats'])
-        {
-            $product_data['cats'] = explode(',',$product_data['cats']);
-            
+        if ($product_data['cats']) {
+            $product_data['cats'] = explode(',', $product_data['cats']);
+
         }
-        if($product_data['amenities'])
-        {
-            $product_data['amenities'] = explode(',',$product_data['amenities']);
-            
+        if ($product_data['amenities']) {
+            $product_data['amenities'] = explode(',', $product_data['amenities']);
+
         }
-        if($product_data['etra_content'])
-        {
-            
+        if ($product_data['etra_content']) {
+
             $product_data['etra_content'] = json_decode($product_data['etra_content'], true);
             $product_data['buttons'] = json_decode($product_data['buttons'], true);
             $product_data['tgallary'] = $tgallary;
-            foreach($product_data['etra_content'] as $k =>$v)
-            {
-                $i = $k+1;
+            foreach ($product_data['etra_content'] as $k => $v) {
+                $i = $k + 1;
                 $nv = trim($product_data['etra_content'][$k]);
-                if($nv && $v)
-                {
-                $product_data['etra_content'][$k] = $v;
-                }
-                else
-                {
-                    $product_data['etra_content'][$k] = $v; 
+                if ($nv && $v) {
+                    $product_data['etra_content'][$k] = $v;
+                } else {
+                    $product_data['etra_content'][$k] = $v;
                 }
             }
             // var_dump($product_data['etra_content']);
             // die();
-            
-            
+
+
         }
         echo json_encode($product_data);
         die();
     }
+
     function product_view($para1 = "", $para2 = "")
     {
         $user_id = $this->session->userdata('user_id') ? $this->session->userdata('user_id') : 0;
@@ -4242,59 +4628,48 @@ foreach($data as $k=> $v)
         $vendors = array();
         /*$vendors[] = $this->db->get_where('product', array('product_id' => $para1, 'status' => 'ok'))->row();**/
         $product_data = $this->db->get_where('product', array('product_id' => $para1, 'status' => 'ok'));
-        if(!empty($product_data->row()->parent_id))
-        {
-             $para1 = $product_data->row()->parent_id;
-             $this->crud_model->_set_variation($para1);
+        if (!empty($product_data->row()->parent_id)) {
+            $para1 = $product_data->row()->parent_id;
+            $this->crud_model->_set_variation($para1);
         }
         $product_data = $this->db->get_where('product', array('product_id' => $para1, 'status' => 'ok'));
         $product_data = $this->db->get_where('product', array('product_id' => $para1));
-        
+
         $this->db->where('product_id', $para1);
         $this->db->update('product', array(
             'number_of_view' => $product_data->row()->number_of_view + 1,
             'last_viewed' => time()
         ));
         $vid = json_decode($product_data->row()->added_by);
-        if(isset($_GET['edit']) && isset($_SESSION['admin_login']) && $_SESSION['admin_login'] == 'yes' &&  $para1 == 665)
-        {
-        }
-        else if(isset($_GET['edit']) && ($_SESSION['login'] != 'yes') && ($vid->id != $_SESSION['vendor_id'])){
+        if (isset($_GET['edit']) && isset($_SESSION['admin_login']) && $_SESSION['admin_login'] == 'yes' && $para1 == 665) {
+        } else if (isset($_GET['edit']) && ($_SESSION['login'] != 'yes') && ($vid->id != $_SESSION['vendor_id'])) {
             $this->error();
             exit();
         }
-        
+
 
         $type = 'other';
-        if($product_data->row()->is_bpage)
-        {
-            if(isset($_GET['edit']))
-            {
+        if ($product_data->row()->is_bpage) {
+            if (isset($_GET['edit'])) {
                 $page_data['ng'] = 1;
             }
             $type = 'bpage';
-        }
-        elseif($product_data->row()->is_product)
-        {
+        } elseif ($product_data->row()->is_product) {
             $type = 'product';
-        }
-        elseif($product_data->row()->is_blog)
-        {
+        } elseif ($product_data->row()->is_blog) {
             $type = 'blog';
-        }
-        else
-        {
-            $type="car";
+        } else {
+            $type = "car";
         }
         $page_data['product_details'] = $this->db->get_where('product', array('product_id' => $para1))->result_array();
         $page_data['vendors'] = $vendors;
         // var_dump($product_details);
-        
+
         $page_data['page_name'] = "product_view/" . $type . "/page_view";
         $page_data['asset_page'] = "product_view_" . $type;
         $page_data['product_data'] = $product_data->result_array();
-        $page_data['page_title'] = !empty($product_data->row()->seo_title)? $product_data->row()->seo_title :$product_data->row()->title;
-        $page_data['page_description'] = !empty($product_data->row()->seo_description)? $product_data->row()->seo_description :'';
+        $page_data['page_title'] = !empty($product_data->row()->seo_title) ? $product_data->row()->seo_title : $product_data->row()->title;
+        $page_data['page_description'] = !empty($product_data->row()->seo_description) ? $product_data->row()->seo_description : '';
         $page_data['product_tags'] = $product_data->row()->tag;
 
         $page_data['user_bought_product'] = $this->crud_model->is_product_bought($user_id, $product_data->row()->product_id);
@@ -4316,25 +4691,23 @@ foreach($data as $k=> $v)
                 ->result_array();
 
         $this->set_affiliation_code_as_cookie(array());
-        $attributes = $this->db->where('product_id',$para1)->get('attribute_to_products')->result_array();
-            $attr = array();
-            foreach($attributes as $k=> $v)
-            {
-                $aid = $v['attribute_id'];
-                $row = $this->db->where('id',$aid)->get('attribute')->row();
-                
-                if($row)
-                {
-                    //get options
-                    $options = $this->db->where('attr_id',$aid)->where('product_id',$para1)->get('attribute_to_values')->result_array();
-                    $attr[] = array(
-                        'name'=> $row->name,
-                        'options'=> $options
-                    );
-                }
+        $attributes = $this->db->where('product_id', $para1)->get('attribute_to_products')->result_array();
+        $attr = array();
+        foreach ($attributes as $k => $v) {
+            $aid = $v['attribute_id'];
+            $row = $this->db->where('id', $aid)->get('attribute')->row();
+
+            if ($row) {
+                //get options
+                $options = $this->db->where('attr_id', $aid)->where('product_id', $para1)->get('attribute_to_values')->result_array();
+                $attr[] = array(
+                    'name' => $row->name,
+                    'options' => $options
+                );
             }
-            
-            $page_data['attribute'] = $attr;
+        }
+
+        $page_data['attribute'] = $attr;
         $this->load->view('front/index', $page_data);
     }
 
@@ -4366,8 +4739,8 @@ foreach($data as $k=> $v)
             $type = 'other';
         }
         $page_data['product_details'] = $product_data->result_array();
-        $page_data['page_title'] = !empty($product_data->row()->seo_title)? $product_data->row()->seo_title :$product_data->row()->title;;
-        $page_data['page_description'] = !empty($product_data->row()->seo_title)? $product_data->row()->seo_description :'';
+        $page_data['page_title'] = !empty($product_data->row()->seo_title) ? $product_data->row()->seo_title : $product_data->row()->title;;
+        $page_data['page_description'] = !empty($product_data->row()->seo_title) ? $product_data->row()->seo_description : '';
         $page_data['product_tags'] = $product_data->row()->tag;
 
         $this->load->view('front/product_view/' . $type . '/quick_view/index', $page_data);
@@ -4390,8 +4763,8 @@ foreach($data as $k=> $v)
             $page_data['page_name'] = "customer_product_view/" . $type . "/page_view";
             $page_data['asset_page'] = "product_view_" . $type; //there is no asset page for customer product view
             $page_data['product_data'] = $product_data->result_array();
-            $page_data['page_title'] = !empty($product_data->row()->seo_title)? $product_data->row()->seo_title :$product_data->row()->title;;
-            $page_data['page_description'] = !empty($product_data->row()->seo_description)? $product_data->row()->seo_description :'';
+            $page_data['page_title'] = !empty($product_data->row()->seo_title) ? $product_data->row()->seo_title : $product_data->row()->title;;
+            $page_data['page_description'] = !empty($product_data->row()->seo_description) ? $product_data->row()->seo_description : '';
             $page_data['product_tags'] = $product_data->row()->tag;
 
             $this->load->view('front/index', $page_data);
@@ -4410,8 +4783,8 @@ foreach($data as $k=> $v)
         $type = 'other';
 
         $page_data['product_details'] = $product_data->result_array();
-        $page_data['page_title'] = !empty($product_data->row()->seo_title)? $product_data->row()->seo_title :$product_data->row()->title;;
-        $page_data['page_description'] = !empty($product_data->row()->seo_description)? $product_data->row()->seo_description :'';
+        $page_data['page_title'] = !empty($product_data->row()->seo_title) ? $product_data->row()->seo_title : $product_data->row()->title;;
+        $page_data['page_description'] = !empty($product_data->row()->seo_description) ? $product_data->row()->seo_description : '';
         $page_data['product_tags'] = $product_data->row()->tag;
 
         $this->load->view('front/customer_product_view/' . $type . '/quick_view/index', $page_data);
@@ -4431,16 +4804,18 @@ foreach($data as $k=> $v)
         $this->session->set_userdata('currency', $currency);
         recache();
     }
-    
-    function contactus(){
+
+    function contactus()
+    {
         $from_name = $_REQUEST['fname'];
         $from = $_REQUEST['email'];
         $msg = 'Testing';//$_REQUEST['msg'];
         $sub = "MESSAGE";
         $to = "raheelshehzad188@gmail.com";
         $this->load->model('email_model');
-        $this->email_model->directory_contact($_REQUEST,$to,$msg);
+        $this->email_model->directory_contact($_REQUEST, $to, $msg);
     }
+
     /* FUNCTION: Loads Contact Page */
     function contact($para1 = "")
     {
@@ -4584,33 +4959,37 @@ foreach($data as $k=> $v)
     /* FUNCTION: Concerning Login */
     public function success_subscription()
     {
-        if(isset($_GET['track']))
-        {
-            // $track = $_GET['track'];
-            // $pack = $this->db->where('track_id',$track)->get('membership_payment')->row();
-            // $v = $this->db->where('vendor_id', $pack->vendor)->update('vendor',array('membership'=>$pack->vendor));
+        if (isset($_GET['track'])) {
+            $track = $_GET['track'];
+            $pack = $this->db->where('track_id',$track)->get('membership_payment')->row();
+            $v = $this->db->where('vendor_id', $pack->vendor)->update('vendor',array('membership'=>$pack->vendor));
+            if($v){
+            $vendor = $this->db->where('vendor_id',$pack->vendor)->get('vendor')->row();
+            $this->email_model->payment_success($vendor->email,$pack->amount.'$') ;
+            }
             $page_data = array();
+            //zohaib yhn bho success ki mail
             $page_data['page_name'] = "subscription_thank";
+            $page_data['amount'] = $pack->amount;
             // $page_data['asset_page'] = "register";
             $page_data['page_title'] = translate('registration');
             $this->load->view('front/index', $page_data);
-            
+
         }
     }
-    
+
     public function vendor_subscription()
     {
         //get vendor id here
-        $_SESSION['subscription_vendor'] = 34;
-        if(isset($_SESSION['subscription_vendor']))
-        {
-             
-            $user = $this->db->where('vendor_id',$_SESSION['subscription_vendor'])->get('vendor')->row();
-            
-            if(isset($user->pack) && $user->pack)
-            {
-                $pack = $this->db->where('membership_id',$user->pack)->get('membership')->row();
-                
+//         $_SESSION['subscription_vendor'] = 157;//for test
+var_dump($_SESSION['subscription_vendor']);
+        if (isset($_SESSION['subscription_vendor'])) {
+
+            $user = $this->db->where('vendor_id', $_SESSION['subscription_vendor'])->get('vendor')->row();
+            if (isset($user->pack) && $user->pack) {
+                $pack = $this->db->where('membership_id', $user->pack)->get('membership')->row();
+
+
                 $track = time();
                 $in = array(
                     'vendor' => $_SESSION['subscription_vendor'],
@@ -4618,79 +4997,99 @@ foreach($data as $k=> $v)
                     'method' => 'stripe-subscription',
                     'status' => 'Pending',
                     'track_id' => $track,
-                    );
-                    $this->db->insert('membership_payment',$in);
-                    if(isset($pack->stripe_id) && $pack->stripe_id)
-                    {
-                        $path = FCPATH.'/stripe-subscription/vendor/autoload.php';
+                );
+                $this->db->insert('membership_payment', $in);
+                if (isset($pack->stripe_id) && $pack->stripe_id) {
+                    try {
+                        $path = FCPATH . '/stripe-subscription/vendor/autoload.php';
                         require $path;
- \Stripe\Stripe::setApiKey('sk_test_51KxcDlAuzV7aLiwxSU6ucZEUtpEhfRnatPJgx86qp0jQ0lsOaUpXoKaY7OUGdryKL7QDYSfF1OMkKc1MdHwrkoBT00MVS8HOLd');
-                    $checkout_session = \Stripe\Checkout\Session::create([
-      'success_url' => base_url().'/home/success_subscription?track='.$track,
-      'cancel_url' => base_url().'/stripe-subscription/cancel.html',
-      'payment_method_types' => ['card'],
-      'mode' => 'subscription',
-      'line_items' => [[
-        'price' => "price_1MNZWDAuzV7aLiwxkDQjMYvk",
-        // For metered billing, do not pass quantity
-        'quantity' => 1,
-      ]],
-      // 'metadata' => [
-      //   'plan_id' => 1,
-      //   'customer_id' => $_SESSION['subscription_vendor'],
-      // ],
-      'subscription_data'=>['metadata' => ["plan_id" => $user->pack,"track" => $track, "customer_id" => $_SESSION['subscription_vendor']]],
-    ]);
+                        \Stripe\Stripe::setApiKey('sk_test_51KxcDlAuzV7aLiwxSU6ucZEUtpEhfRnatPJgx86qp0jQ0lsOaUpXoKaY7OUGdryKL7QDYSfF1OMkKc1MdHwrkoBT00MVS8HOLd');
+                        $checkout_session = \Stripe\Checkout\Session::create([
+                            'success_url' => base_url() . '/home/success_subscription?track=' . $track,
+                            'cancel_url' => base_url() . '/stripe-subscription/cancel.html',
+                            'payment_method_types' => ['card'],
+                            'mode' => 'subscription',
+                            'line_items' => [[
+                                'price' => $pack->stripe_id,
+                                // For metered billing, do not pass quantity
+                                'quantity' => 1,
+                            ]],
+//                           if($coupon){
+//                               'discounts' => [[
+//                                   'coupon' => 'Jf8DLxDL',
+//                               ]],
+//                           }
+                            'subscription_data' => [
+                                'metadata' => ["plan_id" => $user->pack, "track" => $track, "customer_id" => $_SESSION['subscription_vendor']]],
+                        ]);
+                    } catch (Exception $e) {
+                        echo '<script> alert("Coupon is not for this package.") </script>';
+                        $path = FCPATH . '/stripe-subscription/vendor/autoload.php';
+                        require $path;
+                        \Stripe\Stripe::setApiKey('sk_test_51KxcDlAuzV7aLiwxSU6ucZEUtpEhfRnatPJgx86qp0jQ0lsOaUpXoKaY7OUGdryKL7QDYSfF1OMkKc1MdHwrkoBT00MVS8HOLd');
+                        $checkout_session = \Stripe\Checkout\Session::create([
+                            'success_url' => base_url() . '/home/success_subscription?track=' . $track,
+                            'cancel_url' => base_url() . '/stripe-subscription/cancel.html',
+                            'payment_method_types' => ['card'],
+                            'mode' => 'subscription',
+                            'line_items' => [[
+                                'price' => $pack->stripe_id,
+                                // For metered billing, do not pass quantity
+                                'quantity' => 1,
+                            ]],
+
+                            'subscription_data' => [
+                                'metadata' => ["plan_id" => $user->pack, "track" => $track, "customer_id" => $_SESSION['subscription_vendor']]],
+                        ]);
+                    }
                     ?>
                     <head>
-  <title>Stripe Subscription Checkout</title>
-  <script src="https://js.stripe.com/v3/"></script>
-</head>
-<body>
-  <script type="text/javascript">
-     var stripe = Stripe('pk_test_51KxcDlAuzV7aLiwx3CROcLFk2FIP9EiaxlpIRq7kpi7xpthRmsEZ8VJ6SeOFe5megdWfJce3OrREhboghh5pDKkZ006Sg5I8lY');
-     var session = "<?php echo $checkout_session['id']; ?>";
-          stripe.redirectToCheckout({ sessionId: session })
-                  .then(function(result) {
-          // If `redirectToCheckout` fails due to a browser or network
-          // error, you should display the localized error message to your
-          // customer using `error.message`.
-          if (result.error) {
-            alert(result.error.message);
-          }
-        })
-        .catch(function(error) {
-          console.error('Error:', error);
-        });          
+                        <title>Stripe Subscription Checkout</title>
+                        <script src="https://js.stripe.com/v3/"></script>
+                    </head>
+                    <body>
+                    <script type="text/javascript">
+                        var stripe = Stripe('pk_test_51KxcDlAuzV7aLiwx3CROcLFk2FIP9EiaxlpIRq7kpi7xpthRmsEZ8VJ6SeOFe5megdWfJce3OrREhboghh5pDKkZ006Sg5I8lY');
+                        var session = "<?php echo $checkout_session['id']; ?>";
+                        stripe.redirectToCheckout({sessionId: session})
+                            .then(function (result) {
+                                // If `redirectToCheckout` fails due to a browser or network
+                                // error, you should display the localized error message to your
+                                // customer using `error.message`.
+                                if (result.error) {
+                                    alert(result.error.message);
+                                }
+                            })
+                            .catch(function (error) {
+                                console.error('Error:', error);
+                            });
 
 
+                    </script>
 
-  </script>
-  
-</body>
+                    </body>
                     <?php
-                    }
-                    
+                }
+
             }
-            
+
             /*require FCPATH.'stripe-subscription/vendor/autoload.php';
  \Stripe\Stripe::setApiKey('sk_test_mSOHfomD5CDglqvXR9d7ImNs');*/
-        }
-        else
-        {
+        } else {
             die('Forbidden request!');
         }
-        
+
     }
+
     public function vendor_page($id)
     {
-        
-        
-        $user = $this->db->where('vendor_id',$id)->get('vendor')->row();
-        
-        $added_by = array (
-          'type' => 'vendor',
-          'id' => $id,
+
+
+        $user = $this->db->where('vendor_id', $id)->get('vendor')->row();
+
+        $added_by = array(
+            'type' => 'vendor',
+            'id' => $id,
         );
         $in = array();
         $in['title'] = $user->company;
@@ -4711,15 +5110,14 @@ foreach($data as $k=> $v)
         $in['added_by'] = json_encode($added_by);
         $in['is_bpage'] = 1;
         $in['slug'] = slugify($user->company);
-    
-        $this->db->insert('product',$in);
+
+        $this->db->insert('product', $in);
         $pid = $this->db->insert_id();
         // create_slug($pid);
-        $v = $this->db->where('vendor_id', $id)->update('vendor',array('bpage'=>$pid));
+        $v = $this->db->where('vendor_id', $id)->update('vendor', array('bpage' => $pid));
         //s
-        if($user->pack)
-        {
-            $pack = $this->db->where('membership_id',$user->pack)->get('membership')->row();
+        if ($user->pack) {
+            $pack = $this->db->where('membership_id', $user->pack)->get('membership')->row();
             $option = array(
                 'ads' => $pack->product_limit,
             );
@@ -4732,51 +5130,47 @@ foreach($data as $k=> $v)
                 'vendor' => $id,
                 'vendor_name' => $user->title,
                 'price' => $pack->price,
-                'name' =>$pack->title,
+                'name' => $pack->title,
                 'shipping' => 0,
                 'tax' => 0
             );
             $this->cart->insert($data);
             $_SESSION['subscription_vendor'] = $id;
-            return true;
-            echo "checkout";
-            
-            // exit();
-
-        }
-        else
-        {
-            $pack = $this->db->where('amount',0)->get('package')->row();
-            $this->process_pack($id,0);
+            return   "checkout";
+        } else {
+            $pack = $this->db->where('amount', 0)->get('package')->row();
+            $this->process_pack($id, 0);
             return 0;
         }
         //bpage
     }
+
     function process_order($id)
     {
-        $order = $this->db->where('sale_id',$id)->get('sale')->row();
+        $order = $this->db->where('sale_id', $id)->get('sale')->row();
         $cart = json_decode($order->product_details);
         $sing = array();
-        $i = 0; 
+        $i = 0;
         foreach ($cart as $key => $value) {
-            if($i == 0)
-            {
+            if ($i == 0) {
                 $sing = $value;
             }
             $i++;
         }
-        if(isset($sing->signup_pkg))
-        {
-            $this->process_pack($sing->vendor,$sing->id);
+        if (isset($sing->signup_pkg)) {
+            $this->process_pack($sing->vendor, $sing->id);
         }
     }
+
     function process_pack($vid, $pid)
     {
-        $this->crud_model->upgrade_membership($vid,$pid);
+        $this->crud_model->upgrade_membership($vid, $pid);
 
     }
+
     function vendor_logup($para1 = "", $para2 = "")
     {
+
         // var_dump($_REQUEST);
         if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
             $this->load->library('recaptcha');
@@ -4808,29 +5202,30 @@ foreach($data as $k=> $v)
             $this->form_validation->set_rules('city', 'City', 'required');
             // $this->form_validation->set_rules('middle_name', 'Middle Name', 'required');
             $this->form_validation->set_rules('last_name', 'Last Name', 'required');
-            if($this->input->post('company')){
-                $num = $this->db->where('title',$this->input->post('company'))->get('product');
-                if($num->num_rows() > 0){
-                    echo"Company Already exit";
-                $this->form_validation->set_rules('company', 'Company', 'required', array('required' => translate('company_name_already_teken_please_try_unique_name')));
+            if ($this->input->post('company')) {
+                $num = $this->db->where('title', $this->input->post('company'))->get('product');
+                if ($num->num_rows() > 0) {
+                    echo "Company Already exit";
+                    $this->form_validation->set_rules('company', 'Company', 'required', array('required' => translate('company_name_already_teken_please_try_unique_name')));
                 }
             }
-            
-            if($this->input->post('affiliate') == 'yes'){
-            $this->form_validation->set_rules('affiliate_terms_check', 'Affiliate Terms of Use', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
+
+            if ($this->input->post('affiliate') == 'yes') {
+                $this->form_validation->set_rules('affiliate_terms_check', 'Affiliate Terms of Use', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
             }
-            
-            
+
+
             $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
-            
+
             if ($this->form_validation->run() == FALSE) {
                 echo validation_errors();
-                
+
             } else {
-                 
+
                 if ($safe == 'yes') {
                     if (true) {
                         if (true) {
+
                             $data['name'] = $this->input->post('name');
                             $data['email'] = $this->input->post('email');
                             $data['address1'] = $this->input->post('address1');
@@ -4845,13 +5240,13 @@ foreach($data as $k=> $v)
                             $data['city'] = $this->input->post('city');
                             $data['zip'] = $this->input->post('zip');
                             $data['pack'] = $this->input->post('pack');
-                    
+
                             $data['middle_name'] = $this->input->post('middle_name');
                             $data['last_name'] = $this->input->post('last_name');
                             $data['create_timestamp'] = time();
                             $data['approve_timestamp'] = 0;
                             $data['approve_timestamp'] = 0;
-                            $data['membership'] = 0;
+                            $data['membership'] = $this->input->post('pack');
                             $data['status'] = 'pending';
                             $data['status'] = 'approved';
 
@@ -4859,23 +5254,17 @@ foreach($data as $k=> $v)
                                 $password = $this->input->post('password1');
                                 $data['password'] = sha1($password);
                                 $this->db->insert('vendor', $data);
-                                $this->vendor_page($this->db->insert_id());
-                                $msg = 'done_and_sent';
-                            echo $msg;
-                            exit();
-                                
-
-                                $msg = 'done';
+                                $msg = $this->vendor_page($this->db->insert_id());
                                 if ($this->email_model->account_opening('vendor', $data['email'], $password) == false) {
-                                    $msg = 'done_but_not_sent';
+                                    if(!$msg)
+                                     $msg = 'done_but_not_sent';
                                 } else {
-                                    $msg = 'done_and_sent';
+                                    if(!$msg)
+                                    $msg = 'checkout';
                                 }
-                            }
-                            
-                            // $this->vendor_page($this->db->insert_id());
-                            $msg = 'done_and_sent';
-                            echo $msg;
+                                echo $msg;
+                                exit();
+                            };
                             exit();
                         } else {
                             echo translate('please_fill_the_captcha');
@@ -4900,8 +5289,8 @@ foreach($data as $k=> $v)
                         $data['middle_name'] = $this->input->post('middle_name');
                         $data['last_name'] = $this->input->post('last_name');
                         $data['add_affilite'] = $this->input->post('affiliate');
-                         $data['TOC'] = $this->input->post('terms_check');
-                        if($this->input->post('affiliate') == 'yes'){
+                        $data['TOC'] = $this->input->post('terms_check');
+                        if ($this->input->post('affiliate') == 'yes') {
                             $data['aff_TOC'] = $this->input->post('affiliate_terms_check');
                         }
                         $data['create_timestamp'] = time();
@@ -4915,27 +5304,40 @@ foreach($data as $k=> $v)
                             $password = $this->input->post('password1');
                             $data['password'] = sha1($password);
                             $this->db->insert('vendor', $data);
-                             
-                            // print_r($this->db->last_query());    
-                            // die();
-                            if($this->vendor_page($this->db->insert_id()) == true){
-                            if ($this->email_model->account_opening('vendor', $data['email'], $password) == true) {
-                                if ($this->email_model->vendor_reg_email_to_admin($data['email'], $password) == false) {
+                            $this->vendor_page($this->db->insert_id());
+                                $msg = 'done_and_sent';
+                                echo $msg;
+                                exit();
+
+
+                                $msg = 'done';
+                                if ($this->email_model->account_opening('vendor', $data['email'], $password) == false) {
                                     $msg = 'done_but_not_sent';
                                 } else {
-                                    
                                     $msg = 'done_and_sent';
                                 }
-                            } else {
-                                $msg = 'done_and_sent';
-                            }
-                            }
-                            
+                            // $this->vendor_page($this->db->insert_id());
+
+                            // print_r($this->db->last_query());
+                            // die();
+                            // if ($this->vendor_page($this->db->insert_id()) == 'checkout') {
+                            //     if ($this->email_model->account_opening('vendor', $data['email'], $password) == true) {
+                            //         if ($this->email_model->vendor_reg_email_to_admin($data['email'], $password) == false) {
+                            //             $msg = 'checkout';
+                            //         } else {
+
+                            //             $msg = 'checkout';
+                            //         }
+                            //     } else {
+                            //         $msg = 'checkout';
+                            //     }
+                            // }
+
                             echo $msg;
                             exit();
 
                             $msg = 'done';
-                            
+
                         }
                     }
                 } else {
@@ -4943,7 +5345,7 @@ foreach($data as $k=> $v)
                 }
             }
         } else if ($para1 == 'registration') {
-            
+
             if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
                 $page_data['recaptcha_html'] = $this->recaptcha->render();
             }
@@ -4954,16 +5356,14 @@ foreach($data as $k=> $v)
             $page_data['page_name'] = "vendor/register";
             $page_data['asset_page'] = "register";
             $page_data['page_title'] = translate('registration');
-            $this->load->view('front/index', $page_data);
-        }
-        elseif ($para1 == "sub_by_cat") {
+            $this->load->view('front/index2', $page_data);
+        } elseif ($para1 == "sub_by_cat") {
             echo $this->crud_model->select_html('sub_category', 'sub_category', 'sub_category_name', 'add', 'form-control demo-chosen-select required', '', 'category', $para2, 'get_brnd');
             exit();
-            }
-        elseif ($para1 == "sub3_by_cat") {
+        } elseif ($para1 == "sub3_by_cat") {
             echo $this->crud_model->select_html('sub3_category', 'sub3_category', 'sub_category_name', 'add', 'form-control demo-chosen-select required', '', 'category', $para2, ' ');
             exit();
-            }
+        }
 
     }
 
@@ -4987,8 +5387,7 @@ foreach($data as $k=> $v)
 
             if ($this->form_validation->run() == FALSE) {
                 echo validation_errors();
-            }
-            else {
+            } else {
                 // var_dump(sha1($this->input->post('password')));
                 $signin_data = $this->db->get_where('user', array(
                     'email' => $this->input->post('email'),
@@ -4997,6 +5396,7 @@ foreach($data as $k=> $v)
                 if ($signin_data->num_rows() > 0) {
                     foreach ($signin_data->result_array() as $row) {
                         $this->session->set_userdata('user_login', 'yes');
+                        
                         $this->session->set_userdata('user_id', $row['user_id']);
                         $this->session->set_userdata('user_name', $row['username']);
                         $this->session->set_flashdata('alert', 'successful_signin');
@@ -5004,16 +5404,18 @@ foreach($data as $k=> $v)
                         $this->db->update('user', array(
                             'last_login' => time()
                         ));
+                        var_dump($this->session->userdata('user_login'));
+                        
                         echo 'done';
                     }
                 } else {
                     echo 'failed';
                 }
             }
-        }
-        else if ($para1 == 'forget') {
-            if(demo()){
-                echo "Action blocked in demo";exit;
+        } else if ($para1 == 'forget') {
+            if (demo()) {
+                echo "Action blocked in demo";
+                exit;
             }
             $this->load->library('form_validation');
             $this->form_validation->set_rules('email', 'Email', 'required');
@@ -5042,106 +5444,111 @@ foreach($data as $k=> $v)
         }
         //$this->load->view('front/index', $page_data);
     }
-    
-    
-    function report(){
-        
-            $name = $_GET['fname']; 
-            $email = $_GET['email'];
-            $msg = $_GET['message'];
-            $pid = $_GET['pid'];
-            $data = array(
-                "name" =>$name,
-                "email" =>$email,
-                "meg" =>$msg,
-                'pid'=>$pid
-                );
-            
-            $report = $this->db->insert('report', $data);
-            $lastid = $this->db->insert_id();
-            if(!$report)
-            {
-             $ret = array(
-                        'email'=>'0',
-                        'msg'=>'server error'
-                        );
-            }
-            
-            if($report){
-                $email = $this->email_model->report_email($lastid);
-                if ($email) {
-                       echo 1;
-                        //  $ret = array(
-                        // "email"=>'1',
-                        // "msg"=>'email sent'
-                        // );
-                    } else{
-                        echo 0;
-                    //   $ret = array(
-                    //     "email"=>'0',
-                    //     "msg"=>'email not sent'
-                    //      );
-                    }
-                   
-            }
-            
-            // echo json_encode($ret);
-       
-    }
-    function contact_us(){
-        
-            $fname = $_GET['fname'];
-            $lname = $_GET['lname'];
-            $email = $_GET['email'];
-            $phone = $_GET['phone'];
-            $msg = $_GET['message'];
-            $pid = $_GET['pid'];
-            $bname = $_GET['bname'];
-            $submail = $_GET['submail'];
-            $sub = $_GET['sub'];
-            $data = array(
-                "first_name" =>$fname,
-                "last_name"=>$lname,
-                "email" =>$email,
-                "phone"=>$phone,
-                "msg" =>$msg,
-                'pid'=>$pid,
-                'bname'=>$bname,
-                'submail'=>$submail,
-                'subject'=>$sub
-                );
-            
-            $report = $this->db->insert('contact_us', $data);
-            $lastid = $this->db->insert_id();
-            if($report){
-                $email = $this->email_model->contact_email($lastid,$submail);
-                    // var_dump($email);
-                    // die('ok');
-               if ($email == "true") {
-                      echo '1';
-                        //  $ret = array(
-                        // "email"=>'1',
-                        // "msg"=>'email sent'
-                        // );
-                    } else{
-                        echo '0';
-                    //   $ret = array(
-                    //     "email"=>'0',
-                    //     "msg"=>'email not sent'
-                    //      );
-                    }
-                //   echo json_encode($ret);
-            }
-            
-            
-       
-    }
-        function email_template(){
-            $this->load->view('email/index');
+
+
+    function report()
+    {
+
+        $name = $_GET['fname'];
+        $email = $_GET['email'];
+        $msg = $_GET['message'];
+        $pid = $_GET['pid'];
+        $data = array(
+            "name" => $name,
+            "email" => $email,
+            "meg" => $msg,
+            'pid' => $pid
+        );
+
+        $report = $this->db->insert('report', $data);
+        $lastid = $this->db->insert_id();
+        if (!$report) {
+            $ret = array(
+                'email' => '0',
+                'msg' => 'server error'
+            );
         }
+
+        if ($report) {
+            $email = $this->email_model->report_email($lastid);
+            if ($email) {
+                echo 1;
+                //  $ret = array(
+                // "email"=>'1',
+                // "msg"=>'email sent'
+                // );
+            } else {
+                echo 0;
+                //   $ret = array(
+                //     "email"=>'0',
+                //     "msg"=>'email not sent'
+                //      );
+            }
+
+        }
+
+        // echo json_encode($ret);
+
+    }
+
+    function contact_us()
+    {
+
+        $fname = $_GET['fname'];
+        $lname = $_GET['lname'];
+        $email = $_GET['email'];
+        $phone = $_GET['phone'];
+        $msg = $_GET['message'];
+        $pid = $_GET['pid'];
+        $bname = $_GET['bname'];
+        $submail = $_GET['submail'];
+        $sub = $_GET['sub'];
+        $data = array(
+            "first_name" => $fname,
+            "last_name" => $lname,
+            "email" => $email,
+            "phone" => $phone,
+            "msg" => $msg,
+            'pid' => $pid,
+            'bname' => $bname,
+            'submail' => $submail,
+            'subject' => $sub
+        );
+
+        $report = $this->db->insert('contact_us', $data);
+        $lastid = $this->db->insert_id();
+        if ($report) {
+            $email = $this->email_model->contact_email($lastid, $submail);
+            // var_dump($email);
+            // die('ok');
+            if ($email == "true") {
+                echo '1';
+                //  $ret = array(
+                // "email"=>'1',
+                // "msg"=>'email sent'
+                // );
+            } else {
+                echo '0';
+                //   $ret = array(
+                //     "email"=>'0',
+                //     "msg"=>'email not sent'
+                //      );
+            }
+            //   echo json_encode($ret);
+        }
+
+
+    }
+
+    function email_template()
+    {
+        $this->load->view('email/index');
+    }
+
     /* FUNCTION: Setting login page with facebook and google */
     function login_set($para1 = '', $para2 = '', $para3 = '')
     {
+        var_dump($_SESSION);
         if ($this->session->userdata('user_login') == "yes") {
             redirect(base_url() . 'home/profile', 'refresh');
         }
@@ -5238,6 +5645,7 @@ foreach($data as $k=> $v)
                             'user_id' => $user_id
                         ))->row()->username);
                         $this->session->set_flashdata('alert', 'successful_signin');
+                        
 
                         $this->db->where('user_id', $user_id);
                         $this->db->update('user', array(
@@ -5273,7 +5681,7 @@ foreach($data as $k=> $v)
 
                 } else {
                     $data['username'] = $g_user['givenName'];
-                    $data['surname']  = $g_user['familyName'];
+                    $data['surname'] = $g_user['familyName'];
                     $data['email'] = $g_user['email'];
                     $data['wishlist'] = '[]';
                     $data['package_info'] = '[]';
@@ -5326,10 +5734,9 @@ foreach($data as $k=> $v)
                 $this->load->view('front/user/login/quick_modal', $page_data);
             } else {
 
-                $this->load->view('front/index', $page_data);
+                $this->load->view('front/index2', $page_data);
             }
-        }
-        elseif ($para1 == 'registration') {
+        } elseif ($para1 == 'registration') {
             if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
                 $page_data['recaptcha_html'] = $this->recaptcha->render();
             }
@@ -5339,7 +5746,7 @@ foreach($data as $k=> $v)
             if ($para2 == 'modal') {
                 $this->load->view('front/user/register/index', $page_data);
             } else {
-                $this->load->view('front/index', $page_data);
+                $this->load->view('front/index2', $page_data);
             }
         }
     }
@@ -5378,14 +5785,17 @@ foreach($data as $k=> $v)
         }
         echo $exists;
     }
-    function email(){
+
+    function email()
+    {
         $page_data['page_title'] = 'Email';
-        $page_data['email_body'] = $this->load->view('front/user/email'); 
+        $page_data['email_body'] = $this->load->view('front/user/email');
         $page_data['to'] = 'nk7162390@gmail.com';
         $page_data['from'] = 'info@markethubland.com';
-        $this->email_model->emails($email_body,$to,$from);
+        $this->email_model->emails($email_body, $to, $from);
         // var_dump($page_data);
     }
+
     /* FUNCTION: Newsletter Subscription */
     function subscribe()
     {
@@ -5449,7 +5859,7 @@ foreach($data as $k=> $v)
         $this->load->library('form_validation');
         $page_data['page_name'] = "registration";
         if ($para1 == "add_info") {
-            // here
+            
             $msg = '';
             $this->form_validation->set_rules('username', 'First Name', 'required');
             $this->form_validation->set_rules('email', 'Email', 'required|is_unique[user.email]|valid_email', array('required' => 'You have not provided %s.', 'is_unique' => 'This %s already exists.'));
@@ -5463,20 +5873,21 @@ foreach($data as $k=> $v)
             $this->form_validation->set_rules('state', 'State', 'required');
             $this->form_validation->set_rules('country', 'Country', 'required');
             $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
-            if($this->input->post('affiliate') == 'yes'){
-            $this->form_validation->set_rules('affiliate_terms_check', 'Affiliates Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
+            if ($this->input->post('affiliate') == 'yes') {
+                $this->form_validation->set_rules('affiliate_terms_check', 'Affiliates Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
             }
             if ($this->form_validation->run() == FALSE) {
+                
                 echo validation_errors();
-            }
-            else {
-                if ($safe == 'yes') {
-                // 
+            } else {
+                if (true) {
+                    
+                    //
                     if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
                         $captcha_answer = $this->input->post('g-recaptcha-response');
                         $response = $this->recaptcha->verifyResponse($captcha_answer);
-                       
-                        if ($response['success']) {
+
+                        if (true) {
                             $data['username'] = $this->input->post('username');
                             $data['email'] = $this->input->post('email');
                             $data['address1'] = $this->input->post('address1');
@@ -5508,8 +5919,7 @@ foreach($data as $k=> $v)
                         } else {
                             echo translate('please_fill_the_captcha');
                         }
-                    }
-                    else {
+                    } else {
                         // die('nimra');
                         $data['username'] = $this->input->post('username');
                         $data['email'] = $this->input->post('email');
@@ -5523,7 +5933,7 @@ foreach($data as $k=> $v)
                         $data['country'] = $this->input->post('country');
                         $data['add_affilite'] = $this->input->post('affiliate');
                         $data['TOC'] = $this->input->post('terms_check');
-                        if($this->input->post('affiliate') == 'yes'){
+                        if ($this->input->post('affiliate') == 'yes') {
                             $data['aff_TOC'] = $this->input->post('affiliate_terms_check');
                         }
                         $data['langlat'] = '';
@@ -5545,13 +5955,11 @@ foreach($data as $k=> $v)
                         }
                         echo $msg;
                     }
-                }
-                else {
+                } else {
                     echo 'Disallowed charecter : " ' . $char . ' " in the POST';
                 }
             }
-        }
-        else if ($para1 == "update_info") {
+        } else if ($para1 == "update_info") {
             $id = $this->session->userdata('user_id');
             $data['username'] = $this->input->post('username');
             $data['surname'] = $this->input->post('surname');
@@ -5569,8 +5977,7 @@ foreach($data as $k=> $v)
             $this->db->where('user_id', $id);
             $this->db->update('user', $data);
             echo "done";
-        }
-        else if ($para1 == "update_password") {
+        } else if ($para1 == "update_password") {
             $user_data['password'] = $this->input->post('password');
             $account_data = $this->db->get_where('user', array(
                 'user_id' => $this->session->userdata('user_id')
@@ -5592,19 +5999,18 @@ foreach($data as $k=> $v)
 
         } else if ($para1 == "change_picture") {
             $id = $this->session->userdata('user_id');
-            if(!demo()){
+            if (!demo()) {
                 $this->crud_model->file_up('img', 'user', $id, '', '', '.jpg');
             }
             echo 'done';
-        }
-        else {
+        } else {
             $this->load->view('front/registration', $page_data);
         }
     }
 
     function error()
     {
-        echo $this->load->view('front/others/404_error',array(),true);
+        echo $this->load->view('front/others/404_error', array(), true);
     }
 
 
@@ -5624,214 +6030,226 @@ foreach($data as $k=> $v)
             echo 'failure';
         }
     }
+
     //get vendotr addresss object
-    function get_rate_object($pid,$from, $to)
+    function get_rate_object($pid, $from, $to)
     {
         $length = 20;
         $width = 20;
         $height = 20;
-        $distance_unit= 'in';
+        $distance_unit = 'in';
         $weight = 1;
         $mass_unit = 'kg';
-        $vproduct = $this->db->where('product_id',$pid)->get('product')->row();
-        if(isset($vproduct->warehouse_id) && $vproduct->warehouse_id)
-        {
-                $address = $this->db->where('address_id',$vproduct->warehouse_id)->get('address')->row();
-                if($address)
-                {
-                    $from = $address->shippo_id;
-                }
-                // $from = $this->get_shippo_rate($vendor->name,$vendor->vendor_id,$vendor->city,$vendor->address1,$vendor->email,$vendor->phone,$vendor->zip);
-            
-            
-            
-            if($aproduct->weight)
-            {
+        $vproduct = $this->db->where('product_id', $pid)->get('product')->row();
+        if (isset($vproduct->warehouse_id) && $vproduct->warehouse_id) {
+            $address = $this->db->where('address_id', $vproduct->warehouse_id)->get('address')->row();
+            if ($address) {
+                $from = $address->shippo_id;
+            }
+            // $from = $this->get_shippo_rate($vendor->name,$vendor->vendor_id,$vendor->city,$vendor->address1,$vendor->email,$vendor->phone,$vendor->zip);
+
+
+            if ($aproduct->weight) {
                 $weight = $aproduct->weight;
             }
-            if($aproduct->height)
-            {
+            if ($aproduct->height) {
                 $height = $aproduct->height;
             }
-            if($aproduct->width)
-            {
+            if ($aproduct->width) {
                 $width = $aproduct->width;
                 $length = $aproduct->width;
             }
-            $param = array (
-  'address_from' => $from,
-  'address_to' => $to,
-  'parcels' => 
-  array (
-    0 => 
-    array (
-      'length' => $length,
-      'width' => $width,
-      'height' => $height,
-      'distance_unit' => $distance_unit,
-      'weight' => $weight,
-      'mass_unit' => $mass_unit,
-    ),
-  ),
-  'async' => false,
-);
+            $param = array(
+                'address_from' => $from,
+                'address_to' => $to,
+                'parcels' =>
+                    array(
+                        0 =>
+                            array(
+                                'length' => $length,
+                                'width' => $width,
+                                'height' => $height,
+                                'distance_unit' => $distance_unit,
+                                'weight' => $weight,
+                                'mass_unit' => $mass_unit,
+                            ),
+                    ),
+                'async' => false,
+            );
 
             $curl = curl_init();
 
-curl_setopt_array($curl, array(
-  CURLOPT_URL => 'https://api.goshippo.com/shipments/',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_POSTFIELDS =>json_encode($param),
-  CURLOPT_HTTPHEADER => array(
-    'Authorization: ShippoToken '.$this->config->item('shippo_token'),
-    'Content-Type: application/json',
-    'Cookie: tracker_sessionid=ce5dac7ad8964de99e65e9e24ab2f10c'
-  ),
-));
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://api.goshippo.com/shipments/',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode($param),
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization: ShippoToken ' . $this->config->item('shippo_token'),
+                    'Content-Type: application/json',
+                    'Cookie: tracker_sessionid=ce5dac7ad8964de99e65e9e24ab2f10c'
+                ),
+            ));
 
-$response = curl_exec($curl);
+            $response = curl_exec($curl);
 
-curl_close($curl);
-$response = json_decode($response,true); 
-if(isset($response['rates']))
-{
-    
-return $response['rates'];
-}
-else
-{
-    return false;
-}
+            curl_close($curl);
+            $response = json_decode($response, true);
+            if (isset($response['rates'])) {
+
+                return $response['rates'];
+            } else {
+                return false;
+            }
         }
     }
+
     function send_shipping($sale_id)
     {
-        $rows = $this->crud_model->get_type_name_by_id('sale',$sale_id, 'product_details');
+        $rows = $this->crud_model->get_type_name_by_id('sale', $sale_id, 'product_details');
         // var_dump($rows);
         $rows = json_decode($rows, true);
-        foreach($rows as $k=> $v)
-        {
-            $sing = $this->db->where('id',$v['shippoo_info'])->get('ship_method')->row();
+        foreach ($rows as $k => $v) {
+            $sing = $this->db->where('id', $v['shippoo_info'])->get('ship_method')->row();
             // var_dump($sing);
             // var_dump($v);
             // die('OK61');
             $fields = array(
-                'rate' =>$sing->object_id,
-                'label_file_type' =>'PDF',
-                'async' =>'true',
-                );
-$curl = curl_init();
-curl_setopt_array($curl, array(
-  CURLOPT_URL => "https://api.goshippo.com/transactions",
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => "",
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 30,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => "POST",
-  CURLOPT_POSTFIELDS =>http_build_query($fields),
-  CURLOPT_HTTPHEADER => array(
-    'Authorization: ShippoToken '.$this->config->item('shippo_token'),
-    "cache-control: no-cache",
-    "content-type: application/x-www-form-urlencoded",
-    "postman-token: 89a980c7-e44a-08ab-ff3d-2834d08950d4"
-  ),
-));
-echo $response = curl_exec($curl);
-die();
-$response = json_decode($response,true);
-$track = !empty($response['tracking_number'])?$response['tracking_number']:'test';
-$up = array('raw_book'=> json_encode($response),'track'=>$track);
-$this->db->where('id',$v['shippoo_info'])->update('ship_method',$up);
+                'rate' => $sing->object_id,
+                'label_file_type' => 'PDF',
+                'async' => 'true',
+            );
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://api.goshippo.com/transactions",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => http_build_query($fields),
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization: ShippoToken ' . $this->config->item('shippo_token'),
+                    "cache-control: no-cache",
+                    "content-type: application/x-www-form-urlencoded",
+                    "postman-token: 89a980c7-e44a-08ab-ff3d-2834d08950d4"
+                ),
+            ));
+            $response = curl_exec($curl);
+            $response = json_decode($response, true);
+            $r = $this->get_track($response['object_id']);
+            // if there is no tracing number try again once
+            if (empty($r['tracking_number'])) {
+                $r = $this->get_track($response['object_id']);
+            }
+            $track = !empty($r['tracking_number']) ? $r['tracking_number'] : '';
+            $up = array('raw_book' => json_encode($r), 'track' => $track);
+            $this->db->where('id', $v['shippoo_info'])->update('ship_method', $up);
 
-$err = curl_error($curl);
+            $err = curl_error($curl);
 
-curl_close($curl);
+            curl_close($curl);
         }
     }
-    function get_shippo_rate($fname,$lname,$country,$state,$city,$address1,$email,$phone,$zip = '')
+
+    public function get_track($id)
     {
-            //curl request here 
-            $country = $this->db->where('countries_id',$country)->get('countries')->row();
-            $country_ios= '';
-            if(!empty($country))
-            {
-                $country_ios= $country->iso2;
-            }
-            $curl = curl_init();
-            $param = array(
-                'name' => $fname.' '.$lname,
-                'company' => 'comunity hub land',
-                'street1' => $address1,
-                'city' => $city,
-                'state' => $state,
-                'zip' => $zip,
-                'country' => $country_ios,
-                'email' => $email,
-                'phone' => $phone,
-                'validate' => true,
-                );
-curl_setopt_array($curl, array(
-  CURLOPT_URL => 'https://api.goshippo.com/addresses/',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_POSTFIELDS => http_build_query($param),
-  CURLOPT_HTTPHEADER => array(
-    'Authorization: ShippoToken '.$this->config->item('shippo_token'),
-    'Content-Type: application/x-www-form-urlencoded',
-    'Cookie: tracker_sessionid=5517763ce0cc48cf8999c125bad280ea'
-  ),
-));
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.goshippo.com/transactions/" . $id,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: ShippoToken ' . $this->config->item('shippo_token'),
+                "cache-control: no-cache",
+                "content-type: application/x-www-form-urlencoded",
+                "postman-token: 89a980c7-e44a-08ab-ff3d-2834d08950d4"
+            ),
+        ));
 
-$response = curl_exec($curl);
+        $response = curl_exec($curl);
+        return $response = json_decode($response, true);
+    }
 
-curl_close($curl);
-$obj = json_decode($response);
-if(isset($obj->object_id) && $obj->object_id && $obj->is_complete)
-{
-    return $obj->object_id;
-}
-else
-{
-    // var_dump($param);
-    return $obj;
-}
+    function get_shippo_rate($fname, $lname, $country, $state, $city, $address1, $email, $phone, $zip = '')
+    {
+        //curl request here
+        $country = $this->db->where('countries_id', $country)->get('countries')->row();
+        $country_ios = '';
+        if (!empty($country)) {
+            $country_ios = $country->iso2;
+        }
+        $curl = curl_init();
+        $param = array(
+            'name' => $fname . ' ' . $lname,
+            'company' => 'comunity hub land',
+            'street1' => $address1,
+            'city' => $city,
+            'state' => $state,
+            'zip' => $zip,
+            'country' => $country_ios,
+            'email' => $email,
+            'phone' => $phone,
+            'validate' => true,
+        );
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.goshippo.com/addresses/',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => http_build_query($param),
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: ShippoToken ' . $this->config->item('shippo_token'),
+                'Content-Type: application/x-www-form-urlencoded',
+                'Cookie: tracker_sessionid=5517763ce0cc48cf8999c125bad280ea'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        $obj = json_decode($response);
+        if (isset($obj->object_id) && $obj->object_id && $obj->is_complete) {
+            return $obj->object_id;
+        } else {
+            // var_dump($param);
+            return $obj;
+        }
 
         return false;
     }
+
     function vendor_addresss_object($vid)
     {
-        $row = $this->db->where('vendor_id',$vid)->get('vendor')->row();
-        if(empty($row))
-        {
+        $row = $this->db->where('vendor_id', $vid)->get('vendor')->row();
+        if (empty($row)) {
             return false;
         }
-        if($row->shipoo_object)
-        {
+        if ($row->shipoo_object) {
             return $row->shipoo_object;
-        }
-        else
-        {
-            //curl request here 
-            $country = $this->db->where('countries_id',$row->country)->get('countries')->row();
-            $city= '';
-            $state= '';
-            $city= '';
-            $country_ios= '';
-            if(!empty($country))
-            {
-            $country_ios= $country->iso2;
+        } else {
+            //curl request here
+            $country = $this->db->where('countries_id', $row->country)->get('countries')->row();
+            $city = '';
+            $state = '';
+            $city = '';
+            $country_ios = '';
+            if (!empty($country)) {
+                $country_ios = $country->iso2;
             }
             $curl = curl_init();
             $param = array(
@@ -5845,33 +6263,32 @@ else
                 'email' => $row->email,
                 'phone' => $row->phone,
                 'validate' => true,
-                );
-curl_setopt_array($curl, array(
-  CURLOPT_URL => 'https://api.goshippo.com/addresses/',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_POSTFIELDS => http_build_query($param),
-  CURLOPT_HTTPHEADER => array(
-    'Authorization: ShippoToken '.$this->config->item('shippo_token'),
-    'Content-Type: application/x-www-form-urlencoded',
-    'Cookie: tracker_sessionid=5517763ce0cc48cf8999c125bad280ea'
-  ),
-));
+            );
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://api.goshippo.com/addresses/',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => http_build_query($param),
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization: ShippoToken ' . $this->config->item('shippo_token'),
+                    'Content-Type: application/x-www-form-urlencoded',
+                    'Cookie: tracker_sessionid=5517763ce0cc48cf8999c125bad280ea'
+                ),
+            ));
 
-$response = curl_exec($curl);
+            $response = curl_exec($curl);
 
-curl_close($curl);
-$obj = json_decode($response);
-if(isset($obj->object_id) && $obj->object_id)
-{
-    $this->db->where('vendor_id',$vid)->update('vendor',array('shipoo_object'=>$obj->object_id));
-    return $obj->object_id;
-}
+            curl_close($curl);
+            $obj = json_decode($response);
+            if (isset($obj->object_id) && $obj->object_id) {
+                $this->db->where('vendor_id', $vid)->update('vendor', array('shipoo_object' => $obj->object_id));
+                return $obj->object_id;
+            }
         }
         return false;
     }
@@ -5917,129 +6334,114 @@ if(isset($obj->object_id) && $obj->object_id)
     {
         //$this->wallet_model->add_user_balance(20);
     }
-    function vendor_sort($arr) {
-    $size = count($arr)-1;
-    for ($i=0; $i<$size; $i++) {
-        for ($j=0; $j<$size-$i; $j++) {
-            $k = $j+1;
-            if ($arr[$k]->price < $arr[$j]->price) {
-                // Swap elements at indices: $j, $k
-                list($arr[$j], $arr[$k]) = array($arr[$k], $arr[$j]);
+
+    function vendor_sort($arr)
+    {
+        $size = count($arr) - 1;
+        for ($i = 0; $i < $size; $i++) {
+            for ($j = 0; $j < $size - $i; $j++) {
+                $k = $j + 1;
+                if ($arr[$k]->price < $arr[$j]->price) {
+                    // Swap elements at indices: $j, $k
+                    list($arr[$j], $arr[$k]) = array($arr[$k], $arr[$j]);
+                }
             }
         }
+        return $arr;
     }
-    return $arr;
-}
 
     function variation()
     {
         $pdata = array();
-        if(isset($_GET['product_id']))
-        {
+        if (isset($_GET['product_id'])) {
             $attribute = array();
-                if(isset($_GET['attribute']))
-                {
+            if (isset($_GET['attribute'])) {
                 $attribute = $_GET['attribute'];
+            }
+            foreach ($attribute as $k => $v) {
+                if (empty($v)) {
+                    unset($attribute[$k]);
                 }
-                foreach($attribute as $k=> $v)
-                {
-                    if(empty($v))
-                    {
-                        unset($attribute[$k]);
-                    }
-                }
-                $para1 = $_GET['product_id'];
-                $vendors = array();
+            }
+            $para1 = $_GET['product_id'];
+            $vendors = array();
             /*$vendors[] = $this->db->get_where('product', array('product_id' => $para1, 'status' => 'ok'))->row();*/
             $vlists = $this->db->get_where('product', array('parent_id' => $para1, 'status' => 'ok'))->result();
-            foreach($vlists as $k=>$v)
-            {
-                
+            foreach ($vlists as $k => $v) {
+
                 $vendors[] = $v;
             }
             $ava = array();
-            if(empty($attribute))
-            {
-                foreach($vendors as $k=>$v)
-                {
+            if (empty($attribute)) {
+                foreach ($vendors as $k => $v) {
                     $child = array();
                     $child[] = $v->product_id;
-                    
-                    $all_rates = $this->db->where('rate >',0)->where_in('product', $child)->get('stock')->result_array();
-                  $gmin = 0;
-                  $gmax = 0;
-                  foreach($all_rates as $kK=> $vv)
-                  {
-                      if($kK == 0)
-                      {
-                          $v->stock_id = $vv['stock_id'];
-                        $v->price = $vv['rate'];
-                      }
-                      if($gmin > $vv['rate'])
-                      {
-                        $v->stock_id = $vv['stock_id'];
-                        $v->price = $vv['rate'];
-                      }
-                      if($gmax < $vv['rate'])
-                      {
-                          $gmax = $vv['rate'];
-                      }
-                  }
+
+                    $all_rates = $this->db->where('rate >', 0)->where_in('product', $child)->get('stock')->result_array();
+                    $gmin = 0;
+                    $gmax = 0;
+                    foreach ($all_rates as $kK => $vv) {
+                        if ($kK == 0) {
+                            $v->stock_id = $vv['stock_id'];
+                            $v->price = $vv['rate'];
+                        }
+                        if ($gmin > $vv['rate']) {
+                            $v->stock_id = $vv['stock_id'];
+                            $v->price = $vv['rate'];
+                        }
+                        if ($gmax < $vv['rate']) {
+                            $gmax = $vv['rate'];
+                        }
+                    }
                     $ava[] = $v;
                 }//vendors
             }
-            
-            foreach($vendors as $k=>$v)
-            {
-                
+
+            foreach ($vendors as $k => $v) {
+
                 $pid = $v->product_id;
-                $nattr = $this->convert_value($pid,$attribute);
-                $stks = $this->db->where('product',$pid)->get('stock')->result();
+                $nattr = $this->convert_value($pid, $attribute);
+                $stks = $this->db->where('product', $pid)->get('stock')->result();
                 $is_ok = 0;
                 $stock = 0;
                 $price = $v->sale_price;
-                foreach($stks as $sk=>$sv)
-                {
-                    $st_arr = explode(',',$sv->attribute);
-                    $sattr = $this->convert_value($pid,$st_arr);
-                    $inter=array_intersect($sattr,$nattr);
-                    if(count($inter) == count($attribute) && $is_ok == 0)
-                    {
+                foreach ($stks as $sk => $sv) {
+                    $st_arr = explode(',', $sv->attribute);
+                    $sattr = $this->convert_value($pid, $st_arr);
+                    $inter = array_intersect($sattr, $nattr);
+                    if (count($inter) == count($attribute) && $is_ok == 0) {
                         $is_ok = $sv->stock_id;
                         $price = $sv->rate;
                         $stock = $sv->quantity;
                     }
                 }
-                if($is_ok && $stock)
-                {
+                if ($is_ok && $stock) {
                     $v->stock_id = $is_ok;
                     $v->price = $price;
                     $ava[] = $v;
-                } 
+                }
             }
-            
-                $pdata['vendors'] = $this->vendor_sort($ava);
+
+            $pdata['vendors'] = $this->vendor_sort($ava);
         }//if product exist
-        if(isset($pdata['vendors']) && $pdata['vendors'])
-        {
-        $this->load->view('front/product_view/other/page_view/vendors',$pdata);
-        }
-        else
-        {
+        if (isset($pdata['vendors']) && $pdata['vendors']) {
+            $this->load->view('front/product_view/other/page_view/vendors', $pdata);
+        } else {
             echo "No product avalible";
         }
-        
+
     }//function end
+
     function convert_value($pid, $attr)
     {
         $av = array();
-        foreach($attr as $k=>$v)
-        {
-            $row = $this->db->where('id',$v)->get('attribute_to_values')->row();
+        foreach ($attr as $k => $v) {
+            $row = $this->db->where('id', $v)->get('attribute_to_values')->row();
             $av[] = $row->value;
         }
         return $av;
     }
+
     function cancel_order()
     {
         $this->session->set_userdata('sale_id', '');
@@ -6047,6 +6449,7 @@ if(isset($obj->object_id) && $obj->object_id)
         $this->cart->destroy();
         redirect(base_url(), 'refresh');
     }
+
     /* FUNCTION: Concering Add, Remove and Updating Cart Items*/
     function cart($para1 = '', $para2 = '', $para3 = '', $para4 = '')
     {
@@ -6058,7 +6461,7 @@ if(isset($obj->object_id) && $obj->object_id)
             $all_op = json_decode($this->crud_model->get_type_name_by_id('product', $para2, 'options'), true);
             if ($all_op) {
                 foreach ($all_op as $ro) {
-                    $name = 'choice_'.$ro['no'];
+                    $name = 'choice_' . $ro['no'];
                     $title = $ro['title'];
                     $option[$name] = array('title' => $title, 'value' => $this->input->post($name));
                 }
@@ -6081,17 +6484,15 @@ if(isset($obj->object_id) && $obj->object_id)
                     $this->cart->update($data);
                 }
             }
-            $img = $this->crud_model->file_view('product',$product_id,'','','thumb','src','multi','one');
+            $img = $this->crud_model->file_view('product', $product_id, '', '', 'thumb', 'src', 'multi', 'one');
             $comp_cover = $this->crud_model->get_type_name_by_id('product', $para2, 'comp_logo');
-            if($comp_cover)
-                        {
-                            $img = $this->crud_model->get_img($comp_cover);
-                            if(isset($img->secure_url))
-                            {
-                                $img = $img->secure_url;
-                            }
+            if ($comp_cover) {
+                $img = $this->crud_model->get_img($comp_cover);
+                if (isset($img->secure_url)) {
+                    $img = $img->secure_url;
+                }
 
-                        }
+            }
 
             $data = array(
                 'id' => $para2,
@@ -6108,11 +6509,32 @@ if(isset($obj->object_id) && $obj->object_id)
             $stock = $this->crud_model->get_type_name_by_id('product', $para2, 'current_stock');
 
             if (!$this->crud_model->is_added_to_cart($para2) || $para3 == 'pp') {
-                if ($stock >= $qty || $this->crud_model->is_digital($para2)) {
+                // if ($stock >= $qty || $this->crud_model->is_digital($para2)) {
+                //     $this->cart->insert($data);
+                //     echo 'added';
+                // } else {
+                //     echo 'shortage';
+                // }
+                 if (true) {
                     $this->cart->insert($data);
-                    echo 'added';
+                    $html = 'Item add tio cart successfully! click here to <a href="'.base_url('home/cart_checkout').'">View cart</a>';
+                    if($this->input->post('type'))
+                    {
+                        $this->session->set_flashdata('message', $html);
+                        redirect($_SERVER['HTTP_REFERER'], 'refresh');
+                    }
+                    else
+                    {
+                    redirect(base_url('home/cart_checkout'), 'refresh');
+
+                    }
+                        // $page_data['page_name'] = "cart";
+                        // $page_data['page_title'] ="Shopping Cart";
+                        //  $this->load->view('front/index', $page_data);
+
                 } else {
-                    echo 'shortage';
+                    $this->session->set_flashdata('message', 'Please Try Again!');
+                        redirect($_SERVER['HTTP_REFERER'], 'refresh');
                 }
             } else {
                 echo 'already';
@@ -6445,222 +6867,203 @@ if(isset($obj->object_id) && $obj->object_id)
     {
         $curl = curl_init();
 
-curl_setopt_array($curl, array(
-  CURLOPT_URL => "https://free.currconv.com/api/v7/convert?q=USD_EUR&compact=ultra&apiKey=14b83c6698edf5b90ee4",
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => "",
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 30,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => "GET",
-  CURLOPT_HTTPHEADER => array(
-    "cache-control: no-cache",
-    "postman-token: 30f71e99-6820-ec9c-647f-1b1f204cc0cd"
-  ),
-));
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://free.currconv.com/api/v7/convert?q=USD_EUR&compact=ultra&apiKey=14b83c6698edf5b90ee4",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "postman-token: 30f71e99-6820-ec9c-647f-1b1f204cc0cd"
+            ),
+        ));
 
-$response = curl_exec($curl);
-$err = curl_error($curl);
-$response = json_decode($response, true);
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        $response = json_decode($response, true);
 
-curl_close($curl);
+        curl_close($curl);
 
-return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
+        return (isset($response['USD_EUR']) ? $response['USD_EUR'] : 0);
     }
+
     function cart_checkout($para1 = "")
     {
-        
+
         $con_rate = $this->get_rate();//get rate of euro
 
         if ($para1 == "orders") {
-            if(isset($_GET['r_id']))
-            {
+            if (isset($_GET['r_id'])) {
                 $r_id = $_GET['r_id'];
-                
+
                 /*--new logic---*/
                 $carted = $this->cart->contents();
-                foreach($carted as $k => $v)
-                {
-                    $methods = $this->db->select('MIN(`amount`) as amount,id')->where('r_id',$r_id)->where('cart_key',$v['rowid'])->get('ship_method')->row();
-                    if(isset($_SESSION['cart_contents'][$v['rowid']]['shipping']) && isset($methods->amount))
-                    {
+                foreach ($carted as $k => $v) {
+                    $methods = $this->db->select('MIN(`amount`) as amount,id')->where('r_id', $r_id)->where('cart_key', $v['rowid'])->get('ship_method')->row();
+                    if (isset($_SESSION['cart_contents'][$v['rowid']]['shipping']) && isset($methods->amount)) {
                         $_SESSION['cart_contents'][$v['rowid']]['shipping'] = $methods->amount;
                         $_SESSION['cart_contents'][$v['rowid']]['shippoo_info'] = $methods->id;
                     }
-                    
+
                 }
                 /*--new logic---*/
-                $methods = $this->db->where('r_id',$r_id)->distinct('slug')->get('ship_method')->result_array();
-            foreach($methods as $sk => $sv)
-            {
-                
-                $tot = 0;
-                
-                    foreach($carted as $k => $v)
-                {
-                    if($k == $sv['cart_key'] && $sv['slug'] == $method)
-                    {
-                        
-                        
-                        $tot = $tot + $sv['amount'];
-                        $eu_price = $sv['amount'] * $con_rate ;
-                $v['shipping'] = $eu_price;
-                
-                $in = array(
-                    'cart_key' => $v['rowid'],
-                    'from_address' => $v['address'],
-                    'to_address' => $obj,
-                    'rate_object' => $sv['object_id'],
-                    'price' => $rate['amount'],
-                    'eu_price' => $eu_price,
-                    'raw_daata' => json_encode($sv)
-                    );
-                    $this->db->insert('shipoo_rates',$in);
-                $this->cart->update($v);
-                // var_dump($_SESSION);
-                    } 
+                $methods = $this->db->where('r_id', $r_id)->distinct('slug')->get('ship_method')->result_array();
+                foreach ($methods as $sk => $sv) {
+
+                    $tot = 0;
+
+                    foreach ($carted as $k => $v) {
+                        if ($k == $sv['cart_key'] && $sv['slug'] == $method) {
+
+
+                            $tot = $tot + $sv['amount'];
+                            $eu_price = $sv['amount'] * $con_rate;
+                            $v['shipping'] = $eu_price;
+
+                            $in = array(
+                                'cart_key' => $v['rowid'],
+                                'from_address' => $v['address'],
+                                'to_address' => $obj,
+                                'rate_object' => $sv['object_id'],
+                                'price' => $rate['amount'],
+                                'eu_price' => $eu_price,
+                                'raw_daata' => json_encode($sv)
+                            );
+                            $this->db->insert('shipoo_rates', $in);
+                            $this->cart->update($v);
+                            // var_dump($_SESSION);
+                        }
+                    }
                 }
-            }
-            $carted = $this->cart->contents();
+                $carted = $this->cart->contents();
             }
             $carted = $this->cart->contents();
             // var_dump($carted);
-            echo $r = $this->load->view('front/shopping_cart/order_set',array(),true);
+            echo $r = $this->load->view('front/shopping_cart/order_set', array(), true);
             exit();
         }
         if ($para1 == "cal_shipping") {
-            if(isset($_GET['firstname']) && isset($_GET['lastname'])&& isset($_GET['address1'])&& isset($_GET['email']) && isset($_GET['country']) && isset($_GET['phone']) && isset($_GET['city']))
-            {
-            // $obj = $this->get_shippo_rate($_GET['firstname'],$_GET['lastname'],$_GET['country'],$_GET['address1'],$_GET['email'],$_GET['phone']);
-            $obj = $this->get_shippo_rate($_GET['firstname'],$_GET['lastname'],$_GET['country'],$_GET['state'],$_GET['city'],$_GET['address1'],$_GET['email'],$_GET['phone'],$_GET['zip']);
-            if(is_object($obj))
-            {
-                $obj = (array) $obj;
-                $msg = '';
-                foreach($obj as $k=> $v)
-                {
-                    
-                    if(isset($v[0]))
-                    $msg = $msg.$v[0].'<br>';
-                    else
-                    $msg = $msg.$v.'<br>';
-                }
-                $ret = array(
-                    'status'=>0,
-                    'msg'=>$msg
-                    );
-                    echo json_encode($ret);
-                    exit();
-                
-            } 
-            $r_id = time();
-            $carted = $this->cart->contents();
-            foreach($carted as $k => $v)
-            {
-                $rate = array();
-                if($obj)
-                {
-                    
-                $rate = $this->get_rate_object($v['id'],0,$obj);
-                }
-                if(!$rate)
-                {
+            if (isset($_GET['firstname']) && isset($_GET['lastname']) && isset($_GET['address1']) && isset($_GET['email']) && isset($_GET['country']) && isset($_GET['phone']) && isset($_GET['city'])) {
+                // $obj = $this->get_shippo_rate($_GET['firstname'],$_GET['lastname'],$_GET['country'],$_GET['address1'],$_GET['email'],$_GET['phone']);
+                $obj = $this->get_shippo_rate($_GET['firstname'], $_GET['lastname'], $_GET['country'], $_GET['state'], $_GET['city'], $_GET['address1'], $_GET['email'], $_GET['phone'], $_GET['zip']);
+                if (is_object($obj)) {
+                    $obj = (array)$obj;
+                    $msg = '';
+                    foreach ($obj as $k => $v) {
+
+                        if (isset($v[0]))
+                            $msg = $msg . $v[0] . '<br>';
+                        else
+                            $msg = $msg . $v . '<br>';
+                    }
                     $ret = array(
-                    'status'=>0,
-                    'msg'=>'Shippo did not support your diliver location please try annother address!',
-                    'data'=>$rate,
-                    'address'=>$obj 
+                        'status' => 0,
+                        'msg' => $msg
                     );
                     echo json_encode($ret);
                     exit();
+
                 }
-                    
+                $r_id = time();
+                $carted = $this->cart->contents();
+                foreach ($carted as $k => $v) {
+                    $rate = array();
+                    if ($obj) {
+
+                        $rate = $this->get_rate_object($v['id'], 0, $obj);
+                    }
+                    if (!$rate) {
+                        $ret = array(
+                            'status' => 0,
+                            'msg' => 'Shippo did not support your diliver location please try annother address!',
+                            'data' => $rate,
+                            'address' => $obj
+                        );
+                        echo json_encode($ret);
+                        exit();
+                    }
+
                 }
-                
+
                 $ship_id = 0;
-                foreach($rate as $rk=> $rv)
-                {
+                foreach ($rate as $rk => $rv) {
                     $wh = array(
-                        'shipment_id'=> $rv['carrier_account'],
-                        'slug'=> $rv['provider'],
+                        'shipment_id' => $rv['carrier_account'],
+                        'slug' => $rv['provider'],
                         'cart_key' => $v['rowid'],
                         'r_id' => $r_id,
-                        );
-                        
-                        $ship_method = $this->db->where($wh)->get('ship_method')->row();
-                        // if($rk == 1)
-                        // {
-                        //     echo $ship_method->estimated_days.'>'.$rv['estimated_days'];
-                        //     if($ship_method->estimated_days > $rv['estimated_days'])
-                        //     {
-                        //         echo "Here"; 
-                        //     }
-                        //     print_r($ship_method);
-                        //     die("IJ");
-                        // }
-                        if($ship_method)
-                        {
-                            if($ship_method->estimated_days > $rv['estimated_days'])
-                            {
-                                $wh['estimated_days'] = $rv['estimated_days'];
-                            $wh['amount'] = $rv['amount'];
-                            $wh['object_id'] = $rv['object_id'];
-                            $wh['name'] = isset($rv['servicelevel']['name'])?$rv['servicelevel']['name']:"";
-                            $wh['logo'] = isset($rv['provider_image_200'])?$rv['provider_image_200']:"";
-                            $ship_id = $ship_method->id;
-                            $ship_method = $this->db->where('id',$ship_method->id)->update('ship_method',$wh);
-                            
-                             
-                            }
-                        }
-                        else
-                        {
-                            $wh['object_id'] = $rv['object_id'];
+                    );
+
+                    $ship_method = $this->db->where($wh)->get('ship_method')->row();
+                    // if($rk == 1)
+                    // {
+                    //     echo $ship_method->estimated_days.'>'.$rv['estimated_days'];
+                    //     if($ship_method->estimated_days > $rv['estimated_days'])
+                    //     {
+                    //         echo "Here";
+                    //     }
+                    //     print_r($ship_method);
+                    //     die("IJ");
+                    // }
+                    if ($ship_method) {
+                        if ($ship_method->estimated_days > $rv['estimated_days']) {
                             $wh['estimated_days'] = $rv['estimated_days'];
                             $wh['amount'] = $rv['amount'];
-                            $wh['name'] = isset($rv['servicelevel']['name'])?$rv['servicelevel']['name']:"";
-                            $wh['logo'] = isset($rv['provider_image_200'])?$rv['provider_image_200']:"";
-                            $ship_method = $this->db->insert('ship_method',$wh);
-                            $ship_id = $this->db->insert_id();
+                            $wh['object_id'] = $rv['object_id'];
+                            $wh['name'] = isset($rv['servicelevel']['name']) ? $rv['servicelevel']['name'] : "";
+                            $wh['logo'] = isset($rv['provider_image_200']) ? $rv['provider_image_200'] : "";
+                            $ship_id = $ship_method->id;
+                            $ship_method = $this->db->where('id', $ship_method->id)->update('ship_method', $wh);
+
+
                         }
-                //  $eu_price = $rate['amount'] * $con_rate ;
-                // $v['shipping'] = $eu_price;
-                
-                // $in = array(
-                //     'cart_key' => $v['rowid'],
-                //     'from_address' => $v['address'],
-                //     'to_address' => $obj,
-                //     'rate_object' => $v['object_id'],
-                //     'price' => $rate['amount'],
-                //     'eu_price' => $eu_price,
-                //     'raw_daata' => json_encode($rate)
-                //     );
-                //     $r = $this->db->insert('shipoo_rates',$in);   
+                    } else {
+                        $wh['object_id'] = $rv['object_id'];
+                        $wh['estimated_days'] = $rv['estimated_days'];
+                        $wh['amount'] = $rv['amount'];
+                        $wh['name'] = isset($rv['servicelevel']['name']) ? $rv['servicelevel']['name'] : "";
+                        $wh['logo'] = isset($rv['provider_image_200']) ? $rv['provider_image_200'] : "";
+                        $ship_method = $this->db->insert('ship_method', $wh);
+                        $ship_id = $this->db->insert_id();
+                    }
+                    //  $eu_price = $rate['amount'] * $con_rate ;
+                    // $v['shipping'] = $eu_price;
+
+                    // $in = array(
+                    //     'cart_key' => $v['rowid'],
+                    //     'from_address' => $v['address'],
+                    //     'to_address' => $obj,
+                    //     'rate_object' => $v['object_id'],
+                    //     'price' => $rate['amount'],
+                    //     'eu_price' => $eu_price,
+                    //     'raw_daata' => json_encode($rate)
+                    //     );
+                    //     $r = $this->db->insert('shipoo_rates',$in);
                 }
                 $this->cart->update($v);
             }
             $con_rate = 1;
-            $methods = $this->db->where('r_id',$r_id)->distinct('slug')->get('ship_method')->result_array();
-            foreach($methods as $sk => $sv)
-            {
+            $methods = $this->db->where('r_id', $r_id)->distinct('slug')->get('ship_method')->result_array();
+            foreach ($methods as $sk => $sv) {
                 $tot = 0;
-                foreach($carted as $k => $v)
-                {
-                    if($k == $sv['cart_key'])
-                    {
+                foreach ($carted as $k => $v) {
+                    if ($k == $sv['cart_key']) {
                         $tot = $tot + $sv['amount'];
                     }
                 }
-                $methods[$sk]['price'] = round($tot*$con_rate, 2);
+                $methods[$sk]['price'] = round($tot * $con_rate, 2);
             }
-            $data = array('methods'=>$methods,'r_id'=>$r_id);
+            $data = array('methods' => $methods, 'r_id' => $r_id);
             $ret = array(
-                    'status'=>1,
-                    'msg'=>$r_id
-                    );
-                    echo json_encode($ret);
-                    exit();
-            
+                'status' => 1,
+                'msg' => $r_id
+            );
+            echo json_encode($ret);
+            exit();
+
         } elseif ($para1 == "delivery_address") {
             $this->load->view('front/shopping_cart/delivery_address');
         } elseif ($para1 == "payments_options") {
@@ -6773,7 +7176,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
         if (count($carted) <= 0) {
             redirect(base_url() . 'home/', 'refresh');
         }*/
-        
+
 
         $carted = $this->cart->contents();
         $total = $this->cart->total();
@@ -6795,7 +7198,6 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
 
         if ($this->input->post('payment_type') == 'paypal') {
             if ($para1 == 'go') {
-
 
 
                 $data['product_details'] = $product_details;
@@ -6829,7 +7231,6 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 }
 
 
-
                 $vendors = $this->crud_model->vendors_in_sale($sale_id);
                 $delivery_status = array();
                 $payment_status = array();
@@ -6861,9 +7262,8 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
 
                 foreach ($carted as $val) {
                     $this->db->where('sale_id', $sale_id);
-                $this->db->delete('sale');
-                    if($val['signup_pkg'])
-                    {
+                    $this->db->delete('sale');
+                    if ($val['signup_pkg']) {
                         $signup_pkg = $val;
                     }
                     $this->paypal->add_field('item_number_' . $i, $i);
@@ -6879,18 +7279,17 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                     $this->paypal->add_field('quantity_' . $i, $val['qty']);
                     $i++;
                 }
-                if($signup_pkg)
-                {
-                    $paypal_email           = $this->db->get_where('business_settings',array('type'=>'paypal_email'))->row()->value;
+                if ($signup_pkg) {
+                    $paypal_email = $this->db->get_where('business_settings', array('type' => 'paypal_email'))->row()->value;
                     $data = array();
-                    $data['vendor']         = $signup_pkg['vendor'];
-                    $data['amount']         = $signup_pkg['price'];
-                    $data['status']         = 'due';
-                    $data['method']         = 'paypal';
-                    $data['membership']     = $signup_pkg['id'];
-                    $data['timestamp']      = time();
+                    $data['vendor'] = $signup_pkg['vendor'];
+                    $data['amount'] = $signup_pkg['price'];
+                    $data['status'] = 'due';
+                    $data['method'] = 'paypal';
+                    $data['membership'] = $signup_pkg['id'];
+                    $data['timestamp'] = time();
                     $this->db->insert('membership_payment', $data);
-                    $sale_id           = 'memvership-'.$this->db->insert_id();
+                    $sale_id = 'memvership-' . $this->db->insert_id();
                 }
                 if ($this->crud_model->get_type_name_by_id('business_settings', '3', 'value') == 'fixed') {
                     $this->paypal->add_field('shipping_1', $this->cart->format_number(($this->crud_model->get_type_name_by_id('business_settings', '2', 'value') / $exchange)));
@@ -6960,19 +7359,18 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
 
                 $this->session->set_userdata('sale_id', $sale_id);
 
-                $bitcoin_coinpayments_merchant = $this->db->get_where('business_settings',array('type'=>'bitcoin_coinpayments_merchant'))->row()->value;
+                $bitcoin_coinpayments_merchant = $this->db->get_where('business_settings', array('type' => 'bitcoin_coinpayments_merchant'))->row()->value;
                 $exchange = exchange('usd');
-                $final_amount = $grand_total/$exchange;
+                $final_amount = $grand_total / $exchange;
 
                 /*echo "<pre>";
                 print_r(compact('bitcoin_coinpayments_merchant','final_amount'));
                 echo "</pre>";exit;*/
 
-                echo $this->load->view('front/bitcoin_payment_view',compact('bitcoin_coinpayments_merchant','final_amount'),true);
+                echo $this->load->view('front/bitcoin_payment_view', compact('bitcoin_coinpayments_merchant', 'final_amount'), true);
                 exit;
             }
-        }
-        else if ($this->input->post('payment_type') == 'c2') {
+        } else if ($this->input->post('payment_type') == 'c2') {
             if ($para1 == 'go') {
 
                 $data['product_details'] = $product_details;
@@ -7036,8 +7434,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 $this->twocheckout_lib->submit_form();
                 // submit the fields to paypal
             }
-        }
-        else if ($this->input->post('payment_type') == 'vp') {
+        } else if ($this->input->post('payment_type') == 'vp') {
             if ($para1 == 'go') {
 
                 $data['product_details'] = $product_details;
@@ -7114,8 +7511,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 $this->vouguepay->submit_vouguepay_post();
                 // submit the fields to vouguepay
             }
-        }
-        else if ($this->input->post('payment_type') == 'cash_on_delivery') {
+        } else if ($this->input->post('payment_type') == 'cash_on_delivery') {
             if ($para1 == 'go') {
 
                 $data['product_details'] = $product_details;
@@ -7133,9 +7529,9 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
 
                 $this->db->insert('sale', $data);
                 $sale_id = $this->db->insert_id();
-                
+
                 $this->send_shipping($sale_id);
-                
+
                 if ($this->session->userdata('user_login') == 'yes') {
                     $data['buyer'] = $this->session->userdata('user_id');
                 } else {
@@ -7151,7 +7547,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 $vendors = $this->crud_model->vendors_in_sale($sale_id);
                 $delivery_status = array();
                 $payment_status = array();
-                
+
                 foreach ($vendors as $p) {
                     $delivery_status[] = array('vendor' => $p, 'status' => 'pending', 'comment' => '', 'delivery_time' => '');
                     $payment_status[] = array('vendor' => $p, 'status' => 'due');
@@ -7166,9 +7562,9 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 $this->db->where('sale_id', $sale_id);
                 $this->db->update('sale', $data);
                 $this->process_order($sale_id);
-                $this->crud_model->process_affiliation($sale_id,false);
-                
-                
+                $this->crud_model->process_affiliation($sale_id, false);
+
+
                 foreach ($carted as $value) {
                     $this->crud_model->decrease_quantity($value['id'], $value['qty']);
                     $data1['type'] = 'destroy';
@@ -7186,10 +7582,10 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                     $data1['datetime'] = time();
                     $this->db->insert('stock', $data1);
                 }
-                
+
                 $this->crud_model->digital_to_customer($sale_id);
-                // $this->email_model->email_invoice($sale_id);
-                
+                $this->email_model->email_invoice($sale_id);
+
                 // $this->cart->destroy();
                 $this->session->set_userdata('couponer', '');
                 //echo $sale_id;
@@ -7199,8 +7595,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                     redirect(base_url() . 'home/guest_invoice/' . $data['guest_id'], 'refresh');
                 }
             }
-        }
-        else if ($this->input->post('payment_type') == 'wallet') {
+        } else if ($this->input->post('payment_type') == 'wallet') {
             $balance = $this->wallet_model->user_balance();
             if ($balance >= $grand_total) {
                 if ($para1 == 'go') {
@@ -7256,7 +7651,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                     }
                     $this->wallet_model->reduce_user_balance($grand_total, $this->session->userdata('user_id'));
                     $this->crud_model->digital_to_customer($sale_id);
-                    
+
                     $this->crud_model->email_invoice($sale_id);
                     $this->cart->destroy();
                     $this->session->set_userdata('couponer', '');
@@ -7266,8 +7661,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
             } else {
                 redirect(base_url() . 'home/profile/part/wallet/', 'refresh');
             }
-        }
-        else if ($this->input->post('payment_type') == 'stripe') {
+        } else if ($this->input->post('payment_type') == 'stripe') {
             if ($para1 == 'go') {
                 if (isset($_POST['stripeToken'])) {
 
@@ -7315,7 +7709,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                             $randomString = '';
                             for ($i = 0; $i < 10; $i++) {
                                 $randomString .= $characters[rand(0, $charactersLength - 1)];
-                           }
+                            }
                             $data['guest_id'] = $sale_id . '-' . $randomString;
                         }
                         $vendors = $this->crud_model->vendors_in_sale($sale_id);
@@ -7335,7 +7729,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                         $this->db->where('sale_id', $sale_id);
                         $this->db->update('sale', $data);
                         $this->process_order($sale_id);
-                        $this->crud_model->process_affiliation($sale_id,true);
+                        $this->crud_model->process_affiliation($sale_id, true);
 
                         foreach ($carted as $value) {
                             $this->crud_model->decrease_quantity($value['id'], $value['qty']);
@@ -7373,8 +7767,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                     redirect(base_url() . 'home/cart_checkout/', 'refresh');
                 }
             }
-        }
-        else if ($this->input->post('payment_type') == 'pum') {
+        } else if ($this->input->post('payment_type') == 'pum') {
             if ($para1 == 'go') {
 
                 $data['product_details'] = $product_details;
@@ -7459,8 +7852,7 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
                 // submit the fields to pum
                 $this->pum->submit_pum_post();
             }
-        }
-        else if ($this->input->post('payment_type') == 'sslcommerz') {
+        } else if ($this->input->post('payment_type') == 'sslcommerz') {
             if ($para1 == 'go') {
 
                 $data['product_details'] = $product_details;
@@ -7621,20 +8013,19 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
             $data['payment_type'] = 'paypal';
             $sale_id = $_POST['custom'];
             $pos = strpos($sale_id, "memvership-");
-        if($pos > -1)
-        {
-            $invoice_id = preg_replace('/[^0-9]/', '', $sale_id);  
-            $data = array();
-            $data['status']         = 'paid';
-            $data['details']        = json_encode($_POST);
-            // $invoice_id             = $_POST['custom'];
-            $this->db->where('membership_payment_id', $invoice_id);
-            $r = $this->db->update('membership_payment', $data);
-            $type = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->membership;
-            $vendor = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->vendor;
-            $this->package_affliate($invoice_id);
-            $this->crud_model->upgrade_membership($vendor,$type);
-        }
+            if ($pos > -1) {
+                $invoice_id = preg_replace('/[^0-9]/', '', $sale_id);
+                $data = array();
+                $data['status'] = 'paid';
+                $data['details'] = json_encode($_POST);
+                // $invoice_id             = $_POST['custom'];
+                $this->db->where('membership_payment_id', $invoice_id);
+                $r = $this->db->update('membership_payment', $data);
+                $type = $this->db->get_where('membership_payment', array('membership_payment_id' => $invoice_id))->row()->membership;
+                $vendor = $this->db->get_where('membership_payment', array('membership_payment_id' => $invoice_id))->row()->vendor;
+                $this->package_affliate($invoice_id);
+                $this->crud_model->upgrade_membership($vendor, $type);
+            }
             // $sale_id = 256;
             $vendors = $this->crud_model->vendors_in_sale($sale_id);
             $payment_status = array();
@@ -7662,82 +8053,78 @@ return (isset($response['USD_EUR'])?$response['USD_EUR']:0);
         $this->session->set_flashdata('alert', 'payment_cancel');
         redirect(base_url() . 'home/cart_checkout/', 'refresh');
     }
+
     function package_affliate($id)
     {
-        
-        $ip =$_SERVER['REMOTE_ADDR'];
+
+        $ip = $_SERVER['REMOTE_ADDR'];
         $this->db->order_by("create_at", "desc");
 
-        $row = $this->db->where('ip',$ip)->get('aff_log')->row();
-        if($row && $id && isset($row->status) && $row->status == 0)
-        {
+        $row = $this->db->where('ip', $ip)->get('aff_log')->row();
+        if ($row && $id && isset($row->status) && $row->status == 0) {
             $aff_id = $row->aff_id;
             $comp_id = $row->comp_id;
-            $compain = $this->db->where('compain_id',$comp_id)->get('compain')->row();//compain
-            $user = $this->db->where('id',$aff_id)->get('affliate_user')->row();//compain
-            $inv = $this->db->where('membership_payment_id',$id)->get('membership_payment')->row();//compain
-            $am = ($compain->percentage/100)* $inv->amount;
-            
+            $compain = $this->db->where('compain_id', $comp_id)->get('compain')->row();//compain
+            $user = $this->db->where('id', $aff_id)->get('affliate_user')->row();//compain
+            $inv = $this->db->where('membership_payment_id', $id)->get('membership_payment')->row();//compain
+            $am = ($compain->percentage / 100) * $inv->amount;
+
             $expiry = $row->expire_at;
             $today = date("Y-m-d");
-$expire = $expiry; //from database
+            $expire = $expiry; //from database
 
-$today_time = strtotime($today);
-$expire_time = strtotime($expire);
+            $today_time = strtotime($today);
+            $expire_time = strtotime($expire);
 
-            if(isset($user->wallet) && $am && $today_time < $expire_time )
-            {
+            if (isset($user->wallet) && $am && $today_time < $expire_time) {
                 $earn = $am + $user->wallet;
                 $up = array(
                     'wallet' => $earn
-                    );
-                $r = $this->db->where('id',$aff_id)->update('affliate_user',$up);
-                if($r)
-                {
+                );
+                $r = $this->db->where('id', $aff_id)->update('affliate_user', $up);
+                if ($r) {
                     $up = array(
                         'status' => 1,
                         'earn' => $am,
-                        );
-                    $this->db->where('id',$row->id)->update('aff_log',$up);
+                    );
+                    $this->db->where('id', $row->id)->update('aff_log', $up);
                 }
                 return true;
             }
-            
+
         }
     }
-    
+
 
     /* FUNCTION: Loads after successful paypal payment*/
     function paypal_success($sale_id = 0)
     {
-        
+
         $carted = $this->cart->contents();
-        if(isset($_REQUEST['custom']))
-        {
-        $sale_id = $_REQUEST['custom'];
+        if (isset($_REQUEST['custom'])) {
+            $sale_id = $_REQUEST['custom'];
         }
         // $sale_id = 'memvership-34';
         // var_dump($sale_id);
         $pos = strpos($sale_id, "memvership-");
-        if($pos > -1)
-        {
-            $invoice_id = preg_replace('/[^0-9]/', '', $sale_id);  
+        if ($pos > -1) {
+            $invoice_id = preg_replace('/[^0-9]/', '', $sale_id);
             $data = array();
-            $data['status']         = 'paid';
-            $data['details']        = json_encode($_POST);
+            $data['status'] = 'paid';
+            $data['details'] = json_encode($_POST);
             // $invoice_id             = $_POST['custom'];
             $this->db->where('membership_payment_id', $invoice_id);
             $r = $this->db->update('membership_payment', $data);
-            $type = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->membership;
-            $vendor = $this->db->get_where('membership_payment',array('membership_payment_id'=>$invoice_id))->row()->vendor;
+            $type = $this->db->get_where('membership_payment', array('membership_payment_id' => $invoice_id))->row()->membership;
+            $vendor = $this->db->get_where('membership_payment', array('membership_payment_id' => $invoice_id))->row()->vendor;
             $this->package_affliate($invoice_id);
-            $this->crud_model->upgrade_membership($vendor,$type);
+            $this->crud_model->upgrade_membership($vendor, $type);
         }
-        
-        $guest_id = $this->db->where('sale_id',$sale_id)->get('sale')->row();
+
+        $guest_id = $this->db->where('sale_id', $sale_id)->get('sale')->row();
         $this->process_order($sale_id);
         // return 0;
-        $this->crud_model->process_affiliation($sale_id,false);
+        $this->crud_model->process_affiliation($sale_id, false);
         foreach ($carted as $value) {
             $this->crud_model->decrease_quantity($value['id'], $value['qty']);
             $data1['type'] = 'destroy';
@@ -7780,7 +8167,7 @@ $expire_time = strtotime($expire);
         $carted = $this->cart->contents();
         $sale_id = $this->session->userdata('sale_id');
         $guest_id = $this->crud_model->get_type_name_by_id('sale', $sale_id, 'guest_id');
-        $this->crud_model->process_affiliation($sale_id,false);
+        $this->crud_model->process_affiliation($sale_id, false);
 
         $data['payment_details'] = json_encode($_POST);
         $data['payment_timestamp'] = strtotime(date("m/d/Y"));
@@ -7881,7 +8268,7 @@ $expire_time = strtotime($expire);
             $data['payment_status'] = json_encode($payment_status);
             $this->db->where('sale_id', $sale_id);
             $this->db->update('sale', $data);
-            $this->crud_model->process_affiliation($sale_id,false);
+            $this->crud_model->process_affiliation($sale_id, false);
 
             foreach ($carted as $value) {
                 $this->crud_model->decrease_quantity($value['id'], $value['qty']);
@@ -7947,7 +8334,7 @@ $expire_time = strtotime($expire);
             $data1['payment_status'] = json_encode($payment_status);
             $this->db->where('sale_id', $sale_id);
             $this->db->update('sale', $data1);
-            $this->crud_model->process_affiliation($sale_id,true);
+            $this->crud_model->process_affiliation($sale_id, true);
 
 
             $carted = $this->cart->contents();
@@ -8035,7 +8422,7 @@ $expire_time = strtotime($expire);
         $carted = $this->cart->contents();
         $sale_id = $this->session->userdata('sale_id');
         $guest_id = $this->crud_model->get_type_name_by_id('sale', $sale_id, 'guest_id');
-        $this->crud_model->process_affiliation($sale_id,false);
+        $this->crud_model->process_affiliation($sale_id, false);
         foreach ($carted as $value) {
             $size = $this->crud_model->is_added_to_cart($value['id'], 'option', 'choice_0');
             $this->crud_model->decrease_quantity($value['id'], $value['qty'], $size);
@@ -8087,7 +8474,7 @@ $expire_time = strtotime($expire);
             $data['payment_status'] = json_encode($payment_status);
             $this->db->where('sale_id', $sale_id);
             $this->db->update('sale', $data);
-            $this->crud_model->process_affiliation($sale_id,true);
+            $this->crud_model->process_affiliation($sale_id, true);
 
             foreach ($carted as $value) {
                 $size = $this->crud_model->is_added_to_cart($value['id'], 'option', 'choice_0');
@@ -8155,6 +8542,7 @@ $expire_time = strtotime($expire);
         }
 
     }
+
     /* FUNCTION: Concerning wishlist*/
     function affliates($para1 = "", $para2 = "")
     {
@@ -8185,13 +8573,65 @@ $expire_time = strtotime($expire);
 
 
     /* FUNCTION: Loads Contact Page */
-    function blog($para1 = "")
+    function blog1($para1 = "")
     {
         $page_data['category'] = $para1;
         $page_data['page_name'] = 'blog';
         $page_data['asset_page'] = 'blog';
         $page_data['page_title'] = translate('blog');
-          $page_data['blogs'] = $this->db->get('blog')->result_array();
+        $config = array();
+       
+           $config["per_page"] = 9;
+           $config["uri_segment"] = 4;
+           $page = (isset($_GET['page'])) ? $_GET['page'] : 1;
+           $start =   ($page* $config["per_page"]) - $config["per_page"];
+            $this->db->limit($config["per_page"], $start);
+        $page_data['blogs'] = $this->db->order_by('blog_id','asc')->get('blog')->result_array();
+        $config["total_rows"] = $tot =  count($this->db->get('blog')->result_array());
+            $page_data['tot'] = $tot;
+            $page_data['cpage'] = $page;
+            $page_data['tpage'] = $tot/$config["per_page"];
+            $currentPageUrl = $_SERVER["REDIRECT_SCRIPT_URI"];
+            $page_data['link'] = $currentPageUrl;
+                $config ['use_page_numbers'] = TRUE;
+                $config ['query_string_segment'] = 'page';
+                $config ['page_query_string'] = TRUE;
+             $config["base_url"] = $currentPageUrl;
+            //   $config['num_links'] = 4;
+            // $config['first_link'] = 'First';
+$config['last_link'] = ' ';
+            $this->pagination->initialize($config);
+        // $page_data['blogs'] = $this->db->get('blog')->result_array();
+        $this->load->view('front/index1', $page_data);
+    }
+    function blog($para1 = "")
+    {
+        $page_data['category'] = $para1;
+        $page_data['page_name'] = 'blog';
+        $page_data['asset_page'] = 'blog';
+        $page_data['page_title'] = 'Blog - Affoardable Online Shopping In Pakistan';
+        $config = array();
+       
+           $config["per_page"] = 9;
+           $config["uri_segment"] = 4;
+           $page = (isset($_GET['page'])) ? $_GET['page'] : 1;
+           $start =   ($page* $config["per_page"]) - $config["per_page"];
+            $this->db->limit($config["per_page"], $start);
+        $page_data['blogs'] = $this->db->order_by('blog_id','asc')->get('blog')->result_array();
+        $config["total_rows"] = $tot =  count($this->db->get('blog')->result_array());
+            $page_data['tot'] = $tot;
+            $page_data['cpage'] = $page;
+            $page_data['tpage'] = $tot/$config["per_page"];
+            $currentPageUrl = $_SERVER["REDIRECT_SCRIPT_URI"];
+            $page_data['link'] = $currentPageUrl;
+                $config ['use_page_numbers'] = TRUE;
+                $config ['query_string_segment'] = 'page';
+                $config ['page_query_string'] = TRUE;
+             $config["base_url"] = $currentPageUrl;
+            //   $config['num_links'] = 4;
+            // $config['first_link'] = 'First';
+$config['last_link'] = ' ';
+            $this->pagination->initialize($config);
         $this->load->view('front/index', $page_data);
     }
 
@@ -8708,12 +9148,11 @@ $expire_time = strtotime($expire);
 
                     $this->paypal->add_field('notify_url', base_url() . 'home/cus_paypal_ipn');
                     $this->paypal->add_field('cancel_return', base_url() . 'home/cus_paypal_cancel');
-                    $this->paypal->add_field('return', base_url() . 'home/cus_paypal_success/'.$payment_id);
+                    $this->paypal->add_field('return', base_url() . 'home/cus_paypal_success/' . $payment_id);
 
                     // submit the fields to paypal
                     $this->paypal->submit_paypal_post();
-                }
-                else if ($this->input->post('payment_type') == 'bitcoin') {
+                } else if ($this->input->post('payment_type') == 'bitcoin') {
 
                     $user_id = $this->session->userdata('user_id');
                     $payment_type = $this->input->post('payment_type');
@@ -8736,12 +9175,11 @@ $expire_time = strtotime($expire);
 
                     $this->session->set_userdata('payment_id', $payment_id);
 
-                    $bitcoin_coinpayments_merchant = $this->db->get_where('business_settings',array('type'=>'bitcoin_coinpayments_merchant'))->row()->value;
+                    $bitcoin_coinpayments_merchant = $this->db->get_where('business_settings', array('type' => 'bitcoin_coinpayments_merchant'))->row()->value;
                     $exchange = exchange('usd');
-                    $final_amount = $amount/$exchange;
-                    echo $this->load->view('front/bitcoin_customer_package_payment_view',compact('bitcoin_coinpayments_merchant','final_amount'),true);
+                    $final_amount = $amount / $exchange;
+                    echo $this->load->view('front/bitcoin_customer_package_payment_view', compact('bitcoin_coinpayments_merchant', 'final_amount'), true);
                     exit;
-
 
 
                 } else if ($this->input->post('payment_type') == 'stripe') {
@@ -9027,7 +9465,8 @@ $expire_time = strtotime($expire);
         }
     }
 
-    function bitcoin_customer_package_success(){
+    function bitcoin_customer_package_success()
+    {
 
         $payment_id = $this->session->userdata('payment_id');
 
@@ -9062,7 +9501,8 @@ $expire_time = strtotime($expire);
         redirect(base_url() . 'home/profile/part/payment_info', 'refresh');
     }
 
-    function bitcoin_customer_package_cancel(){
+    function bitcoin_customer_package_cancel()
+    {
         $payment_id = $this->session->userdata('payment_id');
         $this->db->where('package_payment_id', $payment_id);
         $this->db->delete('package_payment');
@@ -9126,7 +9566,7 @@ $expire_time = strtotime($expire);
     /* FUNCTION: Loads after successful paypal payment*/
     function cus_paypal_success()
     {
-        
+
         $this->session->set_flashdata('alert', 'paypal_success');
         // redirect(base_url() . 'home/invoice/'.$this->session->userdata('payment_id'), 'refresh');
         $this->session->set_userdata('payment_id', '');
@@ -9478,7 +9918,7 @@ $expire_time = strtotime($expire);
             $product_upd_data['rating_total'] = $product['rating_total'] - $existing_rating + $upd_data['rating'];
             $product_upd_data['rating_num'] = empty($user_rating) ? $product['rating_num'] + 1 : $product['rating_num'];
 
- 
+
             $this->db->update('product', $product_upd_data, array('customer_product_id' => $product_id));
         }
 
@@ -9503,17 +9943,17 @@ $expire_time = strtotime($expire);
         $this->email_model->do_email($from, $from_name, $to, $sub, $msg);
     }
 
-    function test(){
-       // $pac = $this->crud_model->get_product_affiliation_codes_from_cookies();
-       //
-       // echo "<pre>";
-       // print_r($pac);
-       // echo "</pre>";
-       //$this->email_model->account_opening('user', 'email@gmail.com', '1234');
-       //$this->email_model->email_invoice(224);
+    function test()
+    {
+        // $pac = $this->crud_model->get_product_affiliation_codes_from_cookies();
+        //
+        // echo "<pre>";
+        // print_r($pac);
+        // echo "</pre>";
+        //$this->email_model->account_opening('user', 'email@gmail.com', '1234');
+        //$this->email_model->email_invoice(224);
 
     }
-
 
 
 }

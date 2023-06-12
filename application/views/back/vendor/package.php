@@ -1,4 +1,4 @@
-<div id="content-container"> 
+<div id="content-container">
     <div id="page-title">
         <h1 class="page-header text-overflow"><?php echo translate('upgrade_package');?></h1>
     </div>
@@ -23,7 +23,7 @@
                             <label class="col-sm-4 control-label"><?php echo translate('product');?></label>
                             <div class="col-sm-6">
                                 <select name="membership" id="type" class="demo-chosen-select" onchange="get_membership_info(this.value)">
-                                    <option value="0" 
+                                    <option value="0"
                                         <?php
                                             $e_match = $membership;
                                             if ($e_match == 0) {
@@ -31,19 +31,22 @@
                                             }
                                             if ($e_match == 0) {
                                                 echo 'selected="selected"';
-                                            } 
+                                            }
                                         ?> >
                                         <?php echo translate('default');?>
-                                    </option> 
+                                    </option>
                                     <?php
-                                        $memberships = $this->db->get('membership')->result_array();
+                                    $this->db->order_by('mcat','asc');
+                                    $memberships = $this->db->get('membership')->result_array();
                                         foreach ($memberships as $row1) {
-                                    ?>
-                                    <option value="<?php echo $row1['membership_id']; ?>" 
+                                        $pkg = $this->db->where('package_id', $row1['mcat'])->get('package')->result_array();
+
+                                        ?>
+                                    <option value="<?php echo $row1['membership_id']; ?>"
                                         <?php if ($row1['membership_id'] == $e_match) {
                                             echo 'selected="selected"';
                                         } ?> >
-                                        <?php echo $row1['title']; ?>
+                                        <?php echo $pkg[0]['name'].' ('. $row1['title'].' )'; ?>
                                     </option>
                                     <?php
                                         }
@@ -110,7 +113,7 @@
                                 var typea = $('#type').val();
                                 if(type == 'stripe'){
                                     $.ajax({
-                                        url: "<?php echo base_url(); ?>vendor/business_settings/membership_price/"+typea, 
+                                        url: "<?php echo base_url(); ?>vendor/business_settings/membership_price/"+typea,
                                         success: function(total){
                                             total = total.replace("<?php echo currency(); ?>", '');
                                             //total = parseFloat(total.replace(",", ''));

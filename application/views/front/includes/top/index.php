@@ -216,8 +216,9 @@ $font =  $this->db->get_where('ui_settings',array('type' => 'font'))->row()->val
 
 ?>
 
-<link href='https://fonts.googleapis.com/css?family=<?php echo $font; ?>:400,500,600,700,800,900' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=<?php echo $font; ?>:400,500,600,700,800,900&display=swap' rel='stylesheet' type='text/css'>
 <link href="<?php echo base_url(); ?>template/front/css/socialmedia9_style.css" rel="stylesheet">
+<script type="text/javascript" src="https://unpkg.com/default-passive-events"></script>
 <style>
 
     *{

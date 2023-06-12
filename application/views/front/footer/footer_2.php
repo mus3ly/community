@@ -14,7 +14,7 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
     border-radius: 100%;
     width: 50px;
     height: 50px;
-    padding: 0; 
+    padding: 0;
     font-size: 42px;
     text-align: center;
 }
@@ -27,44 +27,48 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
 
 <footer class="footer_warp">
-    <div class="container">
+    <div class="container-fluid logo_up">
         <div class="row">
-        <div class="col-md-12 fotter_logo p-0">
+        <div class="col-md-12 fotter_logo">
              <a href="#"><img src="<?= base_url(); ?>/template/front/images/logo.png" alt=""></a>
             </div>
-            </div>
-            </div>
-    <div class="container">
-        <div class="row">
-            
-            <div class="col-md-5 col-sm-12 fotter_logo">
-               
-                
-                <?php
+              <div class="col-md-3">      
+        <?php
 							echo form_open(base_url() . 'home/subscribe', array(
 								'class' => 'mhl_subscribe_fields',
 								'method' => 'post'
 							));
-						?>    
+						?>
 							<div class="form-group row">
-                            	<div class="col-md-12 p-0 footer_form">
+                            	<div class="col-md-12 p-0 footer_search">
 									<input type="text" class="form-control col-md-12" name="email" id="subscr" placeholder="<?php echo translate('enter_your_email_address'); ?>">
-                                	<span class="btn btn-subcribe subscriber  enterer center_btn2"><?php echo translate('subscribe'); ?></span>
+                                	<button class="btn btn-subcribe subscriber  enterer center_btn2"><?php echo translate('subscribe'); ?></button>
                                 </div>
-							</div>                
-					   </form> 
+							</div>
+					   </form>
+					   </div>
+    
+            </div>
+            </div>
+            
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-md-3 col-sm-12  fotter_logo2">
+        
                 <div class="row">
-                    <div class="col-sm-5 left_ftbaner">
+                    <div class="col-sm-12 img_footer" align="left">
                         <img src="https://markethubland.com//template/front/images/footer_btmimg.png" alt="">
                     </div>
                     <div class="col-sm-7 right_ftinfo">
-                   <p> <?= $footer_text ?></p>
+
                     </div>
                 </div>
+                            
             </div>
-            <div class="col-md-7 col-sm-12">
-                <div class="row">  
-            <div class="col-sm-5 widget_colum">
+            <div class="col-md-9 col-sm-12">
+                <div class="row up_it">
+            <div class="col-sm-3 widget_colum">
                 <h4>Community Pegs</h4>
                 <div style="display:flex;">
                 <ul style="
@@ -81,14 +85,14 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                                                     $result[]=$row;
                                                 }
                                             }
-                                            
+
                     foreach ($brands as $key => $value) {
                         if(in_array($value['category_id'], $result))
                         {
                             $x++;
                         if($x==7){
                             echo '</ul><ul>';
-                        }    
+                        }
                             //  echo $value['category_id'];
                         ?>
 
@@ -96,7 +100,7 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                               <?php
                         }
                     }
-                              ?> 
+                              ?>
                                 </ul>
                                 </div>
                 <!--<ul>-->
@@ -104,19 +108,19 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                     $categories=json_decode($footer_category);
                     foreach ($categories as $key => $value) {
                         $row = $this->db->where('category_id',$value)->get('category')->row();
-                        
+
                         if($row)
                         {
                         ?>
                         <li><a href="<?= base_url('home/category/'.$value); ?>"><?= $row->category_name ?></li></a>
-                        
+
                         <?php
                         }
                     }*/
                     ?>
                 <!--</ul>-->
             </div>
-            <div class="col-sm-4 widget_colum">
+            <div class="col-sm-3 widget_colum">
                 <h4>Company Info</h4>
                 <ul>
                     <li><a href="<?= base_url('home/page/Disclaimer'); ?>">Disclaimer</a></li>
@@ -141,14 +145,14 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                     ?>
                 <!--</ul>-->
             </div>
-            <div class="col-sm-3 widget_colum">
+            <div class="col-sm-2 widget_colum">
                 <h4>Discovery</h4>
                   <ul>
                     <li><a href="<?= base_url('home/page/About_Us'); ?>"> About Us</a></li>
                     <li><a href="<?= base_url('home/page/Services'); ?>">Services</a></li>
                     <li><a href="<?= base_url('home/page/career'); ?>">Career</a></li>
                     <li><a href="<?= base_url('home/page/Articles'); ?>">Articles</a></li>
-                    
+
                 </ul>
                 <!--<ul>-->
                     <?php /*
@@ -165,15 +169,20 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                     ?>
                 <!--</ul>-->
             </div>
-            <div class="footerbtn">
-             <a href="<?= base_url('vendor_logup/registration'); ?>"><button class="btn_anim from-top">SIGN-UP to Add a Listing</button></a>
-             <a href="<?= base_url('directory'); ?>"><button class="btn_anim from-top">Visit Directory</button></a>
-             <a href="<?= base_url('home/login_set/registration'); ?>"><button class="btn_anim from-top">Join Our Affiliate Marketing</button></a>
+            <div class="col-sm-4 widget_colum p-0">
+                <h4>About US</h4>
+                <p style="color:white;text-align:justify; "><?= strip_tags($footer_text) ?></p>
             </div>
+            
             </div>
         </div>
     </div>
     </div>
+    <div class="footerbtn">
+             <a href="<?= base_url('vendor_logup/registration'); ?>"><button class="btn_anim from-top">SIGN-UP to Add a Listing</button></a>
+             <a href="<?= base_url('directory'); ?>"><button class="btn_anim from-top">Visit Directory</button></a>
+             <a href="<?= base_url('home/login_set/registration'); ?>"><button class="btn_anim from-top">Join Our Affiliate Marketing</button></a>
+            </div>
     <div class="mhl_copyright_footer">
         <span>Copyright @ 2023 </span><span><a href="<?php base_url(); ?>">Markethubland</a></span>
     </div>
@@ -183,24 +192,24 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
     $(".flgicon i").click(function(){
         $(".overlaypopup,.popup_box").fadeIn();
     });
-    
+
      $(".close_btn,.overlaypopup").click(function(){
         $(".overlaypopup,.popup_box").fadeOut();
     });
 
      $("#shareit").click(function(){
         $(".social_mediabox").toggle(500);
-    }); 
-    
+    });
+
      $('.dropdown_box a').click(function(e){
         location.href=$(this).attr('href')
     })
     $(document).on('click',".set-pad-tb",function(e){
         var ths=$(this);
         if($(window).width()<768){
-           
+
             var thsdrop=$('.dropdown_box',ths);
-             if(thsdrop.length){ 
+             if(thsdrop.length){
                  e.preventDefault();
             }
             $('.dropdown_box').slideUp();
@@ -213,6 +222,6 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
             }
         }
     });
-   
-    
+
+
 </script>

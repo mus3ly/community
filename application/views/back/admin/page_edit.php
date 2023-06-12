@@ -25,7 +25,19 @@
                             <input type="text" name="parmalink" id="page_code" placeholder="<?php echo translate('page_code'); ?>" class="form-control disabled required" value="<?php echo $row['parmalink']; ?>">
                         </div>
                     </div>
-                                                   
+                                                         
+                <div class="form-group btm_border">
+                    <label class="col-sm-4 control-label" ><?php echo translate('meta_title');?></label>
+                    <div class="col-sm-6">
+                        <input type="text" name="meta_title"  placeholder="<?php echo translate('meta_title');?>" class="form-control" value="<?php echo $row['meta_title']; ?>">
+                    </div>
+                </div> 
+                <div class="form-group btm_border">
+                    <label class="col-sm-4 control-label" ><?php echo translate('meta_description');?></label>
+                    <div class="col-sm-6">
+                        <textarea name="meta_description"  rows="7" placeholder="<?php echo translate('meta_description');?>" class="form-control"><?php echo $row['meta_description']; ?></textarea>
+                    </div>
+                </div>                           
                     <div class="form-group btm_border">
                         <label class="col-sm-4 control-label" ><?php echo translate('tags');?></label>
                         <div class="col-sm-6">

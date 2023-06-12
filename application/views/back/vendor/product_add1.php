@@ -1,4 +1,4 @@
- <?php  
+ <?php
 $rid = time();
 ?>
 <div class=" newsidebar" style="margin-top:70px;">
@@ -35,12 +35,12 @@ $rid = time();
         </div>
         <div class="col-sm-10 right_content_box">
             <div class="tab-base">
-                    <!--Tabs Content-->                    
+                    <!--Tabs Content-->
                     <div class="tab-content">
                         <div id="product_details" class="tab-pane fade active in">
-        
+
                             <div class="form-group ">
-                                <h4 class=""><?php echo translate('product_details'); ?></h4>                            
+                                <h4 class=""><?php echo translate('product_details'); ?></h4>
                             </div>
                             <div class="row">
                                 <div class="col-sm-3 sidegap_box">
@@ -89,7 +89,7 @@ $rid = time();
                                         </span>
                                         <br><br>
                                         <span id="previewImg1" >
-                                            
+
                                             <?php
                                                 if($row['comp_logo'])
                                                 {
@@ -157,7 +157,7 @@ $rid = time();
                         </div>
                         <div id="event_images" class="tab-pane fade ">
                         <div class="form-group btm_border">
-                                <h4 class="text-thin text-center"><?php echo translate('gallary_images'); ?></h4>                            
+                                <h4 class="text-thin text-center"><?php echo translate('gallary_images'); ?></h4>
                             </div>
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-12"><?php echo translate('images');?></label>
@@ -194,7 +194,7 @@ $rid = time();
 
                         <div id="business_details" class="tab-pane fade">
                             <div class="form-group ">
-                                <h4 class=""><?php echo translate('business_details'); ?></h4>                            
+                                <h4 class=""><?php echo translate('business_details'); ?></h4>
                             </div>
                             <div class="row">
                                 <div class="col-sm-3 sidegap_box">
@@ -222,6 +222,14 @@ $rid = time();
                                             <span class="btn unit_set"></span>
                                     </div>
                                 </div>
+                                <div class="col-sm-3 sidegap_box">
+                                    <div class="form-group ">
+                                        <label class="control-label" for="demo-hor-6">Shippo Price</label>
+                                        <input type="number" name="shippo_price" id="demo-hor-8" min='1' step='.01' placeholder="Shippo Price" class="form-control required" value="1">
+                                        <span class="btn"><?php echo currency('','def'); ?> 1 will allow buyer to trace their shipment 3 times. </span>
+                                        <span class="btn unit_set"></span>
+                                    </div>
+                                </div>
 
                                 <div class="col-sm-3 sidegap_box">
                                     <div class="form-group ">
@@ -242,7 +250,7 @@ $rid = time();
                                      <span class="btn unit_set"></span>
                                     </div>
                                 </div>
-                           
+
                                 <div class="col-sm-3 sidegap_box">
                                     <div class="form-group ">
                                        <label>Product Discount</label>
@@ -254,16 +262,16 @@ $rid = time();
                                     <span class="btn unit_set"></span>
                                     </div>
                                 </div>
-                                
+
                             </div>
-                            
+
                         </div>
 
 
 
                         <div id="customer_choice_options" class="tab-pane fade">
                             <div class="form-group ">
-                                <h4 class=""><?php echo translate('customer_choice_options'); ?></h4>                            
+                                <h4 class=""><?php echo translate('customer_choice_options'); ?></h4>
                             </div>
                             <div class="form-group ">
                                 <label class="col-sm-2 control-label" for="demo-hor-14"><?php echo translate('color'); ?></label>
@@ -286,7 +294,7 @@ $rid = time();
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div id="more_additional_options"></div>
                             <div class="form-group ">
                                 <label class="col-sm-12 control-label" for="demo-hor-inputpass"></label>
@@ -305,36 +313,36 @@ $rid = time();
     </div>
     <div class="row">
     <div class="col-md-12">
-       
+
             <!--Panel heading-->
             <div class="panel-heading">
                 <div class="panel-control" style="float: left;">
-                    
+
                 </div>
             </div>
             <div class="panel-body">
-                
+
 
                 <span class="btn btn-purple btn-labeled fa fa-hand-o-right pull-right" onclick="next_tab()"><?php echo translate('next'); ?></span>
                 <span class="btn btn-purple btn-labeled fa fa-hand-o-left pull-right" onclick="previous_tab()"><?php echo translate('previous'); ?></span>
-        
+
             </div>
-    
+
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-md-11">
-                        <span class="btn btn-purple btn-labeled fa fa-refresh pro_list_btn pull-right" 
+                        <span class="btn btn-purple btn-labeled fa fa-refresh pro_list_btn pull-right"
                             onclick="ajax_set_full('add','<?php echo translate('add_product'); ?>','<?php echo translate('successfully_added!'); ?>','product_add',''); "><?php echo translate('reset');?>
                         </span>
                     </div>
-                    
+
                     <div class="col-md-1">
                         <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" onclick="form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');" ><?php echo translate('upload');?></span>
                     </div>
-                    
+
                 </div>
             </div>
-    
+
         </form>
     </div>
 </div>
@@ -346,7 +354,7 @@ $rid = time();
     window.preview = function (input) {
         if (input.files && input.files[0]) {
             $("#previewImg").html('');
-            
+
             $(input.files).each(function () {
                 var reader = new FileReader();
                 reader.readAsDataURL(this);
@@ -356,8 +364,8 @@ $rid = time();
                     // $("#previewImg").append("<div style='float:left;border:4px solid #303641;padding:5px;margin:5px;'><img height='80' src='" + e.target.result + "'></div>");
                 }
             });
-            
-            
+
+
         }
     }
     function upload_img(img){
@@ -396,7 +404,7 @@ $.ajax(settings).done(function (response) {
         data: { },
         success: function (data) {
             $('.gallary_images').html(data);
-           
+
         },
         error: function (xhr, exception) {
             var msg = "";
@@ -415,15 +423,15 @@ $.ajax(settings).done(function (response) {
             } else {
                 msg = "Error:" + xhr.status + " " + xhr.responseText;
             }
-           
+
         }
-    }); 
+    });
 
         $(mid).remove();
     }
 
     function other_forms(){}
-    
+
     function set_summer(){
         $('.summernotes').each(function() {
             var now = $(this);
@@ -465,7 +473,7 @@ $.ajax(settings).done(function (response) {
         $('.demo-chosen-select').chosen();
         $('.demo-cs-multiselect').chosen({width:'100%'});
     }
-    
+
     $(document).ready(function() {
         set_select();
         set_summer();
@@ -481,7 +489,7 @@ $.ajax(settings).done(function (response) {
         ajax_load(base_url+'vendor/product/sub_by_cat1/'+id,'sub_cat','other');
     }
     function get_brnd(id){
-        
+
     }
     function get_sub_res(id){}
 
@@ -490,11 +498,11 @@ $.ajax(settings).done(function (response) {
     });
 
     function createColorpickers() {
-    
+
         $('.demo2').colorpicker({
             format: 'rgba'
         });
-        
+
     }
         $("#more_option_btn").click(function(){
         option_count('add');
@@ -540,14 +548,14 @@ $.ajax(settings).done(function (response) {
         );
         set_summer();
     });
-    
+
     function next_tab(){
-        $('.nav-tabs li.active').next().find('a').click();                    
+        $('.nav-tabs li.active').next().find('a').click();
     }
     function previous_tab(){
-        $('.nav-tabs li.active').prev().find('a').click();                     
+        $('.nav-tabs li.active').prev().find('a').click();
     }
-    
+
     $('body').on('click', '.rmo', function(){
         $(this).parent().parent().remove();
     });
@@ -581,7 +589,7 @@ $.ajax(settings).done(function (response) {
             +'      </div>'
         );
         createColorpickers();
-    });                
+    });
 
     $('body').on('click', '.rmc', function(){
         $(this).parent().parent().remove();
@@ -593,8 +601,8 @@ $.ajax(settings).done(function (response) {
             event.preventDefault();
         });
     });
-    
-    
+
+
     const dropArea = document.querySelector(".drop_box"),
   button = dropArea.querySelector("button"),
   dragText = dropArea.querySelector("header"),

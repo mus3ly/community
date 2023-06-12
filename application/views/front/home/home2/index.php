@@ -1,23 +1,4 @@
-<!DOCTYPE html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Community Hubland</title>
-    <!-- meta tag -->
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta http-equiv="Content-Language" content="en-us"/>
-    <meta name="description" content=""/>
-    <meta name="keywords" content=""/>
-    <meta name="distribution" content="global"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link id="favicon" rel="icon"  type="<?= base_url(); ?>template/front/images/favicon.png" href="<?= base_url(); ?>template/front/images/favicon.png">
-    <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/font-awesome.min.css" />
-    <link rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/style.css" />
-    <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/owl.carousel.css" />
 
-</head>
 <style>
     .scroll::-webkit-scrollbar {
             display: none;
@@ -75,20 +56,20 @@
                                             $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '62'))->row();
                                             if($top_banner)
                                             {
-                                             $img = $this->crud_model->get_img($top_banner->value)->secure_url;
+                                             $img = $this->crud_model->get_img($top_banner->value)->webp_url;
                                          }
 
                                         ?>
-                <img src="<?= $img ?>" alt="">
+                <img src="<?= $img ?>" width="343px" height="198px" alt="">
             </div>
             <div class="col-sm-8 perfect_place">
                 <h5>Community HubLand - A Directory Site - Your Virtual Land</h5>
                 <h3>Search Your <b>Communities</b></h3>
                 <div class="search_bar border_iner">
                 <form action="<?= base_url('/home/text_search'); ?>"  onkeyup="submitForm(event)" id="srch_form" method="post">
-                    <img style="width:22px;" src="<?= base_url('/search_icon_bar.png'); ?>" alt="Search">
+                    <img style="width:22px;" src="<?= base_url('/search_icon_bar.png'); ?>" width="22px" height="22px" alt="Search">
                     <input type="text" placeholder="TACOS, CHEAP DINNER, MAX’S" id="left_box"  name="query" alt="" style="border-right: 1px solid #f26122 !important;border-radius:0;" id="texted">
-                    <img src="<?= base_url(); ?>template/front/images/Location.png" alt="Search">
+                    <img src="<?= base_url(); ?>template/front/images/Location.webp" width="18px" height="21px" alt="Search">
                      <input type="text" id="loc_box"  onkeyup="search_location()" placeholder="LOCATION"  name="" alt="" >
                      <div id="map_search" style="
     z-index: 9999999999999999;
@@ -99,7 +80,7 @@
                      </div>
                      <input type="hidden" id="place_id" name="place_id" />
                     <button type="submit">Search</button>
-                    
+
     <div id="map"></div>
                 </form>
                 </div>
@@ -108,7 +89,7 @@
                 <div id="small-categories" class="owl-carousel owl-carousel-icons owl-loaded owl-drag">
                   <div class="owl-stage-outer">
                      <div class="owl-stage" style="transform: translate3d(-3002px, 0px, 0px); transition: all 0.25s ease 0s; width: 4804px;">
-                        
+
                         <?php
                         // die('come');
                         $brands = $this->db->get('category')->result_array();
@@ -127,7 +108,7 @@
                         if(in_array($value['category_id'], $result))
                         {
                             //  echo $value['category_id'];
-                        ?> 
+                        ?>
                             <div class="owl-item " >
                            <div class="item">
                               <div class="slider_box_icons">
@@ -141,26 +122,26 @@
                         }
                     }
                 ?>
-                        
-                        
-                        
+
+
+
                      </div>
                   </div>
                   <div class="owl-nav">
-                     <button type="button" role="presentation" class="owl-prev"><i class="fa fa-angle-left"></i></button>
-                     <button type="button" role="presentation" class="owl-next"><i class="fa fa-angle-right"></i> </button>
+                     <button type="button" role="presentation" aria-label="left arrow" class="owl-prev"><i class="fa fa-angle-left"></i></button>
+                     <button type="button" role="presentation" aria-label="right arrow" class="owl-next"><i class="fa fa-angle-right"></i> </button>
                   </div>
                   <div class="owl-dots disabled"></div>
                </div>
 
-                
-                
+
+
             </div>
         </div>
     </div>
 </div>
 <div class="right_dotted">
-    <img src="<?= base_url(); ?>template/front/images/doted-lines-right.png" alt="">
+    <img src="<?= base_url(); ?>template/front/images/doted-lines-right.webp" alt="">
 </div>
 
 
@@ -173,17 +154,17 @@
             </video>
             </div>
             <div class="col-sm-6 communitybox every_business">
-                
+
                 <h3>Sign-up and own a business page in less than 5 minutes</h3>
                     <div class="scroll">
                     <p>Use your business page as your community market page:</p>
-                    
+
                     <ul>
-                        <?php 
+                        <?php
                         $points = array( 'Post Advertisements', 'Own A Commercial Business Page', 'Benefit From Affiliate Marketing' );
                         $html = '';
                         foreach( $points as $point ) {
-                            $html .= '<li><img src="https://markethubland.com/template/front/images/Tick-Square.png" alt="">' . $point . '</li>';
+                            $html .= '<li><img src="https://markethubland.com/template/front/images/Tick-Square.webp" width="24px" height="25px" alt="">' . $point . '</li>';
                         }
                         echo $html;
                         ?>
@@ -194,12 +175,12 @@
                     </p>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>
 
-<!-- <div class="list_business">
+<?php/*?> <div class="list_business">
     <div class="container">
         <div class="plus_dot">
             <div class="right_plus">
@@ -212,12 +193,12 @@
             </div>
         </div>
     </div>
-</div> -->
+</div> <?php */?>
 
 
 <div class="icon_box_wrap">
     <div class="container">
-        
+
       <!--  <div class="row">
 
         <?php
@@ -225,17 +206,17 @@
                                     $boxes = 3;
                                     if($cboxes)
                                     {
-                                        
+
                                         $boxes = count($cboxes);
                                     }
 
-                                    for ($i=0; $i < $boxes; $i++) { 
+                                    for ($i=0; $i < $boxes; $i++) {
                                         ?>
             <div class="col-sm-4 sidegapp">
                 <div class="info_box_shadow">
                     <div class="shadow_icon">
                     <i class="fa <?= (isset($cboxes[$i]['icon'])?$cboxes[$i]['icon']:''); ?>" aria-hidden="true"></i>
-                       
+
                     </div>
                     <b><?= (isset($cboxes[$i]['heading'])?$cboxes[$i]['heading']:''); ?></b>
                     <ul>
@@ -266,10 +247,10 @@
 
                                     }
             ?>
-            
+
         </div>-->
 
-        
+
         </div>
     </div>
 </div>
@@ -277,23 +258,23 @@
 <div class="community_wrap">
     <div class="container">
         <div class="clipart">
-            <img src="<?= base_url(); ?>template/front/images/business_graphic-clipart.png" alt="">
+            <img src="<?= base_url(); ?>template/front/images/business_graphic-clipart.webp" width="79px" height="63px" alt="">
         </div>
         <div class="row">
             <div class="col-sm-7 communitybox every_business">
-                
+
                 <h3><?= $this->crud_model->get_type_name_by_id('ui_settings','69','value'); ?></h3>
                 <div class="scroll">
                 <p><?= $this->crud_model->get_type_name_by_id('ui_settings','68','value'); ?></p>
-                
+
                 <ul>
                     <?php
-                    $bullets =  $this->crud_model->get_type_name_by_id('ui_settings','73','value'); 
+                    $bullets =  $this->crud_model->get_type_name_by_id('ui_settings','73','value');
                     $bullets = explode(',',$bullets);
                     foreach($bullets as $k=> $v)
                     {
                         ?>
-                        <li><img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""><?= $v ?></li>
+                        <li><img src="<?= base_url(); ?>template/front/images/Tick-Square.webp" width="24px" height="25px" alt=""><?= $v ?></li>
                         <?php
                     }
                     ?>
@@ -308,18 +289,18 @@
                                             $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '67'))->row();
                                             if($top_banner)
                                             {
-                                             $img = $this->crud_model->get_img($top_banner->value)->secure_url;
+                                             $img = $this->crud_model->get_img($top_banner->value)->webp_url;
                                          }
 
                                         ?>
-                <img src="<?= $img ?>" alt="">
+                <img src="<?= $img ?>"  width="512px" height="529px" alt="">
                 <div class="circle_clipart">
-                    <img src="<?= base_url(); ?>template/front/images/circle-clipart.png" alt="">
+                    <img src="<?= base_url(); ?>template/front/images/circle-clipart.webp" width="96px" height="223px" alt="">
                 </div>
             </div>
         </div>
         <div class="dotted_lines_clipart">
-            <img src="<?= base_url(); ?>template/front/images/dotted_lines_clipart.png" alt="">
+            <img src="<?= base_url(); ?>template/front/images/dotted_lines_clipart.webp" width="120px" height="106px" alt="">
         </div>
     </div>
 </div>
@@ -328,14 +309,14 @@
     <div class="container">
         <div class="orange_card_box">
             <div class="full_circle">
-                <img src="<?= base_url(); ?>template/front/images/business-card-right.png" alt="">
+                <img src="<?= base_url(); ?>template/front/images/business-card-right.webp" alt="">
             </div>
             <p><?= $this->crud_model->get_type_name_by_id('ui_settings','74','value'); ?></p>
             <h4><?= $this->crud_model->get_type_name_by_id('ui_settings','75','value'); ?></span></h4>
             <p class="hire_para"><?= $this->crud_model->get_type_name_by_id('ui_settings','76','value'); ?></p>
             <div class="row">
                 <?php
-                    $bullets =  $this->crud_model->get_type_name_by_id('ui_settings','77','value'); 
+                    $bullets =  $this->crud_model->get_type_name_by_id('ui_settings','77','value');
                     $bullets = explode(',',$bullets);
 
                     foreach($bullets as $k=> $v)
@@ -343,7 +324,7 @@
                         $exp = explode(':',$v);
                         ?>
                         <div class="col-sm-6 checkbox_tick">
-                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""> 
+                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.webp" width="24px" height="25px" alt="">
                     <h4><?= (isset($exp[0])?$exp[0]:''); ?></h4>
                     <p><?= (isset($exp[1])?$exp[1]:''); ?></p>
                 </div>
@@ -351,7 +332,7 @@
                     }
                     ?>
                 <div class="col-sm-12 checkbox_tick mt-4">
-                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""> 
+                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.webp" width="24px" height="25px" alt="">
                     <h4>CALL CENTRE SERVICES</h4>
                     <p>A myriad of low cost, highly efficient customer services from technical to telemarketing and help desk support</p>
                 </div>
@@ -378,72 +359,71 @@
                 ?>
             </div>
             <div class="bottom_circled">
-                <img src="<?= base_url(); ?>template/front/images/bottom-circled.png" alt="">
+                <img src="<?= base_url(); ?>template/front/images/bottom-circled.webp" alt="">
             </div>
         </div>
     </div>
 </div>
 
 
-<div class="advertise_wrap">
-    <div class="purple_line">
-        <img src="<?= base_url(); ?>template/front/images/base-icon.png" alt="">
-    </div>
-    <div class="container">
-        <div class="row" id="advertise_info">
-            <div class="col-sm-5 business_graphic">
-            <?php
-                                    $img = '';
-                                            $top_banner     =  $this->db->get_where('ui_settings',array('ui_settings_id' => '85'))->row();
-                                            if($top_banner)
-                                            {
-                                             $img = $this->crud_model->get_img($top_banner->value)->secure_url;
-                                         }
+    <div class="advertise_wrap">
+        <div class="purple_line">
+            <img src="<?= base_url(); ?>template/front/images/base-icon.png" alt="">
+        </div>
+        <div class="container">
+            <div class="row" id="advertise_info">
+                <div class="col-sm-4 business_graphic">
+                    <?php
+                    $img = '';
+                    $top_banner = $this->db->get_where('ui_settings', array('ui_settings_id' => '85'))->row();
+                    if ($top_banner) {
+                        $img = $this->crud_model->get_img($top_banner->value)->secure_url;
+                    }
 
-                                        ?>
-                <img src="<?= $img ?>" alt="">
-                <div class="purple_dot" style="top: auto;bottom: -61px;">
+                    ?>
+                    <img src="<?= $img ?>" alt="">
+                    <div class="purple_dot" style="top: auto;bottom: -61px;">
                         <img src="<?= base_url(); ?>template/front/images/purple.png" alt="">
                     </div>
+                </div>
+                <div class="col-sm-8 communitybox">
+                    <b><?= $this->crud_model->get_type_name_by_id('ui_settings', '79', 'value'); ?></b>
+                    <h3><?= $this->crud_model->get_type_name_by_id('ui_settings', '80', 'value'); ?></h3>
+                    <div class="scroll" style="display:inline-block">
+                        <p><?= $this->crud_model->get_type_name_by_id('ui_settings', '82', 'value'); ?></p>
+                        <div class="row ">
+                            <?php
+                            $bullets = $this->crud_model->get_type_name_by_id('ui_settings', '81', 'value');
+                            $bullets = explode(',', $bullets);
+                            foreach ($bullets as $k => $v) {
+                                $exp = explode(':', $v);
+                                ?>
+                                <div class="<?php echo ($k == count($bullets) - 1) ? 'col-sm-12' : 'col-sm-6'; ?> checkbox_tick">
+                                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
+                                    <h4 style="color:black;"><?= (isset($exp[0]) ? $exp[0] : ''); ?></h4>
+                                    <p style="color:black;"><?= (isset($exp[1]) ? $exp[1] : ''); ?></p>
+                                </div>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="learn_more_btns" align="right">
+                        <a href="<?= $this->crud_model->get_type_name_by_id('ui_settings', '84', 'value'); ?>"
+                           class="our_projects"><?= $this->crud_model->get_type_name_by_id('ui_settings', '83', 'value'); ?></a>
+                        <!--<div class="purple_dot">-->
+                        <!--    <img src="<?= base_url(); ?>template/front/images/purple.png" alt="">-->
+                        <!--</div>-->
+                    </div>
+
+                </div>
+
             </div>
-            <div class="col-sm-7 communitybox">
-                <b><?= $this->crud_model->get_type_name_by_id('ui_settings','79','value'); ?></b>
-                <h3><?= $this->crud_model->get_type_name_by_id('ui_settings','80','value'); ?></h3>
-                <div class="scroll" style="display:inline-block">
-                <p><?= $this->crud_model->get_type_name_by_id('ui_settings','82','value'); ?></p>
-                <ul>
-                    <?php
-                    $bullets =  $this->crud_model->get_type_name_by_id('ui_settings','81','value'); 
-                    $bullets = explode(',',$bullets);
-                    foreach($bullets as $k=> $v)
-                    {
-                        $exp = explode(':',$v);
-                        ?>
-                        <div class="col-sm-6 checkbox_tick">
-                    <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt=""> 
-                    <h4  style="color:black;"><?= (isset($exp[0])?$exp[0]:''); ?></h4>
-                    <p style="color:black;"><?= (isset($exp[1])?$exp[1]:''); ?></p>
-                </div>
-                        <?php
-                    }
-                    ?>
-                </ul>
-                </div>
-                <div class="learn_more_btns">
-                <a href="<?= $this->crud_model->get_type_name_by_id('ui_settings','84','value'); ?>" class="our_projects"><?= $this->crud_model->get_type_name_by_id('ui_settings','83','value'); ?></a>
-                    <!--<div class="purple_dot">-->
-                    <!--    <img src="<?= base_url(); ?>template/front/images/purple.png" alt="">-->
-                    <!--</div>-->
-                </div>
-                
-            </div>
-            
+        </div>
+        <div class="upper_line_dot">
+            <img src="<?= base_url(); ?>template/front/images/doted-lines-right.png" alt="">
         </div>
     </div>
-    <div class="upper_line_dot">
-        <img src="<?= base_url(); ?>template/front/images/doted-lines-right.png" alt="">
-    </div>
-</div>
 <?php
 include "featured_products.php";
 ?>
@@ -459,7 +439,7 @@ include "featured_products.php";
 <script src="<?= base_url('/'); ?>template/front/js-files/additional-script.js"></script>
           <script type="text/javascript">
               (function($) {
-    
+
     /*---Owl-carousel----*/
 
     // ___Owl-carousel-icons
@@ -471,7 +451,7 @@ include "featured_products.php";
         animateIn: 'fadeInDowm',
         animateOut: 'fadeOutDown',
         autoplay: false,
-        autoplayTimeout: 5000, 
+        autoplayTimeout: 5000,
         autoplayHoverPause: true,
         dots: false,
         nav: true,
@@ -497,9 +477,9 @@ include "featured_products.php";
 })(jQuery);
 function search_location()
 {
-    
+
     var str = $('#loc_box').val();
-    // 
+    //
     if(str.length >= 2 )
     {
         $('#map_search #loader').show();
@@ -515,7 +495,7 @@ function search_location()
             // alert(res);
         }
     });
-       
+
     }
     else
     {
@@ -527,7 +507,7 @@ function select_place(place,txt)
     $('#loc_box').val(txt);
     $('#place_id').val(place);
     $('#map_search #result').hide();
-    
+
 }
           </script>
 

@@ -11,77 +11,77 @@
         margin-bottom: 20px;
     }
     .form-login .row div[class*="col-"], .form-login .row aside[class*="col-"] {
-    margin-top: 0;
-    margin: 0 0 17px;
-}
-.logup_btn{
+        margin-top: 0;
+        margin: 0 0 17px;
+    }
+    .logup_btn{
         background: #f2651f;
         width: auto;
         border-radius: 4px;
     }
-   #register_box {
-    padding: 0 0 96px;
-}
+    #register_box {
+        padding: 0 0 96px;
+    }
 
-.main_head {
-    background: #f26528;
-    color: #fff;
-    padding: 13px 25px;
-}
-.main_head .title {
-    color: #fff;
-    margin: 0;
-}
-.main_head .title h4{
-    font-size: 19px;
-    margin: 0 0 6px;
-}
-.main_head .option {
-    font-size: 13px;
-}
-.main_head .option  a{
-    color: #fff;
-}
-.vendor_box{
-    margin-top: 50px;
-}
-.form__box{
-    padding: 26px 15px 25px;
-    border-radius: 3px;
-    background: #fff;
-    box-shadow: 0 7px 23px rgb(68 68 68 / 11%);
-    margin: 0;
-    border: 1px solid #cccccc87;
-}
-.radius_input {
-    padding: 0 7px;
-    margin: 0 !important;
-}
-.radius_input .form-control {
-    height: 38px;
-    font-size: 15px;
-}
-.radius_input label{
-    margin-bottom: 8px;
-}
-#password-strength-status{
-    font-size: 13px;
-}
+    .main_head {
+        background: #f26528;
+        color: #fff;
+        padding: 13px 25px;
+    }
+    .main_head .title {
+        color: #fff;
+        margin: 0;
+    }
+    .main_head .title h4{
+        font-size: 19px;
+        margin: 0 0 6px;
+    }
+    .main_head .option {
+        font-size: 13px;
+    }
+    .main_head .option  a{
+        color: #fff;
+    }
+    .vendor_box{
+        margin-top: 50px;
+    }
+    .form__box{
+        padding: 26px 15px 25px;
+        border-radius: 3px;
+        background: #fff;
+        box-shadow: 0 7px 23px rgb(68 68 68 / 11%);
+        margin: 0;
+        border: 1px solid #cccccc87;
+    }
+    .radius_input {
+        padding: 0 7px;
+        margin: 0 !important;
+    }
+    .radius_input .form-control {
+        height: 38px;
+        font-size: 15px;
+    }
+    .radius_input label{
+        margin-bottom: 8px;
+    }
+    #password-strength-status{
+        font-size: 13px;
+    }
 
 
-@media(max-width: 767px){
-  .container{
-    width: auto;
-    max-width: 100%;
-  }
-  .mobileside {
-    padding: 0;
-}
-.vendor_box {
-    margin-top: 11px;
-}
+    @media(max-width: 767px){
+        .container{
+            width: auto;
+            max-width: 100%;
+        }
+        .mobileside {
+            padding: 0;
+        }
+        .vendor_box {
+            margin-top: 11px;
+        }
 
-}
+    }
 
 
 
@@ -90,10 +90,10 @@
 
 <link href="<?= base_url() ?>/template/back/plugins/chosen/chosen.min.css" rel="stylesheet">
 <section class="page-section color get_into" id="register_box">
-    
+
    <div class="vendor_box">
         <div class="">
-        
+
         <div class="row margin-top-0">
             <div class="col-sm-12">
                 <div class="logo_top">
@@ -124,15 +124,15 @@
                             <h4><?php echo translate('vendor_registration');?></h4>
                             <div class="option">
                                 <?php echo translate('already_a_vendor_?_click_to_');?>
-                                <a href="<?php echo base_url(); ?>vendor" target="_blank" class="vendor_login_btn"> 
+                                <a href="<?php echo base_url(); ?>vendor" target="_blank" class="vendor_login_btn">
                                     <?php echo translate('login');?> <?php echo translate('as_vendor');?>
                                 </a>!
                                 <?php echo translate('not_a_member_yet_?_click_to_');?>
-                                <a href="<?php echo base_url(); ?>login_set/registration"> 
+                                <a href="<?php echo base_url(); ?>login_set/registration">
                                     <?php echo translate('sign_up');?> <?php echo translate('as_customer');?>
                                 </a>!
                             </div>
-                            
+
                         </div>
                 </div>
                    <div class="form__box">
@@ -141,8 +141,8 @@
                                 </p>
                         </div>
                        <div class="row box_shape">
-                        
-                        
+
+
                         <div class="col-sm-4 radius_input">
                             <div class="form-group">
                                 <input class="form-control required" name="name" type="text" placeholder="<?php echo translate('first_name');?>" data-toggle="tooltip" title="<?php echo translate('first_name');?>">
@@ -164,7 +164,7 @@
                                 <small style="color:red;display:none;" id="buss_error">Business Name already exist</small>
                                 <small style="color:red;display:none;" id="buss_er">Business Name already exist please try unique Name!</small>
                             </div>
-                        </div> 
+                        </div>
                         <div class="col-sm-4 radius_input">
                             <div class="form-group">
                                 <input class="form-control emails required" name="email" type="email" placeholder="<?php echo translate('email');?>" data-toggle="tooltip" title="<?php echo translate('email');?>">
@@ -181,7 +181,7 @@
                             <div class="form-group">
                                 <input class="form-control pass2 required" type="password" name="password2" placeholder="<?php echo translate('confirm_password');?>" data-toggle="tooltip" title="<?php echo translate('confirm_password');?>">
                             </div>
-                            <div id='pass_note'></div> 
+                            <div id='pass_note'></div>
                         </div>
                         <div class="col-sm-4 radius_input">
                             <div class="form-group">
@@ -203,28 +203,28 @@
                                 <input class="form-control required" name="address2" type="text" placeholder="<?php echo translate('address_line_2');?>" data-toggle="tooltip" title="<?php echo translate('address_line_2');?>">
                             </div>
                         </div>
-                        
+
                         <div class="col-sm-4 radius_input">
                                 <label class="control-label" for="demo-hor-2"><?php echo translate('bussniss_type');?></label>
                                 <div>
                                     <?php echo $this->crud_model->select_html('category','buss_type','category_name','signup_cat','demo-chosen-select required','','digital',NULL,''); ?>
                                 </div>
                             </div>
-                
+
                         <div class="col-sm-4 radius_input">
                                 <label class="control-label" for="demo-hor-2"><?php echo translate('main_Business_Category');?></label>
                                 <div>
                                     <?php echo $this->crud_model->select_html('category','sub_category','category_name','signup_main_cat','demo-chosen-select required','','digital',NULL); ?>
                                 </div>
                             </div>
-                        
+
                             <div class="col-sm-4 radius_input">
                                 <label class="control-label" for="demo-hor-2"><?php echo translate('industry_category');?></label>
                                 <div>
                                     <?php echo $this->crud_model->select_html('category','sub3_category','category_name','ind_main_cat','demo-chosen-select required','','digital',NULL); ?>
                                 </div>
                             </div>
-                           
+
                         <!--    <div class="col-sm-6" id="scat" style="display: none;">-->
                         <!--    <div class="form-group">-->
                         <!--        <label><?php // echo translate('sub-category');?></label>-->
@@ -253,7 +253,7 @@
                                 <label>State</label>
                                 <input class="form-control required" name="state" type="text" placeholder="<?php echo translate('state');?>" data-toggle="tooltip" title="<?php echo translate('state');?>">
                             </div>
-                                
+
                             </div>
                         </div>
                         <div class="col-sm-4 radius_input">
@@ -269,7 +269,7 @@
                             </div>
                         </div>
                         <div class="col-sm-12 terms radius_input" style="padding-bottom: 10px;">
-                            <input  name="affiliate" type="checkbox" value="yes" id="affiliates"> 
+                            <input  name="affiliate" type="checkbox" value="yes" id="affiliates">
                             <?php  echo translate('join_affiliates');?>
                         </div>
                         <div class="col-sm-12 terms radius_input" style="display:none;"  id="affiliate_terms_check" >
@@ -280,7 +280,7 @@
                           </a>
                       </div>
                         <div class="col-sm-12 terms radius_input">
-                            <input  name="terms_check" type="checkbox" value="ok" > 
+                            <input  name="terms_check" type="checkbox" value="ok" >
                             <?php echo translate('i_agree_with');?>
                             <a href="<?php echo base_url();?>home/legal/terms_conditions" target="_blank">
                                 <?php echo translate('terms_&_conditions');?>
@@ -313,7 +313,7 @@
                         }
                             ?>
             </div>
-            
+
         </div>
     </div>
    </div>
@@ -328,7 +328,7 @@
         cursor:pointer;
         text-decoration:underline;
     }
-    
+
     .get_into .terms input[type=checkbox] {
         margin:0px;
         width:15px;
@@ -371,7 +371,7 @@ function other(){
         other();
     });
     $( "#uniquebusiness" ).on('keyup', function(){
-        $('#buss_error').css({'display':'none'}); 
+        $('#buss_error').css({'display':'none'});
         var val = $(this).val();
         $('#registerbtn').attr("disabled", false);
         if(val)
@@ -384,7 +384,7 @@ function other(){
         success: function (data) {
            if(data == 'error'){
                $('#registerbtn').attr("disabled", true);
-              $('#buss_error').css({'display':'block'}); 
+              $('#buss_error').css({'display':'block'});
            }
         },
         error: function (xhr, exception) {
@@ -392,9 +392,9 @@ function other(){
     });
         }
     });
-    
+
     $( ".unique").on('keyup', function(){
-        $('#buss_er').css({'display':'none'}); 
+        $('#buss_er').css({'display':'none'});
         var val = $(this).val();
         if(val)
         {
@@ -405,7 +405,7 @@ function other(){
         data: {val:val },
         success: function (data) {
            if(data == 'error'){
-              $('#buss_er').css({'display':'block'}); 
+              $('#buss_er').css({'display':'block'});
            }
         },
         error: function (xhr, exception) {
@@ -413,7 +413,7 @@ function other(){
     });
         }
     });
-    
+
     function get_cat(id,now){
         $('#scat').show('slow');
         ajax_load(base_url+'home/vendor_logup/sub_by_cat/'+id,'sub_cat','other');
