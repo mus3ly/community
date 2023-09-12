@@ -68,11 +68,11 @@ class Crud_model extends CI_Model
         $row =  $this->db->where('id',$id)->get('media')->row();
         if(isset($row->webp_url) && $row->webp_url)
         {
-            $url = base_url().$row->webp_url;
+            $url = img_url().$row->webp_url;
         }
         else
         {
-            $url = base_url().$row->path;
+            $url = img_url().$row->path;
         }
         // var_dump($url);
         return $url;
@@ -1907,8 +1907,6 @@ foreach($vendors as $kk=> $vv)
                 $p = 'yes';
             }
         }
-
-        $this->config->cache_query();
         if ($p == 'yes') {
             return true;
         } else {

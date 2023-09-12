@@ -29,7 +29,7 @@
  {
      return date("M d, Y", strtotime($date));
  }
- function img_url($pth)
+ function img_url($pth = '')
  {
     //img_url
     $CI =& get_instance();

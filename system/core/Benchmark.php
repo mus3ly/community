@@ -70,6 +70,10 @@ class CI_Benchmark {
 	 * @param	string	$name	Marker name
 	 * @return	void
 	 */
+	public function mark_time()
+	{
+		
+	}
 	public function mark($name)
 	{
 		$this->marker[$name] = microtime(TRUE);

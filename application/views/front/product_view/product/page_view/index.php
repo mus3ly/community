@@ -1,6 +1,5 @@
 <?php
 $url = base_url('updated/');
- include "header_new.php";
 ?>
 <?php
 $pro = array();
@@ -49,6 +48,7 @@ if(isset($product_data[0]))
 
     
 }
+$row = $pro;
     $imgs = $this->db->where('pid',$pro['product_id'])->get('product_to_images')->result_array();
 $nimgs = array();
 if(isset($pro['comp_cover']) && $pro['comp_cover'])
@@ -61,9 +61,9 @@ foreach($imgs as $k=> $v)
 }
 $imgs = $nimgs;
 $fimg = '';
-if(isset($imgs[0]))
+if(isset($nimgs[0]))
 {
-    $fimg = $this->crud_model->size_img($imgs[0]['img'],500,500);
+    $fimg = $nimgs[0];
 }
     $thumbs = $this->crud_model->file_view('product',$row['product_id'],'','','thumb','src','multi','all');
     $mains = $this->crud_model->file_view('product',$row['product_id'],'','','no','src','multi','all'); 
@@ -348,7 +348,3 @@ if(isset($imgs[0]))
       </div>
     </section>
   </main>
-
-<?php
- include "footer_new.php";
-?>
