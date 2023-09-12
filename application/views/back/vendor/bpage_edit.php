@@ -1,4 +1,168 @@
+<style>
+.padding_none{
+    padding:0;
+}
+ #select_amn2{
+    display: flex;
+    align-items:center;
+}
+.img_fix{
+         width: 150px;
+    height: 150px;
+    border: 1px solid #ddd;
+    display: inline-block;
+}
+.img_fix img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+#select_amn2 p{
+ background-color: #F26122;
+    padding: 10px 20px;
+    width: auto;
+    margin: 2px;
+    color: white;
 
+}
+    #mainnav-container{
+        left :0px !important;
+    }ima
+    .gallary_images{}
+    .gallary_images ul{
+        list-style: none;
+        display: inline-block;
+    }
+    .gallary_images ul li{
+        display: inline-block;
+    }
+  .feature_single{
+    width: 100%;
+    overflow:hidden;
+  }
+  .error{
+        border-color: red !important;
+
+}
+    .del_icon
+    {
+    position: absolute;
+    font-size: large;
+    color: red
+    }
+    .del_icon i{
+        float: right;
+    }
+    #add_amn{
+    max-width: 92%;
+    max-height: 150px;
+    min-width: 0px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    
+}
+#add_amn ul div{
+        padding: 5px 0;
+    cursor: pointer;
+    
+}
+#add_amn ul div:hover{
+    border-bottom: 1px solid #f26122;
+}
+
+.adding_position
+{
+    position:relative;
+}
+    .gallary_images ul li img{}
+.btn1{
+    
+    outline: 0!important;
+    border: none;
+    background: transparent;
+}
+btn1 .fa{
+    font-size: 25px;
+    color: #cecece;
+}
+.form h4{
+    font-size:14px;
+}
+.form .btn{
+    background-color: white;
+    border: 1px dashed #cecece;
+}
+.drop_box {
+  margin: 10px 0;
+  padding: 30px;
+  display: flex;
+  background-color: #ededed;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 2px dashed #cecece;
+  border-radius: 5px;
+  width:150px;
+}
+.flip-card > .active, .flip-card-front:hover,.flip-card-front:focus{
+    background-color:#fecb00;
+}
+.flip-card-inner .active{
+}
+.form input {
+  margin: 10px 0;
+  width: 100%;
+  background-color: #e2e2e2;
+  border: none;
+  outline: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+}
+.flip-card {
+  background-color: transparent;
+  width: 300px;
+    height: 110px;
+        margin: 10px 0;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateX(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.flip-card-back p{
+      padding: 50px 0 50px;
+}
+.flip-card-front i{
+    font-size: 25px;
+    padding: 8px 9px;
+    margin-top: 25px;
+    border-radius: 40px;
+}
+
+.flip-card-back {
+  background-color: black;
+  color: white;
+  transform: rotateX(180deg);
+}
+</style>
 <style>
 .breaddcum li {
     cursor: pointer;
@@ -30,7 +194,11 @@
         display: inline-block;
     }
     .gallary_images ul li{
-        display: inline-block;
+            display: inline-block;
+    width: 100px;
+    object-fit: cover;
+    height: 100px;
+    overflow: hidden;
     }
   .feature_single{
     width: 100%;
@@ -45,7 +213,11 @@
     .del_icon i{
         float: right;
     }
-    .gallary_images ul li img{}
+    .gallary_images ul li img{
+            object-fit: cover;
+    width: 100%;
+    height: 100%;
+    }
 .btn1{
     
     outline: 0!important;
@@ -149,6 +321,7 @@ btn1 .fa{
      $s = json_decode($row['added_by']);
     // var_dump($s->id);
     // die();
+    $rid = $row['product_id'];
     $q = $this->db->where('vendor_id',$s->id)->get('vendor')->row_array();
             echo form_open(base_url() . 'vendor/product/update/'.$row['product_id'], array(
                 'class' => 'form-horizontal',
@@ -180,6 +353,10 @@ btn1 .fa{
 
                         <li >
                             <a data-toggle="tab" href="#first_section"><?php echo translate('Service_Description'); ?></a>
+                        </li>
+
+                        <li >
+                            <a data-toggle="tab" href="#amenitys"><?php echo translate('amenities'); ?></a>
                         </li>
                          <li >
                             <a data-toggle="tab" href="#info_section1"><?php echo translate('More_detail'); ?></a>
@@ -358,10 +535,11 @@ btn1 .fa{
                         </div>
                         
                         <div id="customer_choice_options" class="tab-pane fade in">
-                        <input type="hidden" id="category" name="category"/>
+                        <input type="hidden" id="category" value="<?= $product_data->category ?>" name="category"/>
                            <div class="row" id="cat_res">
                                 
                                  <?php
+                                 
                             foreach($brands as $k=>$v){
                                 if($v['level'] == 1)
                                 {
@@ -758,22 +936,6 @@ btn1 .fa{
                                     <input type="text" name="cats" value="<?= $row['cats']; ?>" data-role="tagsinput" placeholder="<?php echo translate('enter comma (,) to add more');?>" class="form-control">
                                 </div>
                             </div>
-                              <div class="form-group btm_border" >
-                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('Add_Amenities');?></label>
-                                <div class="col-sm-6">
-                                    <input type="checkbox" name="checkamenities" value="yes" class="" id="amen_check" <?= isset($row['amen_check']) && 
-                                    $row['amen_check'] == 'yes' ?'checked':'';
-                                    ?>>
-                                </div>
-                            </div>
-                            <div class="form-group btm_border" id="amenities" style="display:<?= isset($row['amen_check']) && 
-                                    $row['amen_check'] == 'yes' ?'block':'none';
-                                    ?>;">
-                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('Amenities');?></label>
-                                <div class="col-sm-6">
-                                    <input type="text" name="amenities" value="<?= $row['amenities']; ?>" data-role="tagsinput" placeholder="<?php echo translate('enter comma (,) to add more');?>" class="form-control">
-                                </div>
-                            </div>
                             <div class="form-group btm_border">
                                 <div class="col-sm-4"></div>
                                 <div class="col-sm-8"></div>
@@ -937,24 +1099,56 @@ btn1 .fa{
                                 $content = json_decode($row['etra_content'],true);
                                 // var_dump($content);
                                 ?>
-                                 <div class="form-group btm_border" id="col1_div">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('column1_Details'); ?></label>
+                                <?php
+                                
+                                        for($i = 0;$i<=2;$i++)
+                                        {
+                                            
+                                            ?>
+                                            <div class="form-group btm_border">
+                                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('column'.($i+1).'_Details'); ?></label>                
+                                                <div class="col-sm-6">
+                                                    <select class="form-control exra_chnge" id="type_<?= $i ?>" onchange="chcont_type(<?= $i ?>)" name="etra_content[<?= $i ?>][type]">
+                                         <option value="0" <?= ($content[$i]['type'] == '0')?"selected":"" ?> >Select content type</option> 
+                                         <option value="text" <?= ($content[$i]['type'] == 'text')?"selected":"" ?>>Text</option> 
+                                         <option value="img" <?= ($content[$i]['type'] == 'img')?"selected":"" ?>>Image</option>
+                                     </select>               
+                                            </div>
+                                            </div>
+                                 <div class="" id="col<?= $i+1 ?>_div" style="display:<?= (($i+1) <= $row['number_of_column'])?"block":"none";?>" >
+                                     
+                                
+                                <div class="" id="text_<?= $i ?>" style="display:<?= (isset($content[$i]['type']) && $content[$i]['type'] == 'text')?"block":"none" ?>">
+                                    <textarea rows="9" name="info_desc" id="info_desc"  class="summernotes" data-height="200" data-name="etra_content[<?= $i ?>][data]"><?= (isset($content[$i]))?$content[$i]['data']:"" ?></textarea>
+                                </div>
+                                <div class="" id="img_<?= $i ?>"  style="display:<?= (isset($content[$i]['type']) && $content[$i]['type'] == 'img')?"block":"none" ?>">
+                                    <div class="form-group btm_border">
+                                        <label class="col-sm-4 control-label" style="display: block;" for="demo-hor-6">Column <?= $i ?> Image</label>
+                                         
+                                      <div class="col-sm-6">
+                                        <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
+                                            <input type="file" name="img_col<?= $i ?>" id="" onchange="preview(this,<?= $i ?>);" id="demo-hor-inputpass" class="form-control">
+                                        </span>
+                                        </div>
+                                        
+                                </div>
+                                <div class="col-sm-4"></div>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" name="info_desc" id="info_desc"  class="summernotes" data-height="200" data-name="etra_content[]"><?= (isset($content[0]))?$content[0]:"" ?></textarea>
+                                <span class="img_fix" id="previewImgcol<?= $i ?>" >
+                                            <?php
+                                                if($content[$i]['data'])
+                                                {
+                                                    $img = base_url($content[$i]['data']);
+                                                    ?>
+                                                    <img class="img-responsive" width="500" src="<?= $img?>" data-id="_paris/uploads/product" alt="User_Image"><?php
+                                                }
+                                            ?>
+                                        </span>
                                 </div>
                                 </div>
-                                 <div class="form-group btm_border" id="col2_div" style="display:none;">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('column2_Details'); ?></label>
-                                <div class="col-sm-6">
-                                    <textarea rows="9" name="info_desc"  class="summernotes" data-height="200" data-name="etra_content[]"><?= (isset($content[1]))?$content[1]:"" ?></textarea>
-                                </div>
-                                </div>
-                                 <div class="form-group btm_border" id="col3_div" style="display:none;">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('column3_Details'); ?></label>
-                                <div class="col-sm-6">
-                                    <textarea rows="9" name="info_desc"  class="summernotes" data-height="200" data-name="etra_content[]"><?= (isset($content[3]))?$content[3]:"" ?></textarea>
-                                </div>
-                                </div>
+                                <?php
+                                        }
+                                ?>
                              
                         </div>
                         <div id="info_section" class="tab-pane fade ">
@@ -1051,6 +1245,51 @@ btn1 .fa{
                                  </div>
                                    
                             
+                        </div>
+                        <div id="amenitys" class="tab-pane fade <?= ($active_tab == 'amenitys')?"active in":''; ?>">
+                              <div class="form-group btm_border" >
+                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('Add_Amenities');?></label>
+                                <div class="col-sm-6 adding_position">
+                                    <input type="checkbox" name="checkamenities" value="yes" class="" id="amen_check" <?= isset($row['amen_check']) && 
+                                    $row['amen_check'] == 'yes' ?'checked':'';
+                                    ?>>
+                                </div>
+                     <div class="form-group btm_border">
+                                    <label class="col-sm-4 control-label" for="demo-hor-1">Select Amenities</label>
+                                    <div class="col-sm-6">
+                                     <div class="row">                                           
+                                     <div class="col-md-10 padding_none">                                           
+                             <input type="text" class="amnty form-control" id="amnty">
+                             </div>
+                               <div class="col-md-2 padding_none">                                           
+                             <button type="button" class="btn btn-primary" id="amn_btn">Add</button>
+                             </div>
+                             </div>
+                            <div id="add_amn">
+                                
+                            </div>
+                            <hr>
+                          
+                            <div id="select_amn2">
+                                
+                        </div>
+                               
+                            <div class="select_amn" style="display: none;">
+                                <?php $exp =  explode(',',$row['amenities']); 
+                                foreach($exp as $k=> $v)
+                                {
+                                    ?>
+                                <input type="text"  id="amv_<?= $k ?>" name="amenities[]" value="<?= $v ?>">
+                                <?php
+                                }
+                                
+                                ?>
+                                
+                            </div>
+                             
+                          </div>
+                                </div>
+                            </div>
                         </div>
                         <div id="event_images" class="tab-pane fade ">
                           <div class="form-group btm_border" style="padding-top:30px;">
@@ -1218,23 +1457,6 @@ btn1 .fa{
 <input type="hidden" id="option_count" value="-1">
 
 <script>
-    window.preview = function (input) {
-        if (input.files && input.files[0]) {
-            $("#previewImg").html('');
-            
-            $(input.files).each(function () {
-                var reader = new FileReader();
-                reader.readAsDataURL(this);
-                reader.onload = function (e) {
-                    console.log(e.target.result);
-                    upload_img(e.target.result);
-                    // $("#previewImg").append("<div style='float:left;border:4px solid #303641;padding:5px;margin:5px;'><img height='80' src='" + e.target.result + "'></div>");
-                }
-            });
-            
-            
-        }
-    }
     function setCookie(name,value,days) {
     var expires = "";
     if (days) {
@@ -1505,6 +1727,20 @@ function selecttype(id)
 }
 
 
+    function preview(input,i) {
+        alert(i);
+        // alert('preview2');
+        if (input.files && input.files[0]) {
+            $("#previewImgcol"+i).html('');
+            $(input.files).each(function () {
+                var reader = new FileReader();
+                reader.readAsDataURL(this);
+                reader.onload = function (e) {
+                    $("#previewImgcol"+i).append("<div style='float:left;border:4px solid #303641;padding:5px;margin:5px;'><img width='500' src='" + e.target.result + "'></div>");
+                }
+            });
+        }
+    }
     function preview2(input) {
         // alert('preview2');
         if (input.files && input.files[0]) {
@@ -1768,10 +2004,134 @@ $('.exra_chnge').change(function(){
         }
     }
 });
-
+    
 $('#amen_check').on('change',function(){
     $('#amenities').toggle();
 })
+$('#amnty').on('keyup', function(){
+        var url = '<?= base_url('vendor/getAmenties')?>';
+        var value = $(this).val();
+        var cats = $('#category').val();
+        if(cats)
+        {
+          $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: {add:1,value:value,cats:cats },
+        success: function (data) {
+           $('#add_amn').html(data);
+        },
+        error: function (xhr, exception) {
+           
+        }
+    });  
+        }
+    });
+     $(document).ready(function(){
+    getamn();
+});
+    $('#amn_btn').on('click', function(){
+        var url = '<?= base_url('vendor/getAmenties')?>';
+        var value = $('#amnty').val();
+        var cats = $('#category').val();
+        if(cats)
+        {
+
+          $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: {add_to_table:1,value:value,cats:cats,pid:<?= $rid ?> },
+        success: function (data) {
+            if(data)
+        {
+            getamn();
+        }
+        
+        },
+        error: function (xhr, exception) {
+           
+        }
+    });  
+        }
+        else
+        {
+            alert("PLease select Ad type first ");
+            go_tab('customer_choice_options')
+        }
+    });
+    function delete_ament(val)
+    {
+        var url = '<?= base_url('vendor/getAmenties');?>';
+      $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { del:1,am_id:val,pid:'<?= $rid ?>'},
+        success: function (data) {
+        if(data)
+        {
+            getamn();
+        }
+       
+        },
+    });
+    }
+     
+    function getamn(id){
+         var url = '<?= base_url('vendor/getAmenties');?>';
+      $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { get:1,pid:'<?= $rid ?>'},
+        success: function (data) {
+        $('#select_amn2').html(data);
+       
+        },
+    });
+    }
+     
+    function selectamn(id){
+         var url = '<?= base_url('vendor/getAmenties');?>';
+      $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { select:1,sid:id,pid:'<?= $rid ?>'},
+        success: function (data) {
+        if(data)
+        {
+            getamn();
+        }
+       
+        },
+    });
+    }
+
+    
+        function capital_val(id)
+        {
+            var val = $('#'+id).val();
+            val = val.charAt(0).toUpperCase() + val.slice(1);
+            $('#'+id).val(val);
+        }
+        function chcont_type(col)
+        {
+            var type = '#type_'+col;
+            var mid = $(type).val();
+            if(mid == 'img')
+            {
+                $('#img_'+col).show();
+                $('#text_'+col).hide();
+            }
+            else
+            {
+                $('#img_'+col).hide();
+                $('#text_'+col).show();
+            }
+        }
     </script>
 
 

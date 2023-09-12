@@ -1,5 +1,6 @@
 
 <?php
+$description = strtolower($description);
 // var_dump($is_event);
 $time1 = date("H:i:s",strtotime($time1));
 $date = date('Y-m-d',strtotime($time1));
@@ -121,18 +122,56 @@ $vendorlogo= '';
                    ?>
                                         </div>
                                     <img src="<?= $img ?>" alt="">
+                                    
                                     </div>
+                                    
                                     <div class="sidegapp_bottom">
                                         <!--New code here-->
-                                        <div class="row sidegapp_bottom_2 ">
-                                            <div class="col-md-6 pdg_rmv"><h5><?= get_fields_line($product_id, 1); ?></h5></div>
-                                            <div class="col-md-6 pdg_rmv text_right"><h5><?= get_fields_line($product_id, 2); ?></h5></div>
-                                            <div class="col-md-6 pdg_rmv"><h5><?= get_fields_line($product_id, 3); ?></h5></div>
-                                            <div class="col-md-6 pdg_rmv text_right"><h5><?= get_fields_line($product_id, 4); ?></h5></div>
-                                        </div>
-                                        <div class="">
                                         <h3 class="color_chnage"><?= $title; ?></h3> 
-                                        <p><?= strWordCut($description,100); ?></p>
+                                        
+                                        <?php 
+                                        if($is_bpage)
+                                        {
+                                            ?>
+                                            <div class="row">
+                                        <div class="col-md-6  pl-0 special_cls car_out">
+                                            <div class="list_attributes "><?= get_fields_line($product_id, 1); ?>Cloths</div>
+                                            <div class="list_attributes "><?= get_fields_line($product_id, 2); ?>Lahore</div>
+                                            </div>
+                                            <div class="col-md-6 text-right pr-0 special_cls">
+                                            <div class="grid_attributes "><?= get_fields_line($product_id, 3); ?>$400</div>
+                                            <div class="grid_attributes "><?= get_fields_line($product_id, 4); ?>Ralph lauren</div>
+                                        </div>
+                                        </div>
+                                            <?php
+                                        }
+                                        else
+                                        { 
+                                            ?>
+                                            <div class="row">
+                                        <div class="col-md-6  pl-0 special_cls car_out">
+                                            <div class="grid_attributes "><?= get_fields_line($product_id, 1); ?></div>
+                                            <div class="grid_attributes "><?= get_fields_line($product_id, 2); ?></div>
+                                            </div>
+                                            <div class="col-md-6 text-right pr-0 special_cls">
+                                            <div class="grid_attributes "><?= get_fields_line($product_id, 3); ?></div>
+                                            <div class="grid_attributes "><?= get_fields_line($product_id, 4); ?></div>
+                                        </div>
+                                        </div>
+                                    <?php
+                                        }
+                                        ?>
+                                        <div class="col-md-12 dec_wrappper p-0">
+                                        
+                                        <?php
+
+                        if ($slog) {
+                            ?>
+                            <h2 class=" catch_phrase spacing_catch_p add_mrgn_in"><?= strWordCut($slog, 50); ?> </h2>
+                            <?php
+                        }
+                        ?>
+                                        <p><?= strWordCut($description,150); ?></p>
                                         <a href="<?= $this->crud_model->product_link($product_id); ?>" class="color_chnage">Read more ......<img src="images/arrow-right1.png" alt=""></a>
                                     </div>
                                     </div>

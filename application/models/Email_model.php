@@ -725,10 +725,10 @@ class Email_model extends CI_Model
       				}
       				$final_email = str_replace('[[body]]',$email_body,$final_email);
       				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
-      				 $this->do_email($from,$from_name,$to1, $sub, $final_email);
+      		// 		 $this->do_email($from,$from_name,$to1, $sub, $final_email);
       			}else{
       				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $email_body);
-      				$this->do_email($from,$from_name,$to1, $sub, $final_email);
+      		// 		$this->do_email($from,$from_name,$to1, $sub, $final_email);
       			}
 
             return $send_mail;
@@ -765,7 +765,7 @@ class Email_model extends CI_Model
             $email_body      = str_replace('[[from]]',$from_name,$email_body);
 
             $background = $this->db->get_where('ui_settings',array('type' => 'email_theme_style'))->row()->value;
-            $to=$this->db->get_where('general_settings', array('type' => 'contact_email'))->row()->value;
+            $to=$this->db->get_where('general_settings', array('type' => 'system_email'))->row()->value;
             if($background !== 'style_1'){
                 $final_email = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
                 if($background == 'style_4'){

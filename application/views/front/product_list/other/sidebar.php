@@ -7,7 +7,6 @@
     <!-- widget shop categories -->
     <!-- widget price filter -->
                <?php
-               var_dump($is_listing);
             if(isset($is_listing) && ($is_listing == 'shop_listing' || $is_listing == 'car_listing')){
                     ?>
             <div class="widget widget-filter-price">

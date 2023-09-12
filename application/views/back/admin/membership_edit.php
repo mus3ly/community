@@ -77,6 +77,34 @@
                 </div>
               
             </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1">
+                    <?php echo translate('stripe_live_id');?>
+                        </label>
+                <div class="col-sm-6">
+                    <input type="text" name="stripe_live_id" value="<?php echo $row['stripe_live_id']; ?>" placeholder="<?php echo translate('stripe_live_id'); ?>" class="form-control required">
+                </div>
+              
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1">
+                    <?php echo translate('promo_code');?>
+                        </label>
+                <div class="col-sm-6">
+                    <input type="text" name="promo_code" value="<?php echo $row['promo_code']; ?>" placeholder="<?php echo translate('promo_code'); ?>" class="form-control required">
+                </div>
+              
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1">
+                    <?php echo translate('promo_limit');?>
+                        </label>
+                <div class="col-sm-6">
+                    <input type="text" name="promo_limit" value="<?php echo $row['promo_limit']; ?>" placeholder="<?php echo translate('promo_limit'); ?>" class="form-control required">
+                </div>
+              
+            </div>
             
             <div class="form-group">
                 <label class="col-sm-4 control-label" for="demo-hor-2"><?php echo translate('package_seal');?></label>

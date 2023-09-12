@@ -17,6 +17,7 @@ class TwoCheckout_Lib {
 	var $fields = array();		// Parameters
 	var $submit_btn = '';		// Button Text
 	var $CI;
+	public $twocheckout_url;
 	
 	function __construct()
 	{

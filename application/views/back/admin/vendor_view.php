@@ -66,7 +66,12 @@
                         <th class="custom_td"><?php echo translate('phone');?></th>
                         <td class="custom_td"><?php echo $row['phone']?></td>
                     </tr>
-                    <?php if($row['skype'] != ''){ ?>
+                    <?php if($row['promo'] != ''){ ?>
+                    <tr>
+                        <th class="custom_td"><?php echo translate('promo_code');?></th>
+                        <td class="custom_td"><?php echo $row['promo']?></td>
+                    </tr>
+                    <?php } if($row['skype'] != ''){ ?>
                     <tr>
                         <th class="custom_td"><?php echo translate('skype');?></th>
                         <td class="custom_td"><?php echo $row['skype']?></td>

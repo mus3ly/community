@@ -1,6 +1,28 @@
 <!-- PAGE -->
 <?php
-    $imgs = $this->db->where('pid',$row['product_id'])->get('product_to_images')->result_array();
+$pro = array();
+if(isset($product_data[0]))
+{ 
+    $pro = $product_data[0];
+
+    
+}
+    $imgs = $this->db->where('pid',$pro['product_id'])->get('product_to_images')->result_array();
+$nimgs = array();
+if(isset($pro['comp_cover']) && $pro['comp_cover'])
+{
+$nimgs[]['img'] = $pro['comp_cover'];
+}
+foreach($imgs as $k=> $v)
+{
+    $nimgs[] = $v;
+}
+$imgs = $nimgs;
+$fimg = '';
+if(isset($imgs[0]))
+{
+    $fimg = $this->crud_model->size_img($imgs[0]['img'],500,500);
+}
     $thumbs = $this->crud_model->file_view('product',$row['product_id'],'','','thumb','src','multi','all');
     $mains = $this->crud_model->file_view('product',$row['product_id'],'','','no','src','multi','all'); 
 ?>
@@ -32,12 +54,12 @@
                             <div class="new"><?php echo translate("today's_deal"); ?></div>
                             <?php } ?>
                         </div>
-                        <img class="img-responsive main-img zoom" id="set_image" src="" alt=""/>
+                        <img class="img-responsive main-img zoom" id="set_image" src="<?= $fimg ?>" alt=""/>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-sm-12 col-xs-12 product_details">
-                <h3 itemprop="name" class="product-title"><?php echo $row['title'];?></h3>
+                <h3 itemprop="name" class="product-title p_h_title"><?php echo $row['title'];?></h3>
                 <?php
                 if ($this->db->get_where('product', array('product_id' => $row['product_id']))->row()->is_bundle == 'no') {
                 ?>
@@ -84,7 +106,7 @@
                 ?>
                 <?php if ($this->db->get_where('general_settings', array('general_settings_id' => '58'))->row()->value == 'ok'and $this->db->get_where('general_settings', array('general_settings_id' => '81'))->row()->value == 'ok'){ ?>
                 <div class="added_by" itemscope itemtype="http://schema.org/Store">
-                    <?php echo translate('sold_by_:');?>
+                    <p><?php echo translate('sold_by_:');?></p> 
                     <p itemprop="name">
                         <?php echo $this->crud_model->product_by($row['product_id'],'with_link');?>
                     </p>

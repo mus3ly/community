@@ -2,95 +2,15 @@
 // echo 'nimra';
 // die();
 ?>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <style type="text/css">
-    .get_into .logo_top{
-        display: none;
-    }
-    .get_into .title{
-        width: 100%;
-        margin-bottom: 20px;
-    }
-    .form-login .row div[class*="col-"], .form-login .row aside[class*="col-"] {
-        margin-top: 0;
-        margin: 0 0 17px;
-    }
-    .logup_btn{
-        background: #f2651f;
-        width: auto;
-        border-radius: 4px;
-    }
-    #register_box {
-        padding: 0 0 96px;
-    }
-
-    .main_head {
-        background: #f26528;
-        color: #fff;
-        padding: 13px 25px;
-    }
-    .main_head .title {
-        color: #fff;
-        margin: 0;
-    }
-    .main_head .title h4{
-        font-size: 19px;
-        margin: 0 0 6px;
-    }
-    .main_head .option {
-        font-size: 13px;
-    }
-    .main_head .option  a{
-        color: #fff;
-    }
-    .vendor_box{
-        margin-top: 50px;
-    }
-    .form__box{
-        padding: 26px 15px 25px;
-        border-radius: 3px;
-        background: #fff;
-        box-shadow: 0 7px 23px rgb(68 68 68 / 11%);
-        margin: 0;
-        border: 1px solid #cccccc87;
-    }
-    .radius_input {
-        padding: 0 7px;
-        margin: 0 !important;
-    }
-    .radius_input .form-control {
-        height: 38px;
-        font-size: 15px;
-    }
-    .radius_input label{
-        margin-bottom: 8px;
-    }
-    #password-strength-status{
-        font-size: 13px;
-    }
-
-
-    @media(max-width: 767px){
-        .container{
-            width: auto;
-            max-width: 100%;
-        }
-        .mobileside {
-            padding: 0;
-        }
-        .vendor_box {
-            margin-top: 11px;
-        }
-
-    }
 
 
 
 
 </style>
-
 <link href="<?= base_url() ?>/template/back/plugins/chosen/chosen.min.css" rel="stylesheet">
 <section class="page-section color get_into" id="register_box">
-
    <div class="vendor_box">
         <div class="">
 
@@ -102,7 +22,7 @@
                     </a>
                 </div>
                 <?php
-                        if(!isset($_GET['pack']))
+                        if(!isset($_GET['pack']) & !isset($promo))
                         {
                             include 'pac1.php';
                         }
@@ -118,7 +38,7 @@
                 ?>
                 <input type="hidden" name="pack" value="<?= $_GET['pack'] ?>">
                 <div class="col-sm-2"></div>
-                <div class="col-sm-8 mobileside">
+                <div class="col-sm-8 mobileside to_center">
                     <div class="main_head">
                     <div class="title">
                             <h4><?php echo translate('vendor_registration');?></h4>
@@ -141,7 +61,9 @@
                                 </p>
                         </div>
                        <div class="row box_shape">
-
+                           <?php if($promo){?>
+                           <input type="hidden" name="promo" value="<?= $promo ?>">
+                            <?php }?>
 
                         <div class="col-sm-4 radius_input">
                             <div class="form-group">
@@ -207,21 +129,21 @@
                         <div class="col-sm-4 radius_input">
                                 <label class="control-label" for="demo-hor-2"><?php echo translate('bussniss_type');?></label>
                                 <div>
-                                    <?php echo $this->crud_model->select_html('category','buss_type','category_name','signup_cat','demo-chosen-select required','','digital',NULL,''); ?>
+                                    <?php echo $this->crud_model->select_html('category','buss_type','category_name','signup_cat','demo-chosen-select form-control required','','digital',NULL,''); ?>
                                 </div>
                             </div>
 
                         <div class="col-sm-4 radius_input">
                                 <label class="control-label" for="demo-hor-2"><?php echo translate('main_Business_Category');?></label>
                                 <div>
-                                    <?php echo $this->crud_model->select_html('category','sub_category','category_name','signup_main_cat','demo-chosen-select required','','digital',NULL); ?>
+                                    <?php echo $this->crud_model->select_html('category','sub_category','category_name','signup_main_cat','demo-chosen-select form-control required','','digital',NULL); ?>
                                 </div>
                             </div>
 
                             <div class="col-sm-4 radius_input">
                                 <label class="control-label" for="demo-hor-2"><?php echo translate('industry_category');?></label>
                                 <div>
-                                    <?php echo $this->crud_model->select_html('category','sub3_category','category_name','ind_main_cat','demo-chosen-select required','','digital',NULL); ?>
+                                    <?php echo $this->crud_model->select_html('category','sub3_category','category_name','ind_main_cat','demo-chosen-select form-control required','','digital',NULL); ?>
                                 </div>
                             </div>
 

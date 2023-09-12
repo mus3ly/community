@@ -18,7 +18,7 @@ else
 
 }
 ?>
-<div class="card card-body col-md-12 col-sm-12 col-xs-12 mb-6 mt-2 p-2">
+<div class="card card-body col-md-12 col-sm-12 col-xs-12 mb-6 mt-2 p-2 product_list">
     <div class="thumbnail list_box_style1" itemscope itemtype="http://schema.org/Product" id="list__viewss">
     <div class="row product-single">
         <div class="col-md-4 col-sm-4 col-xs-12 p-0">
@@ -60,20 +60,17 @@ else
                 </div>
                 <?php if ($this->db->get_where('general_settings', array('general_settings_id' => '58'))->row()->value == 'ok'): ?>
                     <div class="added_by" itemscope itemtype="http://schema.org/Store" style="display:flex;">
-                        <?php echo translate('sold_by_:');?>
-                        <p itemprop="name">
-                            <?php echo $n['title'];?>
-                        </p>
+                        <p><span class="for_sold">sold by</span>  <?php echo $n['title'];?></p> 
+                        
                     </div>
                 <?php endif ?>
                 <hr class="page-divider" style="margin:0px;"/>
                 <div>
                     <div class="product-price">
-                        <?php echo translate('price_:');?>
                         <?php if($discount > 0){ ?>
                             <ins>
                                 <?php echo currency($this->crud_model->get_product_price($product_id)); ?>
-                                <unit><?php echo ' /'.$unit;?></unit>
+                                <unit><?php echo ' /'.strtolower($unit);?></unit>
                             </ins>
                             <del itemprop="price"><?php echo currency($sale_price); ?></del>
                             <span class="label label-success">
@@ -89,7 +86,7 @@ else
                         </span>
                         <?php } else { ?>
                             <ins itemprop="price">
-                                <?php echo currency($sale_price); ?>
+                                <span class="price_color"><?php echo currency($sale_price); ?></span>
                                 <unit><?php echo ' /'.$unit;?></unit>
                             </ins>
                         <?php }?>

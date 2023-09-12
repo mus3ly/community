@@ -13,18 +13,18 @@
                 <div class="tabs-wrapper content-tabs">
                     <ul class="nav nav-tabs">
                         <li class="active">
-                            <a href="#tab1" data-toggle="tab">
+                            <a href="#tab1" id="tab1_btn" data-toggle="tab">
                                 <?php echo translate('personal_info');?>
                             </a>
                         </li>
                         <li>
-                            <a href="#tab2" data-toggle="tab">
+                            <a href="#tab2" id="tab2_btn" data-toggle="tab">
                                 <?php echo translate('change_password');?>
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div class="tab-pane fade in active" id="tab1">
+                        <div class="tab-pane  in active" id="tab1">
                              <div class="details-wrap">
                                 <div class="block-title alt"> 
                                     <i class="fa fa-angle-down"></i> 
@@ -105,7 +105,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
-                                                <span class="btn btn-theme pull-right signup_btn" data-unsuccessful='<?php echo translate('info_update_unsuccessful!'); ?>' data-success='<?php echo translate('info_updated_successfully!'); ?>' data-ing='<?php echo translate('updating..') ?>' >
+                                                <span class="btn btn-theme pull-right signup_btn btn btn-success" data-unsuccessful='<?php echo translate('info_update_unsuccessful!'); ?>' data-success='<?php echo translate('info_updated_successfully!'); ?>' data-ing='<?php echo translate('updating..') ?>' >
                                                     <?php echo translate('update');?>
                                                 </span>
                                             </div>
@@ -114,7 +114,7 @@
                                 </div>
                             </div>   
                         </div>
-                        <div class="tab-pane fade" id="tab2">
+                        <div class="tab-pane " id="tab2">
                             <div class="details-wrap">
                                 <div class="block-title alt"> <i class="fa fa-angle-down"></i> <?php echo translate('change_your_password');?></div>
                                 <div class="details-box">
@@ -136,7 +136,7 @@
                                                 <div class="form-group"><input required name="password2" type="password" placeholder="<?php echo translate('confirm_new_password');?>" class="form-control"></div>
                                             </div>
                                             <div class="col-md-12 col-sm-12">
-                                                <span class="btn btn-theme pull-right signup_btn" data-unsuccessful='<?php echo translate('password_change_unsuccessful!'); ?>' data-success='<?php echo translate('password_changed_successfully!'); ?>' data-ing='<?php echo translate('updating..') ?>' >
+                                                <span class="btn btn-theme pull-right signup_btn btn btn-success" data-unsuccessful='<?php echo translate('password_change_unsuccessful!'); ?>' data-success='<?php echo translate('password_changed_successfully!'); ?>' data-ing='<?php echo translate('updating..') ?>' >
                                                     <?php echo translate('update');?> 
                                                 </button>
                                             </div>
@@ -153,5 +153,16 @@
 <?php
     }
 ?>
-     
+<script>
+    $('document').ready(function(){
+        $('#tab1_btn').click(function(){
+           $('#tab2').hide(); 
+           $('#tab1').show(); 
+        });
+        $('#tab2_btn').click(function(){
+           $('#tab1').hide(); 
+           $('#tab2').show(); 
+        });
+    });
+</script>     
                                    

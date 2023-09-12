@@ -1293,6 +1293,20 @@ $customer_product_check = $this->crud_model->get_type_name_by_id('general_settin
                             }
                         ?>
                         <?php
+                            if($this->crud_model->admin_permission('module_sys')){
+                        ?>
+                        <li <?php if($page_name=="module_sys"){?> class="active-link" <?php } ?> >
+                            <a href="<?php echo base_url(); ?>admin/module_sys">
+                                <i class="fa fa-search-plus"></i>
+                                <span class="menu-title">
+                                   Modules
+                                </span>
+                            </a>
+                        </li>
+                        <?php
+                            }
+                        ?>
+                        <?php
                             if($this->crud_model->admin_permission('list_fields')){
                         ?>
                         <li <?php if($page_name=="list_fields"){?> class="active-link" <?php } ?> >

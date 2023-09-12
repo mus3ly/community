@@ -30,8 +30,22 @@
                 <div class="panel-body">
                     <div class="tab-content">
                         <div class="col-md-12" style="border-bottom: 1px solid #ebebeb;padding: 5px;">
-                            <a class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" href="<?= base_url('vendor/product/add'); ?><?= ($list_type)?"?".$list_type."=1":''; ?>"><?php echo translate('create_listings');?>
+                            <?php
+                            if(isset($mod_cat))
+                            {
+                                ?>
+                                <a class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" href="<?= base_url('vendor/product/add'); ?>?module=<?= $mod->id ?>"><?php echo translate('create_'.$mod_cat->category_name);?>
                             </a>
+                                <?php
+                            }
+                            else
+                            {
+                                ?>
+                                <a class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" href="<?= base_url('vendor/product/add'); ?><?= ($list_type)?"?".$list_type."=1":''; ?>"><?php echo translate('create_listings');?>
+                            </a>
+                                <?php
+                            }
+                            ?>
                             <button class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" 
                                 style="display:none;"  onclick="ajax_set_list();  proceed('to_add');"><?php echo translate('here');?>
                             </button>
@@ -52,7 +66,21 @@
 	var timer = '<?php $this->benchmark->mark_time(); ?>';
 	var user_type = 'vendor';
 	var module = 'product';
-	var list_cont_func = 'list';
+	<?php
+	if(isset($mod))
+	{
+	    ?>
+	    var list_cont_func = 'list?module=<?= $mod->id; ?>';
+	    <?php
+	}
+	else
+	{
+	    ?>
+	    var list_cont_func = 'list';
+	    <?php
+	}
+	?>
+	
 	var dlt_cont_func = 'delete';
 	<?php
 	if($list_type)

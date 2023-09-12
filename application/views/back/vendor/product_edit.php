@@ -1,5 +1,29 @@
 <?php
+function bubbleSort($arr)
+{
+    $n = sizeof($arr);
+  
+    // Traverse through all array elements
+    for($i = 0; $i < $n; $i++) 
+    {
+        // Last i elements are already in place
+        for ($j = 0; $j < $n - $i - 1; $j++) 
+        {
+            // traverse the array from 0 to n-i-1
+            // Swap if the element found is greater
+            // than the next element
+            if ($arr[$j]['sort'] > $arr[$j+1]['sort'])
+            {
+                $t = $arr[$j];
+                $arr[$j] = $arr[$j+1];
+                $arr[$j+1] = $t;
+            }
+        }
+    }
+    return $arr;
+}
 $row = (array) $product_data;
+$all_op = json_decode($row['options'],true);
 ?>
 <style>
  #select_amn2{
@@ -80,7 +104,6 @@ btn1 .fa{
     background-color:#fecb00;
 }
 .flip-card-inner .active{
-        background-color:#fecb00;
 }
 .form input {
   margin: 10px 0;
@@ -139,8 +162,22 @@ btn1 .fa{
 
 <div class="row">
     <div class="col-md-12 top_head">
-                            <button class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" onclick="ajax_set_full('add','Add Product','Successfully Added!','product_add',''); proceed('to_list');" style="display: none;">Create Listings</button>
-                            <a href="<?= base_url('/vendor/product'); ?>" class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" style="" onclick="ajax_set_list();  proceed('to_add');">Back To Listings</a>
+                            <button class="btn btn-primary btn-labeled fa fa-plus-circle add_pro_btn pull-right" onclick="ajax_set_full('add','Add Product','Successfully Added!','product_add',''); " style="display: none;">Create Listings</button>
+                            <?php
+                            if(isset($mod_cat))
+                            {
+                                ?>
+                                <a href="<?= base_url('/vendor/product'); ?>?module=<?= $mod->id ?>" class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" style="" onclick="ajax_set_list();">Back To <?= $mod_cat->category_name  ?> List                            </a>
+                            </a>
+                                <?php
+                            }
+                            else
+                            {
+                                ?>
+                                <a href="<?= base_url('/vendor/product'); ?>" class="btn btn-info btn-labeled fa fa-step-backward pull-right pro_list_btn" style="" onclick="ajax_set_list();">Back To Product List                            </a>
+                                <?php
+                            }
+                            ?>
                         </div>
     <div class="col-md-12 newsidebar">
         <?php
@@ -150,6 +187,23 @@ btn1 .fa{
                 'id' => 'product_add',
                 'enctype' => 'multipart/form-data'
             ));
+            $this->db->where_in('category',explode(',',$row['category']));
+            $fil_col = $this->db->where('is_filter',1)->get('list_fields')->result_array();
+            $rid = $row['product_id'];
+            // var_dump($fil_col);
+            foreach($fil_col as $k=> $v)
+            {
+                $dvalue = (isset($row[$v['tbl_col']])?$row[$v['tbl_col']]:$v['dvalue']) ;
+                if($dvalue == 'cdate')
+{
+    $dvalue= formate_date(date('Y-m-d'));
+}
+                $col = $v['tbl_col'];
+                ?>
+                <input type="hidden" value="<?= $dvalue?>" name="<?= $v['tbl_col'] ?>" placeholder="<?= $v['label'] ?>" id="<?= $v['tbl_col'] ?>_col" />
+                <?php
+                
+            }
         ?>
             <!--Panel heading-->
             <div class="row">
@@ -158,53 +212,55 @@ btn1 .fa{
                 <div class="panel-control1">
                     <ul class="nav nav-tabs">
                        <?php
-                        $gen = 0;
-                        if(isset($_GET['is_job']) || isset($_GET['is_event']))
-                        {
-                            $gen = 1;
-                        }
-                        ?>
-                        <?php
-                        if(!$gen)
-                        {
-                        ?>
-                        <li class="active" onclick="go_tab('customer_choice_options')">
-                            <a data-toggle="tab" href="#customer_choice_options"><?php echo translate('business_type'); ?></a>
-                        </li>
-                        <?php
-                        }
-                        ?>
-                        <li class="<?= ($gen)?"active":""; ?>"  onclick="go_tab('top_banner')">
-                            <a data-toggle="tab" href="#top_banner"><?php echo translate('general'); ?></a>
-                        </li>
-                        
-                       <li onclick="go_tab('event_images')">
-                            <a data-toggle="tab" href="#event_images"><?php echo translate('images_gallary'); ?></a>
-                        </li>
-                        <li onclick="go_tab('custom_attributes_0')">
-                            <a data-toggle="tab" href="#custom_attributes_0"><?php echo translate('Top_information'); ?></a>
-                        </li>
-                        <li onclick="go_tab('checkbox_information')">
-                            <a data-toggle="tab" href="#checkbox_information"><?php echo translate('checkbox_information'); ?></a>
-                        </li>
-                        <li  onclick="go_tab('amenitys')">
-                            <a data-toggle="tab" href="#amenitys"><?php echo translate('Amenities'); ?></a>
-                        </li>
-                       <li  onclick="go_tab('first_section')">
-                            <a data-toggle="tab" href="#first_section"><?php echo translate('Desrciptive_section'); ?></a>
-                        </li>
-                       <li onclick="go_tab('custom_attributes_1')">
-                            <a data-toggle="tab" href="#custom_attributes_1"><?php echo translate('accordion_information'); ?></a>
-                        </li>
+                        $this->db->order_by("sort", "asc");
+                        $active_tab = 'customer_choice_options';
 
-                         <li onclick="go_tab('location')">
-                            <a data-toggle="tab" href="#location"><?php echo translate('location'); ?></a>
-                        </li>
-                  
-                       
-                      <li onclick="go_tab('seo_section')">
-                            <a data-toggle="tab" href="#seo_section"><?php echo translate('seo_section'); ?></a>
-                        </li>
+                        $tabs = $this->db->get('listing_tabs')->result_array();
+                        if(isset($mod))
+                        {
+                            $tab = json_decode($mod->tabs,true);
+                            $label = $tab['label'];
+                            $sort = $tab['sort'];
+                            foreach($tabs as $k=> $v)
+                            {
+                                $id = $v['id'];
+                                if($sort[$id] == 0)
+                                {
+                                    unset($tabs[$k]);
+                                }
+                                $tabs[$k]['label'] = $label[$id];
+                                $tabs[$k]['sort'] = $sort[$id];
+                            }
+                            
+                        }
+                        $ntabs = array();
+                        
+                        foreach($tabs as $k=> $v)
+                        {
+                            if($v['sort'])
+                            {
+                                $ntabs[]= $v;
+                            }
+                        }
+                        $tabs = $ntabs;
+                        $tabs = bubbleSort($tabs);
+                        
+                        if(isset($tabs[0]['key']))
+                        {
+                            $active_tab = $tabs[0]['key'];
+                        }
+                        foreach($tabs as $k=> $v)
+                        {
+                            if($v['sort'] != 0)
+                            {
+                            ?>
+                            <li class="<?= (!$k)?"active":""; ?>"  onclick="go_tab('<?= $v['key'] ?>')">
+                                <a data-toggle="tab" href="#<?= $v['key']; ?>"><?php echo $v['label']; ?></a>
+                            </li>
+                            <?php
+                            }
+                        }
+                        ?>
                         
                     </ul>
                 </div>
@@ -216,8 +272,114 @@ btn1 .fa{
                 <div class="tab-base">
                     <!--Tabs Content-->                    
                     <div class="tab-content">
-                        
-                   <div id="customer_choice_options" class="tab-pane fade <?= (!$gen)?"active in":""; ?>">
+                       <div id="customer_choice_options1" class="tab-pane fade <?= ($active_tab == 'customer_choice_options1')?"active in":''; ?>">
+                            
+                            <div class="form-group btm_border">'
+                                <label class="col-sm-2 control-label" for="demo-hor-15">
+                                    <?php echo translate('product_color_options');?>
+                                        </label>
+                                    <div class="col-sm-6"  id="more_colors">
+                                        <?php 
+                                            if($all_c){
+                                                foreach($all_c as $p){
+                                        ?>
+                                            <div class="col-md-12" style="margin-bottom:8px;">
+                                                <div class="col-md-8">
+                                                    <div class="input-group demo2">
+                                                        <input type="text" value="<?php echo $p; ?>" name="color[]" class="form-control" />
+                                                        <span class="input-group-addon"><i></i></span>
+                                                    </div>
+                                                </div>
+                                                <span class="col-md-4">
+                                                    <span class="remove_it_v rmc btn btn-danger btn-icon btn-circle icon-lg fa fa-times" ></span>
+                                                </span>
+                                            </div>
+                                        <?php 
+                                                }
+                                            } 
+                                        ?>
+                                    </div>
+                            </div>
+                            
+                            <div class="form-group btm_border">
+                                <label class="col-sm-2 control-label" for="demo-hor-16"></label>
+                                <div class="col-sm-6">
+                                        <div id="more_color_btn" class="btn btn-primary btn-labeled fa fa-plus pull-right">
+                                            <?php echo translate('add_colors');?></div>
+                                </div>
+                            </div>
+                            <div id="more_additional_options">
+                            <?php
+                                $r = 0;
+                                if(!empty($all_op)){
+                                    foreach($all_op as $i=>$row1){
+                                        $r = 1;
+                            ?> 
+                                <div class="form-group" data-no="<?php echo $row1['no']; ?>">
+                                    <div class="col-sm-2">
+                                        <input type="text" name="op_title[]" value="<?php echo $row1['title']; ?>" class="form-control required"  placeholder="<?php echo translate('customer_input_title'); ?>">
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <select class="demo-chosen-select op_type required" name="op_type[]" >
+                                            <option value="" <?php if($row1['type'] == ''){ echo 'selected'; } ?> >(none)</option>
+                                            <option value="text" <?php if($row1['type'] == 'text'){ echo 'selected'; } ?> >Text Input</option>
+                                            <option value="single_select" <?php if($row1['type'] == 'single_select'){ echo 'selected'; } ?> >Dropdown Single Select</option>
+                                            <option value="radio" <?php if($row1['type'] == 'radio'){ echo 'selected'; } ?> >Radio</option>
+                                        </select>
+                                        <div class="col-sm-12 options">
+                                        <?php
+                                            if($row1['type'] == 'text' || $row1['type'] == ''){
+                                        ?>
+                                            <input type="hidden" name="op_set<?php echo $row1['no']; ?>[]" value="none" >
+                                        <?php
+                                            } else {
+                                        ?>
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-12 options margin-bottom-10">
+                                                <?php foreach ($row1['option'] as $key => $row2) { ?>
+                                                    <div>
+                                                        <div class="col-sm-10">
+                                                          <input type="text" name="op_set<?php echo $row1['no']; ?>[]" value="<?php echo $row2; ?>" class="form-control required"  placeholder="<?php echo translate('option_name'); ?>">
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                          <span class="remove_it_n rmon btn btn-danger btn-icon btn-circle icon-sm fa fa-times" onclick="delete_row(this)"></span>
+                                                        </div>
+                                                    </div>
+                                                <?php } ?>
+                                                </div>
+                                                <br>
+                                                <div class="btn btn-mint btn-labeled fa fa-plus pull-right add_op">
+                                                <?php echo translate('add_options_for_choice');?></div>
+                                            </div>
+
+                                        <?php
+                                            }
+                                        ?>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="op_no[]" value="<?php echo $row1['no']; ?>" >
+                                    <div class="col-sm-2">
+                                        <span class="remove_it_o rmo btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>
+                                    </div>
+                                </div>
+                            <?php
+                                    }
+                                }
+                            ?> 
+                            </div>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-2 control-label" for="demo-hor-inputpass"></label>
+                                <div class="col-sm-6">
+                                    <h4 class="pull-left">
+                                        <i><?php echo translate('if_you_need_more_choice_options_for_customers_of_this_product_,please_click_here.');?></i>
+                                    </h4>
+                                    <div id="more_option_btn" class="btn btn-mint btn-labeled fa fa-plus pull-right">
+                                    <?php echo translate('add_customer_input_options');?></div>
+                                </div>
+                            </div>
+
+                        </div>
+                   <div id="customer_choice_options" class="tab-pane fade <?= ($active_tab == 'customer_choice_options')?"active in":''; ?>">
                         <input type="hidden" id="category" value="<?= ($row['category'])?$row['category']:""; ?>" name="category"/>
                            <div class="row" id="cat_res">
                                   <div class="breaddcum">
@@ -252,7 +414,7 @@ btn1 .fa{
                             $cat[] = $v;
                             $crow = $this->db->where('category_id',$v)->get('category')->row();
                             ?>
-                            <li onclick="selecttype('<?= implode(',',$cat);?>',<?= $v;?>,1)"><?= $crow->category_name;?></li>
+                            <li><?= $crow->category_name;?></li>
                             <?php
                         }
                         ?>
@@ -269,35 +431,16 @@ btn1 .fa{
 
                     </ul>
                 </div> 
-                                 <?php
-                            foreach($brands as $k=>$v){
-                                if($v['level'] == 1)
-                                {
-                            ?>
-                                <div class="col-md-4 col-sm-12 col-xs-12 <?= ($product_data->category == $v['category_id'])?"active":"" ?>" onclick="selecttype('<?= $v['category_id'];?>')" >
-                                    <a href="#"><div class="flip-card ">
-                                  <div class="flip-card-inner">
-                                      <?php
-                                      ?>
-                                    <div class="flip-card-front <?= (in_array($v['category_id'],$carr))?"active":"" ?>">
-                                        <i class="fa <?= $v['fa_icon'];?>" aria-hidden="true"></i>
-                                        <br>
-                                        <p><?= $v['category_name'];?></p>
-                                    </div>
-                                    <div class="flip-card-back"><p><?= $v['category_name'];?> </p></div>
-                                  </div>
-                                </div>
-                                </a>
-                                </div>
-                                <?php 
-                                }
-                            }
-                            ?>
+                <span class="error">To change category of your ad, please delete current ad and recreate ad with new category listing
+
+
+
+</span>
                                 <div class="col-md-4 col-sm-12 col-xs-12"></div>
                                 <div class="col-md-4 col-sm-12 col-xs-12"></div>
                             </div>
                         </div>
-                        <div id="top_banner" class="tab-pane fade">
+                        <div id="top_banner" class="tab-pane fade <?= ($active_tab == 'top_banner')?"active in":''; ?>">
                             <h4 class="text-thin text-center"><?php echo translate('top_banner'); ?></h4> 
                             <div class="form-group btm_border">
                             <div class="form-group btm_border">
@@ -315,7 +458,9 @@ btn1 .fa{
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('listing_detail'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>
+                                    <textarea rows="9" name="description"   id="editor1" height="200" >
+                                        <?php echo $row['description']; ?></textarea>
+                                    <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
                                 </div>
                                 </div>
                                 <div class="form-group btm_border">
@@ -324,6 +469,33 @@ btn1 .fa{
                                     <input type="text" name="tag" value="<?= $row['tag']; ?>" data-role="tagsinput" placeholder="<?php echo translate('enter comma (,) to add more');?>" class="form-control">
                                 </div>
                             </div>
+                            <?php
+                            if(isset($mod) && $mod->is_address)
+                            {
+                            ?>
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-6"><?php echo translate('address');?></label>
+                                <div class="col-sm-4">
+                                    <select class="form-control required" name= "warehouse">
+                                        <?php
+                                        foreach($warehouse as $k => $v){
+                                        ?>
+                                        <option value="<?= $v['address_id'];?>"><?= $v['title'];?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                    </select>
+                                    <p>You can add new warehouses by <a href="<?= base_url('/vendor/address'); ?>">Clicking here</a></p>
+                                </div>
+                            </div>
+                            
+                            <?php
+                            }
+                            ?>
+                            <?php
+                            if(isset($mod) && !$mod->hide_bus)
+                            {
+                            ?>
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-6"><?php echo translate('whatsapp_number');?></label>
                                 <div class="col-sm-4">
@@ -362,6 +534,10 @@ btn1 .fa{
                                     </select>
                                 </div>
                             </div>
+                            <?php
+                            }//hide bus details
+                            ?>
+                            
                                     <label class="col-sm-4 control-label" for="demo-hor-12">Feature image</label>
                                     <div class="col-sm-6">
                                         <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
@@ -380,7 +556,22 @@ btn1 .fa{
                                             ?>
                                         </span>
                                     </div>
+                                    
                                 </div>
+                            
+                            <?php
+                            if(isset($mod)&& $mod->img_detail)
+                            {
+                                ?>
+                             <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-6"><?php echo translate('uper_text');?></label>
+                                <div class="col-sm-4">
+                                    <input class="form-control"  value="<?= $row['uper_text'] ?>" name= "uper_text" />
+                                </div>
+                            </div>
+                            <?php
+                            }
+                            ?>
                                 <div class="form-group btm_border">
                                     <label class="col-sm-4 control-label" for="demo-hor-12">Cover Image</label>
                                     <div class="col-sm-6">
@@ -400,9 +591,22 @@ btn1 .fa{
                                         </span>
                                     </div>
                                 </div>
+                                        <?php
+                            if(isset($mod)&& $mod->img_detail)
+                            {
+                                ?>
+                             <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-6"><?php echo translate('down_text');?></label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" value="<?= $row['down_text'] ?>" name= "down_text" />
+                                </div>
+                            </div>
+                            <?php
+                            }
+                            ?>
                         
                         </div>
-                        <div id="first_section" class="tab-pane fade ">
+                        <div id="first_section" class="tab-pane fade <?= ($active_tab == 'first_section')?"active in":''; ?>">
                                 
                                 <div class="form-group btm_border">
                                     <label class="col-sm-4 control-label" for="demo-hor-12">section Image</label>
@@ -427,7 +631,7 @@ btn1 .fa{
                                 <div class="form-group btm_border">
                                     <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('main_heading');?></label>
                                     <div class="col-sm-6">
-                                        <input type="text" name="slogan" id="demo-hor-1" value="<?php echo $row['slogan']; ?>" placeholder="<?php echo translate('main_heading');?>" class="form-control ">
+                                        <input type="text" name="discip_heading" id="demo-hor-1" value="<?php echo $row['discip_heading']; ?>" placeholder="<?php echo translate('discip_heading');?>" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group btm_border">
@@ -530,7 +734,7 @@ btn1 .fa{
                             </div>
 
                         </div>
-                        <div id="text_gallary" class="tab-pane fade ">
+                        <div id="text_gallary" class="tab-pane fade <?= ($active_tab == 'text_gallary')?"active in":''; ?>">
                         <div class="col-md-12">
                                     <div id="text_div" >
                                     <?php
@@ -576,7 +780,7 @@ btn1 .fa{
                                     </div>
                                     </div>
                         </div>
-                   <div id="custom_attributes_0" class="tab-pane fade ">
+                   <div id="custom_attributes_0" class="tab-pane fade <?= ($active_tab == 'custom_attributes_0')?"active in":''; ?>">
                         <div class="form-group btn_border">
                             <h5 style="color: red;padding: 0 89px;">If more than 30 characters, it will be added to the accordion section</h5>
                         </div>
@@ -595,14 +799,34 @@ btn1 .fa{
                           ?>
                                               <div class="form-group">
                                  <div class="col-sm-4">
-                                 <input type="text" name="ad_field_names[]" class="form-control required" value="<?= $v?>"  placeholder="<?php echo translate('field_name'); ?>">
+                                 <input type="text" name="ad_field_names[]" class="form-control required" readonly="true" value="<?= $v?>"  placeholder="<?php echo translate('field_name'); ?>">
                                  </div>
                                  <div class="col-sm-5">
+                                 <?php
+                                 $s = $this->db->where('label',trim($v))->get('list_fields')->row();
+                                 if($s)
+                                 {
+                                     $s->val = $values[$k];
+                                 $this->load->view('vedit_f',$s);
+                                 }
+                                 else
+                                 {
+                                     ?>
                                  <input type="text" rows="9"  class="form-control" data-height="100" name="ad_field_values[]" value="<?= $values[$k]; ?>">
+                                 <?php
+                                 }
+                                 ?>
                                 </div>
+                                <?php
+                                if(!empty($s) && $s->is_required == NULL)
+                                {
+                                ?>
                                 <div class="col-sm-2">
                                 <span class="remove_it_v rms btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>
                                 </div>
+                                <?php
+                                }
+                                ?>
                                 </div>
                                 <?php
                                               }
@@ -620,9 +844,13 @@ btn1 .fa{
                             </div>
                              
                         </div>
-                           <div id="checkbox_information" class="tab-pane fade ">
+                           <div id="checkbox_information" class="tab-pane fade <?= ($active_tab == 'checkbox_information')?"active in":''; ?>">
                                  <div class="form-group btn_border">
                             <h5 style="color: red;padding: 0 89px;">Do not exceed more than 30 characters per entry</h5>
+                            <div>
+                                <labe>Section Heading</label>  
+                                <input class="form-control" name="checkbox_h" value="<?= $row['checkbox_h'] ?>" />
+                            </div>
                         </div>
                       <div class="form-group btm_border">
                           <?php
@@ -666,45 +894,67 @@ btn1 .fa{
                             </div>
                             
                         </div>
-                          <div id="amenitys" class="tab-pane fade ">
+                        <div id="amenitys" class="tab-pane fade <?= ($active_tab == 'amenitys')?"active in":''; ?>">
+                              <div class="form-group btm_border" >
+                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('Add_Amenities');?></label>
+                                <div class="col-sm-6 adding_position">
+                                    <input type="checkbox" name="checkamenities" value="yes" class="" id="amen_check" <?= isset($row['amen_check']) && 
+                                    $row['amen_check'] == 'yes' ?'checked':'';
+                                    ?>>
+                                </div>
                      <div class="form-group btm_border">
                                     <label class="col-sm-4 control-label" for="demo-hor-1">Select Amenities</label>
                                     <div class="col-sm-6">
-                                                                                
+                                     <div class="row">                                           
+                                     <div class="col-md-10 padding_none">                                           
                              <input type="text" class="amnty form-control" id="amnty">
+                             </div>
+                               <div class="col-md-2 padding_none">                                           
                              <button type="button" class="btn btn-primary" id="amn_btn">Add</button>
-                             
+                             </div>
+                             </div>
                             <div id="add_amn">
                                 
                             </div>
                             <hr>
                           
                             <div id="select_amn2">
+                                
                         </div>
                                
                             <div class="select_amn" style="display: none;">
-                            <!--<input type="text" name="amenities[]"  class="form-control ">-->
+                                <?php $exp =  explode(',',$row['amenities']); 
+                                foreach($exp as $k=> $v)
+                                {
+                                    ?>
+                                <input type="text"  id="amv_<?= $k ?>" name="amenities[]" value="<?= $v ?>">
+                                <?php
+                                }
+                                
+                                ?>
+                                
+                            </div>
                              
                           </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="custom_attributes_1" class="tab-pane fade ">
-                            
+                        <div id="custom_attributes_1" class="tab-pane fade <?= ($active_tab == 'custom_attributes_1')?"active in":''; ?>">
+                            <div>
+                                <labe>Section Heading</label>
+                                <input class="form-control" name="accor_h"  value="<?= $row['accor_h'] ?>" />
+                            </div>
                             <?php
-                                if(isset($row['additional_fields_new']) && !empty($row['additional_fields_new'])){
-                                    $exp1 = json_decode($row['additional_fields_new']);
-                                    // var_dump($exp1);
-                                    $ex1 =$exp1->name;
-                                    $values1 = $exp1->value;
-                                    foreach($ex1 as $k => $v){
+                            $acc = $this->db->where('pid',$row['product_id'])->get('product_to_accordion')->result_array();
+                                if($acc){
+                                    foreach($acc as $k => $v){
                                         ?>
                                     <div class="form-group">
                                         <div class="col-sm-4">
-                                            <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>" value="<?= $v?>">
+                                            <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>" value="<?= $v['title']?>">
                                         </div>
                                         <div class="col-sm-5">
-                                            <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values_custom[]"><?= $values1[$k]; ?></textarea>
+                                            <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values_custom[]"><?= $v['detail']; ?></textarea>
                                         </div>
                                 
                                     </div>
@@ -739,7 +989,7 @@ btn1 .fa{
                         </div>    
                         </div>
                              
-                        <div id="seo_section" class="tab-pane fade ">
+                        <div id="seo_section" class="tab-pane fade <?= ($active_tab == 'seo_section')?"active in":''; ?>">
                             <div class="form-group btm_border">
                                 <div class="col-sm-4"></div>
                                 <div class="col-sm-8"></div>
@@ -835,7 +1085,7 @@ btn1 .fa{
                                 </div>
                                 </div>
                         </div>
-                        <div id="location" class="tab-pane fade ">
+                        <div id="location" class="tab-pane fade <?= ($active_tab == 'location')?"active in":''; ?>">
                         <input  style="width: 186px;
     padding: 0 16px;
     height: 34px;
@@ -862,7 +1112,7 @@ btn1 .fa{
     margin: 0 0 13px;" type="text" id="cityLng" value="<?= $row['lng']; ?>" name="lng" />
                             </div>
                         </div>
-                        <div id="event_images" class="tab-pane fade ">
+                        <div id="event_images" class="tab-pane fade <?= ($active_tab == 'event_images')?"active in":''; ?>">
                         <div class="form-group btm_border">
                                 <h4 class="text-thin text-center"><?php echo translate('gallary_images'); ?></h4>                            
                             </div>
@@ -938,7 +1188,7 @@ btn1 .fa{
                             
 
                         </div>-->
-                        <div id="event_images" class="tab-pane fade ">
+                        <div id="event_images" class="tab-pane fade <?= ($active_tab == 'event_images')?"active in":''; ?>">
         
                             
 
@@ -995,7 +1245,7 @@ btn1 .fa{
                     </div>
                     
                     <div class="col-md-1">
-                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" id="registerbutton" onclick="validate_listing();" ><?php echo translate('upload');?></span>
+                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" id="registerbutton" onclick="textarea();validate_listing();" ><?php echo translate('upload');?></span>
                     </div>
                     
                 </div>
@@ -1009,6 +1259,162 @@ btn1 .fa{
 </script>
 
 <input type="hidden" id="option_count" value="-1">
+
+<script>
+            // This sample still does not showcase all CKEditor 5 features (!)
+            // Visit https://ckeditor.com/docs/ckeditor5/latest/features/index.html to browse all the features.
+            var editor1;
+            CKEDITOR.ClassicEditor.create(document.getElementById("editor1"), {
+                // https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html#extended-toolbar-configuration-format
+                toolbar: {
+                    items: [
+                        'exportPDF','exportWord', '|',
+                        'findAndReplace', 'selectAll', '|',
+                        'heading', '|',
+                        'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
+                        'bulletedList', 'numberedList', 'todoList', '|',
+                        'outdent', 'indent', '|',
+                        'undo', 'redo',
+                        '-',
+                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+                        'alignment', '|',
+                        'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
+                        'specialCharacters', 'horizontalLine', 'pageBreak', '|',
+                        'textPartLanguage', '|',
+                        'sourceEditing'
+                    ],
+                    shouldNotGroupWhenFull: true
+                },
+                // Changing the language of the interface requires loading the language file using the <script> tag.
+                // language: 'es',
+                list: {
+                    properties: {
+                        styles: true,
+                        startIndex: true,
+                        reversed: true
+                    }
+                },
+                // https://ckeditor.com/docs/ckeditor5/latest/features/headings.html#configuration
+                heading: {
+                    options: [
+                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                        { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                        { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                        { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+                        { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+                    ]
+                },
+                // https://ckeditor.com/docs/ckeditor5/latest/features/editor-placeholder.html#using-the-editor-configuration
+                placeholder: 'Welcome to CKEditor 5!',
+                name:'short_description',
+                // https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-family-feature
+                fontFamily: {
+                    options: [
+                        'default',
+                        'Arial, Helvetica, sans-serif',
+                        'Courier New, Courier, monospace',
+                        'Georgia, serif',
+                        'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                        'Tahoma, Geneva, sans-serif',
+                        'Times New Roman, Times, serif',
+                        'Trebuchet MS, Helvetica, sans-serif',
+                        'Verdana, Geneva, sans-serif'
+                    ],
+                    supportAllValues: true
+                },
+                // https://ckeditor.com/docs/ckeditor5/latest/features/font.html#configuring-the-font-size-feature
+                fontSize: {
+                    options: [ 10, 12, 14, 'default', 18, 20, 22 ],
+                    supportAllValues: true
+                },
+                // Be careful with the setting below. It instructs CKEditor to accept ALL HTML markup.
+                // https://ckeditor.com/docs/ckeditor5/latest/features/general-html-support.html#enabling-all-html-features
+                htmlSupport: {
+                    allow: [
+                        {
+                            name: /.*/,
+                            attributes: true,
+                            classes: true,
+                            styles: true
+                        }
+                    ]
+                },
+                // Be careful with enabling previews
+                // https://ckeditor.com/docs/ckeditor5/latest/features/html-embed.html#content-previews
+                htmlEmbed: {
+                    showPreviews: true
+                },
+                // https://ckeditor.com/docs/ckeditor5/latest/features/link.html#custom-link-attributes-decorators
+                link: {
+                    decorators: {
+                        addTargetToExternalLinks: true,
+                        defaultProtocol: 'https://',
+                        toggleDownloadable: {
+                            mode: 'manual',
+                            label: 'Downloadable',
+                            attributes: {
+                                download: 'file'
+                            }
+                        }
+                    }
+                },
+                // https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html#configuration
+                mention: {
+                    feeds: [
+                        {
+                            marker: '@',
+                            feed: [
+                                '@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
+                                '@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
+                                '@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
+                                '@sugar', '@sweet', '@topping', '@wafer'
+                            ],
+                            minimumCharacters: 1
+                        }
+                    ]
+                },
+                // The "super-build" contains more premium features that require additional configuration, disable them below.
+                // Do not turn them on unless you read the documentation and know how to configure them and setup the editor.
+                removePlugins: [
+                    // These two are commercial, but you can try them out without registering to a trial.
+                    // 'ExportPdf',
+                    // 'ExportWord',
+                    'CKBox',
+                    'CKFinder',
+                    'EasyImage',
+                    // This sample uses the Base64UploadAdapter to handle image uploads as it requires no configuration.
+                    // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/base64-upload-adapter.html
+                    // Storing images as Base64 is usually a very bad idea.
+                    // Replace it on production website with other solutions:
+                    // https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/image-upload.html
+                    // 'Base64UploadAdapter',
+                    'RealTimeCollaborativeComments',
+                    'RealTimeCollaborativeTrackChanges',
+                    'RealTimeCollaborativeRevisionHistory',
+                    'PresenceList',
+                    'Comments',
+                    'TrackChanges',
+                    'TrackChangesData',
+                    'RevisionHistory',
+                    'Pagination',
+                    'WProofreader',
+                    // Careful, with the Mathtype plugin CKEditor will not load when loading this sample
+                    // from a local file system (file://) - load this site via HTTP server if you enable MathType
+                    'MathType'
+                ]
+            }).then( newEditor => {
+        editor1 = newEditor;
+    } )
+    .catch( error => {
+        console.error( error );
+    } );
+            function textarea(){
+                $('#editor1').val(editor1.getData());
+                
+            }
+        </script>
 
 <script>
 function activaTab(tab){
@@ -1211,6 +1617,7 @@ $.ajax(settings).done(function (response) {
         'custom_attributes_1',
         'location',
         'seo_section',
+        'customer_choice_options1',
         
     ];
     function go_tab(ctab1 = ''){
@@ -1219,8 +1626,8 @@ $.ajax(settings).done(function (response) {
         {
             $('.nav-tabs li').each(function( index ) {
                 var loop_name = $( this ).children('a').attr('href');
-                // console.log(loop_name);
-                if(loop_name.match(ctab))
+                console.log(loop_name+' == '+ctab );
+                if(loop_name == ctab)
                 {
                     $(this).addClass('active');
                     $(loop_name).addClass('active');
@@ -1307,52 +1714,6 @@ $.ajax(settings).done(function (response) {
         });
  
     
-    function selecttype(id,nid= 0,type = 1)
-{
-    
-    if(type)
-    {
-        alert(id);
-        $('#category').val(id);
-    }
-    else
-    {
-        if($('#category').val())
-        {
-            var pre = $('#category').val()+','+id;
-            // alert(pre);
-            $('#category').val(pre);
-        }
-        else{
-            $('#category').val(id);
-        }
-    }
-    show_rel_fields();
-    if(nid)
-    {
-        id=nid;
-    }
-    alert(id);
-
-    var url  = base_url+'vendor/product/sub_by_cat/'+id;
-    $.ajax({
-  url: url,
-  cache: false,
-  success: function(html){
-    if(html == '0')
-    {
-        next_tab();
-
-    }
-    else
-    {
-    $("#cat_res").html(html);
-    }
-  }
-});
-
-    // get_cat(id,this);
-}
 
  
    });
@@ -1464,7 +1825,7 @@ else
    });
 let file;
 var filename;
-function selecttype(id,nid= 0,type = 1)
+function selecttype(id,nid= 0,type = 0)
 {
     // alert(nid);
     if(type)
@@ -1473,8 +1834,9 @@ function selecttype(id,nid= 0,type = 1)
     }
     else
     {
-        if($('#category').val())
+        if($('#category').val() && id)
         {
+            
             var pre = $('#category').val()+','+id;
             // alert(pre);
             $('#category').val(pre);
@@ -1483,6 +1845,7 @@ function selecttype(id,nid= 0,type = 1)
             $('#category').val(id);
         }
     }
+    alert($('#category').val());
     show_rel_fields();
     if(nid)
     {
@@ -1508,8 +1871,10 @@ function selecttype(id,nid= 0,type = 1)
 });
 
     // get_cat(id,this);
-}{
-    if($('#category').val())
+}
+/*if(true)
+{
+    if($('#category').val() && id )
     {
         var pre = $('#category').val()+','+id;
         // alert(pre);
@@ -1537,7 +1902,7 @@ function selecttype(id,nid= 0,type = 1)
 });
 
     // get_cat(id,this);
-}
+}*/
 
 
     function preview2(input) {
@@ -1719,7 +2084,8 @@ function showPosition(position) {
     <script>
          function validate_listing(){
         var property_cat = '<?= $this->config->item('property_cat') ?>';
-        var plainText = $($("#summernotes").code()).text();
+        var plainText = $("#editor1").code();
+        console.log(plainText);
           if(plainText.length < 300)
             {
                 alert('Please add minimum 300 character in description');
@@ -1812,7 +2178,7 @@ else
             }
             else
             {
-                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');
             }
         }
         else if(property_cat == 1)
@@ -1854,7 +2220,7 @@ else
             }
             else
             {
-                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');
             }
         }
         else if(event_cat == 1)
@@ -1897,7 +2263,7 @@ else
             }
             else
             {
-                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');
             }
         }
         else if(job_cat == 1)
@@ -1939,12 +2305,12 @@ else
             }
             else
             {
-                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+                form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');
             }
         }
         else
         {
-            form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+            form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');
         }
         return 0;
         // 
@@ -2022,22 +2388,6 @@ $('.exra_chnge').change(function(){
     $(".js-example-basic-single").select2();
     });
     
-    $('#amnty').on('keyup', function(){
-        var url = '<?= base_url('vendor/getAmenties')?>';
-        var value = $(this).val();
-          $.ajax({
-        url: url,
-        type: "Post",
-        async: true,
-        data: {add:1,value:value },
-        success: function (data) {
-           $('#add_amn').html(data);
-        },
-        error: function (xhr, exception) {
-           
-        }
-    });  
-    });
      $("#more_field_btn").click(function(){
         
         $("#more_checkbox_fields").append(''
@@ -2053,43 +2403,140 @@ $('.exra_chnge').change(function(){
         set_summer();
     });
     
-    $('#amn_btn').on('click', function(){
-        var url = '<?= base_url('vendor/getAmenties')?>';
-        var value = $('#amnty').val();
+</script>
+<!--amenities script-->
+<script type="text/javascript">
+$(document).ready(function(){
+    getamn('<?= $rid ?>');
+});
+        function update_filter(id,col)
+        {
+            
+            var input = document.getElementById(id);
+            var value = input.value;
+            alert(value);
+            if(value == 'other' && input.getAttribute('type') == 'model')
+            {
+                var outer = id+'_outer';  
+             var html = '<input type="text" id="'+input.getAttribute('id')+'" col="'+input.getAttribute('col')+'" rows="9" onkeyup="'+input.getAttribute('onchange')+'" class="form-control required" placeholder="'+input.getAttribute('placeholder')+'" data-height="100" name="ad_field_values[]">';
+             document.getElementById(outer).innerHTML = html;
+            }
+            else
+            {
+            document.getElementById(col).value = value; 
+            }
 
+        }
+        function capital_val(id)
+        {
+            var val = $('#'+id).val();
+            val = val.charAt(0).toUpperCase() + val.slice(1);
+            $('#'+id).val(val);
+        }
+        
+$('#amen_check').on('change',function(){
+    $('#amenities').toggle();
+})
+$('#amnty').on('keyup', function(){
+        var url = '<?= base_url('vendor/getAmenties')?>';
+        var value = $(this).val();
+        var cats = $('#category').val();
+        if(cats)
+        {
           $.ajax({
         url: url,
         type: "Post",
         async: true,
-        data: {add_to_table:1,value:value },
+        data: {add:1,value:value,cats:cats },
         success: function (data) {
-        var html = '<input type="text" name="amenities[]" value="'+data+'">';
-        $('.select_amn').append(html);
-        var text = '<p><span onclick="delete('+data+')">x</span>'+data+'</p>';
-        $('#select_amn2').append(text);
+           $('#add_amn').html(data);
         },
         error: function (xhr, exception) {
            
         }
     });  
+        }
     });
-    
+    $('#amn_btn').on('click', function(){
+        var url = '<?= base_url('vendor/getAmenties')?>';
+        var value = $('#amnty').val();
+        var cats = $('#category').val();
+        if(cats)
+        {
+
+          $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: {add_to_table:1,value:value,cats:cats,pid:<?= $rid ?> },
+        success: function (data) {
+            if(data)
+        {
+            getamn();
+        }
+        
+        },
+        error: function (xhr, exception) {
+           
+        }
+    });  
+        }
+        else
+        {
+            alert("PLease select Ad type first ");
+            go_tab('customer_choice_options')
+        }
+    });
+    function delete_ament(val)
+    {
+        var url = '<?= base_url('vendor/getAmenties');?>';
+      $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { del:1,am_id:val,pid:'<?= $rid ?>'},
+        success: function (data) {
+        if(data)
+        {
+            getamn();
+        }
+       
+        },
+    });
+    }
+     
+    function getamn(id){
+         var url = '<?= base_url('vendor/getAmenties');?>';
+      $.ajax({
+        url: url,
+        type: "Post",
+        async: true,
+        data: { get:1,pid:'<?= $rid ?>'},
+        success: function (data) {
+        $('#select_amn2').html(data);
+       
+        },
+    });
+    }
+     
     function selectamn(id){
          var url = '<?= base_url('vendor/getAmenties');?>';
       $.ajax({
         url: url,
         type: "Post",
         async: true,
-        data: { select:1,sid:id},
+        data: { select:1,sid:id,pid:'<?= $rid ?>'},
         success: function (data) {
-       var html = '<input type="text" name="amenities[]" value="'+data+'">';
-        $('.select_amn').append(html);
-        var text = '<p><span onclick="delete('+data+')">x</span>'+data+'</p>';
-        $('#select_amn2').append(text);
+        if(data)
+        {
+            getamn();
+        }
+       
         },
     });
     }
-</script>
+    </script>
+<!--amenities script-->
     <script>
         $('#slug').on('keyup',function(){
             $('#registerbutton').attr("disabled", false);
@@ -2124,6 +2571,86 @@ $('.exra_chnge').change(function(){
           $("#slug").val(Text);    
           $('#slug').keyup();
         });
+    </script>
+    
+    <script type="text/javascript">
+        function update_filter(id,col)
+        {
+            
+            var input = document.getElementById(id);
+            var value = input.value;
+            if(value == 'other' && input.getAttribute('type') == 'model')
+            {
+                var outer = id+'_outer';  
+             var html = '<input type="text" id="'+input.getAttribute('id')+'" col="'+input.getAttribute('col')+'" rows="9" onkeyup="'+input.getAttribute('onchange')+'" class="form-control required" placeholder="'+input.getAttribute('placeholder')+'" data-height="100" name="ad_field_values[]">';
+             document.getElementById(outer).innerHTML = html;
+            }
+            else
+            {
+            document.getElementById(col+'_col').value = value; 
+            }
+
+        }
+        /*--extra option---*/
+    $("#more_option_btn").click(function(){
+        option_count('add');
+        var co = $('#option_count').val();
+        $("#more_additional_options").append(''
+            +'<div class="form-group" data-no="'+co+'">'
+            +'    <div class="col-sm-4">'
+            +'        <input type="text" name="op_title[]" class="form-control required"  placeholder="<?php echo translate('customer_input_title'); ?>">'
+            +'    </div>'
+            +'    <div class="col-sm-5">'
+            +'        <select class="demo-chosen-select op_type required" name="op_type[]" >'
+            +'            <option value="">(none)</option>'
+            +'            <option value="text">Text Input</option>'
+            +'            <option value="single_select">Dropdown Single Select</option>'
+            +'            <option value="radio">Radio</option>'
+            +'        </select>'
+            +'        <div class="col-sm-12 options">'
+            +'          <input type="hidden" name="op_set'+co+'[]" value="none" >'
+            +'        </div>'
+            +'    </div>'
+            +'    <input type="hidden" name="op_no[]" value="'+co+'" >'
+            +'    <div class="col-sm-2">'
+            +'        <span class="remove_it_o rmo btn btn-danger btn-icon btn-circle icon-lg fa fa-times" onclick="delete_row(this)"></span>'
+            +'    </div>'
+            +'</div>'
+        );
+        set_select();
+    });
+    
+    $("#more_additional_options").on('change','.op_type',function(){
+        var co = $(this).closest('.form-group').data('no');
+        if($(this).val() !== 'text' && $(this).val() !== ''){
+            $(this).closest('div').find(".options").html(''
+                +'    <div class="col-sm-12">'
+                +'        <div class="col-sm-12 options margin-bottom-10"></div><br>'
+                +'        <div class="btn btn-mint btn-labeled fa fa-plus pull-right add_op">'
+                +'        <?php echo translate('add_options_for_choice');?></div>'
+                +'    </div>'
+            );
+        } else if ($(this).val() == 'text' || $(this).val() == ''){
+            $(this).closest('div').find(".options").html(''
+                +'    <input type="hidden" name="op_set'+co+'[]" value="none" >'
+            );
+        }
+    });
+    
+    $("#more_additional_options").on('click','.add_op',function(){
+        var co = $(this).closest('.form-group').data('no');
+        $(this).closest('.col-sm-12').find(".options").append(''
+            +'    <div>'
+            +'        <div class="col-sm-10">'
+            +'          <input type="text" name="op_set'+co+'[]" class="form-control required"  placeholder="<?php echo translate('option_name'); ?>">'
+            +'        </div>'
+            +'        <div class="col-sm-2">'
+            +'          <span class="remove_it_n rmon btn btn-danger btn-icon btn-circle icon-sm fa fa-times" onclick="delete_row(this)"></span>'
+            +'        </div>'
+            +'    </div>'
+        );
+    });
+    /*--extra option---*/
     </script>
 <style>
     .btm_border{

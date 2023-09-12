@@ -7,9 +7,6 @@
                                             <th>#</th>
                                             <th><?php echo translate('image');?></th>
                                             <th><?php echo translate('name');?></th>
-                                            <th><?php echo translate('price');?></th>
-                                            <th><?php echo translate('availability');?></th>
-                                            <th><?php echo translate('purchase');?></th>
                                             <th><?php echo translate('remove');?></th>
                                         </tr>
                                     </thead>

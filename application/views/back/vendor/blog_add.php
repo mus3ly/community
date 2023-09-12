@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col-md-12">
-		<?php
-	
+        <?php
+    
             echo form_open(base_url() . 'vendor/product/do_add/', array(
                 'class' => 'form-horizontal',
                 'method' => 'post',
                 'id' => 'product_add',
-				'enctype' => 'multipart/form-data'
+                'enctype' => 'multipart/form-data'
             ));
         ?>
             <!--Panel heading-->
@@ -57,7 +57,7 @@
                                 <label class="col-sm-4 control-label" for="demo-hor-12"><?php echo translate('image');?></label>
                                 <div class="col-sm-6">
                                   <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
-                                            <input type="file" value="<?= ($row['sneakerimg'])?$row['sneakerimg']:""; ?>" name="sneakerimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control">
+                                            <input type="file" value="<?= ($row['sneakerimg'])?$row['sneakerimg']:""; ?>" name="sideimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control required">
                                         </span>
                                     <br><br>
                                      <span id="previewImg1" >
@@ -84,7 +84,7 @@
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('description'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9"  class="summernotes" data-height="300" data-name="description"></textarea>
+                                    <textarea rows="9"  class="summernotes" id="summernotes" data-height="300" data-name="description"></textarea>
                                 </div>
                             </div>
 
@@ -135,7 +135,7 @@
                     </div>
                     
                     <div class="col-md-1">
-                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" id="registerbtn" onclick="form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');"><?php echo translate('upload');?></span>
+                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" id="registerbtn" onclick="validate_listing();"><?php echo translate('upload');?></span>
                     </div>
                     
                 </div>
@@ -477,6 +477,29 @@
           $("#slug").val(Text);    
           $('#slug').keyup();
         });
+        function preview1(input) {
+        // alert('preview2');
+        if (input.files && input.files[0]) {
+            $("#previewImg1").html('');
+            $(input.files).each(function () {
+                var reader = new FileReader();
+                reader.readAsDataURL(this);
+                reader.onload = function (e) {
+                    $("#previewImg1").append("<div style='float:left;border:4px solid #303641;padding:5px;margin:5px;'><img height='80' src='" + e.target.result + "'></div>");
+                }
+            });
+        }
+    }
+        function validate_listing(){
+        // var textareaValue = $('#desc_summernote').summernote('code', 'value');
+        var plainText = $($("#summernotes").code()).text();
+          if(plainText.length < 300)
+            {
+                alert('Please add minimum 300 character in description');
+                return 0;
+            }
+        form_submit('product_add','<?php echo translate('blog_has_been_uploaded!'); ?>');proceed('to_add');
+    }
     </script>
 <style>
     .btm_border{border-bottom: 1px solid #ebebeb;padding-bottom: 15px;}

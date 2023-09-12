@@ -48,7 +48,7 @@
 
 	<script src="<?php echo base_url(); ?>template/back/plugins/pace/pace.min.js"></script>
 
-	<?php $ext =  $this->db->get_where('ui_settings',array('type' => 'fav_ext'))->row()->value; $this->benchmark->mark_time();?>
+	<?php $ext =  $this->db->get_where('ui_settings',array('type' => 'fav_ext'))->row()->value; ?>
 
 	<link rel="shortcut icon" href="<?php echo base_url(); ?>uploads/others/favicon.<?php echo $ext; ?>">
 

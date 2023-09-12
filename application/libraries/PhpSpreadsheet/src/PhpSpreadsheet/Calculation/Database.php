@@ -1,6 +1,7 @@
 <?php
 
 namespace PhpOffice\PhpSpreadsheet\Calculation;
+#[\AllowDynamicProperties]
 
 class Database
 {
@@ -21,6 +22,12 @@ class Database
      *
      * @return null|string
      */
+    public function __construct(array $params)
+{
+    $this->username = $params['username'] ?? null;
+    $this->password = $params['password'] ?? null;
+    $this->port = $params['port'] ?? null;
+}
     private static function fieldExtract($database, $field)
     {
         $field = strtoupper(Functions::flattenSingleValue($field));

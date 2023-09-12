@@ -86,6 +86,8 @@
 
 	<!--SCRIPT-->
 	<!--=================================================-->
+	
+	<script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/super-build/ckeditor.js"></script>
 
 	<!--jQuery [ REQUIRED ]-->
 	<script src="<?php echo base_url(); ?>template/back/js/jquery-2.1.1.min.js"></script>

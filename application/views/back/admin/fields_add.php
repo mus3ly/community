@@ -47,7 +47,7 @@
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('Required');?></label>
                 <div class="col-sm-6">
                     <input type="checkbox" name="is_required" id="demo-hor-1" 
-                    	placeholder="<?php echo translate('required'); ?>" value="1" class="form-control required">
+                    	placeholder="<?php echo translate('required'); ?>" value="1" class=" required">
                 </div>
             </div>
             <div class="form-group">
@@ -80,6 +80,9 @@
                         <option value="text">Text</option>
                         <option value="textarea">Textarea</option>
                         <option value="select">Select</option>
+                        <option value="date">Date</option>
+                        <option value="time">Time</option>
+                        <option value="number">Number</option>
                         </select>
                 </div>
             </div>
@@ -122,7 +125,52 @@
                 <input type="text" name="prefix" class="form-control">
                 </div>
             </div>
-
+        <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('postfix');?></label>
+                <div class="col-sm-6">
+                <input type="text" name="postfix" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('listing');?></label>
+                <div class="col-sm-6">
+                <input type="text" name="listing" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('filter_sort');?></label>
+                <div class="col-sm-6">
+                <input type="number" name="sorts" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('default_value');?></label>
+                <div class="col-sm-6">
+                <input type="text" name="default_value" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('view_type');?></label>
+                <div class="col-sm-6">
+                    <select name="view_type" class="form-control required">
+                        <option >Choose View Type</option>
+                        <option value="0" >Full</option>
+                        <option value="1">Half</option>
+                        </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('filter_enable');?></label>
+                <div class="col-sm-6">
+                <input type="checkbox" name="filter_enable" class="" value="1">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('capital_val');?></label>
+                <div class="col-sm-6">
+                <input type="checkbox" name="capital_val" class="" value="1">
+                </div>
+            </div>
           
         </div>
 	</form>

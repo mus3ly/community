@@ -21,9 +21,11 @@
                         	<?php echo $row['title']; ?>
                         </h2>
                         <div class="post-meta">
+                            <P class="low_me">
 							<?php echo translate('by'); ?> 
-							<?php echo $row['author']; ?> / 
-                            <?php echo $row['date']; ?>
+							<span class="name"><?php echo $row['author']; ?></span> | 
+							<span class="date"><?= $newDate = formate_date($row['date']);?></span>
+							</p>
                         </div>
                     </div>
                     <div class="post-media">

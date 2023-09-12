@@ -61,8 +61,9 @@ $route['login'] = 'home/login';
 $route['admin'] = 'admin/main_login';
 $route['vendor'] = 'vendor/main';
 $route['contact'] = 'home/contact';
+$route['faq'] = 'home/faq';
 $route['articles'] = 'home/blog';
-$route['directory'] = 'home/sneaker';
+$route['directory'] = 'home/directory';
 
 $route['directory/(:any)'] = 'home/directory/$1';
 $route['404_override'] = 'home/error';

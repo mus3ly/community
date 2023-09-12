@@ -8,6 +8,7 @@
 				<tr>
 					<th><?php echo translate('no');?></th>
 					<th><?php echo translate('name');?></th>
+					<th><?php echo translate('Approve');?></th>
 					<th class="text-right"><?php echo translate('options');?></th>
 				</tr>
 			</thead>
@@ -22,6 +23,18 @@
                     <td><?php echo $i; ?></td>
                     
                     <td><?php echo $row['name']; ?></td>
+                    <td>
+                    <?php 
+                    if($row['status'] == '1'){
+                    ?>
+                    <input id="pub_<?= $row['id']?>"   class='sw1 form-control'   type="checkbox" data-id="<?= $row['id']?>" checked />
+               <?php 
+               } else 
+               {?>
+                  <input id="pub_<?= $row['id']?>"  class='sw1 form-control'   type="checkbox" data-id="<?= $row['id']?>" />
+               <?php
+               }
+                ?></td>
                     <!--<td><?php //echo $row['category_name']; ?></td>-->
                     <td class="text-right">
                         <a class="btn btn-success btn-xs btn-labeled fa fa-wrench" data-toggle="tooltip" 

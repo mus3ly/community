@@ -99,7 +99,7 @@ class Paypal {
    var $ipn_log_file;               // filename of the IPN log
    var $ipn_response;               // holds the IPN response from paypal   
    var $ipn_data = array();         // array contains the POST values for IPN
-   
+   public $paypal_url;
    var $fields = array();           // array holds the fields to submit to paypal
 
    

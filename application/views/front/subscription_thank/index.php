@@ -4,8 +4,8 @@
     <div class="row">
         <div class="col-md-12">
           <div class="thanks_wrapper">
-              <span><i class="fa-solid fa-circle-check"></i></span>
-              <h1>Thank's For your Purchase!</h1> 
+              <div class="check_icon"><i class="fa-solid fa-circle-check"></i></div>
+              <h1 class="spacer">Thank's For your Purchase!</h1> 
               <p>You should recieve an order conformation email shortly.</p>
               <div class="go_home">
                   <span><h2>What you have purchased</h2></span>

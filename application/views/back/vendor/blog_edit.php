@@ -65,15 +65,15 @@
                                 <label class="col-sm-4 control-label" for="demo-hor-12"><?php echo translate('images');?></label>
                                 <div class="col-sm-6">
                                     <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
-                                            <input type="file" value="<?= ($row['sneakerimg'])?$row['sneakerimg']:""; ?>" name="sneakerimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control">
+                                            <input type="file" value="<?= ($row['sideimg'])?$row['sideimg']:""; ?>" name="sideimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control">
                                         </span>
                                     <br><br>
                                     <span id="previewImg1" >
                                             
                                             <?php
-                                                if($row['comp_logo'])
+                                                if($row['comp_cover'])
                                                 {
-                                                    $img = $this->crud_model->size_img($row['comp_logo'],100,100);
+                                                    $img = $this->crud_model->size_img($row['comp_cover'],100,100);
                                                     ?>
                                                     <img class="img-responsive" width="100" src="<?= $img;?>" data-id="_paris/uploads/product" alt="Feature Image"><?php
                                                 }
@@ -96,7 +96,7 @@
                                     <?php echo translate('description');?>
                                         </label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" class="summernotes" data-height="300" data-name="description"><?php echo $row['description']; ?></textarea>
+                                    <textarea rows="9" class="summernotes" id="blog_disc" data-height="300" data-name="description"><?php echo $row['description']; ?></textarea>
                                 </div>
                             </div>
 
@@ -147,7 +147,7 @@
                     </div>
                     
                     <div class="col-md-1">
-                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" id="registerbtn" onclick="form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');" ><?php echo translate('upload');?></span>
+                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" id="registerbtn" onclick="validate_listing();" ><?php echo translate('upload');?></span>
                     </div>
                     
                 </div>
@@ -462,6 +462,16 @@
           $("#slug").val(Text);    
           $('#slug').keyup();
         });
+            function validate_listing(){
+        // var textareaValue = $('#desc_summernote').summernote('code', 'value');
+        var plainText = $($("#blog_disc").code()).text();
+          if(plainText.length < 300)
+            {
+                alert('Please add minimum 300 character in description');
+                return 0;
+            }
+        form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');proceed('to_add');
+    }
     </script>
 <style>
 	.btm_border{

@@ -70,6 +70,7 @@ class Vouguepay {
    var $last_error;                 // holds the last error encountered
    
    var $ipn_log;                    // bool: log IPN results to text file?
+   public $vouguepay_url;
    
    var $ipn_log_file;               // filename of the IPN log
    var $ipn_response;               // holds the IPN response from vouguepay   

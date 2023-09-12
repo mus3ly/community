@@ -1,126 +1,53 @@
+
 <style>
-    #sidebar ul li a{
-        color:#000;
-    }
-    .sidebar_background{
-       background: #fff;
-    box-shadow: 0px 0px 10px #ddd;
-    padding: 0 15px;
-    line-height: 1;
-}
-.listing_items_styling > li{
-    font-size:15px;
-    font-weight:300;
-    padding: 5px 0;
-}
-.listing_items_styling > li:hover{
-        border-bottom: 1px solid #ddd;
-        scale:1;
-
-
-}
-#add_height_in h1{
-        width: 100%;
-    color: #f26122;
-    font-size: 18px;
-    text-transform: capitalize;
-    font-weight: 500 !important;
-    margin-bottom: 5px;
-}
-.add_height_in h4{
-    margin-bottom:5px;
-}
-.search_cat{
-    color:#fff !important;
-}
-
-.side_bar_title,.amenities_title_side{
-            color: #fff;
-    padding: 10px;
-    background: #f26122;
-    border-radius: 10px 10px 0 0;
-
-}
-.side_bar_amenities{
-            overflow: auto;
-    background: #fff;
-    box-shadow: 0px 0px 10px #ddd;
-    padding: 15px;
-    HEIGHT: 400px;
-    line-height: 1.5;
-}
-.side_bar_amenities ul li label{
-        font-size: 14px;
-    font-weight: 300;
-
-}
-.side_bar_amenities ul li{
-    display:flex;
-    gap:10px;
-    width:100%;
-    align-items:center;
-}
-.itemimg{
-       height: 100% !important;
-    overflow: hidden;
-    min-height:100%;
-
-}
-.logo_withname img{
-      width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-.logo_withname{
-    height:100%;
-    border: none;
-    position:relative;
-}
-#row-hight{
-
-}
-
+    
 </style>
 <aside class="col-md-12 sidebar new_sidebar" id="sidebar">
-    <!-- widget shop categories -->
-    <!-- widget price filter -->
-               <?php
-            /*if(isset($is_listing) && ($is_listing == 'shop_listing' || $is_listing == 'car_listing')){
-                    ?>
-            <div class="widget widget-filter-price">
-                <div class="Amenities1">
-                    <div class="left_filter to_left_f">
-                     <h3>Filter Your Search</h3>
-                </div>
-
-                 <div class="push_left">
-           <!-- <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="open_sidebar();">
-                <i class="fa fa-bars"></i>
-            </span>-->
-            <a class="btn-theme-light make_it_flexi" onClick="set_view('grid')" href="#"><img src="<?php echo base_url(); ?>/white_grid.png" alt=""/></a>
-            <a class="btn btn-theme-light make_it_flexi" onClick="set_view('list')" href="#"><img src="<?php echo base_url(); ?>/white_icon.png" alt=""/></a>
+    <div id="adding_mrgn"  style="display:block">
+    <!--<label>Distance Range</label>-->
+    <?php
+    $max_dis = 1000;
+    ?>
+          <div class="row">
+        <div class="col-md-6 pl-0">            
+        <p class="margin_bottom_remove">Distance range :</p>
         </div>
-                </div>
-                <div class="range_slider new_rang">
+        <div class="col-md-6 pr-0">
+        <div style="color:#000;" class="ranger">
+              
+              <span id="demo1"><?= (isset($_GET['dis_range'])?explode('-',$_GET['dis_range'])[1]:$max_dis) ?></span>
+        </div>
+        </div>
+        </div>
+    <input type="range" min="1" max="<?= $max_dis ?>" value="<?= (isset($_GET['dis_range'])?explode('-',$_GET['dis_range'])[1]:$max_dis) ?>" class="slider" id="dis_range_input" >
+    </div>
+    <div class="new_filter">
+         <?php
+         $is_fil = false;
+               $max = $max_price;
+               $sale_check =0;
+               if($cat_path)
+               {
+               $this->db->where_in('category',$cat_path);
+               $sale_check = $this->db->where('is_filter',1)->where('tbl_col','sale_price')->get('list_fields')->row();
+               }
+            if($sale_check || (isset($is_listing) && $is_listing == 'shop_listing')){
+                $is_fil = true;
+                    ?>
                     <div class="row">
-                        <div class="col-sm-12">
-                          <div id="slider-range"></div>
-                        </div>
-                    </div>
-                    <div class="row slider-labels">
-                        <div class="col-xs-6 p-0 caption">
-                          <strong>Min:</strong> <span id="slider-range-value1"></span>
-                        </div>
-                        <div class="col-xs-6 p-0 text-right caption">
-                          <strong>Max:</strong> <span id="slider-range-value2"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-6 pl-0">            
+        <p class="margin_bottom_remove">Price range :</p>
+        </div>
+        <div class="col-md-6 pr-0">
+        <div style="color:#000;" class="ranger">
+              
+              <span id="demo"><?= (isset($_GET['sale_price'])?$_GET['sale_price']:$max) ?></span>
+        </div>
+        </div>
+        </div>
+  <input type="range" min="1" max="<?= $max ?>" value="<?= (isset($_GET['sale_price'])?$_GET['sale_price']:$max) ?>" class="slider" id="myRange">
+  
+  
 
             <?php
             }
@@ -131,112 +58,49 @@
             <?php
             }
             ?>
+            <?php
+  /*if(true)
+  {
+   ?>
+   <button class="filter_btn" onclick="custom_filter('<?= $main ?>')">Filter Result</button>
+   <?php   
+  }*/
+  ?>
+            <div class="row">
+        <?php
+        $arr = array();
+        if($cat_path)
+        {
+        $this->db->where_in('category',$cat_path);
+        $this->db->order_by("filter_sort", "ASC");
+$arr = $this->db->where('is_filter',1)->where('hide_filter',0)->get('list_fields')->result_array();
+}
+foreach($arr as $k=> $v)
+{
+    
+    $this->load->view('filter_f',$v);
+}
+?>
+</div>
+<?php
+if(isset($car_mod))
+{
+    $mod = $this->db->where('id',$car_mod)->get('modules')->row();
+    if(isset($mod->filter_file) && trim($mod->filter_file))
+    $this->load->view('front/filters/'.$mod->filter_file,array('type'=>'html'));
+}
+if($arr  || $is_fil || true)
+{
+    $main = isset($cat_path[0])?$cat_path[0]:0;
+    ?>
+    <div class="form-group pading_cls col-md-12">
+    <button class="filter_btn" onclick="custom_filter('<?= $main ?>')">Filter Result</button>
+    </div>
     <?php
-            if(isset($is_listing) && $is_listing == 'car_listing'){
-                $all_makes =  $this->db->get('makes')->result_array();
-
-                    ?>
-                    <select name="select_make" onchange="do_product_search('0')" id="select_make" class="form-control">
-                        <option value="0">Make</option>
-                        <?php
-                        foreach($all_makes as $k => $v){
-                        ?>
-                        <option value="<?= $v['id']?>"><?= $v['name']?></option>
-                        <?php
-                        }
-                        ?>
-                    </select>
-                    <div class="from_group">
-                        <!--<label>Model from</label>-->
-                        <input id="modelf_input" class="form-control"  onchange="do_product_search('0')" type="text" placeholder="Model From" />
-                    </div>
-                    <div class="from_group1">
-                        <!--<label>Model to</label>-->
-                        <input id="modelt_input" class="form-control" onchange="do_product_search('0')" type="text" placeholder="Model To" />
-                    </div>
-                    <div class="from_group1">
-                        <!--<label>No of seats</label>-->
-                    <input type="number" id="seats_input" onkeyup="do_product_search('0')" placeholder="No: of Seats" name="seats"  class="form-control">
-                    </div>
-                    <?php
-                }
-                ?>
-                <?php
-            if(isset($is_listing) && $is_listing == 'property_listing'){
-                    ?>
-
-
-                    <input type="number" placeholder="No: of Bedrooms" onkeyup="do_product_search('0')" id="bedrooms_input"  class="margin_added form-control">
-                       <select name="select_property_type" onchange="do_product_search('0')" id="select_property_type" class="margin_added form-control">
-                       <option value="" >Type</option>
-                        <option value="detached">Detached </option>
-                        <option value="apartment ">Apartment </option>
-                        <option value="house">House</option>
-                        <option value="rent">Rent</option>
-                        <option value="sale">Sale</option>
-                        <option value="furnished">Furnished</option>
-                        <option value="unfurnished">Unfurnished</option>
-
-                    </select>
-                    <?php
-                }
-                ?>
-                <?php
-            if(isset($is_listing) && $is_listing == 'jobs_listing'){
-                    ?>
-
-
-                        <select name="select_job_hours" onchange="do_product_search('0')"  id="select_job_hours" class="margin_added form-control">
-                                <option value="">select job hours</option>
-                                <option value="fulltime">Full Time</option>
-                                <option value="parttime ">Part Time</option>
-                                <option value="rotation ">Rotation</option>
-                                <option value="two_years ">Two Years</option>
-
-                            </select>
-                      <select name="select_job_type" onchange="do_product_search('0')"  id="select_job_type" class="margin_added form-control">
-                                    <option value="">select job type</option>
-                                    <option value="paermanent">Permanent</option>
-                                    <option value="temporary">Temporary</option>
-                                    <option value="contract">Contract</option>
-                                    <option value="volunteer">Volunteer</option>
-                                    <option value="apprenticeship ">Apprenticeship</option>
-                                    <option value="internship ">Internship</option>
-
-                                </select>
-                    <?php
-                }
-                ?>       <?php
-            if(isset($is_listing) && $is_listing == 'event_listing'){
-                    ?>
-
-                        <input type="date" id="event_date_input" onchange="do_product_search('0')" class="add_padding form-control">
-                        <select id="event_type_input"class="form-control add_padding" onchange=" do_product_search('0')">
-                            <option value="">Event type</option>
-                            <option value="wedding">Wedding</option>
-                            <option value="festival">Festival</option>
-                            <option value="concert">Concert</option>
-                            <option value="party">Party</option>
-                            <option value="get_to_gether">Get To Gether</option>
-                            <option value="music">Music</option>
-                        </select>
-                       <select id="age_restriction_input" class="form-control add_padding" onchange=" do_product_search('0')">
-                                   <option value="">Age Restrictions</option>
-                                    <option value="family">Family Friendly</option>
-                                    <option value="kids">Kids Friendly</option>
-                                    <option value="18+">18+</option>
-                                    <option value="12+">12+</option>
-                                    <option value="all_ages">All Ages</option>
-
-                                </select>
-
-                    <?php
-                }*/
-                ?>
-    <!-- /widget price filter -->
-    <span class="btn btn-theme-transparent pull-left hidden-lg hidden-md" onClick="close_sidebar();" style="border-radius:50%; position: absolute; top:0;right:10px;color:white;">
-        <i class="fa fa-times"></i>
-    </span>
+}
+        ?>
+    </div>
+    
         <h3 class="title-for-list side_bar_title" >
                     <span class="arrow search_cat search_cat_click all_category_set" style="display:none;" data-cat="0"
                         data-min="<?php echo floor($this->crud_model->get_range_lvl('product_id !=', '0', "min")); ?>"
@@ -259,18 +123,7 @@
 
                 <?php
                 $all_category = '' ;
-                if(isset($is_listing) && $is_listing == 'shop_listing'){
-                        $all_category =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 87))->row()->value,true);
-
-                        foreach($all_category as $k=> $v)
-                        {
-                            $sing = $this->db->where('category_id',$v)->get('category')->row_array();
-                            $all_category[$k] = $sing;
-                        }
-                        $result=array();
-
-                   }
-                else{
+                if(true){
 
                     // $all_category = $this->db->get('category')->result_array();
 
@@ -371,26 +224,17 @@
     <br>
     <div class="row hidden-sm hidden-xs">
     <?php
-		//echo $this->html_÷model->widget('special_products');
-	?>
+        //echo $this->html_÷model->widget('special_products');
+    ?>
     </div>
 
     <?php
-    $id = '0';
-      if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'car_listing'){
-      $id = '807';
-      }
-      if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'property_listing'){
-          $id = '808';
-      }
-      if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'event_listing'){
-           $id = '917';
-      }
-      if(isset($_GET['is_listing']) && $_GET['is_listing'] == 'jobs_listing'){
-           $id = '78';
-      }
+    if(!$cat_path)
+    {
+        $cat_path = array('0');
+    }
 
-     $all_amenity = $this->db->where('status', 1)->where('catid',$id)->get('amenity')->result_array();
+     $all_amenity = $this->db->where('status', 1)->where_in('catid',$cat_path)->get('amenity')->result_array();
     ?>
     <?php
     if(!empty($all_amenity)){
@@ -405,7 +249,7 @@
             foreach($all_amenity as $k=> $v)
             {
                 ?>
-                <li><a href="#"><label style="color:#000;"><?= $v['name']; ?></label></a></li>
+                <li class="<?= (isset($_GET['amenity']) && $_GET['amenity']== $v['name'])?"active":""; ?>" ><a onclick="set_value('amenity','<?= $v['name']; ?>')"><label style="color:#000;"><?= $v['name']; ?></label></a></li>
                 <?php
             }
             ?>
@@ -426,7 +270,3 @@
     ?>
 
 </aside>
-
-<input type="hidden" id="univ_max" value="<?php echo $this->crud_model->get_range_lvl('product_id !=', '', "max"); ?>">
-<input type="hidden" id="cur_cat" value="0">
-<?php include 'search_script.php'; ?>

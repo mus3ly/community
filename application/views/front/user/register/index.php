@@ -11,8 +11,21 @@
 
 </ul>
 </div>
-<section class="page-section color get_into">
+<section class="page-section color get_into mgn_top_rmv">
     <div class="container">
+        <?php
+	    if($this->session->flashdata('message'))
+	    {
+	    ?>
+	    <div class="alert alert-success" id="success-alert">
+               <button type="button" class="close" data-dismiss="alert">x</button>
+               <?= $this->session->flashdata('message');
+               unset($_SESSION['message'])
+               ?>
+            </div>
+            <?php
+	    }
+            ?>
         <div class="row">
             <div class="middleboxregister">
             
@@ -26,15 +39,9 @@
                     $g_login_set = $this->crud_model->get_type_name_by_id('general_settings','52','value');
                 ?>
                 <div class="row box_shape">
-                  <div class="title"  style="width: 100%;">
-                      <?php echo translate('customer_registration');?>
-                  <!--      <div class="option">-->
-                  <!--    	<?php echo translate('already_a_member_?_click_to_');?>-->
-                  <div class="login_info" style="margin-top:5px;">
-                                    <p>Are you a guest? Join Community HubLand as a customer, or login to leave reviews and  add to wish list. Join Community HubLand affiliate marketing to earn passively <a href="#">read more</a> </p>
-                                    <div class="hovertext"><p>  create your own affiliate marketing portal to encourage affiliate marketers to market your business, bookmark your favourite listings, comment and more) With a Customer account… more (on click: you can bookmark your favourite businesses, comment in discussions and leave reviews) … - When they click Business Login or Business Sign-up, the text for business above should be on top of the form - When they click Customer Login or Customer Sign-up, the text for customer above should be on top of the form - Either form should have the other login and signup options available for them to change their mind and select another option ….. When the click on either of the affiliate logins or sign-ups the same follows and the texts are: - A Marketing Affiliate Account to will provide you options to earn as you share businesses on your social media accounts. Anyone joining Community HubLand or purchasing from businesses on Community HubLand via your shared links will provide you respective commissions from Community HubLand and/or the business purchase - A Business Affiliate Account will provide you a platform to host your marketing materials that affiliate marketers can access to share on the social media platforms. You can determine how much commission your affiliate marketers will earn.</p></div>
-                                </div>
-                      </div>
+                 <div class="col-md-12 title_header">
+                        <?php echo translate('customer_registration');?>
+                 </div>
                       <hr>
                       <div class="col-md-6">
                           <div class="form-group">
@@ -80,33 +87,25 @@
                           </div>
                       </div>
                       <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Country</label>
-                                <?php echo $this->crud_model->select_html('countries','country','name','edit','form-control demo-chosen-select required select_country',$country,'',NULL,'select_country'); ?>
-                            </div>
-                        </div>
-                        <div class="col-md-6 p-0">
-                            <div class="form-group">
-                                <label>State</label>
-                                <span id="stats_select" class="pl-0 col-md-12">
-                                <input type="text" class="form-control required" name="state" />
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                        <div class="col-md-6" style="padding-left:0;">
-                            <div class="form-group">
-                                <label>City</label>
-                                <input class="form-control required" name="city" type="text" placeholder="<?php echo translate('city');?>" data-toggle="tooltip" title="<?php echo translate('city');?>">
-                            </div>
-                        </div>
-                        <div class="col-md-6 p-0" style="margin-top:0px">
-                            <div class="form-group">
-                                <label>Zip code</label>
-                                <input class="form-control required" name="zip" type="text" placeholder="<?php echo translate('zip');?>" data-toggle="tooltip" title="<?php echo translate('zip');?>">
-                            </div>
-                        </div>
-                        </div>
+                          <div class="form-group">
+                              <input class="form-control required" type="text" name="city" placeholder="<?php echo translate('city');?>" data-toggle="tooltip" title="<?php echo translate('city');?>">
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <input class="form-control required" type="text" name="state" placeholder="<?php echo translate('state');?>" data-toggle="tooltip" title="<?php echo translate('state');?>">
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="form-group">
+                              <input class="form-control required" type="text" name="country" placeholder="<?php echo translate('country');?>" data-toggle="tooltip" title="<?php echo translate('country');?>">
+                          </div>
+                      </div>
+                      <div class="col-md-6">
+                          <div class="">
+                              <input class="form-control required" name="zip" type="text" placeholder="<?php echo translate('zip');?>" data-toggle="tooltip" title="<?php echo translate('zip');?>">
+                          </div>
+                      </div>
                       <div class="col-md-12 terms">
                          <input  name="affiliate" type="checkbox" value="yes" id="affiliates">
                           <?php echo translate('Join Affiliates');?>
@@ -119,7 +118,7 @@
                               <?php echo translate('Affiliates_terms_of_use');?>
                           </a>
                       </div>
-                      <div class="col-md-12 terms">
+                      <div class="col-md-12 terms new_terms">
                           <input  name="terms_check" type="checkbox" value="ok" >
                           <?php echo translate('i_agree_with');?>
                           <a href="<?php echo base_url();?>home/legal/terms_conditions" target="_blank">
@@ -139,15 +138,15 @@
 							          }
 						            ?>
                         <div class="col-md-12">
-                            <span class="btn btn-theme-sm btn-block btn-theme-dark pull-right logup_btn" data-ing='<?php echo translate('registering..'); ?>' data-msg="">
+                            <button type="submit" class="btn btn-theme btn-block btn-icon-left facebook">
                                 <?php echo translate('register');?>
-                            </span>
+                            </button>
                         </div>
 
                         <!--- Facebook and google login -->
                         <?php
                           if($fb_login_set == 'ok' || $g_login_set == 'ok'){ ?>
-                            <div class="col-md-12 col-lg-12">
+                            <div class="col-md-12 col-lg-12 login_divider_mrgn">
                                 <h2 class="login_divider"><span><?php echo translate('sign_in_with_facebook');?>or</span></h2>
                             </div>
                             <?php if($fb_login_set == 'ok'){ ?>
@@ -183,6 +182,30 @@
                             }
                           }
                         ?>
+                         <div class="title title_signup">
+                   
+                        <div class="option">
+                      	<?php echo translate('already_a_member_?_click_to_');?>
+                        <?php
+			                     if ($this->crud_model->get_type_name_by_id('general_settings','58','value') !== 'ok') { ?>
+                              <a href="<?php echo base_url(); ?>home/login_set/login">
+                                  <?php echo translate('login');?>!
+                              </a>
+                        <?php
+									         }
+                           else { ?>
+                                <a href="<?php echo base_url(); ?>home/login_set/login">
+                                    <?php echo translate('login');?>! <?php echo translate('as_customer');?>
+                                </a>
+                              <?php echo translate('_or_');?>
+                                <a href="<?php echo base_url(); ?>home/vendor_logup/registration">
+                                    <?php echo translate('sign_up');?>! <?php echo translate('as_vendor');?>
+                                </a>
+                              <?php
+          									}
+          								?>
+                        </div>
+                      </div>
                     </div>
             	</form>
             </div>

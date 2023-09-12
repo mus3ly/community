@@ -27,8 +27,7 @@ class Admin extends CI_Controller
         //$this->output->enable_profiler(TRUE);
         $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         $this->output->set_header('Pragma: no-cache');
-        //$this->crud_model->ip_data();
-        $this->config->cache_query();
+        //$this->crud_model->ip_data()
     }
 
     /* index of the admin. Default: Dashboard; On No Login Session: Back to login page. */
@@ -132,6 +131,7 @@ class Admin extends CI_Controller
         // }
         if ($para1 == 'do_add') {
             $data['name'] = $this->input->post('name');
+            $data['status'] = $this->input->post('status');
             $this->db->insert('member_cat', $data);
             recache();
         } else if ($para1 == 'edit') {
@@ -141,6 +141,7 @@ class Admin extends CI_Controller
             $this->load->view('back/admin/member_category_edit', $page_data);
         } elseif ($para1 == "update") {
             $data['name'] = $this->input->post('name');
+            $data['status'] = $this->input->post('status');
             $this->db->where('id', $para2);
             $this->db->update('member_cat', $data);
             recache();
@@ -1035,7 +1036,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $this->load->view('back/index', $page_data);
         }
     }
-    function makes($para1 = '', $para2 = '')
+    function makes($para1 = '', $para2 = '', $para3 = '')
     {
         if (!$this->crud_model->admin_permission('makes')) {
             redirect(base_url() . 'admin');
@@ -1059,10 +1060,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             recache();
         } elseif ($para1 == 'delete') {
             if(!demo()){
-                $data['status'] = '1';
-                $this->db->where('id', $para2);
-                $this->db->update('makes', $data);
-                // $this->crud_model->set_category_data(0);
+                 $this->db->delete('makes', array('id' => $para2));
                 recache();
             }
         } elseif ($para1 == 'multi_delete') {
@@ -1070,6 +1068,17 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $ids = explode('-', $param2);
                 $this->crud_model->multi_delete('makes', $ids);
             }
+        }else if ($para1 == 'product_publish_set'){
+            $make = $para2;
+            if ($para3 == 'true') {
+                $data['status'] = '1';
+            } else {
+                $data['status'] = '0';
+            }
+            $this->db->where('id', $make);
+            $this->db->update('makes', $data);
+            $this->crud_model->set_category_data(0);
+            recache();
         } else if ($para1 == 'edit') {
             $page_data['amenity_data'] = $this->db->get_where('makes', array(
                 'id' => $para2
@@ -1087,7 +1096,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $page_data['all_amenitys'] = $this->db->get('makes')->result_array();
             $this->load->view('back/index', $page_data);
         }
-    }  function amenity($para1 = '', $para2 = '')
+    }  function amenity($para1 = '', $para2 = '', $para3 = '')
     {
         if (!$this->crud_model->admin_permission('brand')) {
             redirect(base_url() . 'admin');
@@ -1123,13 +1132,22 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             recache();
         } elseif ($para1 == 'delete') {
             if(!demo()){
-                $data['status'] = '0';
-                $this->db->where('amenity_id', $para2);
-                $this->db->update('amenity', $data);
+                $this->db->delete('amenity', array('amenity_id' => $para2));
                 // $this->crud_model->set_category_data(0);
                 recache();
             }
-        } elseif ($para1 == 'multi_delete') {
+        } else if ($para1 == 'product_publish_set'){
+            $amn = $para2;
+            if ($para3 == 'true') {
+                $data['status'] = '1';
+            } else {
+                $data['status'] = '0';
+            }
+            $this->db->where('amenity_id', $amn);
+            $this->db->update('amenity', $data);
+            $this->crud_model->set_category_data(0);
+            recache();
+        }elseif ($para1 == 'multi_delete') {
             if(!demo()){
                 $ids = explode('-', $param2);
                 $this->crud_model->multi_delete('amenity', $ids);
@@ -1143,15 +1161,32 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
 
             if(isset($_GET['level'])){
                if($_GET['level'] == '0'){
-                   $this->db->where('status', '1');
-                $this->db->where('catid', $_GET['level']);
+                   
+                $this->db->select('amenity.*,category.*');
+                $this->db->from('amenity');
+                $this->db->join('category', 'amenity.catid = category.category_id');
                 $this->db->order_by('amenity_id', 'desc');
+                 $page_data['all_amenitys'] = $this->db->get()->result_array();
                 $page_data['all_amenitys'] = $this->db->get('amenity')->result_array();
+               }elseif($_GET['level'] == 'st_1'){
+                   $this->db->select('amenity.*,category.*');
+                $this->db->from('amenity');
+                $this->db->join('category', 'amenity.catid = category.category_id');
+                $this->db->where('amenity.status', '1');
+                $this->db->order_by('amenity_id', 'desc');
+                 $page_data['all_amenitys'] = $this->db->get()->result_array();
+                 
+               }elseif($_GET['level'] == 'st_2'){
+                $this->db->select('amenity.*,category.*');
+                $this->db->from('amenity');
+                $this->db->join('category', 'amenity.catid = category.category_id');
+                $this->db->where('amenity.status', '0');
+                $this->db->order_by('amenity_id', 'desc');
+                 $page_data['all_amenitys'] = $this->db->get()->result_array();
                }else{
                $this->db->select('amenity.*,category.*');
                 $this->db->from('amenity');
                 $this->db->join('category', 'amenity.catid = category.category_id');
-                $this->db->where('amenity.status', '1');
                 $this->db->where('amenity.catid', $_GET['level']);
                 $this->db->order_by('amenity_id', 'desc');
                  $page_data['all_amenitys'] = $this->db->get()->result_array();
@@ -1162,6 +1197,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $this->db->from('amenity');
                 $this->db->join('category', 'amenity.catid = category.category_id');
                 $this->db->where('amenity.status', '1');
+                $this->db->or_where('amenity.status', '0');
                 $this->db->order_by('amenity_id', 'desc');
                  $page_data['all_amenitys'] = $this->db->get()->result_array();
             }
@@ -1174,6 +1210,128 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $page_data['all_amenitys'] = $this->db->get('amenity')->result_array();
             $this->load->view('back/index', $page_data);
         }
+    }function module_sys($para1 = '', $para2 = '')
+    {
+        if (!$this->crud_model->admin_permission('list_fields')) {
+            redirect(base_url() . 'admin');
+        }
+
+        if ($para1 == 'do_add') {
+            if($_POST['dir_check']){
+                $chk = $_POST['dir_check'];
+                $bpage_check = $_POST['bpage_check'];
+            }else{
+                $chk = 0;
+                $bpage_check = 0;
+            }
+            if($_POST['hide_business']){
+                $hide_bus = $_POST['hide_business'];
+            }else{
+                $hide_bus = 0;
+            }
+                $tabs = array(
+                    'label' => $_POST['name'],
+                    'key' => $_POST['key'],
+                    'sort' => $_POST['sort'],
+                    );
+                    $data = array(
+                        'dir_check' => $chk,
+                        'bpage_check' => $bpage_check,
+                        'hide_bus' => $hide_bus,
+                        'dir_icon' => $_POST['dir_icon'],
+                        'dir_slug' => $_POST['dir_slug'],
+                        'dir_text' => $_POST['dir_text'],
+                        );
+                $data['label'] = $this->input->post('label');
+                $data['category'] = $this->input->post('category');
+                $data['sub_category'] = $this->input->post('sub_category');
+                $data['front_view'] = $this->input->post('front_view');
+                $data['bpage_text'] = $this->input->post('bpage_text');
+                $data['filter_file'] = $this->input->post('filter_file');
+                $data['tabs'] = json_encode($tabs);
+                $this->db->insert('modules',$data); 
+                // $str = $this->db->last_query();
+                // echo $str = $this->db->last_query();
+                // die();
+
+             $id = $this->db->insert_id();
+            recache();
+        } elseif ($para1 == "update") {
+            if($_POST['dir_check']){
+                $chk = $_POST['dir_check'];
+                  $bpage_check = $_POST['bpage_check'];
+            }else{
+                $chk = 0;
+                $bpage_check = 0;
+            }
+             if($_POST['hide_business']){
+                $hide_bus = $_POST['hide_business'];
+            }else{
+                $hide_bus = 0;
+            }
+            // die('ok');
+           $tabs = array(
+                    'label' => $_POST['name'],
+                    
+                    
+                    'key' => $_POST['key'],
+                    'sort' => $_POST['sort'],
+                    );
+                    $data = array(
+                        'dir_check' => $chk,
+                        'bpage_check' => $bpage_check,
+                         'hide_bus' => $hide_bus,
+                        'dir_icon' => $_POST['dir_icon'],
+                        'dir_slug' => $_POST['dir_slug'],
+                        'dir_text' => $_POST['dir_text'],
+                        );
+                    $data['label'] = $this->input->post('label');
+                $data['bpage_text'] = $this->input->post('bpage_text');
+                $data['category'] = $this->input->post('category');
+                $data['sub_category'] = $this->input->post('sub_category');
+                $data['front_view'] = $this->input->post('front_view');
+                $data['filter_file'] = $this->input->post('filter_file');
+                $data['tabs'] = json_encode($tabs);
+            $this->db->where('id', $para2);
+            $this->db->update('modules', $data);
+        // var_dump($this->db->last_query());
+            // $this->crud_model->set_category_data(0);
+            recache();
+        } elseif ($para1 == 'delete') {
+            if(!demo()){
+                $this->db->where('id', $para2);
+                $this->db->delete('modules');
+                // $this->crud_model->set_category_data(0);
+                recache();
+            }
+        } elseif ($para1 == 'multi_delete') {
+            if(!demo()){
+                $ids = explode('-', $param2);
+                $this->crud_model->multi_delete('list_fields', $ids);
+            }
+        } else if ($para1 == 'edit') {
+            $page_data['amenity_data'] = $this->db->get_where('modules', array(
+                'id' => $para2
+            ))->result_array();
+            $this->load->view('back/admin/mod_edit', $page_data);
+        } elseif ($para1 == 'list') {
+                 if(true){
+               $this->db->select('modules.*,category.*');
+                $this->db->from('modules');
+                $this->db->join('category', 'modules.category = category.category_id');
+                // $this->db->order_by('sort', 'asc');
+                 $page_data['all_amenitys'] = $this->db->get()->result_array();
+                 $this->load->view('back/admin/mod_list', $page_data);
+            }
+
+
+        } elseif ($para1 == 'add') {
+            $this->load->view('back/admin/mod_add');
+        } else {
+            $page_data['page_name']  = "module_sys";
+            $page_data['all_amenitys'] = $this->db->get('list_fields')->result_array();
+            $this->load->view('back/index', $page_data);
+        }
     }function list_fields($para1 = '', $para2 = '')
     {
         if (!$this->crud_model->admin_permission('list_fields')) {
@@ -1181,6 +1339,12 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
         }
 
         if ($para1 == 'do_add') {
+            if($_POST['filter_enable']){
+                $filter = $_POST['filter_enable'];
+            }else{
+                $filter = 0;
+            }
+            
                 $data['name'] = $this->input->post('name');
                 $data['label'] = $this->input->post('label');
                 $data['is_required'] = $this->input->post('is_required');
@@ -1189,7 +1353,20 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $data['sort'] = $this->input->post('sort');
                 $data['position'] = $this->input->post('position');
                 $data['prefix'] = $this->input->post('prefix');
+                $data['postfix'] = $this->input->post('postfix');
+                $data['tbl_col'] = $col= $this->input->post('listing');
+                $pcols = $this->db->list_fields('product');
+                if($col && !in_array($col,$pcols))
+                {
+                    $sql = 'ALTER TABLE `product` ADD `'.$col.'` TEXT AFTER `discip_heading`;';
+                    $this->db->query($sql);
+                }
+                $data['filter_sort'] = $this->input->post('sorts');
+                $data['dvalue'] = $this->input->post('default_value');
                 $data['placeholder'] = $this->input->post('placeholder');
+                $data['view_type'] = $this->input->post('view_type');
+                $data['capital_val'] = $this->input->post('capital_val');
+                $data['is_filter'] = $filter;
                 $data['options'] = json_encode(explode(',', $this->input->post('option')));
                 $r = $this->db->insert('list_fields', $data);
                 // $str = $this->db->last_query();
@@ -1200,6 +1377,12 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             recache();
         } elseif ($para1 == "update") {
             // die('ok');
+             if($_POST['filter_enable']){
+                $filter = $_POST['filter_enable'];
+            }else{
+                $filter = 0;
+            }
+            
            $data['name'] = $this->input->post('name');
                 $data['label'] = $this->input->post('label');
                 $data['is_required'] = $this->input->post('is_required');
@@ -1208,7 +1391,20 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $data['position'] = $this->input->post('position');
                 $data['sort'] = $this->input->post('sort');
                 $data['prefix'] = $this->input->post('prefix');
+                $data['postfix'] = $this->input->post('postfix');
+                $data['tbl_col'] = $col = $this->input->post('listing');
+                $pcols = $this->db->list_fields('product');
+                if(!in_array($col,$pcols))
+                {
+                    $sql = 'ALTER TABLE `product` ADD `'.$col.'` TEXT AFTER `discip_heading`;';
+                    $this->db->query($sql);
+                }
+                $data['filter_sort'] = $this->input->post('sorts');
+                $data['dvalue'] = $this->input->post('default_value');
                 $data['placeholder'] = $this->input->post('placeholder');
+                $data['view_type'] = $this->input->post('view_type');
+                $data['capital_val'] = $this->input->post('capital_val');
+                $data['is_filter'] = $filter;
                 $data['options'] = json_encode(explode(',', $this->input->post('option')));
             $this->db->where('id', $para2);
             $this->db->update('list_fields', $data);
@@ -1234,13 +1430,25 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $this->load->view('back/admin/fields_edit', $page_data);
         } elseif ($para1 == 'list') {
                  if(true){
-                    //  var_dump($_REQUEST);
                $this->db->select('list_fields.*,category.*');
                 $this->db->from('list_fields');
                 $this->db->join('category', 'list_fields.category = category.category_id');
                 // $this->db->where('list_fields.status', '1');
-                if(isset($_GET['level']) && $_GET['level'])
-                $this->db->where('list_fields.category', $_GET['level']);
+                if(isset($_GET['position']) && $_GET['position'])
+                $this->db->where('list_fields.position', $_GET['position']);
+                if(isset($_GET['filter']) && $_GET['filter'])
+                {
+                    $f = 1;
+                    if($_GET['filter'] == 2)
+                    {
+                        $f = 0;
+                    }
+                $this->db->where('list_fields.is_filter', $f);
+                }
+                if(isset($_GET['sort']) && $_GET['sort'])
+                $this->db->where('list_fields.sort', $_GET['sort']);
+                if(isset($_GET['category']) && $_GET['category'])
+                $this->db->where('list_fields.category', $_GET['category']);
                 $this->db->order_by('sort', 'asc');
                  $page_data['all_amenitys'] = $this->db->get()->result_array();
                 //  var_dump($page_data['all_amenitys']);
@@ -4959,6 +5167,9 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['mcat']    = $this->input->post('mcat');
             $data['discount']    = $this->input->post('discount');
             $data['stripe_id']    = $this->input->post('stripe_id');
+            $data['stripe_live_id']    = $this->input->post('stripe_live_id');
+            $data['promo_code']    = $this->input->post('promo_code');
+            $data['promo_limit']    = $this->input->post('promo_limit');
             $this->db->insert('membership', $data);
             $id = $this->db->insert_id();
             if(!demo()){
@@ -4977,6 +5188,9 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['product_limit']    = $this->input->post('product_limit');
             $data['discount']    = $this->input->post('discount');
             $data['stripe_id']    = $this->input->post('stripe_id');
+            $data['stripe_live_id']    = $this->input->post('stripe_live_id');
+            $data['promo_code']    = $this->input->post('promo_code');
+            $data['promo_limit']    = $this->input->post('promo_limit');
             $data['mcat']    = $this->input->post('mcat');
             $this->db->where('membership_id', $para2);
             $this->db->update('membership', $data);

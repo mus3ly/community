@@ -85,7 +85,7 @@ $rid = time();
                                 <div class="col-sm-12 sidegap_box">
                                     <label class="col-sm-4 control-label" for="demo-hor-12">Feature image</label>
                                         <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
-                                            <input type="file" value="<?= ($row['sneakerimg'])?$row['sneakerimg']:""; ?>" name="sneakerimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control">
+                                            <input type="file" value="<?= ($row['sideimg'])?$row['sideimg']:""; ?>" name="sideimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control required">
                                         </span>
                                         <br><br>
                                         <span id="previewImg1" >

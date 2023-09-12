@@ -12,6 +12,37 @@
  * @since		Version 1.0
  * @filesource
  */
+ function custom_redirect($url)
+ {
+     ?>
+     <head>
+    <script type="text/javascript">
+      function RedirectionJavascript(){
+        document.location.href="<?= $url; ?>";
+      }
+      RedirectionJavascript();
+   </script>
+     <?php
+     exit();
+ }
+ function formate_date($date)
+ {
+     return date("M d, Y", strtotime($date));
+ }
+ function update_col($product_id)
+ {
+     $CI =& get_instance();
+     $up = array(
+         'col1'=>get_fields_line($product_id, 1),
+         'col2'=>get_fields_line($product_id, 2),
+         'col3'=>get_fields_line($product_id, 3),
+         'col4'=>get_fields_line($product_id, 4),
+         'col5'=>get_fields_line($product_id, 5),
+         'col6'=>get_fields_line($product_id, 6),
+         'col_update'=>date('Y-m-d H:i:s'),
+         );
+         return $pro = $CI->db->where('product_id',$product_id)->update('product', $up);
+ }
  function find_values($f, $v)
  {
      $v = strtolower($v);
@@ -145,8 +176,10 @@
  {
      $CI =& get_instance();
      $pro = $CI->db->where('product_id',$id)->get('product')->row(); 
+    //  $cat = $CI->db->where('category_id',$pro->category)->get('category')->row(); 
      //spreate values
      $additional_fields = json_decode($pro->additional_fields, true);
+    //  var_dump($additional_fields);
     $names = array();
     $valus = array();
     
@@ -163,9 +196,10 @@
        $pf[$v] = $valus[$k]; 
     }
     $vl = array();
-     if(isset($pro->category) && $pro->category)
+     if(isset($pro->category))
      {
          $fields = $CI->db->where('sort',$sort)->order_by("position", "asc")->where_in('category',explode(',',$pro->category))->get('list_fields')->result_array(); 
+        //  var_dump($fields);
          $lb = array();
          foreach($fields as $k=> $v)
          {
@@ -175,13 +209,14 @@
                  $lb[] = $v['label'];
                  if(isset($pf[$v['label']]) && $pf[$v['label']])
                  {
-                     if($v['prefix'])
+                     if($v['postfix'])
                      {
-                         $vl[$v['label']] = $pf[$v['label']].' '.$v['prefix'];
+                         
+                         $vl[$v['label']] = $v['postfix'].$pf[$v['label']].' '.$v['prefix'];
                      }
                      else
                      {
-                    $vl[$v['label']] = $pf[$v['label']];        
+                    $vl[$v['label']] = $v['postfix'].$pf[$v['label']].' '.$v['prefix'];        
                      }
                  
                  }
@@ -190,11 +225,11 @@
                      $r = find_values($pf, $v['label']);
                      if($v['prefix'])
                      {
-                         $vl[$v['label']] = $r.' '.$v['prefix'];
+                         $vl[$v['label']] = $v['postfix'].$r.' '.$v['prefix'];
                      }
                      else
                      {
-                    $vl[$v['label']] = $r;        
+                    $vl[$v['label']] = $v['postfix'].$r.' '.$v['prefix'];        
                      }
                  }
              }
@@ -207,7 +242,7 @@
              unset($vl[$k]);
          }
      }
-     return implode(',&nbsp;&nbsp;&nbsp;&nbsp;',$vl);
+     return implode(',&nbsp;',$vl);
  }
  function get_product_meta($pid, $k= '')
  {
@@ -399,7 +434,6 @@ return $l;
 	{
 		function currency_code(){
 			$CI=& get_instance();
-			$CI->security->cron_line_security();
 			$CI->load->database();
 			if($currency_id = $CI->session->userdata('currency')){} else {
 				$currency_id = $CI->db->get_where('business_settings', array('type' => 'currency'))->row()->value;
@@ -422,7 +456,6 @@ return $l;
 	{
 		function exchange($def=''){
 			$CI=& get_instance();
-			$CI->security->cron_line_security();
 			$CI->load->database();
 			if($currency_id = $CI->session->userdata('currency')){} else {
 				$currency_id = $CI->db->get_where('business_settings', array('type' => 'currency'))->row()->value;
@@ -458,7 +491,6 @@ return $l;
 	{
 		function u_exchange(){
 			$CI=& get_instance();
-			$CI->security->cron_line_security();
 			$CI->load->database();
 			
 			$currency_id = $CI->session->userdata('currency');
@@ -474,7 +506,6 @@ return $l;
 
 		function currency($val='',$def=''){
 			$CI=& get_instance();
-			$CI->security->cron_line_security();
 			$CI->load->database();
 			
 			$currency_format = $CI->db->get_where('business_settings', array('type' => 'currency_format'))->row()->value;

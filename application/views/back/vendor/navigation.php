@@ -90,12 +90,20 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                                         <?php echo translate('all_listings');?>
                                                 </a>
                                             </li>
-                                            <li <?php if($page_name=="product" && isset($_GET['is_blog'])){?> class="active-link" <?php } ?> >
-                                                <a href="<?php echo base_url(); ?>vendor/product?is_blog=1">
+                                            <?php
+                                            $mod = $this->db->get('modules')->result_array();
+                                            foreach($mod as $k=> $v)
+                                            {
+                                            ?>
+                                             <li <?php if($page_name=="product" && isset($_GET['module']) && $_GET['module'] == $v['id']){?> class="active-link" <?php } ?> >
+                                                <a href="<?php echo base_url(); ?>vendor/product?module=<?= $v['id'] ?>">
                                                     <i class="fa fa-circle fs_i"></i>
-                                                        <?php echo translate('blog_listings');?>
+                                                        <?php echo $v['label'];?>
                                                 </a>
                                             </li>
+                                            <?php    
+                                            }
+                                            ?>
                                             <li <?php if($page_name=="product" && isset($_GET['is_product'])){?> class="active-link" <?php } ?> >
                                                 <a href="<?php echo base_url(); ?>vendor/product?is_product=1">
                                                     <i class="fa fa-circle fs_i"></i>
@@ -176,12 +184,20 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                                 <?php echo translate('all_listings'); ?>
                                             </a>
                                         </li>
-                                             <li <?php if($page_name=="product" && isset($_GET['is_blog'])){?> class="active-link" <?php } ?> >
-                                                <a href="<?php echo base_url(); ?>vendor/product?is_blog=1">
+                                        <?php
+                                            $mod = $this->db->get('modules')->result_array();
+                                            foreach($mod as $k=> $v)
+                                            {
+                                            ?>
+                                             <li <?php if($page_name=="product" && isset($_GET['module']) && $_GET['module'] == $v['id']){?> class="active-link" <?php } ?> >
+                                                <a href="<?php echo base_url(); ?>vendor/product?module=<?= $v['id'] ?>">
                                                     <i class="fa fa-circle fs_i"></i>
-                                                        <?php echo translate('blog_listings');?>
+                                                        <?php echo $v['label'];?>
                                                 </a>
                                             </li>
+                                            <?php    
+                                            }
+                                            ?>
                                             <li <?php if($page_name=="product" && isset($_GET['is_product'])){?> class="active-link" <?php } ?> >
                                                 <a href="<?php echo base_url(); ?>vendor/product?is_product=1">
                                                     <i class="fa fa-circle fs_i"></i>

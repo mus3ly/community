@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Directory | Community Hubland</title>
+
+  <!-- Favicons -->
+  <link href="assets/images/favicon.png" rel="icon">
+  <link href="assets/images/favicon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css' />
+  <link rel='stylesheet'
+    href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css' />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css' />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css' />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Template Main CSS File -->
+  <link href="assets/scss/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <!-- Shape Boxes -->
+  <div class="dotted_lines">
+    <img src="assets/images/doted-lines.png" alt="">
+  </div>
+  <!-- <div class="ellipse">
+        <img src="assets/images/Ellipse.png" alt="">
+    </div> -->
+  <div class="lines_shape">
+    <img src="assets/images/lines-shape.png" alt="">
+  </div>
+  <!-- <div class="rounded_box">
+        <img src="assets/images/rounded.png" alt="">
+    </div> -->
+
+  <!-- Header -->
+  <button id="header-toggle-btn" class="header-toggle-btn" aria-label="Toggle Header">
+    <i class="fa fa-caret-up"></i>
+  </button>
+
+  <header class="hidden-header" data-aos="fade-down" data-aos-duration="1000">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="assets/images/logo.png" alt="Logo" class="img-fluid">
+        </a>
+        <div class="mobile-open">
+          <a href="#" class="cart-btn-mb btn btn-theme-transparent hidden-ld" data-toggle="modal"
+            data-target="#popup-cart">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="hidden-xs">
+              <span class="cart_num">0</span>
+            </span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="fa fa-bars"></span>
+          </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                COMMUNITY PEGS
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Jobs</a></li>
+                <li><a class="dropdown-item" href="#">Charities</a></li>
+                <li><a class="dropdown-item" href="#">Education</a></li>
+                <li><a class="dropdown-item" href="#">Worship</a></li>
+                <li><a class="dropdown-item" href="#">Blogs</a></li>
+                <li><a class="dropdown-item" href="#">Markets</a></li>
+                <li><a class="dropdown-item" href="#">Short Stays</a></li>
+                <li><a class="dropdown-item" href="#">Activities</a></li>
+                <li><a class="dropdown-item" href="#">Other</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Shop</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Directory
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">All Listings</a></li>
+                <li><a class="dropdown-item" href="#">Places</a></li>
+                <li><a class="dropdown-item" href="#">Affiliate</a></li>
+                <li><a class="dropdown-item" href="#">Blogs</a></li>
+                <li><a class="dropdown-item" href="#">Job</a></li>
+                <li><a class="dropdown-item" href="#">Event</a></li>
+                <li><a class="dropdown-item" href="#">News</a></li>
+                <li><a class="dropdown-item" href="#">Charities</a></li>
+                <li><a class="dropdown-item" href="#">Properties</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Account</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">FAQ</a>
+            </li>
+            <li class="nav-item add-listing">
+              <a href="vendor_logup/registration.html" class="">Add Listing
+                <i class="fa fa-plus"></i>
+              </a>
+            </li>
+            <li class="nav-item dropdown signup">
+              <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-box-arrow-in-right"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Customer Login</a></li>
+                <li><a class="dropdown-item" href="#">Customer Sign-up</a></li>
+                <li><a class="dropdown-item" href="#">Vendor Login</a></li>
+                <li><a class="dropdown-item" href="#">Vendor Sign-up</a></li>
+              </ul>
+            </li>
+            <li class="nav-item cart-btn-item">
+              <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="hidden-xs">
+                  <span class="cart_num">0</span>
+                  Item(s)
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <!-- Directory Menu -->
+  <div class="directory-menu" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+    <div class="container">
+      <div class="directory-menu-inner">
+        <div class="row align-items-center div_center">
+          <div class="col-sm-12 radio_listing set-list-more-icon add_bg_in ">
+
+            <ul>
+              <li class="">
+                <span class="marg_add"><i class="fa-solid fa-folder"></i></span><a href="directory.html"
+                  class=" active">Directory</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fa-solid fa-business-time"></i></span><a href="directory/business.html"
+                  class=" ">Business</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fab fa-affiliatetheme"></i></span><a
+                  href="directory/affiliate-business.html" class=" ">Affiliate</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fa-solid fa-blog"></i></span><a href="directory/blog-directory.html"
+                  class=" ">Blog</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fa-solid fa-briefcase"></i></span><a
+                  href="directory/job-directory.html" class=" ">Job</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fa-solid fa-hand-holding-heart"></i></span><a
+                  href="directory/charities-directory.html" class=" ">Charities</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fa-solid fa-newspaper"></i></span><a
+                  href="directory/publishing-news.html" class=" ">News</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fa-solid fa-building"></i></span><a
+                  href="directory/property-directory.html" class=" ">Properties</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fa-solid fa-calendar-days"></i></span><a
+                  href="directory/event-directory.html" class=" ">Events</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fa-solid fa-location-dot"></i></span><a
+                  href="directory/places-directory.html" class=" ">Places</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fa-solid fa-car"></i></span><a href="directory/vehicles-cars.html"
+                  class=" ">Cars</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fa-solid fa-shop"></i></span><a href="directory/directory-store.html"
+                  class=" ">Shop</a>
+              </li>
+              <li>
+                <span class="marg_add"><i class="fa-solid fa-globe"></i></span><a href="directory/digital-products.html"
+                  class=" ">Digital Products</a>
+              </li>
+
+            </ul>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <main class="directory-main">
+    <div class="ads-listing">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-8 col-md-12 order-lg-2" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
+            <div class="listings-wrapper">
+              <div class="custom-result">
+                <div class="row align-items-center">
+                  <div class="col-sm-12 col-lg-2">
+                    <div class="select_tops hide_on_mobile">
+                      <div class="custom-select-box">
+                        <select>
+                          <option value="">Short By</option>
+                          <option value="">Short By</option>
+                          <option value="">Date</option>
+                          <option value="">Price</option>
+                          <option value="">A to Z</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-lg-8 col-md-12 width_on_mobile">
+                    <div class="left_form">
+                      <form name="dir_form" class="dir_form_css" action="https://dev.communityhubland.com/directory">
+                        <input type="hidden" name="max_price" value="" id="max_price" />
+                        <input type="hidden" name="dis_range" value="" id="dis_range" />
+
+                        <input type="hidden" name="sale_price" value="" placeholder="Search" id="sale_price"
+                          class="search_dir" />
+                        <input type="text" name="q" value="" placeholder="Search" id="left_form_1" class="search_dir" />
+                        <input type="text" placeholder="City or Postcode" id="right_box" value=""
+                          onkeyup="search_location()" class="search_dir" />
+                        <input type="hidden" id="place_id" value="" name="place_id">
+                        <input type="hidden" name="view" id="view" value="list" placeholder="View type grid/list" />
+                        <input type="hidden" name="amenity" id="amenity" value="" placeholder="Amenity" />
+                        <input type="hidden" name="page" id="page" value="1" placeholder="page" />
+                        <span onclick="submit_dform()" class="search-icon hide_on_desktop btn"><i
+                            class="fa-solid fa-magnifying-glass"></i></span>
+
+                        <!-- <input type="submit" value="Search" class="submit_search" /> -->
+                        <div id="map_search">
+
+                          <div id="result" class="directory_result"></div>
+                          <div class="loader_container">
+                            <img id="loader" style="display:none" src="#">
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="col-md-12 col-lg-2 col-sm-12 width_on_mobile_2">
+                    <div class="right_directory_menu">
+                      <div class="select_tops hide_on_desktop">
+                        <div class="custom-select-box">
+                          <select>
+                            <option value="">Short By</option>
+                            <option value="">Short By</option>
+                            <option value="">Date</option>
+                            <option value="">Price</option>
+                            <option value="">A to Z</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="right_buttons">
+
+                        <div class="icons_view">
+
+                          <button id="list" class="active"> <i class="fa-solid fa-list "></i> </button>
+                          <button id="grid" class=""><i class="fa-solid fa-table-cells-large"></i></button>
+                          <button id="map" class=""><i class="fa-solid fa-map-location-dot"></i></button>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="listings">
+                <div class="main_listing" id="list-grid">
+                  <div class="row products list flex-gutters-10">
+                    <div class="col-lg-12 col-md-12 map-wrapper mb-4">
+                      <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d14607.599897020727!2d90.38425379716999!3d23.750946087681623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sRestaurants!5e0!3m2!1sen!2sbd!4v1609477869360!5m2!1sen!2sbd"
+                        width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen=""
+                        aria-hidden="false" tabindex="0"></iframe>
+                    </div>
+                    <div class="change-item col-lg-12">
+                      <div class="sidegap_product item white_shadow__box width_set job_list bpaeg_list "
+                        data-lat="31.5203696" data-lng="74.35874729999999" rate="3">
+                        <div class="row row_height_new" id="row_hieght">
+                          <div class="col-sm-4 col-12 img_col">
+                            <div class="itemimg-wrap  190">
+                              <a href="#"><img src="assets/images/product_image/product_sideimg_1688916662.webp"
+                                  class="img-fluid item-img" alt=""></a>
+                              <div class="logo_withname">
+                                <div class="logo_round">
+                                  <img src="https://communityhubland.com/uploads/product_image/product_1686489729.webp"
+                                    alt="">
+                                  <span class="status active"></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-8 col-12 desc_col desc_col_in ">
+                            <div class="row" id="add_height_in">
+
+                              <div class="col-8">
+                                <h1 class="p_me"><a href="#">Ralph Lauren</a>
+                                </h1>
+                              </div>
+                              <div class="col-4">
+                                <div class="rate2 p_me">
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star"></i>
+                                </div>
+                              </div>
+                              <div class="col-md-6 left_fields special_cls car_out">
+                                <div class="meta meta-left">
+                                  <span><a href="#">Category 1</a></span><span class="divider"></span><span>Category
+                                    2</span><span class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                              </div>
+                              <div class="col-md-6 right_fields special_cls car_out">
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                              </div>
+                              <h2 class="p_me catch_phrase spacing_catch_p">Made to be Worn </h2>
+
+
+                              <div class="last_desc last_d2 col-md-12 p_me">
+                                <div class="col-md-12 dec_wrappper p-0">
+
+                                  <p class="para_text">
+                                    ralph lauren corporation is a global leader in the design,
+                                    marketing, and distribution of premium lifestyle products,
+                                    including apparel, accessories, home furnishings, and other
+                                    licenced product categories. </p>
+                                </div>
+                              </div>
+                              <div class="share_iconss icon_shares">
+                                <div class="affliate">
+                                </div>
+                                <!--<a href="#"><i class="fa fa-share"></i></a>-->
+                                <a href="https://maps.google.com/?q=31.5203696,74.35874729999999"><i
+                                    class="fa fa-map-marker-alt"></i></a>
+                                <a href="#"><i class="fa fa-share"></i></a>
+                                <a href="home/wishlist/add/1.html"><i class="fa fa-heart"></i></a>
+                                <a href="mailto: shaheerumer5668704@gmail.com"><i class="fa fa-envelope"></i></a>
+                                <a href="tel:"><i class="fa fa-phone"></i></a>
+                                <a href="tel:"><i class="fa-brands fa-whatsapp"></i></a>
+
+                              </div>
+
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="change-item col-lg-12">
+                      <div class="sidegap_product item white_shadow__box width_set job_list bpaeg_list "
+                        data-lat="31.5203696" data-lng="74.35874729999999" rate="3">
+                        <div class="row row_height_new" id="row_hieght">
+                          <div class="col-sm-4 col-12 img_col">
+                            <div class="itemimg-wrap  190">
+                              <a href="#"><img src="assets/images/product_image/product_firstImg_1686489729.webp"
+                                  class="img-fluid item-img" alt=""></a>
+                              <div class="logo_withname">
+                                <div class="logo_round">
+                                  <img src="https://communityhubland.com/uploads/product_image/product_1686489729.webp"
+                                    alt="">
+                                  <span class="status"></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-8 col-12 desc_col desc_col_in ">
+                            <div class="row" id="add_height_in">
+
+                              <div class="col-8">
+                                <h1 class="p_me"><a href="#">Ralph Lauren</a>
+                                </h1>
+                              </div>
+                              <div class="col-4">
+                                <div class="rate2 p_me">
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star"></i>
+                                </div>
+                              </div>
+                              <div class="col-md-6 left_fields special_cls car_out">
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                              </div>
+                              <div class="col-md-6 right_fields special_cls car_out">
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                              </div>
+                              <h2 class="p_me catch_phrase spacing_catch_p">Made to be Worn </h2>
+
+
+                              <div class="last_desc last_d2 col-md-12 p_me">
+                                <div class="col-md-12 dec_wrappper p-0">
+
+                                  <p class="para_text">
+                                    ralph lauren corporation is a global leader in the design,
+                                    marketing, and distribution of premium lifestyle products,
+                                    including apparel, accessories, home furnishings, and other
+                                    licenced product categories. and distribution of premium lifestyle products,
+                                    including apparel, accessories, home furnishings, and other
+                                    licenced product categories. </p>
+                                </div>
+                              </div>
+                              <div class="share_iconss icon_shares">
+                                <div class="affliate">
+                                </div>
+                                <!--<a href="#"><i class="fa fa-share"></i></a>-->
+                                <a href="https://maps.google.com/?q=31.5203696,74.35874729999999"><i
+                                    class="fa fa-map-marker-alt"></i></a>
+                                <a href="#"><i class="fa fa-share"></i></a>
+                                <a href="home/wishlist/add/1.html"><i class="fa fa-heart"></i></a>
+                                <a href="mailto: shaheerumer5668704@gmail.com"><i class="fa fa-envelope"></i></a>
+                                <a href="tel:"><i class="fa fa-phone"></i></a>
+                                <a href="tel:"><i class="fa-brands fa-whatsapp"></i></a>
+
+                              </div>
+
+
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="change-item col-lg-12">
+                      <div class="sidegap_product item white_shadow__box width_set job_list bpaeg_list "
+                        data-lat="31.5203696" data-lng="74.35874729999999" rate="3">
+                        <div class="row row_height_new" id="row_hieght">
+                          <div class="col-sm-4 col-12 img_col">
+                            <div class="itemimg-wrap  190">
+                              <img src="assets/images/listing-1.png" class="img-fluid item-img" alt="">
+                              <div class="logo_withname">
+                                <div class="logo_round">
+                                  <img src="https://communityhubland.com/uploads/product_image/product_1686489729.webp"
+                                    alt="">
+                                  <span class="status active"></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-8 col-12 desc_col desc_col_in ">
+                            <div class="row" id="add_height_in">
+
+                              <div class="col-8">
+                                <h1 class="p_me"><a href="#">Ralph Lauren</a>
+                                </h1>
+                              </div>
+                              <div class="col-4">
+                                <div class="rate2 p_me">
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star"></i>
+                                </div>
+                              </div>
+                              <div class="col-md-6 left_fields special_cls car_out">
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                              </div>
+                              <div class="col-md-6 right_fields special_cls car_out">
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                              </div>
+                              <h2 class="p_me catch_phrase spacing_catch_p">Made to be Worn </h2>
+
+
+                              <div class="last_desc last_d2 col-md-12 p_me">
+                                <div class="col-md-12 dec_wrappper p-0">
+
+                                  <p class="para_text">
+                                    ralph lauren corporation is a global leader in the design,
+                                    marketing, and distribution of premium lifestyle products,
+                                    including apparel, accessories, home furnishings, and other
+                                    licenced product categories. </p>
+                                </div>
+                              </div>
+                              <div class="share_iconss icon_shares">
+                                <div class="affliate">
+                                </div>
+                                <!--<a href="#"><i class="fa fa-share"></i></a>-->
+                                <a href="https://maps.google.com/?q=31.5203696,74.35874729999999"><i
+                                    class="fa fa-map-marker-alt"></i></a>
+                                <a href="#"><i class="fa fa-share"></i></a>
+                                <a href="home/wishlist/add/1.html"><i class="fa fa-heart"></i></a>
+                                <a href="mailto: shaheerumer5668704@gmail.com"><i class="fa fa-envelope"></i></a>
+                                <a href="tel:"><i class="fa fa-phone"></i></a>
+                                <a href="tel:"><i class="fa-brands fa-whatsapp"></i></a>
+
+                              </div>
+
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="change-item col-lg-12">
+                      <div class="sidegap_product item white_shadow__box width_set job_list bpaeg_list "
+                        data-lat="31.5203696" data-lng="74.35874729999999" rate="3">
+                        <div class="row row_height_new" id="row_hieght">
+                          <div class="col-sm-4 col-12 img_col">
+                            <div class="itemimg-wrap  190">
+                              <img src="assets/images/listing-1.png" class="img-fluid item-img" alt="">
+                              <div class="logo_withname">
+                                <div class="logo_round">
+                                  <img src="https://communityhubland.com/uploads/product_image/product_1686489729.webp"
+                                    alt="">
+                                  <span class="status active"></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-8 col-12 desc_col desc_col_in ">
+                            <div class="row" id="add_height_in">
+
+                              <div class="col-8">
+                                <h1 class="p_me"><a href="#">Ralph Lauren</a>
+                                </h1>
+                              </div>
+                              <div class="col-4">
+                                <div class="rate2 p_me">
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star"></i>
+                                </div>
+                              </div>
+                              <div class="col-md-6 left_fields special_cls car_out">
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                              </div>
+                              <div class="col-md-6 right_fields special_cls car_out">
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                              </div>
+                              <h2 class="p_me catch_phrase spacing_catch_p">Made to be Worn </h2>
+
+
+                              <div class="last_desc last_d2 col-md-12 p_me">
+                                <div class="col-md-12 dec_wrappper p-0">
+
+                                  <p class="para_text">
+                                    ralph lauren corporation is a global leader in the design,
+                                    marketing, and distribution of premium lifestyle products,
+                                    including apparel, accessories, home furnishings, and other
+                                    licenced product categories. </p>
+                                </div>
+                              </div>
+                              <div class="share_iconss icon_shares">
+                                <div class="affliate">
+                                </div>
+                                <!--<a href="#"><i class="fa fa-share"></i></a>-->
+                                <a href="https://maps.google.com/?q=31.5203696,74.35874729999999"><i
+                                    class="fa fa-map-marker-alt"></i></a>
+                                <a href="#"><i class="fa fa-share"></i></a>
+                                <a href="home/wishlist/add/1.html"><i class="fa fa-heart"></i></a>
+                                <a href="mailto: shaheerumer5668704@gmail.com"><i class="fa fa-envelope"></i></a>
+                                <a href="tel:"><i class="fa fa-phone"></i></a>
+                                <a href="tel:"><i class="fa-brands fa-whatsapp"></i></a>
+
+                              </div>
+
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="change-item col-lg-12">
+                      <div class="sidegap_product item white_shadow__box width_set job_list bpaeg_list "
+                        data-lat="31.5203696" data-lng="74.35874729999999" rate="3">
+                        <div class="row row_height_new" id="row_hieght">
+                          <div class="col-sm-4 col-12 img_col">
+                            <div class="itemimg-wrap  190">
+                              <img src="assets/images/listing-2.png" class="img-fluid item-img" alt="">
+                              <div class="logo_withname">
+                                <div class="logo_round">
+                                  <img src="https://communityhubland.com/uploads/product_image/product_1686489729.webp"
+                                    alt="">
+                                  <span class="status"></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-8 col-12 desc_col desc_col_in ">
+                            <div class="row" id="add_height_in">
+
+                              <div class="col-8">
+                                <h1 class="p_me"><a href="#">Ralph Lauren</a>
+                                </h1>
+                              </div>
+                              <div class="col-4">
+                                <div class="rate2 p_me">
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star"></i>
+                                </div>
+                              </div>
+                              <div class="col-md-6 left_fields special_cls car_out">
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                              </div>
+                              <div class="col-md-6 right_fields special_cls car_out">
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                              </div>
+                              <h2 class="p_me catch_phrase spacing_catch_p">Made to be Worn </h2>
+
+
+                              <div class="last_desc last_d2 col-md-12 p_me">
+                                <div class="col-md-12 dec_wrappper p-0">
+
+                                  <p class="para_text">
+                                    ralph lauren corporation is a global leader in the design,
+                                    marketing, and distribution of premium lifestyle products,
+                                    including apparel, accessories, home furnishings, and other
+                                    licenced product categories. </p>
+                                </div>
+                              </div>
+                              <div class="share_iconss icon_shares">
+                                <div class="affliate">
+                                </div>
+                                <!--<a href="#"><i class="fa fa-share"></i></a>-->
+                                <a href="https://maps.google.com/?q=31.5203696,74.35874729999999"><i
+                                    class="fa fa-map-marker-alt"></i></a>
+                                <a href="#"><i class="fa fa-share"></i></a>
+                                <a href="home/wishlist/add/1.html"><i class="fa fa-heart"></i></a>
+                                <a href="mailto: shaheerumer5668704@gmail.com"><i class="fa fa-envelope"></i></a>
+                                <a href="tel:"><i class="fa fa-phone"></i></a>
+                                <a href="tel:"><i class="fa-brands fa-whatsapp"></i></a>
+
+                              </div>
+
+
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="change-item col-lg-12">
+                      <div class="sidegap_product item white_shadow__box width_set job_list bpaeg_list "
+                        data-lat="31.5203696" data-lng="74.35874729999999" rate="3">
+                        <div class="row row_height_new" id="row_hieght">
+                          <div class="col-sm-4 col-12 img_col">
+                            <div class="itemimg-wrap  190">
+                              <img src="assets/images/listing-1.png" class="img-fluid item-img" alt="">
+                              <div class="logo_withname">
+                                <div class="logo_round">
+                                  <img src="https://communityhubland.com/uploads/product_image/product_1686489729.webp"
+                                    alt="">
+                                  <span class="status active"></span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-sm-8 col-12 desc_col desc_col_in ">
+                            <div class="row" id="add_height_in">
+
+                              <div class="col-8">
+                                <h1 class="p_me"><a href="#">Ralph Lauren</a>
+                                </h1>
+                              </div>
+                              <div class="col-4">
+                                <div class="rate2 p_me">
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star rated"></i>
+                                  <i class="fa fa-star"></i>
+                                </div>
+                              </div>
+                              <div class="col-md-6 left_fields special_cls car_out">
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                                <div class="meta meta-left">
+                                  <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
+                                    class="divider"></span><span>Category 3</span>
+                                </div>
+                              </div>
+                              <div class="col-md-6 right_fields special_cls car_out">
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                                <div class="meta meta-right">
+                                  <span>Lahore 1</span><span class="divider"></span><span>Lahore 2</span><span
+                                    class="divider"></span>
+                                  <span>Lahore 3</span>
+                                </div>
+                              </div>
+                              <h2 class="p_me catch_phrase spacing_catch_p">Made to be Worn </h2>
+
+
+                              <div class="last_desc last_d2 col-md-12 p_me">
+                                <div class="col-md-12 dec_wrappper p-0">
+
+                                  <p class="para_text">
+                                    ralph lauren corporation is a global leader in the design,
+                                    marketing, and distribution of premium lifestyle products,
+                                    including apparel, accessories, home furnishings, and other
+                                    licenced product categories. </p>
+                                </div>
+                              </div>
+                              <div class="share_iconss icon_shares">
+                                <div class="affliate">
+                                </div>
+                                <!--<a href="#"><i class="fa fa-share"></i></a>-->
+                                <a href="https://maps.google.com/?q=31.5203696,74.35874729999999"><i
+                                    class="fa fa-map-marker-alt"></i></a>
+                                <a href="#"><i class="fa fa-share"></i></a>
+                                <a href="home/wishlist/add/1.html"><i class="fa fa-heart"></i></a>
+                                <a href="mailto: shaheerumer5668704@gmail.com"><i class="fa fa-envelope"></i></a>
+                                <a href="tel:"><i class="fa fa-phone"></i></a>
+                                <a href="tel:"><i class="fa-brands fa-whatsapp"></i></a>
+
+                              </div>
+
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <ul class="pagination mt-2">
+
+                    <li onclick="set_value('page','1')" class="active"><a>1</a></li>
+                    <li onclick="set_value('page','2')" class=" "><a>2</a></li>
+                    <li onclick="set_value('page','3')" class=" "><a>3</a></li>
+                    <li onclick="set_value('page','2')"><a>></a></li>
+                    <li onclick="set_value('page','5')"><a>>></a></li>
+
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-md-12 order-lg-1" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="0">
+            <div class="sidebar">
+              <div id="filter-wrapper">
+                <form action="#" method="">
+                  <div class="form-group">
+                    <div class="range-slider-one clearfix">
+                      <h4>Distance Range</h4>
+                      <div class="area-range-slider"></div>
+                      <div class="input"><input type="text" class="property-amount" name="price" readonly></div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="range-slider-one clearfix">
+                      <h4>Price Range</h4>
+                      <div class="area-range-slider"></div>
+                      <div class="input"><input type="text" class="property-amount" name="price" readonly></div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Enter Keyword">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search at">
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-sm-6 custom-padding">
+                        <div class="custom-select-box">
+                          <select>
+                            <option value="">Select option</option>
+                            <option value="">Select option</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 ps-0">
+                        <div class="custom-select-box">
+                          <select>
+                            <option value="">Select option</option>
+                            <option value="">Select option</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" class="btn filter-btn">Apply Filter</button>
+                  </div>
+                </form>
+              </div>
+              <div class="listing-list sidebar-widget">
+                <h4>All Listing</h4>
+                <div class="accordion accordion-flush main-list-accr" id="accordionOne">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="item1">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#item-accr1" aria-expanded="false" aria-controls="item-accr1">
+                        <a href="#">Store</a>
+                      </button>
+                    </h2>
+                    <div id="item-accr1" class="accordion-collapse collapse" aria-labelledby="item1"
+                      data-bs-parent="#accordionOne">
+                      <div class="accordion-body">
+                        <ul>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="item2">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#item-accr2" aria-expanded="false" aria-controls="item-accr2">
+                        <a href="#">Fashion</a>
+                      </button>
+                    </h2>
+                    <div id="item-accr2" class="accordion-collapse collapse" aria-labelledby="item2"
+                      data-bs-parent="#accordionOne">
+                      <div class="accordion-body">
+                        <ul>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="item3">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#item-accr3" aria-expanded="false" aria-controls="item-accr3">
+                        <a href="#">Jobs</a>
+                      </button>
+                    </h2>
+                    <div id="item-accr3" class="accordion-collapse collapse" aria-labelledby="item3"
+                      data-bs-parent="#accordionOne">
+                      <div class="accordion-body">
+                        <ul>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="item4">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#item-accr4" aria-expanded="false" aria-controls="item-accr4">
+                        <a href="#">Vehicles</a>
+                      </button>
+                    </h2>
+                    <div id="item-accr4" class="accordion-collapse collapse" aria-labelledby="item4"
+                      data-bs-parent="#accordionOne">
+                      <div class="accordion-body">
+                        <ul>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="item5">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#item-accr5" aria-expanded="false" aria-controls="item-accr5">
+                        <a href="#">Places</a>
+                      </button>
+                    </h2>
+                    <div id="item-accr5" class="accordion-collapse collapse" aria-labelledby="item5"
+                      data-bs-parent="#accordionOne">
+                      <div class="accordion-body">
+                        <ul>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item no-sublist">
+                    <h2 class="accordion-header" id="item6">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#item-accr6" aria-expanded="false" aria-controls="item-accr6">
+                        <a href="#">Education</a>
+                      </button>
+                    </h2>
+                  </div>
+                  <div class="accordion-item no-sublist">
+                    <h2 class="accordion-header" id="item7">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#item-accr7" aria-expanded="false" aria-controls="item-accr7">
+                        <a href="#">Properties</a>
+                      </button>
+                    </h2>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="item8">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#item-accr8" aria-expanded="false" aria-controls="item-accr8">
+                        <a href="#">Digital Products</a>
+                      </button>
+                    </h2>
+                    <div id="item-accr8" class="accordion-collapse collapse" aria-labelledby="item8"
+                      data-bs-parent="#accordionOne">
+                      <div class="accordion-body">
+                        <ul>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                          <li><a href="#">Sub List</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="sidebar-widget">
+                <h4>AMENITIES</h4>
+                <div class="scroll-list">
+                  <ul>
+                    <li><a href="#">USB outlets</a></li>
+                    <li><a href="#">Stainless steel</a></li>
+                    <li><a href="#">Sound proof</a></li>
+                    <li><a href="#">Microphones</a></li>
+                    <li><a href="#">Speakers</a></li>
+                    <li><a href="#">In-room tablets</a></li>
+                    <li><a href="#">USB outlets</a></li>
+                    <li><a href="#">Stainless steel</a></li>
+                    <li><a href="#">Sound proof</a></li>
+                    <li><a href="#">Microphones</a></li>
+                    <li><a href="#">Speakers</a></li>
+                    <li><a href="#">In-room tablets</a></li>
+                    <li><a href="#">USB outlets</a></li>
+                    <li><a href="#">Stainless steel</a></li>
+                    <li><a href="#">Sound proof</a></li>
+                    <li><a href="#">Microphones</a></li>
+                    <li><a href="#">Speakers</a></li>
+                    <li><a href="#">In-room tablets</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-md-12 col-lg-2 order-lg-3" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="0">
+            <div class="ads-sidebar">
+              <div class="ads-box mb-4">
+                <img src="assets/images/1.jpg" class="img-fluid" alt="">
+              </div>
+              <div class="ads-box mb-4">
+                <img src="assets/images/11.jpg" class="img-fluid" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer_warp">
+    <div class="container">
+      <div class="footer_up">
+        <!--footer logo start here-->
+        <div class="footer_container first-container">
+          <div class="row align-items-center">
+            <div class="col-lg-3 col-md-6 footer_logo">
+              <a href="#"><img src="assets/images/logo.png" class="img-fluid" alt=""></a>
+              <form action="https://dev.communityhubland.com//home/subscribe"
+                class="mhl_subscribe_fields subscribe_form mt-3" method="post" accept-charset="utf-8">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <button class="btn send-btn" type="button" id="button-addon2">Subscribe</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-3 offset-md-3">
+            </div>
+          </div>
+          <!--footer logo Ends here-->
+          <!--footer subscribe Starts here-->
+        </div>
+        <!--footer subscribe Ends here-->
+        <div class="footer_container">
+          <div class="flex_boxes_4 p-0">
+            <!--meddle section-->
+            <div class="row">
+              <!--margin_in_between <div class="col-md-4 resposinve_set hide_me"> -->
+              <div class="col-lg-4 col-sm-6">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <img src="assets/images/volume.png" alt="">
+                  </div>
+                  <div class="col-sm-9">
+                    <div class="about-us">
+                      <h4 class="about_title">About US</h4>
+                      <p>Hire our experienced team of programmers, digital
+                        designers, and marketing professionals.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-sm-6 widget_column">
+                <div class="sec_column">
+                  <h4 class="add_margin_left">Community Pegs</h4>
+                  <div class="align_footer">
+                    <ul class="span_bullets">
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/78.html">Jobs</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/134.html">
+                          Charities</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/305.html">Education</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/351.html">Worship</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/369.html">
+                          Blogs</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/386.html">Markets</a>
+                      </li>
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/431.html">Short Stays</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/429.html">Activities</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/1102.html">Other</a>
+                      </li>
+
+                      <li class="span_bullets_arrows" i="i">
+                        <a href="home/category/853.html">Networking</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/646.html">Stores</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/872.html">Services</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2 widget_column  for_mobile_left">
+
+                <div class="third_column">
+                  <h4>Company Info</h4>
+                  <ul>
+                    <li>
+                      <a href="home/page/Disclaimer.html">Disclaimer</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Privacy_Notice.html">
+                        Privacy Policy</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Cookie_Policy.html">
+                        Cookie Policy</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Terms_Of_Use.html">Terms of Use</a>
+                    </li>
+                    <li>
+                      <a href="home/page/affiliate_terms_of_use.html">Affiliate Terms of Use</a>
+                    </li>
+                    <li>
+                      <a href="home/page/shop_terms_of_use.html">Shop Terms of Use</a>
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+              <div class="col-sm-6 col-lg-2 widget_column  for_mobile_right">
+
+                <div class="forth_column">
+                  <h4>Discovery</h4>
+                  <ul>
+                    <li>
+                      <a href="home/page/About_Us.html">
+                        About Us</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Services.html">Services</a>
+                    </li>
+                    <li>
+                      <a href="home/page/career.html">Career</a>
+                    </li>
+                    <li>
+                      <a href="home/blog.html">Articles</a>
+                    </li>
+
+                  </ul>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer_container">
+      <div class="footerbtn">
+        <a href="vendor_logup/registration.html">
+          SIGN-UP to Add a Listing
+        </a>
+        <a href="directory.html">
+          Visit Directory
+        </a>
+        <a href="home/login_set/registration.html">
+          Join Our Affiliate Marketing
+        </a>
+      </div>
+    </div>
+    </div>
+    <!--meddle section-->
+
+    <div class="mhl_copyright_footer">
+      <div class="copyright_container">
+        <p>Copyright &copy; 2023 <span>|</span> Community HubLand Ltd</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Vendor JS Files -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="assets/js/custom-select.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>

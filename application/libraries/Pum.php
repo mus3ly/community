@@ -2,6 +2,8 @@
 
 class Pum {    
    var $fields = array();
+   public $pum_url;
+   public $pum_salt;
    function __construct() {       
       $CI=& get_instance();
       $CI->load->database();

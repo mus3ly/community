@@ -4,12 +4,16 @@ if (!defined('BASEPATH'))
 
 class Home extends CI_Controller
 {
+    
+    function about_us(){
+        $this->load->view('front/about_us');
+    }
 
     /*nn
      *  Developed by: Active IT zone
      *  Date    : 14 July, 2015
-     *  Active Supershop eCommerce CMS
-     *  http://codecanyon.net/user/activeitezone
+     *  Active Supershop eCommerce CMSn 
+     *  http://codecanyon.net/user/activeitezonen
      */
     function ip_info($ip = NULL, $purpose = "location", $deep_detect = TRUE)
     {
@@ -79,9 +83,20 @@ class Home extends CI_Controller
     public function decide($slug)
     {
         $product = $this->db->where('slug',$slug)->get('product')->row();
+        $pagef = $this->db->get_where('page', array(
+            'parmalink' => $slug
+        ));
         if($product)
         {
             $this->product_view($product->product_id);
+        }
+        elseif($pagef)
+        {
+            $this->page($slug);
+        }
+        else
+        {
+            $this->index();
         }
     }
 
@@ -89,14 +104,11 @@ class Home extends CI_Controller
     {
 
         parent::__construct();
+
         //$this->output->enable_profile r(TRUE);
-        $this->load->library('session');
+        // $this->load->library('session');
         $this->load->database();
         $this->load->library('spreadsheet');
-        $this->load->library('paypal');
-        $this->load->library('twoCheckout_Lib');
-        $this->load->library('vouguepay');
-        $this->load->library('pum');
         $this->load->library("pagination");
         //add affliate log
         if (isset($_GET['aff_id'])) {
@@ -147,13 +159,10 @@ class Home extends CI_Controller
                 $this->output->cache($cache_time);
             }
         }
-        $this->config->cache_query();
         $currency = $this->session->userdata('currency');
         if (!isset($currency)) {
             $this->session->set_userdata('currency', $this->db->get_where('business_settings', array('type' => 'home_def_currency'))->row()->value);
         }
-        setcookie('lang', $this->session->userdata('language'), time() + (86400), "/");
-        setcookie('curr', $this->session->userdata('currency'), time() + (86400), "/");
         //echo $_COOKIE['lang'];
     }
 
@@ -512,7 +521,7 @@ class Home extends CI_Controller
                     $add = $arr['predictions'];
                     foreach ($add as $k => $v) {
                         ?>
-                        <li onclick="select_place('<?= $v['place_id'] ?>','<?= $v['description'] ?>')"><?= $v['description'] ?></li>
+                        <li onclick="select_place('<?= $v['place_id'] ?>','<?= $v['description'] ?>')"><a><?= $v['description'] ?></a></li>
                         <?php
                     }
                 } else {
@@ -523,6 +532,8 @@ class Home extends CI_Controller
                 ?>
             </ul>
             <?php
+            die();
+            
 
         }
     }
@@ -537,7 +548,25 @@ class Home extends CI_Controller
                 'user_id' => $this->session->userdata('user_id'),
             );
             $r = $this->db->insert('user_rating', $in);
+            //calculate rating 
+            $all = $this->db->where('product_id',$_GET['pid'])->get('user_rating')->result_array();
+            
+            
+            $sum= 0;
+            $count = 0;
+            foreach($all as $k=> $v)
+            {
+                $count++;
+                $sum= $sum + $v['rating'];
+            }
+            $ra = $sum/$count;
+            $r = $this->db->where('product_id',$_GET['pid'])->update('product',array('rating_num'=>$ra));
+            
+            
+            //calculate rating 
+            
             if ($r) {
+            
                 echo 1;
                 exit();
             }
@@ -549,7 +578,7 @@ class Home extends CI_Controller
 
     public function test1()
     {
-        $r = get_fields_line(733, 2);
+        $r = get_fields_line(33, 2);
         var_dump($r);
         die();
     }
@@ -583,11 +612,11 @@ class Home extends CI_Controller
     {
 
         $r = array();
-        $top_banner = base_url().'/uploads/others/parralax_search.webp';
+        $top_banner = base_url().'/updated/assets/images/business_bannerpng.webp';
         // $this->db->limit(10);
 
         $sect1 = array(
-            'right_img' =>  $top_banner
+            'main_img' =>  $top_banner
             );
         $r['1st_section'] = $sect1;
         if($ret)
@@ -603,12 +632,14 @@ class Home extends CI_Controller
     public function menu_file(){
         ob_start();
         ?>
-    <ul  class="make_it_left">
-                       <li class="padd_right set-pad-tb"><a href="#" class="this-padding">Community Pegs</a>
-                    <div class="dropdown_box dropdowon_color drodwn1">
-
-                            <ul>
-                                                   <?php
+          
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                COMMUNITY PEGS
+              </a>
+              <ul class="dropdown-menu">
+                  <?php
                         // die('come');
                         $brands = $this->db->get('category')->result_array();
                 $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 86))->row()->value,true);
@@ -625,83 +656,39 @@ class Home extends CI_Controller
                             //  echo $value['category_id'];
                         ?>
 
-                                <li><a href="<?= base_url('directory/'.$value['slug']); ?>"><?= $value['category_name'] ?></a></li>
+                                <li><a class="dropdown-item" href="<?= base_url('directory/'.$value['slug']); ?>"><?= $value['category_name'] ?></a></li>
                               <?php
                         }
                     }
                               ?>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="<?= base_url('directory/directory-store'); ?>">Shop</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="<?= base_url('directory'); ?>" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Directory
+              </a>
+              <ul class="dropdown-menu">
+                  <?php
+                  $mod = $this->db->where('dir_check',1)->get('modules')->result_array();
+                  ?>
+                <li><a class="dropdown-item" href="<?= base_url('directory'); ?>">All Listings</a></li>
+                <?php
+                foreach($mod as $k=> $v)
+                {
+                    ?>
+                <li><a class="dropdown-item" href="<?= base_url('directory/').$v['dir_slug']; ?>"><?=$v['dir_text']; ?></a></li>
+                <?php
+                }
+                ?>
+              </ul>
+            </li>
+            
 
-                            </ul>
-                        </div>
-
-                    <?php
-                    $login = 'guest';
-
-
-                    if(isset($_SESSION['vendor_id'])){
-                        $login = 'vendor';
-                    }
-                    else if(isset($_SESSION['user_id']))
-                    {
-                        $login = 'customer';
-                    }
-                    else{
-                        $login = 'guest';
-                    }
-
-                    $menu = $this->db->where('parent', '0')->order_by('sorting', 'asc')->get('menu')->result_array();
-
-                     foreach($menu as $k => $v){
-                        $perm = $v['permission'];
-                        $p = explode(",", $perm);
-                        if(in_array($login, $p))
-                        {
-                          $menu1 = $this->db->where('parent', $v['id'])->order_by('sorting', 'asc')->get('menu')->result_array();
-                          $link_class = ( $v['name'] == 'Account' && $login == 'guest' ) ? ' disabled' : '';
-                          ?>
-                          <li class="set-pad-tb">
-                              <a href="<?= base_url().$v['slug']; ?>" class="this-padding<?php echo $link_class; ?>"><b><?= $v['name']?></b>
-                          <?php
-                          if( count($menu1) || $v['id'] == 12 )
-                          {
-                          ?>
-                            <i class="fa fa-angle-down"></i></a>
-                          <?php
-                          }
-                          ?>
-
-                            <?php
-                            if($menu1){
-                                // if($v['id'] == 12)
-                                // {
-                                //  var_dump($menu1);
-                                //  die();
-                                // }
-                            ?>
-                            <div class="dropdown_box dropdowon_color drodwn2 d<?=$v['id']?>">
-                            <ul>
-                                <?php
-                                foreach($menu1 as $k => $v){
-                                    $perm = $v['permission'];
-                                    $p = explode(",", $perm);
-                                    if(in_array($login, $p))
-                                    {
-                                ?>
-                                <li><a href="<?= base_url().$v['slug']; ?>"><?= $v['name']?></a></li>
-                                <?php
-                                }
-                                }
-                                ?>
-                            </ul>
-                        </div>
-                        <?php
-                         }
-                        ?>
-                    </li>
-                    <?php
-                        }
-                     }
-                        ?>
+                    
 
 
 <?php
@@ -752,6 +739,62 @@ class Home extends CI_Controller
                 echo '0';
             }
     }
+    public function home_file1(){
+        ob_start();
+         $all_category =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 87))->row()->value,true);
+          $result=array();
+        foreach($all_category as $k => $row ){
+         if($this->crud_model->if_publishable_category($row)){
+                $result[]=$row;
+            }
+        }
+           $all_cat =  $this->db->where_in('category_id',$result)->get('category')->result_array();
+
+           $cat = array();
+           foreach($all_cat as $key => $row)
+            {
+             $cat[] = $row;
+            }
+            ?>
+            <div id="small-categories" class="owl-carousel owl-carousel-icons owl-loaded owl-drag">
+                  <div class="owl-stage-outer">
+                    <div class="owl-stage">
+                        <?php
+
+                        foreach ($cat as $key => $value) {
+                        $fa_icons = $value['fa_icon'] == 'fa-thin fa-house-building' ? 'fa-building' : $value['fa_icon'];
+                        $fa_icons = $fa_icons == 'fa-shirt-long-sleeve' ? 'fa-shirt' : $fa_icons;
+                        $fa_icons = ($fa_icons)?$fa_icons:'fa-file-image';
+
+                            //  echo $value['category_id'];
+                        ?>
+                            <div class="owl-item " >
+                           <div class="item">
+                              <div class="slider_box_icons">
+                                <ul>
+                                    <li ><a href="<?= base_url('directory/'.$value['slug']); ?>"><i class="fa <?= $fa_icons; ?>"></i>  <?= $value['category_name'] ?></a></li>
+                                </ul>
+                            </div>
+                           </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                    </div>
+                  </div>
+                </div>
+            <?php
+            $output = ob_get_contents();
+            ob_end_clean();
+            $myfile = fopen(FCPATH."cat_menu.php", "w") or die("Unable to open file!");
+            fwrite($myfile, $output);
+            fclose($myfile);
+            if($myfile){
+            echo '1';
+            }else{
+                echo '0';
+            }
+    }
     public function home_file(){
         ob_start();
          $all_category =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 87))->row()->value,true);
@@ -778,7 +821,7 @@ class Home extends CI_Controller
                         foreach ($cat as $key => $value) {
                         $fa_icons = $value['fa_icon'] == 'fa-thin fa-house-building' ? 'fa-building' : $value['fa_icon'];
                         $fa_icons = $fa_icons == 'fa-shirt-long-sleeve' ? 'fa-shirt' : $fa_icons;
-                        $fa_icons = ($fa_icons)?$fa_icons:'fa-file-image-o';
+                        $fa_icons = ($fa_icons)?$fa_icons:'fa-file-image';
 
                             //  echo $value['category_id'];
                         ?>
@@ -786,7 +829,7 @@ class Home extends CI_Controller
                            <div class="item">
                               <div class="slider_box_icons">
                                 <ul>
-                                    <li ><a href="<?= base_url('directory/'.$value['slug']); ?>"><i class="fas <?= $fa_icons; ?>"></i>  <?= $value['category_name'] ?></a></li>
+                                    <li ><a href="<?= base_url('directory/'.$value['slug']); ?>"><i class="fa <?= $fa_icons; ?>"></i>  <?= $value['category_name'] ?></a></li>
                                 </ul>
                             </div>
                            </div>
@@ -819,7 +862,7 @@ class Home extends CI_Controller
     public function index()
     {
         $page_data = array();
-        if(isset($_GET['q']))
+        if(isset($_GET['q']) || isset($_GET['place_id']))
         {
 
             $this->category();
@@ -857,13 +900,13 @@ class Home extends CI_Controller
         $page_data['asset_page'] = "home";
         $page_data['page_title'] = translate('home');
         $page_data['new'] = 1;
-        $this->benchmark->mark('code_start');
+        // $this->benchmark->mark('code_start');
 
         $this->load->view('front/index', $page_data);
 
         // Some code happens here
 
-        $this->benchmark->mark('code_end');
+        // $this->benchmark->mark('code_end');
 
     }
 
@@ -1718,7 +1761,7 @@ class Home extends CI_Controller
                     $this->db->insert('customer_product', $data);
                     // echo $this->db->last_query();
                     $id = $this->db->insert_id();
-                    $this->benchmark->mark_time();
+                    // $this->benchmark->mark_time();
                     if (!demo()) {
                         $this->crud_model->file_up("images", "customer_product", $id, 'multi');
                     }
@@ -1819,15 +1862,19 @@ class Home extends CI_Controller
                 redirect(base_url(), 'refresh');
             }
         }
+        
+        $html = '';
         if ($para1 == "info") {
             $page_data['user_info'] = $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->result_array();
-            $this->load->view('front/user/profile', $page_data);
+            echo $html = $this->load->view('front/user/profile', $page_data,true);
+            exit();
         } elseif ($para1 == "wishlist") {
-            $this->load->view('front/user/wishlist');
+            echo $html = $this->load->view('front/user/wishlist',array(),true);
+            exit();
         } elseif ($para1 == "affiliation_point_earnings") {
             $page_data['affiliation_point_earnings'] = $this->db->order_by('used_at', 'desc')->get_where('product_affiliation_code_use', array('affiliator_id ' => $this->session->userdata('user_id')), 100)->result_array();
             $page_data['affiliation_point_earning_total'] = $this->db->get_where('product_affiliation_points_total', array('affiliator_id ' => $this->session->userdata('user_id')))->row_array();
-            $this->load->view('front/user/affiliation_point_earnings', $page_data);
+            $html = $this->load->view('front/user/affiliation_point_earnings', $page_data,true);
         } elseif ($para1 == "uploaded_products") {
             $this->load->view('front/user/uploaded_products');
         } elseif ($para1 == "uploaded_product_status") {
@@ -1839,13 +1886,13 @@ class Home extends CI_Controller
             $this->db->update('customer_product', $data);
             redirect(base_url() . 'home/profile/part/uploaded_products', 'refresh');
         } elseif ($para1 == "package_payment_info") {
-            $this->load->view('front/user/package_payment_info');
+            $html = $this->load->view('front/user/package_payment_info',array(),true);
         } elseif ($para1 == "view_package_details") {
             $info = $this->db->get_where('package_payment', array('package_payment_id' => $para2))->row();
             $page_info['det']['status'] = $info->payment_status;
             $page_info['id'] = $para2;
             $page_info['payment_details'] = $info->payment_details;
-            $this->load->view('front/user/view_package_details', $page_info);
+            $html = $this->load->view('front/user/view_package_details', $page_info,true);
         } elseif ($para1 == "package_set_info") {
             $data['payment_status'] = 'pending';
             $data['payment_details'] = $this->input->post('payment_details');
@@ -2282,7 +2329,7 @@ class Home extends CI_Controller
                     $this->db->insert('customer_product', $data);
                     // echo $this->db->last_query();
                     $id = $this->db->insert_id();
-                    $this->benchmark->mark_time();
+                    // $this->benchmark->mark_time();
                     if (!demo()) {
                         $this->crud_model->file_up("images", "customer_product", $id, 'multi');
                     }
@@ -2306,9 +2353,9 @@ class Home extends CI_Controller
             }
             $this->load->view('front/user/message_to_vendor', $msg_page_data);
         } else {
-            $page_data['part'] = 'info';
+            $page_data['part'] = 'profile';
             if ($para2 == "info") {
-                $page_data['part'] = 'info';
+                $page_data['part'] = 'profile';
             } elseif ($para2 == "wallet") {
                 if ($this->crud_model->get_type_name_by_id('general_settings', '84', 'value') !== 'ok') {
                     redirect(base_url() . 'home');
@@ -2360,10 +2407,12 @@ class Home extends CI_Controller
             }
 
             $page_data['user_info'] = $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->result_array();
+            
+            $page_data['html'] = $html;
             $page_data['page_name'] = "user";
             $page_data['asset_page'] = "user_profile";
             $page_data['page_title'] = translate('my_profile');
-            $this->load->view('front/index', $page_data);
+            $this->load->view('front/profile', $page_data);
         }
         /*$page_data['all_products'] = $this->db->get_where('user', array(
             'user_id' => $this->session->userdata('user_id')
@@ -3246,34 +3295,89 @@ class Home extends CI_Controller
 
     function directory($slug = '')
     {
-        $fixed = array('business', 'affiliate-business', 'shop-online','blogs');
-        if (in_array($slug, $fixed)) {
-            $_SESSION['slug'] = $slug;
+        $mod = $this->db->where('no_module',0)->where('dir_slug',$slug)->get('modules')->row();
+        $fixed = array('business', 'affiliate-business', 'shop-online','blogs','shop');
+        if($mod && $slug)
+        {
             
-            $this->category();
+            $this->category('','','','','','module',$mod);
+        }
+        else if (in_array($slug, $fixed)) {
+            
+            
+            $this->category('','','','','','slug',$slug);
             exit();
         }
         else
         {
+            if($slug)
+            {
             $cid = $this->db->where('slug', $slug)->get('category')->row();
+            if(isset($cid->category_id))
             $this->category($cid->category_id);
+            }
+            else
+            {
+                $this->category();
+            }
+            
             exit();
         }
 
     }
+    public function category2($para1 = "", $para2 = "", $min = "", $max = "", $text = '',$req_type = '', $req_data = '')
+    {
+        echo $this->load->view('front/directory_new', $page_data,true);
+        exit();
+    }
     public function category($para1 = "", $para2 = "", $min = "", $max = "", $text = '',$req_type = '', $req_data = '')
     {
         $this->load->library("pagination");
-        $pag_where = '';
-        if(isset($_GET['q']))
+        $pag_where = " `status` = 'ok' AND `comp_cover` > 0";
+        $place_id;
+        if(isset($_GET['amenity']) && $_GET['amenity'])
+        {
+            $amenity= $_GET['amenity'];
+            $pag_where = 'FIND_IN_SET("'.$amenity.'", `amenities`)';
+            // die($text);
+        }
+        if($req_type == 'module')
+        {
+            $page_data['cat_path']  = array($req_data->category);
+            $page_data['car_mod']  = $req_data->id;
+            $page_data['cur_slug']  = $req_data->dir_slug;
+            if($pag_where)
+            {
+            $pag_where .= " AND `module` = '$req_data->id'";
+            }
+            else
+            {
+                $pag_where .= "`module` = '$req_data->id'";
+            }
+        }
+        
+        if(isset($_GET['place_id']) && $_GET['place_id'])
+        {
+            $place_id= $_GET['place_id'];
+            // die($text);
+        }
+        if(isset($_GET['q']) && $_GET['q'])
         {
             $text= $_GET['q'];
             // die($text);
         }
+        
         $text_url = $text;
         if($text_url)
         {
-            $pag_where = "`title` LIKE '%".$text_url."%'";
+            if($pag_where)
+            {
+            $pag_where .= " AND `title` LIKE '%".$text_url."%' OR `amenities` LIKE '%".$text_url."%'";
+            }
+            else
+            {
+                $pag_where .= "`title` LIKE '%".$text_url."%'  OR `amenities` LIKE '%".$text_url."%'";
+            }
         }
 
         // if ($text !== '') {
@@ -3285,10 +3389,27 @@ class Home extends CI_Controller
 
 
         $cat = array();
-        if ($para1) {
+        if ($para1 && $req_type != 'module') {
+            
             $cat = $this->db->where('category_id',$para1)->get('category')->result_array();
+            if(isset($cat[0]['slug']) && $cat[0]['slug'])
+            $mod = $this->db->where('no_module',1)->where('dir_slug',$cat[0]['slug'])->get('modules')->row();
+            if($mod)
+            {
+             $page_data['car_mod']  = $mod->id;
+             $page_data['cur_slug']  = $mod->dir_slug;
+            }
+            
             // $pag_where = 'category = '.$para1;
-            $pag_where = 'FIND_IN_SET("'.$para1.'", `category`)';
+            if($pag_where)
+            {
+            $pag_where .= ' AND FIND_IN_SET("'.$para1.'", `category`)';
+            }
+            else
+            {
+                $pag_where .= 'FIND_IN_SET("'.$para1.'", `category`)';
+            }
+            
             
         }
         if ($para2) {
@@ -3305,14 +3426,125 @@ class Home extends CI_Controller
                 $type = 'other';
             }
         }
+        if($req_data == 'shop')
+        {
+            $this->db->where('is_product',1);
+        }
+        if(isset($page_data['car_mod']))
+        {
+            $this->db->where('module',$page_data['car_mod']);
+        }
+        $this->db->select_max('sale_price');
+    $this->db->from('product');
+    $query = $this->db->get();
+    $r=$query->row();
+        if(isset($r->sale_price))
+        $page_data['max_price'] = floatval($r->sale_price);
+        if(!$page_data['max_price'])
+        {
+            $page_data['max_price'] = 0;
+        }
+        if(!isset($page_data['cur_slug']))
         $page_data['cur_slug'] = 'directory_listing';
+        if(!isset($page_data['cat_path']))
         $page_data['cat_path']  = array();
         if (isset($cat[0]['slug'])) {
             $page_data['cur_slug'] = $cat[0]['slug'];
             $page_data['cat_path'] = explode(',',$cat[0]['path']);
-        } else if (isset($_SESSION['slug'])) {
-            $page_data['cur_slug'] = $_SESSION['slug'];
+        } else if ($req_type == 'slug') {
+            $page_data['cur_slug'] = $req_data;
+            
+            if($req_data == 'blogs')
+            {
+                if($pag_where)
+            {
+            $pag_where .= ' AND is_blog = 1';
+            }
+            else
+            {
+                $pag_where .= 'is_blog = 1';
+            }
+            }
+            else if($req_data == 'business')
+            {
+                if($pag_where)
+            {
+            $pag_where .= ' AND is_bpage = 1';
+            }
+            else
+            {
+                $pag_where .= 'is_bpage = 1';
+            }
+            }
+            else if($req_data == 'shop')
+            {
+                if($pag_where)
+            {
+            $pag_where .= " AND `is_product` = 1";
+            }
+            else
+            {
+                $pag_where .= " `is_product` = 1";
+            }
+            }
+            else if($req_data == 'affiliate-business')
+            {
+                if($pag_where)
+                {
+                $pag_where .= ' AND is_affiliate = 1';
+                }
+                else
+                {
+                    $pag_where .= 'is_affiliate = 1';
+                }
+            }
         }
+        if($req_data == 'shop')
+        {
+            if(isset($_GET['sale_price']) && $_GET['sale_price'])
+                {
+                    if($pag_where)
+                    {
+                        $pag_where .= " AND `sale_price` >= '1' AND `sale_price` <= '".$_GET['sale_price']."'";
+                    }
+                    else
+                    {
+                        $pag_where .= " `sale_price` >= '1' AND `sale_price` <= '".$_GET['sale_price']."'";
+                    }
+                }
+        }
+        else if($page_data['cat_path'] && $_GET)
+        {
+            $this->db->where_in('category',$page_data['cat_path']);
+            $arr = $this->db->where('is_filter',1)->get('list_fields')->result_array();
+            foreach($arr as $k=> $v)
+            {
+                if($v['tbl_col'] == 'sale_price' && !empty($_GET[$v['tbl_col']]))
+                {
+                    if($pag_where)
+                    {
+                        $pag_where .= "AND `sale_price` >= '1' AND `sale_price` <= '".$_GET[$v['tbl_col']]."'";
+                    }
+                    else
+                    {
+                        $pag_where .= " `sale_price` >= '1' AND `sale_price` <= '".$_GET[$v['tbl_col']]."'";
+                    }
+                }
+                elseif(( empty($v['condition_type']) || $v['condition_type'] == '=') && !empty($_GET[$v['tbl_col']]))
+                {
+                    if($pag_where)
+                    {
+                        $pag_where .= "AND `".$v['tbl_col']."` = '".$_GET[$v['tbl_col']]."'";
+                    }
+                    else
+                    {
+                        $pag_where .= " `".$v['tbl_col']."` = '".$_GET[$v['tbl_col']]."'";
+                    }    
+                }
+                
+            }
+        }
+        
         $page_data['is_listing'] = 'directory_listing';
         $listing_types = array(
             'blogs' => 'blog_listing',
@@ -3329,7 +3561,7 @@ class Home extends CI_Controller
         if (isset($page_data['cur_slug']) && $page_data['cur_slug']) {
             $page_data['is_listing'] = (isset($listing_types[$page_data['cur_slug']])) ? $listing_types[$page_data['cur_slug']] : "";
         }
-        
+        // die($pag_where);//test query
         if(!$page_data['cur_slug'])
         {
             $page_data['cur_slug'] = 'directory_listing';
@@ -3380,7 +3612,7 @@ class Home extends CI_Controller
             $page_data['main_cat'] = $row;
             if($row)
             {
-                $page_data['page_title'] = $row->meta_title;
+                // $page_data['page_title'] = $row->meta_title;
             }
             $min = 0;
             $max = 50000000;
@@ -3391,7 +3623,10 @@ class Home extends CI_Controller
 
             $tag_data = $req_data;
             $page_data['nopage'] = 1;
-            $pag_where = 'FIND_IN_SET("'.$tag_data.'", `tags_slug`)';
+            if($pag_where)
+            $pag_where .= 'AND FIND_IN_SET("'.$tag_data.'", `tags_slug`)';
+            else
+            $pag_where .= 'FIND_IN_SET("'.$tag_data.'", `tags_slug`)';
             $row = $this->db->where('FIND_IN_SET("'.$tag_data.'", `tags_slug`)')->get('product')->row();
             $single_product = $this->db->where('FIND_IN_SET("'.$tag_data.'", `tags_slug`)')->get('product')->result_array();
         $img = $this->crud_model->file_view('products',$single_product[0]['product_id'],'','','no','src','','');
@@ -3499,20 +3734,139 @@ class Home extends CI_Controller
            $page = (isset($_GET['page'])) ? $_GET['page'] : 1;
            $start =   ($page* $config["per_page"]) - $config["per_page"];
             $this->db->limit($config["per_page"], $start);
-            if($pag_where)
-            {
-            $page_data['all_products'] = $this->db->where($pag_where)->get('product');
-            $config["total_rows"] = $tot =  count($this->db->where($pag_where)->get('product')->result_array());
+            $lat = '';
+            $lng = '';
+            if (isset($place_id) && $place_id) {
+                //$place_id
+                $det = place_details($place_id);
+                if (isset($det['result'])) {
+                    if (isset($det['result']['geometry'])) {
+                        $address = $det['result']['geometry'];
+                        if (isset($address['location']['lat'])) {
+                            $lat = $address['location']['lat'];
+                        }
+                        if (isset($address['location']['lng'])) {
+                            $lng = $address['location']['lng'];
+                        }
+
+                    }
+                }
             }
             else
             {
-                $page_data['all_products'] = $this->db->get('product');
-                $config["total_rows"] = $tot =  count($this->db->get('product')->result_array());
+                if(isset($_SESSION['ip_info']))
+                {
+                $lat = $_SESSION['ip_info']['lat'];
+                $lng = $_SESSION['ip_info']['lon'];
+                }
+                // $lat = '51.4866';
+                // $lng = '-3.1549';
             }
+            
+            
+            $dis_range = isset($_GET['dis_range'])?'0-'.$_GET['dis_range']:'0-500';
+            if ($lat && $lng) {
+                
+                $dis_range = explode('-', $dis_range);
+                $mind = $dis_range[0];
+                $maxd = $dis_range[1];
+                // $this->db->select("product.*");
+                if($pag_where)
+                {
+                    $pag_where .= " AND lat != '' AND lng != '' ";
+                    $pag_where .= " AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') >= ".$mind;
+                    $pag_where .= " AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') <= ".$maxd;
+                }
+                else
+                {
+                    $pag_where = " lat != '' AND lng != '' ";
+                    $pag_where .= "AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') >= ".$mind;
+                    $pag_where .= " AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') <= ".$maxd;
+                }
+                
+            }
+            
+            $sort = (isset($_GET['sort'])?$_GET['sort']:"rating_num");
+
+            if ($sort == 'most_viewed') {
+                $this->db->order_by('number_of_view', 'desc');
+            }
+            if ($sort == 'condition_old') {
+                $this->db->order_by('product_id', 'asc');
+            }
+            if ($sort == 'condition_new') {
+                $this->db->order_by('product_id', 'desc');
+            }
+            if ($sort == 'rating_num') {
+                $this->db->order_by('rating_num', 'desc');
+            }
+            
+            if($pag_where)
+            {
+                if($lat && $lng)
+                {
+            $page_data['all_products'] = $this->db->select("product.*,getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') as distance")->where($pag_where)->get('product')->result_array();
+        }
+        else
+        {
+
+            $page_data['all_products'] = $this->db->select("product.*")->where($pag_where)->get('product')->result_array();
+        }
+            //  var_dump($this->db->last_query());
+            //  die();
+            
+            
+            
+            $this->db->where($pag_where)->select_max('sale_price');
+    $this->db->from('product');
+    $query = $this->db->get();
+    $r=$query->row();
+        if(isset($r->sale_price) && !empty($r->sale_price))
+        {
+        $page_data['max_price'] = floatval($r->sale_price);
+        
+        }
+        else
+        {
+            $page_data['max_price'] = 0;
+        }
+        if(!$page_data['max_price'])
+        {
+            $page_data['max_price'] = 0;
+        }
+        
+            }
+            else
+            {
+                
+                $page_data['all_products'] = $this->db->get('product')->result_array();
+                        $this->db->where($pag_where)->select_max('sale_price');
+    $this->db->from('product');
+    $query = $this->db->get();
+    $r=$query->row();
+        if(isset($r->sale_price))
+        $page_data['max_price'] = floatval($r->sale_price);
+        if(!$page_data['max_price'])
+        {
+            $page_data['max_price'] = 0;
+        }
+                
+            }
+            
+            if($pag_where)
+            {
+            $page_data['tot_products'] = $this->db->where($pag_where)->get('product')->result_array();
+            }
+            else
+            {
+                $page_data['tot_products'] = $this->db->get('product')->result_array();
+                
+            }
+            $config["total_rows"] = $tot =  count($page_data['tot_products']);
             $page_data['tot'] = $tot;
             $page_data['cpage'] = $page;
             $page_data['tpage'] = ceil($tot/$config["per_page"]);
-            $currentPageUrl = $_SERVER["REDIRECT_SCRIPT_URI"];
+            $currentPageUrl = $_SERVER['REQUEST_URI'];
             $page_data['link'] = $currentPageUrl;
                 $config ['use_page_numbers'] = TRUE;
                 $config ['query_string_segment'] = 'page';
@@ -3523,7 +3877,8 @@ class Home extends CI_Controller
             $config['last_link'] = ' ';
             $this->pagination->initialize($config);
         //pagination end
-        echo $this->load->view('front/directory', $page_data,true);
+        
+        echo $this->load->view('front/directory_new', $page_data,true);
         exit();
     }
 
@@ -4481,15 +4836,16 @@ class Home extends CI_Controller
             $page_data['page_name'] = "others/custom_page";
             $page_data['asset_page'] = "page";
             $page_data['tags'] = $pagef->row()->tag;
+            $page_data['ptit'] = $pagef->row()->page_name;
             $page_data['page_title'] = $parmalink;
             $page_data['page_items'] = $pagef->result_array();
             if ($this->session->userdata('admin_login') !== 'yes' && $pagef->row()->status !== 'ok') {
                 redirect(base_url() . 'home/', 'refresh');
             }
         } else {
-            redirect(base_url() . 'home/', 'refresh');
+            redirect(base_url() . '', 'refresh');
         }
-        $this->load->view('front/index', $page_data);
+        $this->load->view('front/page', $page_data);
     }
 
 
@@ -4649,6 +5005,8 @@ class Home extends CI_Controller
 
 
         $type = 'other';
+        
+        $mod = $this->db->where('id',$product_data->row()->module)->get('modules')->row();
         if ($product_data->row()->is_bpage) {
             if (isset($_GET['edit'])) {
                 $page_data['ng'] = 1;
@@ -4656,16 +5014,20 @@ class Home extends CI_Controller
             $type = 'bpage';
         } elseif ($product_data->row()->is_product) {
             $type = 'product';
-        } elseif ($product_data->row()->is_blog) {
-            $type = 'blog';
         } else {
+            if($mod)
+            $type= $mod->front_view;
+            else
             $type = "car";
         }
+        
+        
         $page_data['product_details'] = $this->db->get_where('product', array('product_id' => $para1))->result_array();
         $page_data['vendors'] = $vendors;
         // var_dump($product_details);
 
         $page_data['page_name'] = "product_view/" . $type . "/page_view";
+        $page_data['product_type'] = $type;
         $page_data['asset_page'] = "product_view_" . $type;
         $page_data['product_data'] = $product_data->result_array();
         $page_data['page_title'] = !empty($product_data->row()->seo_title) ? $product_data->row()->seo_title : $product_data->row()->title;
@@ -4708,7 +5070,19 @@ class Home extends CI_Controller
         }
 
         $page_data['attribute'] = $attr;
-        $this->load->view('front/index', $page_data);
+        if($type == 'bpage')
+        {
+            $page_data['json_link'] = base_url('home/product_data/'.$para1);
+        }
+        if(isset($_GET['new']))
+        {
+            
+            $this->load->view('front/'.$type, $page_data);
+        }
+        else
+        {
+        $this->load->view('front/index_new', $page_data);
+        }
     }
 
     function set_affiliation_code_as_cookie($params)
@@ -4973,16 +5347,18 @@ class Home extends CI_Controller
             $page_data['amount'] = $pack->amount;
             // $page_data['asset_page'] = "register";
             $page_data['page_title'] = translate('registration');
-            $this->load->view('front/index', $page_data);
+            $this->load->view('front/subscription_thank', $page_data);
 
         }
     }
 
-    public function vendor_subscription()
+    public function vendor_subscription($vid = 0)
     {
         //get vendor id here
-//         $_SESSION['subscription_vendor'] = 157;//for test
-var_dump($_SESSION['subscription_vendor']);
+        // $_SESSION['subscription_vendor'] = 1;//for test
+        
+        if($vid)
+         $_SESSION['subscription_vendor'] = $vid;
         if (isset($_SESSION['subscription_vendor'])) {
 
             $user = $this->db->where('vendor_id', $_SESSION['subscription_vendor'])->get('vendor')->row();
@@ -4999,11 +5375,15 @@ var_dump($_SESSION['subscription_vendor']);
                     'track_id' => $track,
                 );
                 $this->db->insert('membership_payment', $in);
+                $stripe_secret = $this->db->where('type','stripe_secret')->get('business_settings')->row();
+            $stripe_secret = $stripe_secret->value;
+                $stripe_publishable = $this->db->where('type','stripe_publishable')->get('business_settings')->row();
+                $stripe_publishable = $stripe_publishable->value;
                 if (isset($pack->stripe_id) && $pack->stripe_id) {
                     try {
                         $path = FCPATH . '/stripe-subscription/vendor/autoload.php';
                         require $path;
-                        \Stripe\Stripe::setApiKey('sk_test_51KxcDlAuzV7aLiwxSU6ucZEUtpEhfRnatPJgx86qp0jQ0lsOaUpXoKaY7OUGdryKL7QDYSfF1OMkKc1MdHwrkoBT00MVS8HOLd');
+                        \Stripe\Stripe::setApiKey($stripe_secret);
                         $checkout_session = \Stripe\Checkout\Session::create([
                             'success_url' => base_url() . '/home/success_subscription?track=' . $track,
                             'cancel_url' => base_url() . '/stripe-subscription/cancel.html',
@@ -5026,7 +5406,7 @@ var_dump($_SESSION['subscription_vendor']);
                         echo '<script> alert("Coupon is not for this package.") </script>';
                         $path = FCPATH . '/stripe-subscription/vendor/autoload.php';
                         require $path;
-                        \Stripe\Stripe::setApiKey('sk_test_51KxcDlAuzV7aLiwxSU6ucZEUtpEhfRnatPJgx86qp0jQ0lsOaUpXoKaY7OUGdryKL7QDYSfF1OMkKc1MdHwrkoBT00MVS8HOLd');
+                        \Stripe\Stripe::setApiKey($stripe_secret);
                         $checkout_session = \Stripe\Checkout\Session::create([
                             'success_url' => base_url() . '/home/success_subscription?track=' . $track,
                             'cancel_url' => base_url() . '/stripe-subscription/cancel.html',
@@ -5049,7 +5429,7 @@ var_dump($_SESSION['subscription_vendor']);
                     </head>
                     <body>
                     <script type="text/javascript">
-                        var stripe = Stripe('pk_test_51KxcDlAuzV7aLiwx3CROcLFk2FIP9EiaxlpIRq7kpi7xpthRmsEZ8VJ6SeOFe5megdWfJce3OrREhboghh5pDKkZ006Sg5I8lY');
+                        var stripe = Stripe('<?= $stripe_publishable ?>');
                         var session = "<?php echo $checkout_session['id']; ?>";
                         stripe.redirectToCheckout({sessionId: session})
                             .then(function (result) {
@@ -5076,6 +5456,8 @@ var_dump($_SESSION['subscription_vendor']);
             /*require FCPATH.'stripe-subscription/vendor/autoload.php';
  \Stripe\Stripe::setApiKey('sk_test_mSOHfomD5CDglqvXR9d7ImNs');*/
         } else {
+            var_dump($_SESSION);
+            die();
             die('Forbidden request!');
         }
 
@@ -5116,6 +5498,7 @@ var_dump($_SESSION['subscription_vendor']);
         // create_slug($pid);
         $v = $this->db->where('vendor_id', $id)->update('vendor', array('bpage' => $pid));
         //s
+        if($user->promo == ''){
         if ($user->pack) {
             $pack = $this->db->where('membership_id', $user->pack)->get('membership')->row();
             $option = array(
@@ -5141,6 +5524,13 @@ var_dump($_SESSION['subscription_vendor']);
             $pack = $this->db->where('amount', 0)->get('package')->row();
             $this->process_pack($id, 0);
             return 0;
+        }
+        }else{
+            $promo = $user->promo;
+            $chk = $this->db->where('promo_code',$promo)->get('membership')->row();
+            $new = $chk->promo_limit -1;
+            $chk = $this->db->where('promo_code',$promo)->update('membership',array('promo_limit'=> $new));
+            return 'vendor_promo';
         }
         //bpage
     }
@@ -5168,6 +5558,7 @@ var_dump($_SESSION['subscription_vendor']);
 
     }
 
+    
     function vendor_logup($para1 = "", $para2 = "")
     {
 
@@ -5181,15 +5572,6 @@ var_dump($_SESSION['subscription_vendor']);
             $this->load->library('form_validation');
             $safe = 'yes';
             $char = '';
-            /*foreach ($_POST as $k => $row) {
-                if (preg_match('/[\'^":()}{#~><>|=¬]/', $row, $match)) {
-                    if ($k !== 'password1' && $k !== 'password2') {
-                        $safe = 'no';
-                        $char = $match[0];
-                    }
-                }
-            }*/
-
             $this->form_validation->set_rules('name', 'First Name', 'required');
             $this->form_validation->set_rules('email', 'Email', 'valid_email|required|is_unique[vendor.email]', array('required' => 'You have not provided %s.', 'is_unique' => 'This %s already exists.'));
             $this->form_validation->set_rules('password1', 'Password', 'required|matches[password2]');
@@ -5197,7 +5579,7 @@ var_dump($_SESSION['subscription_vendor']);
             $this->form_validation->set_rules('address1', 'Address Line 1', 'required');
             // $this->form_validation->set_rules('display_name', 'Display Name', 'required');
             $this->form_validation->set_rules('state', 'State', 'required');
-            $this->form_validation->set_rules('country', 'Country', 'required');
+            // $this->form_validation->set_rules('country', 'Country', 'required');
             $this->form_validation->set_rules('zip', 'Zip', 'required');
             $this->form_validation->set_rules('city', 'City', 'required');
             // $this->form_validation->set_rules('middle_name', 'Middle Name', 'required');
@@ -5210,66 +5592,71 @@ var_dump($_SESSION['subscription_vendor']);
                 }
             }
 
-            if ($this->input->post('affiliate') == 'yes') {
-                $this->form_validation->set_rules('affiliate_terms_check', 'Affiliate Terms of Use', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
-            }
+            // if ($this->input->post('affiliate') == 'yes') {
+            //     $this->form_validation->set_rules('affiliate_terms_check', 'Affiliate Terms of Use', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
+            // }
 
 
-            $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
+            // $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
 
             if ($this->form_validation->run() == FALSE) {
                 echo validation_errors();
 
             } else {
+    // var_dump($safe);
+    // die('nimraaa');
+                if ($safe = 'yes') {
+                    if (false) {
+                        // if (true) {
 
-                if ($safe == 'yes') {
-                    if (true) {
-                        if (true) {
+                        //     $data['name'] = $this->input->post('name');
+                        //     $data['email'] = $this->input->post('email');
+                        //     $data['address1'] = $this->input->post('address1');
+                        //     $data['address2'] = $this->input->post('address2');
+                        //     $data['company'] = $this->input->post('company');
+                        //     $data['display_name'] = $this->input->post('display_name');
+                        //     $data['state'] = $this->input->post('state');
+                        //     $data['cat1'] = $this->input->post('buss_type');
+                        //     $data['cat2'] = $this->input->post('sub_category');
+                        //     $data['cat3'] = $this->input->post('sub3_category');
+                        //     $data['country'] = $this->input->post('country');
+                        //     $data['city'] = $this->input->post('city');
+                        //     $data['zip'] = $this->input->post('zip');
+                        //     $data['pack'] = $this->input->post('pack');
+                        //     $data['promo'] = $this->input->post('promo');
 
-                            $data['name'] = $this->input->post('name');
-                            $data['email'] = $this->input->post('email');
-                            $data['address1'] = $this->input->post('address1');
-                            $data['address2'] = $this->input->post('address2');
-                            $data['company'] = $this->input->post('company');
-                            $data['display_name'] = $this->input->post('display_name');
-                            $data['state'] = $this->input->post('state');
-                            $data['cat1'] = $this->input->post('buss_type');
-                            $data['cat2'] = $this->input->post('sub_category');
-                            $data['cat3'] = $this->input->post('sub3_category');
-                            $data['country'] = $this->input->post('country');
-                            $data['city'] = $this->input->post('city');
-                            $data['zip'] = $this->input->post('zip');
-                            $data['pack'] = $this->input->post('pack');
+                        //     $data['middle_name'] = $this->input->post('middle_name');
+                        //     $data['last_name'] = $this->input->post('last_name');
+                        //     $data['create_timestamp'] = time();
+                        //     $data['approve_timestamp'] = 0;
+                        //     $data['approve_timestamp'] = 0;
+                        //     $data['membership'] = $this->input->post('pack');
+                        //     $data['status'] = 'pending'; 
+                        //     $data['status'] = 'approved';
 
-                            $data['middle_name'] = $this->input->post('middle_name');
-                            $data['last_name'] = $this->input->post('last_name');
-                            $data['create_timestamp'] = time();
-                            $data['approve_timestamp'] = 0;
-                            $data['approve_timestamp'] = 0;
-                            $data['membership'] = $this->input->post('pack');
-                            $data['status'] = 'pending';
-                            $data['status'] = 'approved';
+                        //     // if ($this->input->post('password1') == $this->input->post('password2')) {
+                        //     //     $password = $this->input->post('password1');
+                        //     //     $data['password'] = sha1($password);
+                        //     //     $this->db->insert('vendor', $data);
+                        //     //     $msg = $this->vendor_page($this->db->insert_id());
+                        //     //     if ($this->email_model->account_opening('vendor', $data['email'], $password) == false) {
+                        //     //         $msg = 'done_but_not_sent';
+                        //     //     } else {
+                        //     //         if ($this->email_model->vendor_reg_email_to_admin($data['email'], $password) == false) {
+                        //     //             $msg = 'done_but_not_sent';
+                        //     //         } else {
 
-                            if ($this->input->post('password1') == $this->input->post('password2')) {
-                                $password = $this->input->post('password1');
-                                $data['password'] = sha1($password);
-                                $this->db->insert('vendor', $data);
-                                $msg = $this->vendor_page($this->db->insert_id());
-                                if ($this->email_model->account_opening('vendor', $data['email'], $password) == false) {
-                                    if(!$msg)
-                                     $msg = 'done_but_not_sent';
-                                } else {
-                                    if(!$msg)
-                                    $msg = 'checkout';
-                                }
-                                echo $msg;
-                                exit();
-                            };
-                            exit();
-                        } else {
-                            echo translate('please_fill_the_captcha');
-                        }
+                        //     //             $msg = 'done_and_sent';
+                        //     //         }
+                        //     //         $msg = 'done_and_sent';
+                        //     //     }
+                        //     //     echo $msg;
+                        //     //     exit();
+                        //     // };
+                        //     exit();
+                        // }
                     } else {
+                        // die('nimra');
                         $data['name'] = $this->input->post('name');
                         $data['email'] = $this->input->post('email');
                         $data['address1'] = $this->input->post('address1');
@@ -5281,15 +5668,16 @@ var_dump($_SESSION['subscription_vendor']);
                         $data['city'] = $this->input->post('city');
                         $data['zip'] = $this->input->post('zip');
                         $data['pack'] = $this->input->post('pack');
-                        $data['cat1'] = $this->input->post('buss_type');
+                        // $data['cat1'] = $this->input->post('buss_type');
                         $data['phone'] = $this->input->post('phone');
-                        $data['whatsapp'] = $this->input->post('wphone');
-                        $data['cat2'] = $this->input->post('sub_category');
-                        $data['cat3'] = $this->input->post('sub3_category');
+                        // $data['whatsapp'] = $this->input->post('wphone');
+                        // $data['cat2'] = this->input->post('sub_category');
+                        // $data['cat3'] = $this->input->post('sub3_category');
                         $data['middle_name'] = $this->input->post('middle_name');
                         $data['last_name'] = $this->input->post('last_name');
                         $data['add_affilite'] = $this->input->post('affiliate');
                         $data['TOC'] = $this->input->post('terms_check');
+                        $data['promo'] = $this->input->post('promo');
                         if ($this->input->post('affiliate') == 'yes') {
                             $data['aff_TOC'] = $this->input->post('affiliate_terms_check');
                         }
@@ -5301,21 +5689,41 @@ var_dump($_SESSION['subscription_vendor']);
 
 
                         if ($this->input->post('password1') == $this->input->post('password2')) {
+                            
                             $password = $this->input->post('password1');
                             $data['password'] = sha1($password);
-                            $this->db->insert('vendor', $data);
-                            $this->vendor_page($this->db->insert_id());
-                                $msg = 'done_and_sent';
-                                echo $msg;
-                                exit();
+                            $x = $this->db->insert('vendor', $data);
+                            
+                            $vid = $this->db->insert_id();
+                            if(!$vid)
+                            {
+                               var_dump($this->db->last_query());
+                            }
+                         
+                            $this->vendor_page($vid);
+                            $this->vendor_subscription($vid);
+                            $this->email_model->account_opening('vendor', $data['email'], $password);
+                            $this->email_model->vendor_reg_email_to_admin($data['email'], $password);
+                            //  here on line 5667
+                            
+                            // redirect(base_url() . 'home/vendor_subscription', 'refresh');
+                                // $msg = 'done_and_sent';
+                                // echo $msg;
+                                // exit();
 
 
-                                $msg = 'done';
-                                if ($this->email_model->account_opening('vendor', $data['email'], $password) == false) {
-                                    $msg = 'done_but_not_sent';
-                                } else {
-                                    $msg = 'done_and_sent';
-                                }
+                                // $msg = 'done';
+                                // if ($this->email_model->account_opening('vendor', $data['email'], $password) == false) {
+                                //     $msg = 'done_but_not_sent';
+                                // } else {
+                                //     if ($this->email_model->vendor_reg_email_to_admin($data['email'], $password) == false) {
+                                //         $msg = 'done_but_not_sent';
+                                //     } else {
+
+                                //         $msg = 'done_and_sent';
+                                //     }
+                                //     $msg = 'done_and_sent';
+                                // }
                             // $this->vendor_page($this->db->insert_id());
 
                             // print_r($this->db->last_query());
@@ -5333,10 +5741,10 @@ var_dump($_SESSION['subscription_vendor']);
                             //     }
                             // }
 
-                            echo $msg;
-                            exit();
+                            // echo $msg;
+                            // exit();
 
-                            $msg = 'done';
+                            // $msg = 'done';
 
                         }
                     }
@@ -5356,7 +5764,10 @@ var_dump($_SESSION['subscription_vendor']);
             $page_data['page_name'] = "vendor/register";
             $page_data['asset_page'] = "register";
             $page_data['page_title'] = translate('registration');
-            $this->load->view('front/index2', $page_data);
+            if(isset($_GET['pack']) && $_GET['pack'])
+            $this->load->view('front/vreg', $page_data);
+            else
+            $this->load->view('front/vendor_pack', $page_data);
         } elseif ($para1 == "sub_by_cat") {
             echo $this->crud_model->select_html('sub_category', 'sub_category', 'sub_category_name', 'add', 'form-control demo-chosen-select required', '', 'category', $para2, 'get_brnd');
             exit();
@@ -5365,6 +5776,22 @@ var_dump($_SESSION['subscription_vendor']);
             exit();
         }
 
+    }
+    
+    function vendor_signup_promo(){
+            $promo = $this->input->post('promo_code');
+            $chk = $this->db->where('promo_code',$promo)->get('membership')->row();
+            if($chk && $chk->promo_limit){
+                $page_data['promo'] = $_POST['promo_code'];
+                $page_data['page_name'] = "vendor/register";
+                $page_data['asset_page'] = "register";
+                $this->load->view('front/vreg', $page_data);
+            }else{
+                $_SESSION['error'] = 'invalid promocode or expired';
+                $this->session->set_flashdata('error', 'invalid promocode or expired');
+                custom_redirect($_SERVER['HTTP_REFERER'], 'refresh');
+            }
+        
     }
 
     function vendor_login_msg()
@@ -5386,7 +5813,9 @@ var_dump($_SESSION['subscription_vendor']);
             $this->form_validation->set_rules('password', 'Password', 'required');
 
             if ($this->form_validation->run() == FALSE) {
-                echo validation_errors();
+                // echo validation_errors();/
+                $this->session->set_flashdata('error', validation_errors());
+                custom_redirect($_SERVER['HTTP_REFERER']);
             } else {
                 // var_dump(sha1($this->input->post('password')));
                 $signin_data = $this->db->get_where('user', array(
@@ -5404,12 +5833,12 @@ var_dump($_SESSION['subscription_vendor']);
                         $this->db->update('user', array(
                             'last_login' => time()
                         ));
-                        var_dump($this->session->userdata('user_login'));
-                        
-                        echo 'done';
+                        $this->session->set_flashdata('message', 'Login Successfull!');
+                         custom_redirect(base_url() . 'home/profile');
                     }
                 } else {
-                    echo 'failed';
+                    $this->session->set_flashdata('error', 'Login Failed!  Incorrect Email Or Password.Please Try Again');
+                    custom_redirect($_SERVER['HTTP_REFERER']);
                 }
             }
         } else if ($para1 == 'forget') {
@@ -5442,7 +5871,7 @@ var_dump($_SESSION['subscription_vendor']);
                 }
             }
         }
-        //$this->load->view('front/index', $page_data);
+        $this->load->view('front/'.$page_data['page_name'], $page_data);
     }
 
 
@@ -5518,7 +5947,7 @@ var_dump($_SESSION['subscription_vendor']);
         $report = $this->db->insert('contact_us', $data);
         $lastid = $this->db->insert_id();
         if ($report) {
-            $email = $this->email_model->contact_email($lastid, $submail);
+            $email = $this->email_model->contact_email($lastid, 'contact');
             // var_dump($email);
             // die('ok');
             if ($email == "true") {
@@ -5548,7 +5977,6 @@ var_dump($_SESSION['subscription_vendor']);
     /* FUNCTION: Setting login page with facebook and google */
     function login_set($para1 = '', $para2 = '', $para3 = '')
     {
-        var_dump($_SESSION);
         if ($this->session->userdata('user_login') == "yes") {
             redirect(base_url() . 'home/profile', 'refresh');
         }
@@ -5746,7 +6174,7 @@ var_dump($_SESSION['subscription_vendor']);
             if ($para2 == 'modal') {
                 $this->load->view('front/user/register/index', $page_data);
             } else {
-                $this->load->view('front/index2', $page_data);
+                $this->load->view('front/user_register', $page_data);
             }
         }
     }
@@ -5754,22 +6182,15 @@ var_dump($_SESSION['subscription_vendor']);
     /* FUNCTION: Logout set */
     function logout()
     {
-        if ($this->crud_model->get_settings_value('general_settings', 'fb_login_set') !== 'no') {
-            $appid = $this->db->get_where('general_settings', array('type' => 'fb_appid'))->row()->value;
-            $secret = $this->db->get_where('general_settings', array('type' => 'fb_secret'))->row()->value;
-            $config = array('appId' => $appid, 'secret' => $secret);
-            $this->load->library('Facebook', $config);
-            $this->facebook->destroy_session();
-        }
-        $this->session->sess_destroy();
-        redirect(base_url() . 'home/logged_out', 'refresh');
+        session_destroy();
+        custom_redirect(base_url() . 'home/logged_out');
     }
 
     /* FUNCTION: Logout */
     function logged_out()
     {
         $this->session->set_flashdata('alert', 'successful_signout');
-        redirect(base_url() . 'home/', 'refresh');
+        custom_redirect(base_url());
     }
 
     /* FUNCTION: Check if Email user exists */
@@ -5859,7 +6280,6 @@ var_dump($_SESSION['subscription_vendor']);
         $this->load->library('form_validation');
         $page_data['page_name'] = "registration";
         if ($para1 == "add_info") {
-            
             $msg = '';
             $this->form_validation->set_rules('username', 'First Name', 'required');
             $this->form_validation->set_rules('email', 'Email', 'required|is_unique[user.email]|valid_email', array('required' => 'You have not provided %s.', 'is_unique' => 'This %s already exists.'));
@@ -5871,15 +6291,18 @@ var_dump($_SESSION['subscription_vendor']);
             $this->form_validation->set_rules('zip', 'ZIP', 'required');
             $this->form_validation->set_rules('city', 'City', 'required');
             $this->form_validation->set_rules('state', 'State', 'required');
-            $this->form_validation->set_rules('country', 'Country', 'required');
-            $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
-            if ($this->input->post('affiliate') == 'yes') {
-                $this->form_validation->set_rules('affiliate_terms_check', 'Affiliates Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
-            }
+            // $this->form_validation->set_rules('country', 'Country', 'required');
+            // $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
+            // if ($this->input->post('affiliate') == 'yes') {
+            //     $this->form_validation->set_rules('affiliate_terms_check', 'Affiliates Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
+            // }
             if ($this->form_validation->run() == FALSE) {
-                
-                echo validation_errors();
+                 $this->session->set_flashdata('message', validation_errors());
+                 $this->login_set('registration');
+                // redirect($_SERVER['HTTP_REFERER'], 'refresh');
+                // echo validation_errors();
             } else {
+                // die('nimra');
                 if (true) {
                     
                     //
@@ -5903,18 +6326,27 @@ var_dump($_SESSION['subscription_vendor']);
                             $data['package_info'] = '[]';
                             $data['product_upload'] = $this->db->get_where('package', array('package_id' => 1))->row()->upload_amount;
                             $data['creation_date'] = time();
+                            // print_r($data);
+                            // die();
 
                             if ($this->input->post('password1') == $this->input->post('password2')) {
                                 $password = $this->input->post('password1');
                                 $data['password'] = sha1($password);
                                 $this->db->insert('user', $data);
                                 $msg = 'done';
-                                if ($this->email_model->account_opening('user', $data['email'], $password) == false) {
-                                    $msg = 'done_but_not_sent';
-                                } else {
-                                    $msg = 'done_and_sent';
-                                }
-                            }
+                                // if ($this->email_model->account_opening('user', $data['email'], $password) == false) {
+                                //     $msg = 'done_but_not_sent';
+                                // } else {
+                                //     $msg = 'done_and_sent';
+                                // }
+                             $this->session->set_flashdata('message', 'Registeration Successfull!');
+                                        // redirect($_SERVER['HTTP_REFERER'], 'refresh');
+                                        // here on line6318
+                                    } else {
+                                        $this->session->set_flashdata('message', 'Registeration Failed');
+                                        // redirect($_SERVER['HTTP_REFERER'], 'refresh');
+                                           $this->login_set('registration');
+                                    }
                             echo $msg;
                         } else {
                             echo translate('please_fill_the_captcha');
@@ -5931,7 +6363,7 @@ var_dump($_SESSION['subscription_vendor']);
                         $data['city'] = $this->input->post('city');
                         $data['state'] = $this->input->post('state');
                         $data['country'] = $this->input->post('country');
-                        $data['add_affilite'] = $this->input->post('affiliate');
+                        // $data['add_affilite'] = $this->input->post('affiliate');
                         $data['TOC'] = $this->input->post('terms_check');
                         if ($this->input->post('affiliate') == 'yes') {
                             $data['aff_TOC'] = $this->input->post('affiliate_terms_check');
@@ -5941,18 +6373,30 @@ var_dump($_SESSION['subscription_vendor']);
                         $data['package_info'] = '[]';
                         $data['product_upload'] = $this->db->get_where('package', array('package_id' => 1))->row()->upload_amount;
                         $data['creation_date'] = time();
+                        
 
                         if ($this->input->post('password1') == $this->input->post('password2')) {
-                            $password = $this->input->post('password1');
-                            $data['password'] = sha1($password);
-                            $this->db->insert('user', $data);
-                            $msg = 'done';
-                            if ($this->email_model->account_opening('user', $data['email'], $password) == false) {
-                                $msg = 'done_but_not_sent';
-                            } else {
-                                $msg = 'done_and_sent';
-                            }
-                        }
+                                $password = $this->input->post('password1');
+                                $data['password'] = sha1($password);
+                                $this->load->database();
+                                $insert = $this->db->insert('user', $data);
+                                $str = $this->db->last_query();
+                                
+                                // $msg = 'done';
+                                // if ($this->email_model->account_opening('user', $data['email'], $password) == false) {
+                                //     $msg = 'done_but_not_sent';
+                                // } else {
+                                //     $msg = 'done_and_sent';
+                                // }
+                             $this->session->set_flashdata('smessage', 'Registeration Successfull!');
+                                        // redirect($_SERVER['HTTP_REFERER'], 'refresh');
+                                        // here on line 6367
+                                        custom_redirect($_SERVER['HTTP_REFERER']);
+                                    } else {
+                                        $this->session->set_flashdata('message', 'Registeration Failed');
+                                        // redirect($_SERVER['HTTP_REFERER'], 'refresh');
+                                           $this->login_set('registration');
+                                    }
                         echo $msg;
                     }
                 } else {
@@ -6485,7 +6929,7 @@ var_dump($_SESSION['subscription_vendor']);
                 }
             }
             $img = $this->crud_model->file_view('product', $product_id, '', '', 'thumb', 'src', 'multi', 'one');
-            $comp_cover = $this->crud_model->get_type_name_by_id('product', $para2, 'comp_logo');
+            $comp_cover = $this->crud_model->get_type_name_by_id('product', $para2, 'comp_cover');
             if ($comp_cover) {
                 $img = $this->crud_model->get_img($comp_cover);
                 if (isset($img->secure_url)) {
@@ -6509,12 +6953,12 @@ var_dump($_SESSION['subscription_vendor']);
             $stock = $this->crud_model->get_type_name_by_id('product', $para2, 'current_stock');
 
             if (!$this->crud_model->is_added_to_cart($para2) || $para3 == 'pp') {
-                // if ($stock >= $qty || $this->crud_model->is_digital($para2)) {
-                //     $this->cart->insert($data);
-                //     echo 'added';
-                // } else {
-                //     echo 'shortage';
-                // }
+                if (true) {//here can asdd stock check
+                    $this->cart->insert($data);
+                    echo 'added';
+                } else {
+                    echo 'shortage';
+                }
                  if (true) {
                     $this->cart->insert($data);
                     $html = 'Item add tio cart successfully! click here to <a href="'.base_url('home/cart_checkout').'">View cart</a>';
@@ -6901,11 +7345,12 @@ var_dump($_SESSION['subscription_vendor']);
 
                 /*--new logic---*/
                 $carted = $this->cart->contents();
+                
                 foreach ($carted as $k => $v) {
                     $methods = $this->db->select('MIN(`amount`) as amount,id')->where('r_id', $r_id)->where('cart_key', $v['rowid'])->get('ship_method')->row();
                     if (isset($_SESSION['cart_contents'][$v['rowid']]['shipping']) && isset($methods->amount)) {
-                        $_SESSION['cart_contents'][$v['rowid']]['shipping'] = $methods->amount;
-                        $_SESSION['cart_contents'][$v['rowid']]['shippoo_info'] = $methods->id;
+                        $_SESSION['cart_contents'][$v['rowid']]['shipping'] = ($methods->amount)?$methods->amount:0;
+                        $_SESSION['cart_contents'][$v['rowid']]['shippoo_info'] = ($methods->id)?$methods->id:0;
                     }
 
                 }
@@ -6946,10 +7391,37 @@ var_dump($_SESSION['subscription_vendor']);
             exit();
         }
         if ($para1 == "cal_shipping") {
+            $carted = $this->cart->contents();
+            //
+            $phyical = 0;
+            foreach($carted as $k=> $v)
+            {
+                $pid = $v['id'];
+                $Product_type = $this->crud_model->get_type_name_by_id('product', $pid, 'Product_type');
+                if($Product_type == 'Physical' && !$phyical)
+                {
+                    $phyical = 1;
+                }
+            }
+            if(!$phyical)
+            {
+                $ret = array(
+                'status' => 1,
+                'msg' => 'digital_order'
+            );
+            echo json_encode($ret);
+            exit();
+            }
+            
             if (isset($_GET['firstname']) && isset($_GET['lastname']) && isset($_GET['address1']) && isset($_GET['email']) && isset($_GET['country']) && isset($_GET['phone']) && isset($_GET['city'])) {
+                
                 // $obj = $this->get_shippo_rate($_GET['firstname'],$_GET['lastname'],$_GET['country'],$_GET['address1'],$_GET['email'],$_GET['phone']);
+                
                 $obj = $this->get_shippo_rate($_GET['firstname'], $_GET['lastname'], $_GET['country'], $_GET['state'], $_GET['city'], $_GET['address1'], $_GET['email'], $_GET['phone'], $_GET['zip']);
+                
                 if (is_object($obj)) {
+                    
+                    
                     $obj = (array)$obj;
                     $msg = '';
                     foreach ($obj as $k => $v) {
@@ -6961,7 +7433,8 @@ var_dump($_SESSION['subscription_vendor']);
                     }
                     $ret = array(
                         'status' => 0,
-                        'msg' => $msg
+                        'msg' => $msg,
+                        'obj' => $obj
                     );
                     echo json_encode($ret);
                     exit();
@@ -7075,7 +7548,7 @@ var_dump($_SESSION['subscription_vendor']);
             $page_data['page_title'] = translate('my_cart');
             $page_data['carted'] = $this->cart->contents();
             // var_dump($page_data);
-            $this->load->view('front/index', $page_data);
+            $this->load->view('front/index_new', $page_data);
         }
     }
 
@@ -7529,8 +8002,9 @@ var_dump($_SESSION['subscription_vendor']);
 
                 $this->db->insert('sale', $data);
                 $sale_id = $this->db->insert_id();
+                
 
-                $this->send_shipping($sale_id);
+                //$this->send_shipping($sale_id);
 
                 if ($this->session->userdata('user_login') == 'yes') {
                     $data['buyer'] = $this->session->userdata('user_id');
@@ -7544,6 +8018,7 @@ var_dump($_SESSION['subscription_vendor']);
                     }
                     $data['guest_id'] = $sale_id . '-' . $randomString;
                 }
+                
                 $vendors = $this->crud_model->vendors_in_sale($sale_id);
                 $delivery_status = array();
                 $payment_status = array();
@@ -7563,7 +8038,7 @@ var_dump($_SESSION['subscription_vendor']);
                 $this->db->update('sale', $data);
                 $this->process_order($sale_id);
                 $this->crud_model->process_affiliation($sale_id, false);
-
+                
 
                 foreach ($carted as $value) {
                     $this->crud_model->decrease_quantity($value['id'], $value['qty']);
@@ -7583,16 +8058,17 @@ var_dump($_SESSION['subscription_vendor']);
                     $this->db->insert('stock', $data1);
                 }
 
-                $this->crud_model->digital_to_customer($sale_id);
+                // $this->crud_model->digital_to_customer($sale_id);
                 $this->email_model->email_invoice($sale_id);
+                
 
                 // $this->cart->destroy();
                 $this->session->set_userdata('couponer', '');
                 //echo $sale_id;
                 if ($this->session->userdata('user_login') == 'yes') {
-                    redirect(base_url() . 'home/invoice/' . $sale_id, 'refresh');
+                    custom_redirect(base_url() . 'home/invoice/' . $sale_id);
                 } else {
-                    redirect(base_url() . 'home/guest_invoice/' . $data['guest_id'], 'refresh');
+                    custom_redirect(base_url() . 'home/guest_invoice/' . $data['guest_id']);
                 }
             }
         } else if ($this->input->post('payment_type') == 'wallet') {
@@ -8534,7 +9010,12 @@ var_dump($_SESSION['subscription_vendor']);
     function wishlist($para1 = "", $para2 = "")
     {
         if ($para1 == 'add') {
+            
             $this->crud_model->add_wish($para2);
+            // 
+            die('OK');
+            custom_redirect($_SERVER['HTTP_REFERER']);
+            
         } else if ($para1 == 'remove') {
             $this->crud_model->remove_wish($para2);
         } else if ($para1 == 'num') {
@@ -9072,7 +9553,7 @@ $config['last_link'] = ' ';
         } else {
             // print_r($page_data);
             // die();
-            $this->load->view('front/index', $page_data);
+            $this->load->view('front/index_new', $page_data);
         }
     }
 
@@ -9945,6 +10426,8 @@ $config['last_link'] = ' ';
 
     function test()
     {
+        var_dump(get_fields_line(39, 3));
+        die();
         // $pac = $this->crud_model->get_product_affiliation_codes_from_cookies();
         //
         // echo "<pre>";

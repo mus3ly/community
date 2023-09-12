@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | EXPLANATION OF VARIABLES
 | -------------------------------------------------------------------
 |
-|	['dsn']      The full DSN string describe a connection to the database.
+|    ['dsn']      The full DSN string describe a connection to the database.
 |	['hostname'] The hostname of your database server.
 |	['username'] The username used to connect to the database
 |	['password'] The password used to connect to the database
@@ -65,9 +65,9 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'commzeyu_ci',
-	'password' => '^U!m,u?f?v]8',
-	'database' => 'commzeyu_ci',
+	'username' => 'admin_chl',
+	'password' => 'dAKMLswKJf',
+	'database' => 'admin_chl',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -90,14 +90,14 @@ $ip_server = $_SERVER['SERVER_ADDR'];
 if($ip_server == '::1' || $ip_server == "127.0.0.1")
 {
 
-	
+
 
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
-	'database' => 'chl',
+	'database' => 'chl1',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

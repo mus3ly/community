@@ -1,11 +1,4 @@
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
-  *{
-      font-family: "arial", sans-serif;
-      
-  }
-</style>
 
 <input type="hidden" value="<?php echo $category; ?>" id="blog_cat" />
 <!-- PAGE WITH SIDEBAR -->
@@ -42,8 +35,13 @@
                                     </a>
                                 </h4>
                 				<div class="overflowed">
-                					<div class="availability"><?php echo translate('by'); ?>: <span><?php echo $row['author']; ?></span></div>
-                					<div class="price"><P><?php echo $row['date']; ?></P></div>
+                					<!--<div class="availability"><?php echo translate('by'); ?>: <span><?php echo $row['author']; ?></span></div>-->
+                					<!--<div class="price"><P><?php echo formate_date($row['date']); ?></P></div>-->
+                					<P class="low_me">
+							<?php echo translate('by'); ?> 
+							<span class="name"><?php echo $row['author']; ?></span> | 
+							<span class="date"><?= $newDate = formate_date($row['date']);?></span>
+							</p>
                 				</div>
                 				<div class="caption-text">
                 				    <p><?= strWordCut($row['summery'], 320); ?></p>

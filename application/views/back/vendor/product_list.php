@@ -29,8 +29,17 @@
     {
         $type = '?'.$type.'=1';
     }
+    $url = base_url().'vendor/product/list_data';
+    if(isset($mod))
+	{
+	    $url = base_url().'vendor/product/list_data?module='.$mod->id;
+	}
+	elseif(isset($_GET['is_product']))
+	{
+	     $url = base_url().'vendor/product/list_data?is_product=1';
+	}
     ?>
-    <table id="events-table" class="table table-striped"  data-url="<?php echo base_url(); ?>vendor/product/list_data<?=$type?>"  data-side-pagination="server" data-pagination="true" data-page-list="[5, 10, 20, 50, 100, 200]"  data-show-refresh="true" data-search="true"  data-show-export="true" >
+    <table id="events-table" class="table table-striped"  data-url="<?php echo $url; ?>"  data-side-pagination="server" data-pagination="true" data-page-list="[5, 10, 20, 50, 100, 200]"  data-show-refresh="true" data-search="true"  data-show-export="true" >
         <thead>
             <tr>
                 <th data-field="item" data-align="right" data-sortable="true">

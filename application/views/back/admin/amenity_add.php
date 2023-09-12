@@ -20,14 +20,18 @@
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('category');?></label>
                 <div class="col-sm-6">
                     <select name="cat" id="demo-hor-2" class="form-control required">
-                        <option value="0">Generl</option>
-                        <option value="808">Property</option>
-                        <option value="807">Cars</option>
-                        <option value="917">Events</option>
-                        <option value="856">Hotels</option>
-                        <option value="78">Jobs</option>
-                        <option value="321">Restaurants</option>
-                        <option value="77">Fashion</option>
+                        <option value="0" selected>Select Category</option>
+			            <?php
+			             $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value,true);
+			            foreach($categories as $k => $v){
+			                $cat = $this->db->get_where('category', array('category_id' => $v))->result_array();
+			                foreach($cat as $key => $value){
+			                   ?>
+			                   <option value="<?= $value['category_id']; ?>"><?= $value['category_name']; ?></option>
+			                   <?php
+			                }
+                        }
+			            ?>
                         </select>
                 </div>
             </div>

@@ -23,15 +23,18 @@
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('category');?></label>
                 <div class="col-sm-6">
                     <select name="cat" id="demo-hor-2" class="form-control required">
-                        <option>Select Category</option>
-                        <option value="808"
-                        <?= isset($row['catid']) && $row['catid'] == '808'?'selected':'' ?>>Property</option>
-                        <option value="807" <?= isset($row['catid']) && $row['catid'] == '807'?'selected':'' ?>>Cars</option>
-                        <option value="917" <?= isset($row['catid']) && $row['catid'] == '917'?'selected':'' ?>>Events</option>
-                        <option value="856" <?= isset($row['catid']) && $row['catid'] == '856'?'selected':'' ?>>Hotels</option>
-                        <option value="78" <?= isset($row['catid']) && $row['catid'] == '78'?'selected':'' ?>>Jobs</option>
-                        <option value="321" <?= isset($row['catid']) && $row['catid'] == '321'?'selected':'' ?>>Restaurants</option>
-                        <option value="77" <?= isset($row['catid']) && $row['catid'] == '77'?'selected':'' ?>>Fashion</option>
+                         <option value="0" selected>Select Category</option>
+			            <?php
+			             $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value,true);
+			            foreach($categories as $k => $v){
+			                $cat = $this->db->get_where('category', array('category_id' => $v))->result_array();
+			                foreach($cat as $key => $value){
+			                   ?>
+			                   <option value="<?= $value['category_id']; ?>" <?= isset($row['catid']) && $row['catid'] == $value['category_id']?'selected':'' ?>><?= $value['category_name']; ?></option>
+			                   <?php
+			                }
+                        }
+			            ?>
                         </select>
                 </div>
             </div>

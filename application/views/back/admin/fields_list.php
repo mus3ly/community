@@ -22,34 +22,38 @@
                            			if($row1)
                            			{
                            			    ?>
-                           			    <option value="<?= $v ?>" <?= (isset($_GET['level']) && $_GET['level'] == $v)?"selected":""; ?>><?= $row1->category_name; ?></option>
+                           			    <option value="<?= $v ?>" <?= (isset($_GET['category']) && $_GET['category'] == $v)?"selected":""; ?>><?= $row1->category_name; ?></option>
                            			    <?php
                            			}
             			 }
 			 
 			            
 			            ?>
-                        <option value="808" <?= (isset($_GET['level']) && $_GET['level'] == '808')?"selected":""; ?>>Property</option>
-                        <option value="807" <?= (isset($_GET['level']) && $_GET['level'] == '807')?"selected":""; ?>>Cars</option>
-                        <option value="917" <?= (isset($_GET['level']) && $_GET['level'] == '917')?"selected":""; ?>>Events</option>
-                        <option value="78" <?= (isset($_GET['level']) && $_GET['level'] == '78')?"selected":""; ?>>Jobs</option>
 		
 		</select>
                     <select name="sort" >
-                        <option value="0">Choose Option</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
+                        <option value="0">Choose Sort</option>
+                        <?php
+                        for($i = 1; $i<=6;$i++)
+                        {
+                            ?>
+                            <option value="<?= $i ?>"  <?= (isset($_GET['sort']) && $_GET['sort'] == $i)?"selected":""; ?>><?= $i ?></option>
+                            <?php
+                        }
+                        ?>
+                        </select>
+            
+                    <select name="filter">
+                        <option value="0">Has Filter</option>
+                        <option value="1" <?= (isset($_GET['filter']) && $_GET['filter'] == 1)?"selected":""; ?> >Yes</option>
+                        <option value="2" <?= (isset($_GET['position']) && $_GET['position'] == 2)?"selected":""; ?>>No</option>
                         </select>
             
                     <select name="position">
                         <option value="0">Choose Position</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
+                        <option value="1" <?= (isset($_GET['position']) && $_GET['position'] == 1)?"selected":""; ?> >1</option>
+                        <option value="2" <?= (isset($_GET['position']) && $_GET['position'] == 2)?"selected":""; ?>>2</option>
+                        <option value="3" <?= (isset($_GET['position']) && $_GET['position'] == 3)?"selected":""; ?>>3</option>
                         </select>
                         <button id="search">Search</button>
 	    </form>
@@ -63,6 +67,7 @@
 					<th><?php echo translate('type');?></th>
 					<th><?php echo translate('sort');?></th>
 					<th><?php echo translate('position');?></th>
+					<th><?php echo translate('filter_information');?></th>
 					<th class="text-right"><?php echo translate('options');?></th>
 				</tr>
 			</thead>
@@ -81,6 +86,14 @@
                     <td><?php echo $row['type']; ?></td>
                     <td><?php echo $row['sort']; ?></td>
                     <td><?php echo $row['position']; ?></td>
+                    <td>
+                        <?php
+                        if($row['is_filter'])
+                        {
+                            echo $row['filter_sort'].'-'.$row['tbl_col'];
+                        }
+                        ?>
+                    </td>
                     
                     <td class="text-right">
                         <a class="btn btn-success btn-xs btn-labeled fa fa-wrench" data-toggle="tooltip" 
@@ -147,14 +160,14 @@
 <script>
 $('#search').on('click', function(e){
     e.preventDefault();
-      var x = $("form").serializeArray();
+      var x = $("form").serialize();
+      console.log(x);
       $.ajax({
-        url: '<?= base_url('admin/list_fields/list'); ?>',
+        url: '<?= base_url('admin/list_fields/list'); ?>?'+x,
         type: "Post",
         async: true,
-        data: { x },
         success: function (data) {
-           
+           $('#demo_s').html(data);
         },
         error: function (xhr, exception) {
             

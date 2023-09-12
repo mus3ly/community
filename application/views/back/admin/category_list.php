@@ -299,7 +299,7 @@
 					{
 			?>
 			<tr id="trow_<?= $row['category_id']?>">
-				<td><?php echo $i; ?></td>
+				<td><?php echo $row['category_id']; ?></td> 
 				<td><?php echo $row['level']; ?></td>
                 <td><?php echo $row['category_name']; ?></td>
                 <td>

@@ -13,7 +13,7 @@
 <section class="page-section specification">
     <div class="container">
         <div class="tabs-wrapper content-tabs">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs product_detail">
                 <li  class="active"  ><a href="#tab1" data-toggle="tab"><?php echo translate('full_description'); ?></a></li>
                 <li ><a href="#tab2" data-toggle="tab"><?php echo translate('additional_specification'); ?></a></li>
                 <li ><a href="#tab3" data-toggle="tab"><?php echo translate('shipment_info'); ?></a></li>

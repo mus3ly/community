@@ -4,6 +4,7 @@
     }
 </style>
 <?php
+$row = $pro;
 	echo form_open('', array(
 		'method' => 'post',
 		'class' => 'sky-form',
@@ -265,49 +266,3 @@
     <div id="share"></div>
 </div>
 <hr class="page-divider small"/>
-<script>
-	$(document).ready(function() {
-		$('#share').share({
-			networks: ['facebook','googleplus','twitter','linkedin','tumblr','in1','stumbleupon','digg'],
-			theme: 'square'
-		});
-	});
-</script>
-<script>
-$(document).ready(function() {
-	check_checkbox();
-});
-function check_checkbox(){
-	$('.checkbox input[type="checkbox"]').each(function(){
-        if($(this).prop('checked') == true){
-			$(this).closest('label').find('.cr-icon').addClass('add');
-		}else{
-			$(this).closest('label').find('.cr-icon').addClass('remove');
-		}
-    });
-}
-function check(now){
-	if($(now).find('input[type="checkbox"]').prop('checked') == true){
-		$(now).find('.cr-icon').removeClass('remove');
-		$(now).find('.cr-icon').addClass('add');
-	}else{
-		$(now).find('.cr-icon').removeClass('add');
-		$(now).find('.cr-icon').addClass('remove');
-	}
-}
-function decrease_val(){
-	var value=$('.quantity-field').val();
-	if(value > 1){
-		var value=--value;
-	}
-	$('.quantity-field').val(value);
-}
-function increase_val(){
-	var value=$('.quantity-field').val();
-	var max_val =parseInt($('.quantity-field').attr('max'));
-	if(value < max_val){
-		var value=++value;
-	}
-	$('.quantity-field').val(value);
-}
-</script>

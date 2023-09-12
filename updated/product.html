@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details | Community Hubland</title>
+
+  <!-- Favicons -->
+  <link href="assets/images/favicon.png" rel="icon">
+  <link href="assets/images/favicon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css' />
+  <link rel='stylesheet'
+    href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css' />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css' />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css' />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css" />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css' />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Template Main CSS File -->
+  <link href="assets/scss/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <!-- Shape Boxes -->
+  <div class="dotted_lines">
+    <img src="assets/images/doted-lines.png" alt="">
+  </div>
+  <!-- <div class="ellipse">
+        <img src="assets/images/Ellipse.png" alt="">
+    </div> -->
+  <div class="lines_shape">
+    <img src="assets/images/lines-shape.png" alt="">
+  </div>
+  <!-- <div class="rounded_box">
+        <img src="assets/images/rounded.png" alt="">
+    </div> -->
+
+  <!-- Header -->
+  <header data-aos="fade-down" data-aos-duration="1000">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="assets/images/logo.png" alt="Logo" class="img-fluid">
+        </a>
+        <div class="mobile-open">
+          <a href="#" class="cart-btn-mb btn btn-theme-transparent hidden-ld" data-toggle="modal" data-target="#popup-cart">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="hidden-xs">
+              <span class="cart_num">0</span>
+            </span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="fa fa-bars"></span>
+          </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                COMMUNITY PEGS
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Jobs</a></li>
+                <li><a class="dropdown-item" href="#">Charities</a></li>
+                <li><a class="dropdown-item" href="#">Education</a></li>
+                <li><a class="dropdown-item" href="#">Worship</a></li>
+                <li><a class="dropdown-item" href="#">Blogs</a></li>
+                <li><a class="dropdown-item" href="#">Markets</a></li>
+                <li><a class="dropdown-item" href="#">Short Stays</a></li>
+                <li><a class="dropdown-item" href="#">Activities</a></li>
+                <li><a class="dropdown-item" href="#">Other</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Shop</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Directory
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">All Listings</a></li>
+                <li><a class="dropdown-item" href="#">Places</a></li>
+                <li><a class="dropdown-item" href="#">Affiliate</a></li>
+                <li><a class="dropdown-item" href="#">Blogs</a></li>
+                <li><a class="dropdown-item" href="#">Job</a></li>
+                <li><a class="dropdown-item" href="#">Event</a></li>
+                <li><a class="dropdown-item" href="#">News</a></li>
+                <li><a class="dropdown-item" href="#">Charities</a></li>
+                <li><a class="dropdown-item" href="#">Properties</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Account</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">FAQ</a>
+            </li>
+            <li class="nav-item add-listing">
+              <a href="vendor_logup/registration.html" class="">Add Listing
+                <i class="fa fa-plus"></i>
+              </a>
+            </li>
+            <li class="nav-item dropdown signup">
+              <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-box-arrow-in-right"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Customer Login</a></li>
+                <li><a class="dropdown-item" href="#">Customer Sign-up</a></li>
+                <li><a class="dropdown-item" href="#">Vendor Login</a></li>
+                <li><a class="dropdown-item" href="#">Vendor Sign-up</a></li>
+              </ul>
+            </li>
+            <li class="nav-item cart-btn-item">
+              <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="hidden-xs">
+                  <span class="cart_num">0</span>
+                  Item(s)
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="product-page">
+      <!-- content -->
+        <div class="container">
+          <div class="row gx-5">
+            <aside class="col-lg-6">
+              <div class="product-imgs" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
+                <div class="img-display">
+                  <div class="img-showcase">
+                    <img
+                      src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg"
+                      alt="shoe image">
+                    <img
+                      src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg"
+                      alt="shoe image">
+                    <img
+                      src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_3.jpg"
+                      alt="shoe image">
+                    <img
+                      src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_4.jpg"
+                      alt="shoe image">
+                  </div>
+                </div>
+                <div class="img-select">
+                  <div class="img-item">
+                    <a href="#" data-id="1">
+                      <img
+                        src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg"
+                        alt="shoe image">
+                    </a>
+                  </div>
+                  <div class="img-item">
+                    <a href="#" data-id="2">
+                      <img
+                        src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg"
+                        alt="shoe image">
+                    </a>
+                  </div>
+                  <div class="img-item">
+                    <a href="#" data-id="3">
+                      <img
+                        src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_3.jpg"
+                        alt="shoe image">
+                    </a>
+                  </div>
+                  <div class="img-item">
+                    <a href="#" data-id="4">
+                      <img
+                        src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_4.jpg"
+                        alt="shoe image">
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </aside>
+            <div class="col-lg-6">
+              <div class="product-details-side" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                <div class="ps-lg-3">
+                  <h4 class="title text-dark">
+                    Quality Men's Hoodie for Winter, Men's Fashion <br />
+                    Casual Hoodie
+                  </h4>
+                  <div class="d-flex flex-row my-3">
+                    <div class="stars mb-1 me-2">
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fa fa-star"></i>
+                      <i class="fas fa-star-half-alt"></i>
+                      <span class="ms-1">
+                        4.5
+                      </span>
+                    </div>
+                    <span class="text-muted">154 reviews</span>
+                    <span class="stock ms-2">In stock</span>
+                  </div>
+
+                  <div class="mb-3">
+                    <span class="h5 price">$75.00</span>
+                    <span class="text-muted">/per box</span>
+                  </div>
+
+                  <p>
+                    Modern look and quality demo item is a streetwear-inspired collection that continues to break away
+                    from the conventions of mainstream fashion. Made in Italy, these black and brown clothing low-top
+                    shirts for
+                    men.
+                  </p>
+
+                  <div class="row">
+                    <dt class="col-3">Type:</dt>
+                    <dd class="col-9">Regular</dd>
+
+                    <dt class="col-3">Color</dt>
+                    <dd class="col-9">Brown</dd>
+
+                    <dt class="col-3">Material</dt>
+                    <dd class="col-9">Cotton, Jeans</dd>
+
+                    <dt class="col-3">Brand</dt>
+                    <dd class="col-9">Reebook</dd>
+                  </div>
+
+                  <hr />
+
+                  <div class="row mb-4">
+                    <div class="col-md-4 col-6">
+                      <label class="mb-2">Size</label>
+                      <select class="form-select">
+                        <option>Small</option>
+                        <option>Medium</option>
+                        <option>Large</option>
+                      </select>
+                    </div>
+                    <!-- col.// -->
+                    <div class="col-md-4 col-6 mb-3">
+                      <label class="mb-2 d-block">Quantity</label>
+                      <div class="input-group mb-3">
+                        <button class="btn px-3" type="button" id="button-addon1" data-mdb-ripple-color="dark">
+                          <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="text" class="form-control text-center" placeholder="1"
+                          aria-label="Example text with button addon" aria-describedby="button-addon1" />
+                        <button class="btn px-3" type="button" id="button-addon2" data-mdb-ripple-color="dark">
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="btns">
+                    <a href="#" class="primary-btn"> <i class="fa fa-shopping-basket me-2"></i> Add to cart </a>
+                    <a href="#" class="secondary-btn icon-hover"> <i class=" me-2 fa fa-heart fa-lg"></i> Save </a>
+                    <a href="#" class="secondary-btn icon-hover"> <i
+                        class=" me-2 fa-solid fa-arrow-right-arrow-left"></i>Compare </a>
+                    <a href="#" class="btn btn-warning"><i class=" me-2 fa fa-paper-plane"></i> Contact Seller</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-- content -->
+
+      <div class="py-4 product-details-tabs">
+        <div class="container">
+          <div class="row gx-4">
+            <div class="col-lg-8 mb-4">
+              <div class="border rounded-2 px-3 py-2 bg-white" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                <!-- Pills navs -->
+                <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+                  <li class="nav-item d-flex" role="presentation">
+                    <a class="nav-link d-flex align-items-center justify-content-center w-100 active" id="ex1-tab-1"
+                      data-bs-toggle="pill" href="#ex1-pills-1" role="tab" aria-controls="ex1-pills-1"
+                      aria-selected="true">Specification</a>
+                  </li>
+                  <li class="nav-item d-flex" role="presentation">
+                    <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-2"
+                      data-bs-toggle="pill" href="#ex1-pills-2" role="tab" aria-controls="ex1-pills-2"
+                      aria-selected="false">Warranty info</a>
+                  </li>
+                  <li class="nav-item d-flex" role="presentation">
+                    <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-3"
+                      data-bs-toggle="pill" href="#ex1-pills-3" role="tab" aria-controls="ex1-pills-3"
+                      aria-selected="false">Shipping info</a>
+                  </li>
+                  <li class="nav-item d-flex" role="presentation">
+                    <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-4"
+                      data-bs-toggle="pill" href="#ex1-pills-4" role="tab" aria-controls="ex1-pills-4"
+                      aria-selected="false">Seller profile</a>
+                  </li>
+                </ul>
+                <!-- Pills navs -->
+
+                <!-- Pills content -->
+                <div class="tab-content" id="ex1-content">
+                  <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
+                    <p>
+                      With supporting text below as a natural lead-in to additional content. Lorem ipsum dolor sit amet,
+                      consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                      Ut
+                      enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                      nulla
+                      pariatur.
+                    </p>
+                    <div class="row my-2">
+                      <div class="col-12 col-md-6">
+                        <ul class="list-unstyled mb-0">
+                          <li><i class="fas fa-check-square me-2"></i>Some great feature name here</li>
+                          <li><i class="fas fa-check-square me-2"></i>Lorem ipsum dolor sit amet, consectetur</li>
+                          <li><i class="fas fa-check-square me-2"></i>Duis aute irure dolor in reprehenderit</li>
+                          <li><i class="fas fa-check-square me-2"></i>Optical heart sensor</li>
+                        </ul>
+                      </div>
+                      <div class="col-12 col-md-6 mb-0">
+                        <ul class="list-unstyled">
+                          <li><i class="fas fa-check-square me-2"></i>Easy fast and ver good</li>
+                          <li><i class="fas fa-check-square me-2"></i>Some great feature name here</li>
+                          <li><i class="fas fa-check-square me-2"></i>Modern style and design</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <table class="table border mt-3 mb-2">
+                      <tr>
+                        <th class="py-2">Display:</th>
+                        <td class="py-2">13.3-inch LED-backlit display with IPS</td>
+                      </tr>
+                      <tr>
+                        <th class="py-2">Processor capacity:</th>
+                        <td class="py-2">2.3GHz dual-core Intel Core i5</td>
+                      </tr>
+                      <tr>
+                        <th class="py-2">Camera quality:</th>
+                        <td class="py-2">720p FaceTime HD camera</td>
+                      </tr>
+                      <tr>
+                        <th class="py-2">Memory</th>
+                        <td class="py-2">8 GB RAM or 16 GB RAM</td>
+                      </tr>
+                      <tr>
+                        <th class="py-2">Graphics</th>
+                        <td class="py-2">Intel Iris Plus Graphics 640</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+                    <p>Tab content or sample information now <br />
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                      nisi ut
+                      aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                      culpa qui
+                      officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing
+                      elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                      quis
+                      nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</p>
+                  </div>
+                  <div class="tab-pane fade mb-2" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
+                    <p>Another tab content or sample information now <br />
+                      Dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+                      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                      ex ea
+                      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                      fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                      deserunt
+                      mollit anim id est laborum.</p>
+                  </div>
+                  <div class="tab-pane fade mb-2" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
+                    <p>Some other tab content or sample information now <br />
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                      nisi ut
+                      aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                      culpa qui
+                      officia deserunt mollit anim id est laborum.</p>
+                  </div>
+                </div>
+                <!-- Pills content -->
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="px-0 rounded-2 shadow-0" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="300">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Similar items</h5>
+                    <div class="d-flex mb-3">
+                      <a href="#" class="me-3">
+                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp"
+                          style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                      </a>
+                      <div class="info">
+                        <a href="#" class="nav-link mb-1">
+                          Rucksack Backpack Large <br />
+                          Line Mounts
+                        </a>
+                        <strong class="text-dark"> $38.90</strong>
+                      </div>
+                    </div>
+
+                    <div class="d-flex mb-3">
+                      <a href="#" class="me-3">
+                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp"
+                          style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                      </a>
+                      <div class="info">
+                        <a href="#" class="nav-link mb-1">
+                          Summer New Men's Denim <br />
+                          Jeans Shorts
+                        </a>
+                        <strong class="text-dark"> $29.50</strong>
+                      </div>
+                    </div>
+
+                    <div class="d-flex mb-3">
+                      <a href="#" class="me-3">
+                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp"
+                          style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                      </a>
+                      <div class="info">
+                        <a href="#" class="nav-link mb-1"> T-shirts with multiple colors, for men and lady </a>
+                        <strong class="text-dark"> $120.00</strong>
+                      </div>
+                    </div>
+
+                    <div class="d-flex">
+                      <a href="#" class="me-3">
+                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp"
+                          style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                      </a>
+                      <div class="info">
+                        <a href="#" class="nav-link mb-1"> Blazer Suit Dress Jacket for Men, Blue color </a>
+                        <strong class="text-dark"> $339.90</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer_warp">
+    <div class="container">
+      <div class="footer_up">
+        <!--footer logo start here-->
+        <div class="footer_container first-container">
+          <div class="row align-items-center">
+            <div class="col-lg-3 col-md-6 footer_logo">
+              <a href="#"><img src="assets/images/logo.png" class="img-fluid" alt=""></a>
+              <form action="https://dev.communityhubland.com//home/subscribe"
+                class="mhl_subscribe_fields subscribe_form mt-3" method="post" accept-charset="utf-8">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <button class="btn send-btn" type="button" id="button-addon2">Subscribe</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-3 offset-md-3">
+            </div>
+          </div>
+          <!--footer logo Ends here-->
+          <!--footer subscribe Starts here-->
+        </div>
+        <!--footer subscribe Ends here-->
+        <div class="footer_container">
+          <div class="flex_boxes_4 p-0">
+            <!--meddle section-->
+            <div class="row">
+              <!--margin_in_between <div class="col-md-4 resposinve_set hide_me"> -->
+              <div class="col-lg-4 col-sm-6">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <img src="assets/images/volume.png" alt="">
+                  </div>
+                  <div class="col-sm-9">
+                    <div class="about-us">
+                      <h4 class="about_title">About US</h4>
+                      <p>Hire our experienced team of programmers, digital
+                        designers, and marketing professionals.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-sm-6 widget_column">
+                <div class="sec_column">
+                  <h4 class="add_margin_left">Community Pegs</h4>
+                  <div class="align_footer">
+                    <ul class="span_bullets">
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/78.html">Jobs</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/134.html">
+                          Charities</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/305.html">Education</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/351.html">Worship</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/369.html">
+                          Blogs</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/386.html">Markets</a>
+                      </li>
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/431.html">Short Stays</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/429.html">Activities</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/1102.html">Other</a>
+                      </li>
+
+                      <li class="span_bullets_arrows" i="i">
+                        <a href="home/category/853.html">Networking</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/646.html">Stores</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/872.html">Services</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2 widget_column  for_mobile_left">
+
+                <div class="third_column">
+                  <h4>Company Info</h4>
+                  <ul>
+                    <li>
+                      <a href="home/page/Disclaimer.html">Disclaimer</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Privacy_Notice.html">
+                        Privacy Policy</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Cookie_Policy.html">
+                        Cookie Policy</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Terms_Of_Use.html">Terms of Use</a>
+                    </li>
+                    <li>
+                      <a href="home/page/affiliate_terms_of_use.html">Affiliate Terms of Use</a>
+                    </li>
+                    <li>
+                      <a href="home/page/shop_terms_of_use.html">Shop Terms of Use</a>
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+              <div class="col-sm-6 col-lg-2 widget_column  for_mobile_right">
+
+                <div class="forth_column">
+                  <h4>Discovery</h4>
+                  <ul>
+                    <li>
+                      <a href="home/page/About_Us.html">
+                        About Us</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Services.html">Services</a>
+                    </li>
+                    <li>
+                      <a href="home/page/career.html">Career</a>
+                    </li>
+                    <li>
+                      <a href="home/blog.html">Articles</a>
+                    </li>
+
+                  </ul>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer_container">
+      <div class="footerbtn">
+        <a href="vendor_logup/registration.html">
+          SIGN-UP to Add a Listing
+        </a>
+        <a href="directory.html">
+          Visit Directory
+        </a>
+        <a href="home/login_set/registration.html">
+          Join Our Affiliate Marketing
+        </a>
+      </div>
+    </div>
+    </div>
+    <!--meddle section-->
+
+    <div class="mhl_copyright_footer">
+      <div class="copyright_container">
+        <p>Copyright &copy; 2023 <span>|</span> Community HubLand Ltd</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Vendor JS Files -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js'></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>

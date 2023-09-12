@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prices | Community Hubland</title>
+
+  <!-- Favicons -->
+  <link href="assets/images/favicon.png" rel="icon">
+  <link href="assets/images/favicon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css' />
+  <link rel='stylesheet'
+    href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css' />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css' />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css' />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css" />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css' />
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Template Main CSS File -->
+  <link href="assets/scss/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <!-- Shape Boxes -->
+  <div class="dotted_lines">
+    <img src="assets/images/doted-lines.png" alt="">
+  </div>
+  <!-- <div class="ellipse">
+        <img src="assets/images/Ellipse.png" alt="">
+    </div> -->
+  <div class="lines_shape">
+    <img src="assets/images/lines-shape.png" alt="">
+  </div>
+  <!-- <div class="rounded_box">
+        <img src="assets/images/rounded.png" alt="">
+    </div> -->
+
+  <!-- Header -->
+  <header data-aos="fade-down" data-aos-duration="1000">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="assets/images/logo.png" alt="Logo" class="img-fluid">
+        </a>
+        <div class="mobile-open">
+          <a href="#" class="cart-btn-mb btn btn-theme-transparent hidden-ld" data-toggle="modal"
+            data-target="#popup-cart">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="hidden-xs">
+              <span class="cart_num">0</span>
+            </span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="fa fa-bars"></span>
+          </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                COMMUNITY PEGS
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Jobs</a></li>
+                <li><a class="dropdown-item" href="#">Charities</a></li>
+                <li><a class="dropdown-item" href="#">Education</a></li>
+                <li><a class="dropdown-item" href="#">Worship</a></li>
+                <li><a class="dropdown-item" href="#">Blogs</a></li>
+                <li><a class="dropdown-item" href="#">Markets</a></li>
+                <li><a class="dropdown-item" href="#">Short Stays</a></li>
+                <li><a class="dropdown-item" href="#">Activities</a></li>
+                <li><a class="dropdown-item" href="#">Other</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Shop</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Directory
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">All Listings</a></li>
+                <li><a class="dropdown-item" href="#">Places</a></li>
+                <li><a class="dropdown-item" href="#">Affiliate</a></li>
+                <li><a class="dropdown-item" href="#">Blogs</a></li>
+                <li><a class="dropdown-item" href="#">Job</a></li>
+                <li><a class="dropdown-item" href="#">Event</a></li>
+                <li><a class="dropdown-item" href="#">News</a></li>
+                <li><a class="dropdown-item" href="#">Charities</a></li>
+                <li><a class="dropdown-item" href="#">Properties</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Account</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">FAQ</a>
+            </li>
+            <li class="nav-item add-listing">
+              <a href="vendor_logup/registration.html" class="">Add Listing
+                <i class="fa fa-plus"></i>
+              </a>
+            </li>
+            <li class="nav-item dropdown signup">
+              <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-box-arrow-in-right"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Customer Login</a></li>
+                <li><a class="dropdown-item" href="#">Customer Sign-up</a></li>
+                <li><a class="dropdown-item" href="#">Vendor Login</a></li>
+                <li><a class="dropdown-item" href="#">Vendor Sign-up</a></li>
+              </ul>
+            </li>
+            <li class="nav-item cart-btn-item">
+              <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="hidden-xs">
+                  <span class="cart_num">0</span>
+                  Item(s)
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="pricing-offer">
+      <div class="container">
+        <ul class="nav nav-pills mb-3" id="pricing-table" role="tablist" data-aos="fade-up" data-aos-duration="1000"
+          data-aos-delay="0">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="monthly-tab" data-bs-toggle="pill" data-bs-target="#monthly"
+              type="button" role="tab" aria-controls="monthly" aria-selected="true">Monthly</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="quarterly-tab" data-bs-toggle="pill" data-bs-target="#quarterly" type="button"
+              role="tab" aria-controls="quarterly" aria-selected="false">Quarterly</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="half-tab" data-bs-toggle="pill" data-bs-target="#half" type="button" role="tab"
+              aria-controls="half" aria-selected="false">Half Year</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="yearly-tab" data-bs-toggle="pill" data-bs-target="#yearly" type="button"
+              role="tab" aria-controls="yearly" aria-selected="false">Yearly</button>
+          </li>
+        </ul>
+        <div class="tab-content" id="pricing-tableContent">
+          <div class="tab-pane fade show active" id="monthly" role="tabpanel" aria-labelledby="monthly-tab"
+            tabindex="0">
+            <div class="price-boxes-wrap">
+              <div class="row">
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+                    <div class="pricingTable-header">
+                      <i class="fa fa-adjust"></i>
+                      <div class="price-value"> $10.00 <span class="month">per month</span> </div>
+                    </div>
+                    <h3 class="heading">Standard</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>50GB</b> Disk Space</li>
+                        <li><b>50</b> Email Accounts</li>
+                        <li><b>50GB</b> Monthly Bandwidth</li>
+                        <li><b>50</b> Email Accounts</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable green" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                    <div class="discount-badge">
+                      <div class="badge-circle">
+                        <p>Save <span class="discount">20%</span></p>
+                      </div>
+                    </div>
+                    <div class="pricingTable-header">
+                      <i class="fa fa-briefcase"></i>
+                      <div class="price-value"> $20.00 <span class="month">per month</span> </div>
+                    </div>
+                    <h3 class="heading">Business</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>60GB</b> Disk Space</li>
+                        <li><b>60</b> Email Accounts</li>
+                        <li><b>20</b> Domains</li>
+                        <li><b>50</b> Email Accounts</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable blue" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
+                    <div class="pricingTable-header">
+                      <i class="fa fa-diamond"></i>
+                      <div class="price-value"> $30.00 <span class="month">per month</span> </div>
+                    </div>
+                    <h3 class="heading">Premium</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>70GB</b> Disk Space</li>
+                        <li><b>70GB</b> Monthly Bandwidth</li>
+                        <li><b>20</b> subdomains</li>
+                        <li><b>50</b> Email Accounts</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="quarterly" role="tabpanel" aria-labelledby="quarterly-tab" tabindex="0">
+            <div class="price-boxes-wrap">
+              <div class="row">
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+                    <div class="pricingTable-header">
+                      <i class="fa fa-adjust"></i>
+                      <div class="price-value"> $10.00 <span class="month">four months</span> </div>
+                    </div>
+                    <h3 class="heading">Standard</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>50GB</b> Disk Space</li>
+                        <li><b>50</b> Email Accounts</li>
+                        <li><b>50GB</b> Monthly Bandwidth</li>
+                        <li><b>50</b> Email Accounts</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable green" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                    <div class="pricingTable-header">
+                      <i class="fa fa-briefcase"></i>
+                      <div class="price-value"> $20.00 <span class="month">four months</span> </div>
+                    </div>
+                    <h3 class="heading">Business</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>60GB</b> Disk Space</li>
+                        <li><b>60</b> Email Accounts</li>
+                        <li><b>20</b> Domains</li>
+                        <li><b>50</b> Email Accounts</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable blue" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">
+                    <div class="pricingTable-header">
+                      <i class="fa fa-diamond"></i>
+                      <div class="price-value"> $30.00 <span class="month">four months</span> </div>
+                    </div>
+                    <h3 class="heading">Premium</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>70GB</b> Disk Space</li>
+                        <li><b>70GB</b> Monthly Bandwidth</li>
+                        <li><b>20</b> subdomains</li>
+                        <li><b>50</b> Email Accounts</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="half" role="tabpanel" aria-labelledby="half-tab" tabindex="0">
+            <div class="price-boxes-wrap">
+              <div class="row">
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable">
+                    <div class="pricingTable-header">
+                      <i class="fa fa-adjust"></i>
+                      <div class="price-value"> $10.00 <span class="month">six months</span> </div>
+                    </div>
+                    <h3 class="heading">Standard</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>50GB</b> Disk Space</li>
+                        <li><b>50</b> Email Accounts</li>
+                        <li><b>50GB</b> Monthly Bandwidth</li>
+                        <li><b>50</b> Email Accounts</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable green">
+                    <div class="pricingTable-header">
+                      <i class="fa fa-briefcase"></i>
+                      <div class="price-value"> $20.00 <span class="month">six months</span> </div>
+                    </div>
+                    <h3 class="heading">Business</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>60GB</b> Disk Space</li>
+                        <li><b>60</b> Email Accounts</li>
+                        <li><b>20</b> Domains</li>
+                        <li><b>50</b> Email Accounts</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable blue">
+                    <div class="pricingTable-header">
+                      <i class="fa fa-diamond"></i>
+                      <div class="price-value"> $30.00 <span class="month">six months</span> </div>
+                    </div>
+                    <h3 class="heading">Premium</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>70GB</b> Disk Space</li>
+                        <li><b>70GB</b> Monthly Bandwidth</li>
+                        <li><b>20</b> subdomains</li>
+                        <li><b>50</b> Email Accounts</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="yearly" role="tabpanel" aria-labelledby="yearly-tab" tabindex="0">
+            <div class="price-boxes-wrap">
+              <div class="row">
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable">
+                    <div class="pricingTable-header">
+                      <i class="fa fa-adjust"></i>
+                      <div class="price-value"> $10.00 <span class="month">per year</span> </div>
+                    </div>
+                    <h3 class="heading">Standard</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>50GB</b> Disk Space</li>
+                        <li><b>50</b> Email Accounts</li>
+                        <li><b>50GB</b> Monthly Bandwidth</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable green">
+                    <div class="pricingTable-header">
+                      <i class="fa fa-briefcase"></i>
+                      <div class="price-value"> $20.00 <span class="month">per year</span> </div>
+                    </div>
+                    <h3 class="heading">Business</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>60GB</b> Disk Space</li>
+                        <li><b>60</b> Email Accounts</li>
+                        <li><b>20</b> Domains</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                  <div class="pricingTable blue">
+                    <div class="pricingTable-header">
+                      <i class="fa fa-diamond"></i>
+                      <div class="price-value"> $30.00 <span class="month">per year</span> </div>
+                    </div>
+                    <h3 class="heading">Premium</h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>70GB</b> Disk Space</li>
+                        <li><b>70GB</b> Monthly Bandwidth</li>
+                        <li><b>20</b> subdomains</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="#">sign up</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="coupon-wrap">
+          <div class="row align-items-center">
+            <div class="col-md-6">
+              <div class="form-side">
+                <form action="">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Add Promo Code" aria-label="Add Promo Code"
+                        aria-describedby="button-addon2">
+                      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Coupon</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="skip-btn">
+                <a href="#" class="skip primary-btn">Skip And Continue</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer_warp">
+    <div class="container">
+      <div class="footer_up">
+        <!--footer logo start here-->
+        <div class="footer_container first-container">
+          <div class="row align-items-center">
+            <div class="col-lg-3 col-md-6 footer_logo">
+              <a href="#"><img src="assets/images/logo.png" class="img-fluid" alt=""></a>
+              <form action="https://dev.communityhubland.com//home/subscribe"
+                class="mhl_subscribe_fields subscribe_form mt-3" method="post" accept-charset="utf-8">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <button class="btn send-btn" type="button" id="button-addon2">Subscribe</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-3 offset-md-3">
+            </div>
+          </div>
+          <!--footer logo Ends here-->
+          <!--footer subscribe Starts here-->
+        </div>
+        <!--footer subscribe Ends here-->
+        <div class="footer_container">
+          <div class="flex_boxes_4 p-0">
+            <!--meddle section-->
+            <div class="row">
+              <!--margin_in_between <div class="col-md-4 resposinve_set hide_me"> -->
+              <div class="col-lg-4 col-sm-6">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <img src="assets/images/volume.png" alt="">
+                  </div>
+                  <div class="col-sm-9">
+                    <div class="about-us">
+                      <h4 class="about_title">About US</h4>
+                      <p>Hire our experienced team of programmers, digital
+                        designers, and marketing professionals.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-sm-6 widget_column">
+                <div class="sec_column">
+                  <h4 class="add_margin_left">Community Pegs</h4>
+                  <div class="align_footer">
+                    <ul class="span_bullets">
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/78.html">Jobs</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/134.html">
+                          Charities</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/305.html">Education</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/351.html">Worship</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/369.html">
+                          Blogs</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/386.html">Markets</a>
+                      </li>
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/431.html">Short Stays</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/429.html">Activities</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/1102.html">Other</a>
+                      </li>
+
+                      <li class="span_bullets_arrows" i="i">
+                        <a href="home/category/853.html">Networking</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/646.html">Stores</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/872.html">Services</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2 widget_column  for_mobile_left">
+
+                <div class="third_column">
+                  <h4>Company Info</h4>
+                  <ul>
+                    <li>
+                      <a href="home/page/Disclaimer.html">Disclaimer</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Privacy_Notice.html">
+                        Privacy Policy</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Cookie_Policy.html">
+                        Cookie Policy</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Terms_Of_Use.html">Terms of Use</a>
+                    </li>
+                    <li>
+                      <a href="home/page/affiliate_terms_of_use.html">Affiliate Terms of Use</a>
+                    </li>
+                    <li>
+                      <a href="home/page/shop_terms_of_use.html">Shop Terms of Use</a>
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+              <div class="col-sm-6 col-lg-2 widget_column  for_mobile_right">
+
+                <div class="forth_column">
+                  <h4>Discovery</h4>
+                  <ul>
+                    <li>
+                      <a href="home/page/About_Us.html">
+                        About Us</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Services.html">Services</a>
+                    </li>
+                    <li>
+                      <a href="home/page/career.html">Career</a>
+                    </li>
+                    <li>
+                      <a href="home/blog.html">Articles</a>
+                    </li>
+
+                  </ul>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer_container">
+      <div class="footerbtn">
+        <a href="vendor_logup/registration.html">
+          SIGN-UP to Add a Listing
+        </a>
+        <a href="directory.html">
+          Visit Directory
+        </a>
+        <a href="home/login_set/registration.html">
+          Join Our Affiliate Marketing
+        </a>
+      </div>
+    </div>
+    </div>
+    <!--meddle section-->
+
+    <div class="mhl_copyright_footer">
+      <div class="copyright_container">
+        <p>Copyright &copy; 2023 <span>|</span> Community HubLand Ltd</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Vendor JS Files -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js'></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>

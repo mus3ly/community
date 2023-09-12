@@ -25,12 +25,11 @@ class Crud_model extends CI_Model
         {
             if($i <= $rate)
             {
-                $html .= '<i class="fa fa-star" style="color:#f26122 !important;"></i>';
+                $html .= '<i class="fa fa-star rated"></i>';
             }
             else
-            {
-                $html .= '<i class="fa fa-star" style="color:#cdcdcd !important;"></i>
-';
+            { 
+                $html .= '<i class="fa fa-star"></i>';
             }
         }
         return $html;
@@ -648,6 +647,12 @@ foreach($vendors as $kk=> $vv)
             return base_url() . 'home/quick_view/' . $product_id;
         } else {
             $s = url_title($this->crud_model->get_type_name_by_id('product', $product_id, 'slug'));
+            if(!$s)
+            {
+                create_slug($product_id);
+                $s = url_title($this->crud_model->get_type_name_by_id('product', $product_id, 'slug'));
+                //update slug here
+            }
             return base_url() .$s;
         }
     }
@@ -1614,7 +1619,6 @@ foreach($vendors as $kk=> $vv)
         if ($user_type == 'admin') {
             $user_id = $added_by['id'];
         }
-        $this->benchmark->mark_time();
         if ($added_by['type'] == $user_type && $added_by['id'] == $user_id) {
             return true;
         } else {
@@ -1995,6 +1999,8 @@ foreach($vendors as $kk=> $vv)
 
     function can_add_product($vendor)
     {
+        return true;//for testing
+        
         $membership = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->membership;
         // die($membership);
         $expire = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->member_expire_timestamp;
@@ -2155,7 +2161,6 @@ foreach($vendors as $kk=> $vv)
         $admin = $this->db->get_where('admin', array(
             'admin_id' => $admin_id
         ))->row();
-        $this->benchmark->mark_time();
 
         $permission_obj = $this->db->get_where('permission', array(
             'codename' => $codename
@@ -2270,10 +2275,10 @@ foreach($vendors as $kk=> $vv)
             ));
         }
         $html = 'Item add tio wishlist successfully! click here to <a href="'.base_url('home/wish_listed').'">View Wishlist</a>';
-        $this->session->set_flashdata('message', $html);
-        redirect($_SERVER['HTTP_REFERER'], 'refresh');
+        $this->session->set_flashdata('success', $html);
+        custom_redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{
-            redirect(base_url().'/login_set/login', 'refresh');
+            custom_redirect(base_url().'/login_set/login');
         }
     }
 // function add_wish($product_id)

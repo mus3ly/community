@@ -2,6 +2,102 @@
 	<!--Chosen [ OPTIONAL ]-->
 	<link href="<?= base_url() ?>/template/back/plugins/chosen/chosen.min.css" rel="stylesheet">
 <style>
+ 
+ #new_checkout .form-group{
+     margin-bottom:20px;
+     display:flex;
+ }
+ 
+ #new_checkout .block-title{
+     margin-bottom:10px;
+ }
+ 
+
+ #new_checkout .col-md-3 {
+   margin-left:10px;
+    width: 24%;
+}
+
+#new_checkout .col-md-12{
+    height:70px;
+}
+#new_checkout .ship_btn{
+        padding: 6px 30px;
+    color: white;
+}
+
+.shopping-cart{
+    background: #fff;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0px 1px 2px gray;
+}
+
+.shopping-cart h5{
+    padding-top: 11px;
+    padding-bottom: 15px;
+}
+
+.shopping-cart .coupon_btn{
+     background-color: #f36022;
+    color: white;
+   
+}
+
+#new_checkout .btn-theme-dark {
+    background: #f26122;
+    margin: 0 9px 0 0;
+    padding: 6px 30px;
+    color: white;
+}
+
+#new_checkout .require_alert{
+    display:none;
+}
+
+#new_checkout .payments-options .cc-selector{
+    width:15%;
+}
+#new_checkout .payments-options .cc-selector img{
+    width:100%;
+}
+
+#new_checkout .payments-options{
+      padding-top: 15px;
+    padding-bottom: 15px;
+}
+  
+#order_place_btn {
+    position: absolute;
+    border: 1px solid gray;
+}
+
+#trasher {
+    position: relative;
+    right: 0px !important;
+}
+
+
+#new_checkout .product-quantity{
+    display:flex;
+}
+
+#new_checkout td h4{
+    font-size:18px;
+}
+
+#new_checkout .quantity_field{
+    width: 60px;
+    padding: 0px;
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+}
+
+
+
+
+
     #order_place_btn{
         position: absolute;
     }
@@ -73,7 +169,7 @@ echo form_open(base_url() . 'home/cart_finish/go', array(
         <div class="panel-group payments-options" id="accordion" role="tablist" aria-multiselectable="true">
         </div>
         <div class="col-md-12 overflowed">
-            <a class="btn btn-theme-dark" href="<?php echo base_url(); ?>home/cancel_order">
+            <a class="btn btn-theme-dark pull-left" href="<?php echo base_url(); ?>home/cancel_order">
                 <?php echo translate('cancel_order');?>
             </a>
             <span class="btn btn-theme pull-right disabled" id="order_place_btn" onclick="cart_submission(this);">
@@ -84,6 +180,7 @@ echo form_open(base_url() . 'home/cart_finish/go', array(
 </section>
 <!-- /PAGE -->
 <?php echo form_close()?>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript" src="<?= base_url(); ?>/template/back/plugins/chosen/chosen.jquery.min.js" ></script>
 <script>
 function other(){
@@ -115,10 +212,10 @@ function other(){
     }
     $(document).ready(function(){
 		var top = Number(200);
-// 		alert("Here84");
+		load_address_form();
 		$('.orders').hide();
 // 		$('.delivery_address').html(' ');
-        var state = check_login_stat('state');
+        /*var state = check_login_stat('state');
         state.success(function (data) {
             load_address_form();
             
@@ -129,7 +226,7 @@ function other(){
             // } else {
             //     signin('guest_checkout');
             // }
-        });
+        });*/
     });
     function load_smethods(){
         
@@ -290,6 +387,18 @@ function other(){
         $( "#mastercard" ).prop( "checked", false );
         $( "#bitcoin" ).prop( "checked", false );
         $( "#"+id ).prop( "checked", true );
+    }
+    function cart_submission(elem){
+
+        if(elem.hasAttribute("disabled") || elem.classList.contains("disabled")){
+            return;
+        }
+
+        var payment_type = $('#ab').val();
+        var form = $('#cart_form');
+        alert(payment_type);
+        
+                 form.submit();
     }
 
     function ship_check(id){

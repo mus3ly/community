@@ -21,6 +21,15 @@
                             	class="form-control required" placeholder="<?php echo translate('name');?>" >
 					</div>
 				</div>
+				<div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1">
+                	<?php echo translate('status');?>
+                    	</label>
+                <div class="col-sm-6">
+                    <input type="checkbox" name="status" id="demo-hor-1" 
+                     value="<?php echo (isset($row['status']) && $row['status'] == 1) ? $row['status'] : '1' ;?>" <?= (isset($row['status']) && $row['status'] == 1) ? 'checked': '' ; ?>	class="" placeholder="<?php echo translate('name');?>" >
+                </div>
+            </div>
 			</div>
 		</form>
 	</div>

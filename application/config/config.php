@@ -459,7 +459,7 @@ $config['global_xss_filtering'] = TRUE;
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
 
-$config['csrf_protection'] 		= TRUE;
+$config['csrf_protection'] 		= FALSE;
 $config['csrf_token_name'] 		= 'csrf_test_name';
 $config['csrf_cookie_name'] 	= 'csrf_cookie_name';
 $config['csrf_expire'] 			= 7200;
@@ -480,9 +480,11 @@ $config['csrf_exclude_uris'] 	= array('home/paypal_success',
 									'home/listed/click/[0-9]+',
 									'home/ticket_reply/[0-9]+',
 									'home/ticket_message_add',
+									'vendor/address/do_add',
 									'vendor/gupload',
 									'home/text_search',
 									'home/email',
+									'webhook/payment_webhook',
 									'home/add_rate',
 									'admin/display_settings',
 									'home/twocheckout_success',

@@ -1,4 +1,7 @@
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script>
 	var base_url = "<?php echo base_url(); ?>"; 
 	var product_added = "<?php echo translate('product_added_to_cart'); ?>";
@@ -48,7 +51,50 @@
 
 	var $j = jQuery.noConflict();
 	var $ = jQuery.noConflict();
+	function search_location()
+{
+    console.log("Here");
 
+    var str = $('#right_box').val();
+    //
+    console.log();
+    if(str.length >= 2 )
+    {
+        $('#map_search #loader').show();
+        $('#map_search #result').hide();
+        $.ajax({
+        url: "<?= base_url('home/srch_loc'); ?>?str="+str,
+        type: 'GET',
+        // dataType: 'json', // added data type
+        success: function(res) {
+            $('#map_search #loader').hide();
+            $('#map_search #result').show();
+            $('#map_search #result').html(res);
+            // alert(res);
+        }
+    });
+
+    }
+    else
+    {
+        $('#map_search #result').hide();
+    }
+}
+function select_place(place,txt)
+{
+    $('#right_box').val(txt);
+    $('#place_id').val(place);
+    $('#map_search #result').hide();
+    if(directory)
+    {
+        submit_dform();
+    }
+
+}
+    function open_sidebar()
+    {
+        $('.navbar_box_items').toggle();
+    }
 	function product_listing_defaults(){
 
 		reload_header_cart();
@@ -772,11 +818,14 @@ if (keyCode == 13){
 				}			
 			},
 			success: function(data) {
-				$j('.ajax-to-cart').removeClass('btn--wait');
+			    data = data.trim();
+				// $j('.ajax-to-cart').removeClass('btn--wait');
 				if(data == 'added'){
-					reload_header_cart();
+				// 	reload_header_cart();
 					notify(product_added,'success','bottom','right');
-					//sound('successful_cart');
+				// 	sound('successful_cart');
+					window.location.href = "<?= base_url('home/cart_checkout'); ?>";
+
 				} else if (data == 'shortage'){
 					notify(quantity_exceeds,'warning','bottom','right');
 					//sound('cart_shortage');
@@ -836,20 +885,20 @@ if (keyCode == 13){
 	
 	
 	function notify(message,type,from,align){
-	    $.notify(message,type, {position:align});
-	    message = 'we are just testing';
-		$.notify({
-			// options
-			message: message 
-		},{
-			// settings
-			type: type,
-			placement: {
-				from: from,
-				align: align,
-				delay:5000
-			}
-		});
+	    Toastify({
+  text: message,
+  duration: 3000,
+  destination: "https://github.com/apvarun/toastify-js",
+  newWindow: true,
+  close: true,
+  gravity: "top", // `top` or `bottom`
+  position: "left", // `left`, `center` or `right`
+  stopOnFocus: true, // Prevents dismissing of toast on hover
+  style: {
+    background: "linear-gradient(to right, #00b09b, #96c93d)",
+  },
+  onClick: function(){} // Callback after click
+}).showToast();
 		
 	}
 	
@@ -1115,6 +1164,11 @@ if (keyCode == 13){
 					here.html(ing); // change submit button text
 				},
 				success: function(data) {
+				    data= data.trim();
+				    if(data == 'vendor_promo'){
+				        location.replace("<?php echo base_url(); ?>home/vendor_login_msg");
+						return 0;
+				    }
 					here.fadeIn();
 					here.html(prv);
 					if(data == 'checkout'){
@@ -1127,7 +1181,7 @@ if (keyCode == 13){
 						);
 						//sound('successful_logup');  		
 					}
-					else if(data == 'done'){
+					else if(data == 'vendor_promo'){
 						notify(logup_success,'success','bottom','right'); 
 						setTimeout(
 							function() {

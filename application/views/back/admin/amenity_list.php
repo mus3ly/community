@@ -1,24 +1,23 @@
 	<div class="panel-body" id="demo_s">
-
+<?php
+      $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value,true);
+                
+?>
 	    <select onchange="slevel()" id="amn" name="level">
 			            <option value="0" selected>Select Category</option>
-                        <option value="0" <?= (isset($_GET['level']) && $_GET['level'] == '0')?"selected":""; ?>>General</option>
-                        <option value="808" <?= (isset($_GET['level']) && $_GET['level'] == '808')?"selected":""; ?>>Property</option>
-                        <option value="807" <?= (isset($_GET['level']) && $_GET['level'] == '807')?"selected":""; ?>>Cars</option>
-                        <option value="917" <?= (isset($_GET['level']) && $_GET['level'] == '917')?"selected":""; ?>>Events</option>
-                        <option value="856" <?= (isset($_GET['level']) && $_GET['level'] == '856')?"selected":""; ?>>Hotels</option>
-                        <option value="78" <?= (isset($_GET['level']) && $_GET['level'] == '78')?"selected":""; ?>>Jobs</option>
-                        <option value="321" <?= (isset($_GET['level']) && $_GET['level'] == '321')?"selected":""; ?>>Restaurants</option>
-                        <option value="77" <?= (isset($_GET['level']) && $_GET['level'] == '77')?"selected":""; ?>>Fashion</option>
-			<?php /*
-			for($i = 1; $i<=$tlevel;$i++)
-			{
-				?>
-					<option value="<?= $i ?>" <?= (isset($_GET['level']) && $_GET['level'] == $i)?"selected":""; ?>><?= $i ?> Level</option>
-				<?php
-
-			} */
-			?>
+			            <?php
+			            foreach($categories as $k => $v){
+			                $cat = $this->db->get_where('category', array('category_id' => $v))->result_array();
+			                foreach($cat as $key => $value){
+			                   ?>
+			                   <option value="<?= $value['category_id']; ?>" <?= (isset($_GET['level']) && $_GET['level'] == $value['category_id'])?"selected":""; ?>><?= $value['category_name']; ?></option>
+			                   <?php
+			                }
+                        }
+			            ?>
+			            <option value="st_1" <?= (isset($_GET['level']) && $_GET['level'] == "st_1")?"selected":""; ?>>Approved</option>
+			            <option value="st_2" <?= (isset($_GET['level']) && $_GET['level'] == "st_2")?"selected":""; ?>>Pending</option>
+                        
 		</select>
 	    
 		<table id="demo-table" class="table table-striped"  data-pagination="true" data-show-refresh="true" data-ignorecol="0,4" data-show-toggle="true" data-show-columns="false" data-search="true" >
@@ -28,6 +27,7 @@
 					<th><?php echo translate('no');?></th>
 					<th><?php echo translate('name');?></th>
 					<th><?php echo translate('Category');?></th>
+					<th><?php echo translate('Approve');?></th>
 					<th class="text-right"><?php echo translate('options');?></th>
 				</tr>
 			</thead>
@@ -43,6 +43,18 @@
                     
                     <td><?php echo $row['name']; ?></td>
                     <td><?php echo $row['category_name']; ?></td>
+                    <td>
+                    <?php 
+                    if($row['status'] == '1'){
+                    ?>
+                    <input id="pub_<?= $row['amenity_id']?>"   class='sw1 form-control'   type="checkbox" data-id="<?= $row['amenity_id']?>" checked />
+               <?php 
+               } else 
+               {?>
+                  <input id="pub_<?= $row['amenity_id']?>"  class='sw1 form-control'   type="checkbox" data-id="<?= $row['amenity_id']?>" />
+               <?php
+               }
+                ?></td>
                     <td class="text-right">
                         <a class="btn btn-success btn-xs btn-labeled fa fa-wrench" data-toggle="tooltip" 
                             onclick="ajax_modal('edit','<?php echo translate('edit_amenity_(_physical_product_)'); ?>','<?php echo translate('successfully_edited!'); ?>','amenity_edit','<?php echo $row['amenity_id']; ?>')" 

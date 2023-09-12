@@ -1,13 +1,30 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+<?php
+$othen = array();
+                    $this->db->order_by("bpage_sort", "asc");
+
+                    $mods = $this->db->where('bpage_check',1)->get('modules')->result_array();
+                    foreach($mods as $k=> $v)
+                    {
+                        $othen[] = $v['id'];
+                    }
+                    
+                    ?>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600&display=swap');
+
+    body{
+        font-family: 'Catamaran', sans-serif !important;
+    }
     .height_auto{
         height:auto !important;
         overflow: auto !important;;
     }
+#rateYo > .checked {
+  color: orange;
+}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <?php
-
 if(isset($_GET['test'])) {
     include "index_new.php";
     die();
@@ -63,7 +80,7 @@ $pros = $this->db->where("`added_by` LIKE '%".$vid."%' AND `added_by` LIKE '%ven
 
 $imgs = $this->db->where('pid',$pro['product_id'])->get('product_to_images')->result_array();
 
-$logo = '';
+$logo = base_url('img_avatar.png');
 
 $cat = '';
 
@@ -131,7 +148,7 @@ if($pro['lat'] && $pro['lng'])
 
 }
 
-if(true)
+if($pro['comp_logo'])
 
 {
 
@@ -200,8 +217,6 @@ if(true)
 
     <link id="favicon" rel="icon"  type="<?= base_url(); ?>template/front/images/favicon.png" href="<?= base_url(); ?>template/front/images/favicon.png">
 
-    <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/font-awesome.min.css" />
-
     <link rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/bootstrap.min.css">
 
     <link type="text/css" rel="stylesheet" href="<?= base_url(); ?>template/front/css-files/style.css" />
@@ -262,7 +277,7 @@ if(true)
 
 <div class="business_card">
 
-    <div class="container">
+    <div class="container  ">
 
         <?php
         if(!is_array($pro['enable_checks'])){
@@ -385,13 +400,13 @@ if(true)
 
 
                         </p>
-
+                        
                         <?php
 
                         echo $this->crud_model->rate_html($pro['rating_num']);
 
                         ?>
-
+                        
 
 
                         <ul style="display:none">
@@ -472,7 +487,7 @@ if(true)
 
 <div class="tabs_wrap">
 
-    <div class="container">
+    <div class="container  ">
 
         <div class="inner_tabs">
 
@@ -483,14 +498,31 @@ if(true)
                 if($pro['default_tab'] == 'tab_3'){?>
 
                     <li class="tab-link__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_3' ?"current":""; ?>" data-tab="tab_3">Blogs</li>
+                    
 
                     <li class="tab-link__box" data-tab="tab_1">Profile</li>
+                    
+                    <?php
+                    $lmod = array();
+                    
+                    foreach($mods as $k=> $v)
+                    {
+                        $lmod[] = $v['id'];
+                        ?>
+                        <li class="tab-link__box" data-tab="tab_m<?= $v['id'] ?>"><?= $v['bpage_text']; ?></li>
+                        <?php
+                    }
+                    ?>
 
-                    <li class="tab-link__box" data-tab="tab_2">Events</li>
-
-                    <li class="tab-link__box" data-tab="tab_4">Jobs</li>
-
-                    <li class="tab-link__box" data-tab="tab_5">Store</li>
+                    <li class="tab-link__box " data-tab="tab_5">Store
+                     
+                        <ul class="bp_hover_box">
+                            <li><a href="">All listing</a></li>
+                            <li><a href=""></a>Directory</li>
+                            <li><a href=""></a>Shop</li>
+                        </ul>
+                    
+                    </li>
 
                     <li class="tab-link__box" data-tab="tab_6">Reviews</li>
 
@@ -504,15 +536,26 @@ if(true)
 
                     <li class="tab-link__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_1' ?"current":""; ?>" data-tab="tab_1">Profile</li>
 
-                    <li class="tab-link__box" data-tab="tab_3">Blogs</li>
+                    <?php
+                    $lmod = array();
+                    
+                    foreach($mods as $k=> $v)
+                    {
+                        $lmod[] = $v['id'];
+                        ?>
+                        <li class="tab-link__box" data-tab="tab_m<?= $v['id'] ?>"><?= $v['bpage_text']; ?></li>
+                        <?php
+                    }
+                    ?>
 
-                    <li class="tab-link__box" data-tab="tab_2">Events</li>
-
-
-
-                    <li class="tab-link__box" data-tab="tab_4">Jobs</li>
-
-                    <li class="tab-link__box" data-tab="tab_5">Store</li>
+                    <li class="tab-link__box bp_hover_box_parent" data-tab="tab_5">Store
+                    
+                        <ul class="bp_hover_box">
+                            <li><a href="">All listing</a></li>
+                            <li><a href=""></a>Blogs</li>
+                            <li><a href=""></a>Products</li>
+                        </ul>
+                        </li>
 
                     <li class="tab-link__box" data-tab="tab_6">Reviews</li>
 
@@ -531,13 +574,104 @@ if(true)
         </div>
 
     </div>
+    <div id="tab_5" class="tab-content__box">
+        ><?php
+        //$vid
+    $pros = $this->db->get('product')->result_array();
+        ?>
+
+        <div class="container ">
+            <div class="row">
+            <?php
+
+            foreach($pros as $sing)
+
+            {
+                $arr = json_decode($sing['added_by'],true);
+                if(isset($arr['type']) && $arr['type'] == 'vendor' && $arr['id'] == $vid && !in_array($sing['module'],$othen))
+                {
+                ?>
+
+
+
+                <div class="col-md-4">
+
+                        <?php
+
+                        echo $this->html_model->product_box($sing, 'grid', 1);
+
+                        ?>
+
+                    </div>
+                    <?php
+                }
+
+            }
+
+            ?>
+            </div>
+
+
+
+        </div>
+
+    </div>
+    
+    <?php
+
+foreach($mods as $k=> $v)
+{
+    
+    
+    ?>
+    <div id="tab_m<?= $v['id'] ?>" class="tab-content__box">
+        ><?php
+        $mid = $v['id'];
+        //$vid
+    $pros = $this->db->where('module',$mid)->get('product')->result_array();
+        ?>
+
+        <div class="container ">
+            <div class="row">
+            <?php
+
+            foreach($pros as $sing)
+
+            {
+                $arr = json_decode($sing['added_by'],true);
+                if(isset($arr['type']) && $arr['type'] == 'vendor' && $arr['id'] == $vid)
+                {
+                ?>
+
+
+
+                <div class="col-md-4">
+
+                        <?php
+
+                        echo $this->html_model->product_box($sing, 'grid', 1);
+
+                        ?>
+
+                    </div>
+                    <?php
+                }
+
+            }
+
+            ?>
+            </div>
+
+
+
+        </div>
+
+    </div>
+    <?php
+}
+?>
 
     <div id="tab_1" class="tab-content__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_1' ?"current":""; ?>">
-
-
-
-
-
         <div class="advertise_wrap" style="padding-bottom: 0;">
 
             <div class="clipart">
@@ -560,7 +694,7 @@ if(true)
 
             </div>
 
-            <div class="container">
+            <div class="container  ">
 
                 <?php
 
@@ -570,9 +704,9 @@ if(true)
 
                     ?>
 
-                    <div class="row" id="advertise_info">
+                    <div class="row section_spacing_bottom" id="advertise_info">
 
-                        <div class="col-sm-4 business_graphic" id="business__graphic">
+                        <div class="col-sm-4 business_graphic " id="business__graphic">
 
 
 
@@ -630,7 +764,7 @@ if(true)
 
                             <div id="equal_btnw1" style="    margin-bottom: 15px;">
 
-                                <div class="learn_more_btns" style="padding:0px;">
+                                <div class="learn_more_btn_bp" style="padding:0px;">
 
                                     <?php
 
@@ -689,6 +823,7 @@ if(true)
                 }
 
                 ?>
+                <div class="sec_div_wrap section_spacing_top section_spacing_bottom">
 
                 <?php
 
@@ -743,6 +878,12 @@ if(true)
                         <?php
 
                         for($i= 1; $i<=$num; $i++)
+                        {
+                            if(!$content[$k]['data']) {
+                                unset($content[$k]);
+                            }
+                        }
+                        for($i= 1; $i<=$num; $i++)
 
                         {
                             $k = $i -1;
@@ -753,7 +894,7 @@ if(true)
                             } elseif(strip_tags($content[0]) != "" && strip_tags($content[1]) == "" && strip_tags($content[2]) == ""){
                                 $class = 12;
                             }
-                            if(strip_tags($content[$k]) != "") {
+                            if($content[$k]['data']) {
                                 ?>
 
                                 <div class="col-sm-<?= $class ?> webdesign">
@@ -761,8 +902,19 @@ if(true)
                                     <div class="inner_box_design height_auto scroll"
                                          style="overflow-y: scroll;height:324px;min-height: 324px;max-height: 324px;">
 
-                                        <p>
-                                            <?php echo $content[$k]; ?>
+                                        <p class="box_with_img">
+                                            <?php 
+                                            if($content[$k]['type'] == 'img' && $content[$k]['data'])
+                                            {
+                                                ?>
+                                                <img src="<?= base_url().$content[$k]['data'] ?>" class="extra_img" />
+                                                <?php
+                                            }
+                                            else
+                                            {
+                                                echo $content[$k]['data'];
+                                            }
+                                            ?>
                                         </p>
 
                                     </div>
@@ -784,7 +936,7 @@ if(true)
                 }
 
                 ?>
-
+</div>
                 <?php
 
                 // if(in_array('event_images',$checks) && )
@@ -795,8 +947,8 @@ if(true)
                     ?>
 
 
-
-                    <div class="verify_head" id="left_gp">
+                    <div class="dec_div_wrap">
+                    <div class="verify_head section_spacing_top" id="left_gp">
 
                         <h3><?= $pro['gallery_lable']; ?></h3>
 
@@ -859,7 +1011,7 @@ if(true)
 
             ?>
 
-            <div class="container">
+            <div class="container  ">
 
 
 
@@ -921,12 +1073,12 @@ if(true)
 
 
 
-                        <div class="col-sm-12 right__boxlighbox">
+                        <div class="col-sm-12 right__boxlighbox responisve_slider_img">
 
                             <?php
 
                             $i = 0;
-                            if(count($imgs) >6 ) {
+                            if(count($imgs) >3 ) {
                                 foreach ($imgs as $k => $v) {
 
                                     $i = $i + 1;
@@ -1192,8 +1344,8 @@ if(true)
         ?>
 
             <div class="container">
-
-                <div class="verify_head" style="    padding: 10px 0px;">
+            <div class="third_sec_wrap section_spacing_top section_spacing_bottom">
+                <div class="verify_head ">
 
                     <h3><?= $pro['gtitle'] ?></h3>
 
@@ -1220,7 +1372,6 @@ if(true)
                             $added_by = json_decode($pro['added_by'], true);
 
                             if(isset($added_by['type']) && $added_by['type'] == 'vendor')
-
                             {
 
                                 $vid = $added_by['id'];
@@ -1229,14 +1380,11 @@ if(true)
 
                             $feature  = $this->db->where('vid',$vid)->get('textg')->result_array();
 
-                            // var_dump($feature);
-
                             $count = count($feature);
 
-                            // echo $count;
+                            echo $count;
 
                             if($feature && $count == 1)
-
                             {
 
                                 $i = 0;
@@ -1391,8 +1539,7 @@ if(true)
 
                                 }
 
-                            }elseif($feature && $count == '7' )
-
+                            }elseif($feature)
                             {
 
                                 $i = 0;
@@ -1438,8 +1585,10 @@ if(true)
                             {
 
                                 $value['ficon'] = $value['icon'];
+                                $media = $value['img'];
 
                                 $value['img'] = $this->crud_model->get_img($value['img'])->secure_url;
+                                $path = $this->crud_model->get_img($media)->path;
 
                                 $i++;
 
@@ -1450,8 +1599,7 @@ if(true)
                                 <div id="<?= $tab ?>" class="tab-content__ <?= ($i == 1)?"current__":""; ?>">
 
                                     <?php
-
-                                    if(!$value['img']){
+                                    if(!$value['img'] || !file_exists($path)){
 
                                         ?>
 
@@ -1479,7 +1627,7 @@ if(true)
 
                                         ?>
 
-                                        <div class="row" id="advertise_info" style="padding-top:16px;">
+                                        <div class="row fix_height" id="advertise_info" style="padding-top:16px;">
 
                                             <div class="col-sm-4 business_graphic" id="leftboxx">
 
@@ -1524,8 +1672,8 @@ if(true)
                     </div>
 
                 </div>
-
-
+    </div>
+    
 
                 <?php
 
@@ -1553,19 +1701,18 @@ if(true)
 
                 ?>
 
-                <div class="container"><div class="main_wrp">
+                <div class="container ">
+                    <div class="main_wrp section_spacing_bottom section_spacing_top">
 
 
 
-                        <div class="verify_head">
-
-                            <h3><?= $pro['about_title']; ?></h3>
-
-                        </div>
+                        
 
                         <div class="row">
+                           
 
                             <?php
+                            
 
                             if(trim($pro['about_desc']))
 
@@ -1574,10 +1721,15 @@ if(true)
                                 ?>
 
                                 <div class="col-sm-8 left_9bx">
+                 <div class="verify_head ">
 
+                            <h3><?= $pro['about_title']; ?></h3>
+
+                        </div>
+                        
                                     <div class="shadow_9" id="__space">
-
-                                        <div style="padding-bottom:10px;"> <?= $pro['about_desc']; ?></div>
+                                
+                                        <div style="padding-bottom:10px;"> <p><?= $pro['about_desc']; ?></p></div>
 
 
 
@@ -1658,14 +1810,15 @@ if(true)
                                         <!--<p>Hire our experienced team of programmers, digital designers, and marketing professionals, who know how to deliver results. With your requirements, we will help you identify your needs to reach solutions</p>-->
 
                                     </div>
-
-                                    <div class="container">
+                                </div>
+                                    <div class="container ">
 
                                         <div class="row">
+                                            <div class="col-md-8">
 
                                             <?php
-
-                                            if($pro['amen_check'] == 'yes'){
+                                                $cat = explode(',',$pro['amenities']);
+                                            if($cat){
 
                                                 ?>
 
@@ -1681,13 +1834,13 @@ if(true)
 
                                                         <div class="inner_sec">
 
-                                                            <div class="tag_container ammen_container" style="height:120px; overflow: hidden;">
+                                                            <div class="ammen_container" style="height:auto; overflow: hidden;">
 
                                                                 <?php
 
-                                                                $cat = explode(',',$pro['amenities']);
+                                                                
 
-                                                                foreach($cat as $k){
+                                                                foreach($cat as $kk=>$k){
 
                                                                     ?>
 
@@ -1706,10 +1859,20 @@ if(true)
                                                                 ?>
 
                                                             </div>
-
-                                                            <div class="more-link" align="center" style="width: 100%;
-    border-top: 1px solid #ccc;
-    background: #fdfbfb; padding:10px; cursor:pointer;" >View More</div>
+<?php
+if(count($cat))
+{
+?>
+                                                            <div class="amen_more more-link" align="center" style="    width: 100%;
+    border-top: 1px solid rgb(233 158 20 / 36%);
+    background: #fdfbfb;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #f16622;">View More</div>
+<?php
+}
+?>
 
                                                         </div>
 
@@ -1737,7 +1900,7 @@ if(true)
 
                                                     <div class="inner_sec">
 
-                                                        <div class="tag_container">
+                                                        <div class="tag_container " style="height:auto;overflow:hidden">
 
                                                             <?php
 
@@ -1764,26 +1927,28 @@ if(true)
 
 
                                                         </div>
+                                                                                                                    <?php
+if(count($cat))
+{
+?>
+                                                            <div class="tag_more" align="center" style="    width: 100%;
+    border-top: 1px solid rgb(233 158 20 / 36%);
+    background: #fdfbfb;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #f16622;">View More</div>
+<?php
+}
+?>
 
                                                     </div>
 
                                                 </div>
 
                                             </div>
-
-
-
-
-
-                                        </div>
-
-                                    </div>
-
-
-
-                                </div>
-
-                                <?php
+                                            </div>
+                                                <?php
 
                             }
 
@@ -1793,7 +1958,7 @@ if(true)
 
                                 ?>
 
-                                <div class="col-sm-4 left_9bx" id="right___gap">
+                                <div class="col-md-4 left_9bx" id="right___gap">
 
                                     <div class="shadow_9 icons_links" id="bg__social">
 
@@ -1903,9 +2068,21 @@ if(true)
 
                             ?>
 
+
+
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+                                
+
                         </div>
 
-                    </div></div>
+                    </div>
 
                 <?php
 
@@ -1915,7 +2092,7 @@ if(true)
 
 
 
-            <!--<div class="container">-->
+            <!--<div class="container  ">-->
 
             <!--         <div class="inner_box_info" style="    padding: 10px 16px;">-->
 
@@ -1931,35 +2108,9 @@ if(true)
 
 
 
-            <!-- <div class="tags_box">
+          
 
-                <ul>
-
-                    <?php
-
-            $tags = $pro['tag'];
-
-            $x = (explode(",",$tags));
-
-            foreach($x as $K => $v){
-
-                ?>
-
-                    <li><a href="#"><img src="#" alt=""> <?=  $v;?></a></li>
-
-                    <?php
-
-            }
-
-
-
-            ?>
-
-                   </ul>
-
-            </div> -->
-
-            <div class="container" style="display:<?= ($pro['info_desc'])?"block":"none" ?>">
+            <div class="container " style="display:<?= ($pro['info_desc'])?"block":"none" ?>">
 
                 <div class="mixcher_orange">
 
@@ -1990,6 +2141,7 @@ if(true)
                 </div>
 
             </div>
+            
 
 
 
@@ -1999,9 +2151,28 @@ if(true)
 
 
 
-            <div class="orange_pathwrap" id="bpage_form">
+           
 
-                <div class="container">
+        
+            
+
+
+
+
+            <div class="purple_line" id="intrested">
+
+                <img src="<?= base_url(); ?>template/front/images/base-icon.png" alt="">
+
+            </div>
+            
+
+
+           
+
+        </div>
+         <div class="orange_pathwrap" id="bpage_form">
+
+                <div class="container ">
 
                     <div class="iframe_box">
 
@@ -2012,18 +2183,11 @@ if(true)
 
 
                         <div class="getin_touch">
+ 
+                            
 
-                            <div class="alert alert-success d-none" id="success" role="alert">
-
-                                Email Send Successfully!
-
-                            </div>
-
-                            <div class="alert alert-danger d-none" id="danger" role="alert">
-
-                                Please Try Again!
-
-                            </div>
+  
+  
 
                             <h3>Get In Touch <img src="<?= base_url(); ?>upload/phone_2.png" alt=""></h3>
 
@@ -2150,26 +2314,51 @@ if(true)
                 </div>
 
             </div>
+            <div class="row">
+                <div class="container ">
+                <div class="col-md-12">
+                    <?php
+            if($pro['tag']){
+        ?>
+   <div class="tags_box box_icons">
+       <h3>TAGS</h3>
+
+                <div class="tags_out">
+
+                    <?php
+
+            $tags = $pro['tag'];
+
+            $x = (explode(",",$tags));
+
+            foreach($x as $K => $v){
+
+                ?> 
+                    <div class="tags_in tags_in_2" style="position:relative;">
+                    <span><img src="<?= base_url(); ?>/upload/checkk.png" alt=""></span><span><?=  $v;?></span>
+                    </div>
+                    <?php
+
+            }
 
 
 
+            ?>
 
+                   </ul>
 
-
-
-            <div class="purple_line" id="intrested">
-
-                <img src="<?= base_url(); ?>template/front/images/base-icon.png" alt="">
-
+            </div> 
+            <?php
+            }
+            ?>
             </div>
+            </div>
+            </div>
+             <div class="container " style="padding-top: 165px ;">
 
+                <div class="container ">
 
-
-            <div class="container" style="padding-top: 165px ;">
-
-                <div class="container">
-
-                    <div class="verify_head" style="    padding: 0 23px 0;">
+                    <div class="verify_head section_spacing_top" style="    padding: 0 23px 0;">
 
                         <h3>You May Also be Interested In</h3>
 
@@ -2266,95 +2455,9 @@ if(true)
 
             </div>
 
-        </div>
-
     </div>
-
-    <div id="tab_2" class="tab-content__box">
-
-        <div class="container">
-
-            <?php
-
-            foreach($pros as $sing)
-
-            {
-
-
-
-                if ($sing['is_event'] == 1)
-
-                {
-
-                    ?>
-
-                    <div class="col-md-4">
-
-                        <?php
-
-                        echo $this->html_model->product_box($sing, 'grid', 1);
-
-                        ?>
-
-                    </div>
-
-                    <?php
-
-                }
-
-            }
-
-            ?>
-
-
-
-        </div>
-
-    </div>
-
-    <div id="tab_3" class="tab-content__box <?= isset($pro['default_tab']) && $pro['default_tab'] == 'tab_3' ?"current":""; ?>">
-
-        <div class="container">
-
-            <div class="row">
-
-                <?php
-
-                foreach($pros as $sing)
-                {
-                    if ($sing['is_blog'] == 1)
-                    {
-                        ?>
-                        <div class="col-md-4">
-                            <?php
-                            echo $this->html_model->product_box($sing, 'grid', 1);
-                            ?>
-                        </div>
-                        <?php
-
-                    }
-
-                }
-
-                ?>
-
-            </div>
-
-            <!--<div class="info_tooltip">-->
-
-            <!--    <a href="#"><img src="<?= base_url(); ?>template/front/images/info-orange.png" alt=""></a>-->
-
-            <!--</div>-->
-
-        </div>
-
-
-
-
-
-    </div><div id="tab_4" class="tab-content__box">
-
-        <div class="container">
+</div>
+        <div class="container ">
 
             <div class="row">
 
@@ -2403,73 +2506,24 @@ if(true)
 
 
     </div>
-
-    <div id="tab_5" class="tab-content__box">
-
-        <div class="container">
-
-            <div class="row">
-
-                <?php
-
-                foreach($pros as $sing)
-
-                {
-
-
-
-                    if ( $sing['is_bpage'] == 0 && $sing['is_blog'] == 0 && $sing['is_event'] == 0 && $sing['is_job'] == 0)
-
-                    {
-
-                        ?>
-
-                        <div class="col-md-4">
-
-                            <?php
-
-                            echo $this->html_model->product_box($sing, 'grid', 1);
-
-                            ?>
-
-                        </div>
-
-                        <?php
-
-                    }
-
-
-
-                }
-
-                ?>
-
-            </div>
-
-
-
-        </div>
-
-    </div>
-
     <div id="tab_6" class="tab-content__box">
 
-        <div class="container">
+        <div class="container ">
 
             <div class="clients_box">
 
-                <h3>Take a look what our client Says</h3>
+                <h3>Take a look what other clients say</h3>
 
-                <h4>Reviews</h4>
+                <h4>Would you like to review this business page?</h4>
 
 
 
             </div>
 
-            <div class="col-sm-8 left__review">
+            <div class="col-sm-12 left__review">
 
-                <div class="row">
-
+                <div class="row make_display_block">
+                    <div class="col-md-6">
                     <?php
 
                     // var_dump($pro);
@@ -2480,7 +2534,7 @@ if(true)
 
                         ?>
 
-                        <div class="col-sm-4 cilent_gapp">
+                        <div class="col-sm-12 cilent_gapp">
 
                             <div class="info_client">
 
@@ -2534,7 +2588,7 @@ if(true)
 
                                     <?php
 
-                                    $this->crud_model->rate_html($v['rating_num']);
+                                    echo $this->crud_model->rate_html($v['rating_num']);
 
                                     ?>
 
@@ -2553,10 +2607,8 @@ if(true)
                     ?>
 
                 </div>
-
-            </div>
-
-            <div class="col-sm-4 add__new_review" id="review_coment">
+                <div class="col-md-6">
+                    <div class="col-sm-12 add__new_review" id="review_coment">
 
                 <label> add new reviews</label>
 
@@ -2572,7 +2624,18 @@ if(true)
 
                                     <fieldset class=" rating-selector__09f24__LNhhs">
 
-                                        <div id="rateYo"></div>
+                                        <div id="rateYo">
+                                            <?php
+                                            $tot = 5;
+                                            for($i = 1 ; $i<=$tot;$i++)
+                                            {
+                                                ?>
+                                                <span id="star<?= $i ?>" onclick="select_rate(<?= $i ?>)" class="fa fa-star"></span>
+                                                <?php
+                                            }
+                                            ?>
+ 
+                                        </div>
 
                                         <input type="hidden" value="0" name="rating" id="rate" />
 
@@ -2618,7 +2681,7 @@ if(true)
 
                         ?>
 
-                        <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:200px"><button type="button" class=" css-hv9ohz" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></div>
+                        <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:200px;"><button type="button" class=" css-hv9ohz" onclick="send_rate()" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></div>
 
                         <?php
 
@@ -2626,7 +2689,7 @@ if(true)
 
                         ?>
 
-                        <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:200px"><a href="<?= base_url('/login_set/login'); ?>"><button type="button"  id="rate_form" class=" css-hv9ohz" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></a></div>
+                        <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:100%;text-align:center;"><a href="<?= base_url('/login_set/login'); ?>"><button type="button"   class=" css-hv9ohz" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></a></div>
 
 
 
@@ -2639,14 +2702,18 @@ if(true)
                 </form>
 
             </div>
+                </div>
+                </div>
+
+            </div>
+
+            
 
         </div>
 
 
 
     </div>
-
-</div>
 
 
 
@@ -2750,7 +2817,7 @@ if(true)
 
 
 
-<div class="container">
+<div class="container  ">
 
 
 
@@ -2762,17 +2829,26 @@ if(true)
 
 <div class="flgicon">
 
-    <a href="#"><i class="fa fa-flag"></i></a>
+    <a href="#" title="Report Site!"><i class="fa fa-flag"></i></a>
 
 </div>
 <script>
     $(".more-link").click(function () {
         var moreAndLess = $(this).html() == 'View More' ? 'View Less' : 'View More';
         $(this).text(moreAndLess);
-        if($(".ammen_container").hasClass('height_auto')){
-            $(".ammen_container").removeClass('height_auto');
+        if($(".ammen_container  ").hasClass('height_auto')){
+            $(".ammen_container  ").removeClass('height_auto');
         } else {
-            $(".ammen_container").addClass('height_auto');
+            $(".ammen_container  ").addClass('height_auto');
+        }
+    });
+    $(".tag_more").click(function () {
+        var moreAndLess = $(this).html() == 'View More' ? 'View Less' : 'View More';
+        $(this).text(moreAndLess);
+        if($(".tag_container  ").hasClass('height_auto')){
+            $(".tag_container  ").removeClass('height_auto');
+        } else {
+            $(".tag_container  ").addClass('height_auto');
         }
     });
 </script>
@@ -2980,6 +3056,33 @@ if(true)
 <script type="text/javascript">
 
     $(document).ready(function(){
+        divElement = document.querySelector(".ammen_container");
+ 
+        elemHeight = divElement.offsetHeight;
+        if(elemHeight >=45)
+        {
+            var r = $('.ammen_container').css('height','45px');
+            
+            $('.amen_more').show();
+        }
+        else
+        {
+            $('.amen_more').hide();
+        }
+        divElement = document.querySelector(".tag_container");
+ 
+        elemHeight = divElement.offsetHeight;
+        if(elemHeight >=45)
+        {
+            var r = $('.tag_container').css('height','45px');
+            
+            $('. ').show();
+        }
+        else
+        {
+            $('.tag_more').hide();
+        }
+        
 
 
 
@@ -3326,31 +3429,25 @@ if(true)
         });
 
     }
-
-    $(function () {
-
-
-
-        $("#rateYo").rateYo({
-
-            starWidth: "40px",
-
-            fullStar: true,
-
-            onSet: function (rating, rateYoInstance) {
-
-                $('#rate').val(rating);
-
+    function select_rate(r)
+    {
+        $('#rate').val(r);
+        var tot = '<?= $tot ?>';
+        for(var i=1;i<=tot;i++)
+        {
+            var mid = '#star'+i;
+            if(i<= r)
+            {
+                $(mid).addClass('checked');
             }
+            else
+            {
+                $(mid).removeClass('checked');
+            }
+        }
+    }
 
-        });
-
-
-
-    });
-
-    $('#rate_form').click(function(){
-
+    function send_rate(){
         var form = $('#rform');
 
         var here = $(this);
@@ -3411,7 +3508,7 @@ if(true)
 
         });
 
-    });
+    }
 
 </script>
 

@@ -50,7 +50,7 @@
                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('Required');?></label>
                 <div class="col-sm-6">
                     <input type="checkbox" name="is_required" id="demo-hor-1" 
-                    	placeholder="<?php echo translate('required'); ?>" value="1" class="form-control required"  <?= (isset($amenity_data['is_required'])&& $amenity_data['is_required'])?"checked":"" ?>>
+                    	placeholder="<?php echo translate('required'); ?>" value="1" class=" required"  <?= (isset($amenity_data['is_required'])&& $amenity_data['is_required'])?"checked":"" ?>>
                 </div>
             </div>
             <div class="form-group">
@@ -82,6 +82,10 @@
                         <option value="text" <?php if($amenity_data['type'] == 'text'){echo 'selected';} ?>>Text</option>
                         <option value="textarea" <?php if($amenity_data['type'] == 'textarea'){echo 'selected';} ?>>Textarea</option>
                         <option value="select" <?php if($amenity_data['type'] == 'select'){echo 'selected';} ?>>select</option>
+                        <option value="modal" <?php if($amenity_data['type'] == 'modal'){echo 'selected';} ?>>modal</option>
+                        <option value="date" <?php if($amenity_data['type'] == 'date'){echo 'selected';} ?>>Date</option>
+                        <option value="time" <?php if($amenity_data['type'] == 'time'){echo 'selected';} ?>>Time</option>
+                        <option value="number" <?php if($amenity_data['type'] == 'number'){echo 'selected';} ?>>Number</option>
                         </select>
                 </div>
             </div>
@@ -124,6 +128,54 @@
                 <input type="text" name="prefix" class="form-control" value="<?= $amenity_data['prefix']?>">
                 </div>
             </div>
+             <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('postfix');?></label>
+                <div class="col-sm-6">
+                <input type="text" name="postfix" class="form-control"  value="<?= $amenity_data['postfix']?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('listing');?></label>
+                <div class="col-sm-6">
+                <input type="text" name="listing" class="form-control"  value="<?= $amenity_data['tbl_col']?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('filter_sort');?></label>
+                <div class="col-sm-6">
+                <input type="number" name="sorts" class="form-control"  value="<?= $amenity_data['filter_sort']?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('default_value');?></label>
+                <div class="col-sm-6">
+                <input type="text" name="default_value" class="form-control"  value="<?= $amenity_data['dvalue']?>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('view_type');?></label>
+                <div class="col-sm-6">
+                    <select name="view_type" class="form-control required">
+                        <option >Choose View Type</option>
+                        <option value="0" <?php if($amenity_data['view_type'] == '0'){echo 'selected';} ?>>Full</option>
+                        <option value="1" <?php if($amenity_data['view_type'] == '1'){echo 'selected';} ?>>Half</option>
+                        </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('filter_enable');?></label>
+                <div class="col-sm-6">
+                <input type="checkbox" name="filter_enable" class="" value="1" <?= (isset($amenity_data['is_filter'])&& $amenity_data['is_filter'])?"checked":"" ?>>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('capital_val');?></label>
+                <div class="col-sm-6">
+                <input type="checkbox" name="capital_val" class="" value="1" <?= (isset($amenity_data['capital_val'])&& $amenity_data['capital_val'])?"checked":"" ?>>
+                </div>
+            </div>
+
 
           
         </div>

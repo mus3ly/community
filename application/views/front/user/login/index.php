@@ -5,7 +5,7 @@
 
 <div class="menulogin">
 <ul>
-    <li><a href="<?php echo base_url('login_set/login');?>">Customer Login</a></li>
+    <li><a class="active" href="<?php echo base_url('login_set/login');?>">Customer Login</a></li>
     <li><a href="<?php echo base_url('home/login_set/registration');?>">Customer Sign-up</a></li>
     <li><a href="<?php echo base_url('vendor');?>">Vendor Login </a></li>
     <li><a href="<?php echo base_url('/vendor_logup/registration');?>">Vender Sign-up</a></li>
@@ -13,11 +13,23 @@
 </ul>
 </div>
 
-<section class="page-section color get_into">
+<section class="page-section color get_into mgn_top_rmv">
     <div class="container" id="login">
         <div class="row margin-top-0">
             <div class="middleboxlogin">
-              
+              <?php
+	    if($this->session->flashdata('message'))
+	    {
+	    ?>
+	    <div class="alert alert-success" id="success-alert">
+               <button type="button" class="close" data-dismiss="alert">x</button>
+               <?= $this->session->flashdata('message');
+               unset($_SESSION['message'])
+               ?>
+            </div>
+            <?php
+	    }
+            ?>
                 <?php
                     echo form_open(base_url() . 'home/login/do_login/', array(
                         'class' => 'form-login',
@@ -29,20 +41,20 @@
 
                     <div class="row box_shape">
                         <div class="title" style="width: 100%;">
-                            <?php echo translate('sign_in');?>
+                            <!--<?php echo translate('sign_in');?>-->
                             <div class="option">
-                            	<?php echo translate('not_a_member_yet_?');?>
-                                <a href="<?php echo base_url(); ?>home/login_set/registration">
-                                    <?php echo translate('Sign_up_as_customer!');?>
+                            	<!--<?php echo translate('not_a_member_yet_?');?>-->
+                             <!--   <a href="<?php echo base_url(); ?>home/login_set/registration">-->
+                             <!--       <?php echo translate('Sign_up_as_customer!');?>-->
                                     
-                                </a>
-                                OR
-                                <a href="<?php echo base_url(); ?>vendor_logup/registration">
-                                    <?php echo translate('Sign_up_for_business!');?>
+                             <!--   </a>-->
+                             <!--   OR-->
+                             <!--   <a href="<?php echo base_url(); ?>vendor_logup/registration">-->
+                             <!--       <?php echo translate('Sign_up_for_business!');?>-->
                                     
-                                </a>
-                                <div class="login_info">
-                                    <p>Are you a guest? Join Community HubLand as a customer, or login to leave reviews and  add to wish list. Join Community HubLand affiliate marketing to earn passively <a href="#">read more</a> </p>
+                             <!--   </a>-->
+                                <div class="login_info" style="margin-top:10px;">
+                                    <p>if you are not yet an affiliate marketer for Community HubLand,you can join from your backend after login to start earning up to 30% commisions on sign-up's and sales. <a href="#">read more</a> </p>
                                     <div class="hovertext"><p>  create your own affiliate marketing portal to encourage affiliate marketers to market your business, bookmark your favourite listings, comment and more) With a Customer account… more (on click: you can bookmark your favourite businesses, comment in discussions and leave reviews) … - When they click Business Login or Business Sign-up, the text for business above should be on top of the form - When they click Customer Login or Customer Sign-up, the text for customer above should be on top of the form - Either form should have the other login and signup options available for them to change their mind and select another option ….. When the click on either of the affiliate logins or sign-ups the same follows and the texts are: - A Marketing Affiliate Account to will provide you options to earn as you share businesses on your social media accounts. Anyone joining Community HubLand or purchasing from businesses on Community HubLand via your shared links will provide you respective commissions from Community HubLand and/or the business purchase - A Business Affiliate Account will provide you a platform to host your marketing materials that affiliate marketers can access to share on the social media platforms. You can determine how much commission your affiliate marketers will earn.</p></div>
                                 </div>
                             </div>
@@ -65,10 +77,15 @@
                             </div>
                         </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <span class="btn btn-theme-sm btn-block btn-theme-dark pull-right login_btn enterer">
+                            <button type="submit" class="btn btn-theme btn-block btn-icon-left facebook social_btn">
                                 <?php echo translate('login');?>
-                            </span>
+                            </button>
                         </div>
+                        <!--<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+                        <!--    <span class="btn btn-theme-sm btn-block btn-theme-dark pull-right login_btn enterer">-->
+                        <!--        <?php echo translate('login');?>-->
+                        <!--    </span>-->
+                        <!--</div>-->
                         <?php if($fb_login_set == 'ok' || $g_login_set == 'ok'){ ?>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <h2 class="login_divider"><span>or</span></h2>
