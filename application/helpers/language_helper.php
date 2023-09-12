@@ -29,6 +29,17 @@
  {
      return date("M d, Y", strtotime($date));
  }
+ function img_url($pth)
+ {
+    //img_url
+    $CI =& get_instance();
+    $url = $CI->config->item('img_url');
+    if ($pth) {
+        $url = $url.$pth;
+    }
+    return $url;
+
+ }
  function update_col($product_id)
  {
      $CI =& get_instance();

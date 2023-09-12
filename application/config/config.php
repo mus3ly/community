@@ -27,6 +27,7 @@ $config['log_threshold'] = 1;
 $config['shippo_token'] = 'shippo_test_52bf877b99c795c0e3a73a8dd2483c417db6f730';
 //  $config['shippo_token'] = 'shippo_live_e6a934d119a9d004a9aa6ab16172fbaea6f2e135';
 $config['demo'] = false;
+$config['img_url'] = 'http://communityhubland.com/';
 
 /*
 |--------------------------------------------------------------------------
