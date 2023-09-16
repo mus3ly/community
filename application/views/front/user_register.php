@@ -3,6 +3,7 @@
 
 $url = base_url('updated/');
  include "header_new.php";
+// die('shaheer');
 ?>
 <main>
     <section class="signup-form-wrapper">
@@ -103,6 +104,11 @@ $url = base_url('updated/');
                   <input type="text" class="form-control" placeholder="Zip Code" name="zip">
                 </div>
               </div>
+                <div class="col-md-12">
+                    <div class="form-group mb-3">
+                        <input type="text" class="form-control" placeholder="referral code" name="Referral_code">
+                    </div>
+                </div>
               <div class="col-md-6">
                 <div class="form-group mb-3">
                   <div class="form-check">

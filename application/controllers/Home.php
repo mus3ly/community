@@ -6261,7 +6261,11 @@ class Home extends CI_Controller
         }
     }
 
-    /* FUNCTION: Customer Registration*/
+    /* FUNCTION: Customer Reg
+    istration*/
+    public function RandomString($length = 10) {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+    }
     function registration($para1 = "", $para2 = "")
     {
         $safe = 'yes';
@@ -6280,6 +6284,7 @@ class Home extends CI_Controller
         $this->load->library('form_validation');
         $page_data['page_name'] = "registration";
         if ($para1 == "add_info") {
+            die('OK');
             $msg = '';
             $this->form_validation->set_rules('username', 'First Name', 'required');
             $this->form_validation->set_rules('email', 'Email', 'required|is_unique[user.email]|valid_email', array('required' => 'You have not provided %s.', 'is_unique' => 'This %s already exists.'));
@@ -6291,6 +6296,7 @@ class Home extends CI_Controller
             $this->form_validation->set_rules('zip', 'ZIP', 'required');
             $this->form_validation->set_rules('city', 'City', 'required');
             $this->form_validation->set_rules('state', 'State', 'required');
+//            $this->form_validation->set_rules('referral_code', 'referral code', 'required');
             // $this->form_validation->set_rules('country', 'Country', 'required');
             // $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
             // if ($this->input->post('affiliate') == 'yes') {
@@ -6326,6 +6332,7 @@ class Home extends CI_Controller
                             $data['package_info'] = '[]';
                             $data['product_upload'] = $this->db->get_where('package', array('package_id' => 1))->row()->upload_amount;
                             $data['creation_date'] = time();
+                            $data['referral_code'] = RandomString();
                             // print_r($data);
                             // die();
 
@@ -6333,6 +6340,8 @@ class Home extends CI_Controller
                                 $password = $this->input->post('password1');
                                 $data['password'] = sha1($password);
                                 $this->db->insert('user', $data);
+                                var_dump($this->db->last_qury());
+                                die();
                                 $msg = 'done';
                                 // if ($this->email_model->account_opening('user', $data['email'], $password) == false) {
                                 //     $msg = 'done_but_not_sent';
