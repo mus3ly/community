@@ -162,7 +162,7 @@ $imgs[] = $pimg;
 
 
 
-                if(in_array('extra_info',$checks) || true)
+                if(true)
 
                 {
 
@@ -218,13 +218,7 @@ $imgs[] = $pimg;
 
                         {
                             $k = $i -1;
-                            if(strip_tags($content[0]) != "" && strip_tags($content[1]) != "" && strip_tags($content[2]) != ""){
-                                $class = 4;
-                            } elseif(strip_tags($content[0]) != "" && strip_tags($content[1]) != "" && strip_tags($content[2]) == ""){
-                                $class = 6;
-                            } elseif(strip_tags($content[0]) != "" && strip_tags($content[1]) == "" && strip_tags($content[2]) == ""){
-                                $class = 12;
-                            }
+                            
                             if($content[$k]['data']) {
                                 ?>
 

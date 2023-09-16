@@ -578,7 +578,7 @@ class Home extends CI_Controller
 
     public function test1()
     {
-        $r = get_fields_line(33, 2);
+        $r = get_fields_line(172, 5);
         var_dump($r);
         die();
     }

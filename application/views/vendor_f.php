@@ -8,6 +8,7 @@ if($options)
 {
     $options = json_decode($options);
 } 
+
 if($type == 'select')
 {
     $tbl = 'makes';

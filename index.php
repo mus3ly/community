@@ -1,4 +1,34 @@
 <?php
+function ip_info($ip)
+{
+    
+$curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => 'http://ip-api.com/json/'.$ip.'?fields=status%2Cmessage%2Ccountry%2CcountryCode%2Cregion%2CregionName%2Ccity%2Czip%2Clat%2Clon%2Ctimezone%2Cisp%2Corg%2Cas%2Cquery',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'GET',
+));
+
+$response = curl_exec($curl);
+
+curl_close($curl);
+return json_decode($response,true);
+
+}
+ if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
+    if(!isset($_SESSION['ip_info']))
+    {
+        $_SESSION['ip_info'] = ip_info($_SERVER['REMOTE_ADDR']);
+    }
 /*if(isset($_REQUEST['dev_test']))
 {
     $cookie_name = "dev_test";
@@ -46,6 +76,7 @@ if(!isset($_COOKIE["dev_test"]))
  * @since	Version 1.0.0
  * @filesource test sublime git
  */
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -67,7 +98,7 @@ date_default_timezone_set('Europe/London');
 
 	include_once './application/libraries/vendor/autoload.php';
 
-	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'production');
 	//define('CFG_TIME_ZONE', 'Asia/Dacca');
 /*
  *---------------------------------------------------------------

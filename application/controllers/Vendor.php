@@ -1118,7 +1118,7 @@ class Vendor extends CI_Controller
             $choice_titles              = $this->input->post('op_title');
             $choice_types               = $this->input->post('op_type');
             $choice_no                  = $this->input->post('op_no');
-            if(count($choice_titles ) > 0){
+            if($choice_titles && count($choice_titles ) > 0){
                 foreach ($choice_titles as $i => $row) {
                     $choice_options         = $this->input->post('op_set'.$choice_no[$i]);
                     $options[]              =   array(
@@ -1202,10 +1202,9 @@ class Vendor extends CI_Controller
                      $this->add_product_amenities($para1,$id,$arr);
                     }
                     update_col($id);
-                            filter_add($id);
                             foreach($_POST['fields'] as $k=> $v)
                             {
-                                $r = update_product_meta($id,$k, $v);
+                                // $r = update_product_meta($id,$k, $v);
                             }
 
                             // var_dump($id);
@@ -1233,7 +1232,7 @@ class Vendor extends CI_Controller
                             if($sneakerimg)
                             {
                         $logo_id = $this->crud_model->add_img($sneakerimg,array());
-                        array_push($dataInfo,$logo_id);
+                        // array_push($dataInfo,$logo_id);
                         $r =$this->db->where('product_id',$id)->update('product',array('comp_logo'=>$logo_id));
                         // var_dump($r);
 
@@ -1377,7 +1376,7 @@ class Vendor extends CI_Controller
         for($i = 0;$i<=$num;$i++)
         {
             
-            if($rtra[$i]['type'] == 'img')
+            if(isset($rtra[$i]['type']) && $rtra[$i]['type'] == 'img')
             {
                 $im = 'img_col'.$i;
                 if(isset($_FILES[$im]['name']) && $_FILES[$im]['name'])
@@ -1394,7 +1393,7 @@ class Vendor extends CI_Controller
         $choice_titles              = $this->input->post('op_title');
             $choice_types               = $this->input->post('op_type');
             $choice_no                  = $this->input->post('op_no');
-            if(count($choice_titles ) > 0){
+            if($choice_titles && count($choice_titles ) > 0){
                 foreach ($choice_titles as $i => $row) {
                     $choice_options         = $this->input->post('op_set'.$choice_no[$i]);
                     $options[]              =   array(
@@ -1557,14 +1556,11 @@ class Vendor extends CI_Controller
             $this->load->library('cloudinarylib');
             $id = $para2;
             update_col($id);
-            filter_add($id);
-            
-            // var_du/mp($x);/
             if(isset($_POST['fields']) && $id)
             {
                 foreach($_POST['fields'] as $k=> $v)
                 {
-                    $r = update_product_meta($id,$k, $v);
+                    // $r = update_product_meta($id,$k, $v);
                 }
             }
             if($id && isset($_FILES['sneakerimg']['name']) && !empty($_FILES['sneakerimg']['name'])){

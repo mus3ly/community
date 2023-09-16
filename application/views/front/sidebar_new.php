@@ -150,18 +150,19 @@ foreach($arr as $k=> $v)
                         {
                             $open = true;
                         }
-                        if($open)
+                        $sub_cats =  $this->db->where_in('pcat',$row['category_id'])->get('category')->result_array();
+                        if($open || $sub_cats)
                         {
-                            $sub_cats =  $this->db->where_in('pcat',$row['category_id'])->get('category')->result_array();
+                            
                             ?>
-                            <div class="accordion-item">
+                            <div class="accordion-item <?= ($open)?'active':''?>">
                     <h2 class="accordion-header" id="item1">
                       <button class="accordion-button accordion-button-sidebar collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#item-accr1" aria-expanded="true" aria-controls="item-accr1" style="color:white; background-color:var(--primary-color);">
+                        data-bs-target="#item-accr<?= $key ?>" aria-expanded="true" aria-controls="item-accr1" style="color:white; background-color:var(--primary-color);">
                         <a class="text-white" href="<?= base_url('/directory'); ?>/<?= $row['slug'] ?>"><?php echo $row['category_name']; ?></a>
                       </button>
                     </h2>
-                    <div id="item-accr1" class="accordion-collapse collapse" aria-labelledby="item1"
+                    <div id="item-accr<?= $key ?>" class="accordion-collapse collapse" aria-labelledby="item1"
                       data-bs-parent="#accordionOne">
                       <div class="accordion-body">
                         <ul>

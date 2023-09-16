@@ -158,6 +158,60 @@ elseif($type == 'text')
                             </div>
                             <?php
 }
+elseif($type == 'weblink')
+{
+    ?>
+<div class="form-group"> 
+                          <div class="col-sm-4">    
+                            <input type="text" name="ad_field_names[]" class="form-control " readonly="true" value=" <?php echo ($dvalue)?$dvalue:translate($label);?>" placeholder="Field Name">    
+                            </div>   
+                            <div class="col-sm-5">    
+                                <div class="row">
+                                    <div class ="col-sm-6" style="padding:0px">
+                                        <input type="text" class="form-control" onkeyup="create_link('<?= $name ?>')" id="<?= $name ?>_text" placeholder="Text" name="">
+                                    </div>
+                                    <div class ="col-sm-6"  style="padding:0px">
+                                        <input type="text" class="form-control" onkeyup="create_link('<?= $name ?>')" name="" placeholder="Link" id="<?= $name ?>_link">
+                                    </div>
+                                </div>
+
+                            <input type="hidden" id="<?= $name ?>" col="<?= $tbl_col ?>" rows="9" 
+                            <?php
+                            if($is_filter && $capital_val)
+                            {
+                                ?>
+                                onkeyup="update_filter('<?= $name ?>','<?= $tbl_col ?>');
+                                <?php
+                                if($capital_val)
+                                {
+                                    ?>
+                                    capital_val('<?= $name ?>');
+                                    <?php
+                                }
+                                ?>
+                                "
+                                <?php
+                            }
+                            elseif($is_filter && !$capital_val)
+                            {
+                                ?>
+                                onkeyup="update_filter('<?= $name ?>','<?= $tbl_col ?>')"
+                                <?php
+                            }
+                            elseif(!$is_filter && $capital_val)
+                            {
+                                ?>
+                                onkeyup="capital_val('<?= $name ?>');"
+                                <?php
+                            }
+                            
+                            ?>
+                             class="form-control <?= $cls ?>"placeholder="<?= $placeholder ?>" data-height="100" name="ad_field_values[]">    </div>   
+                            <div class="col-sm-2">  
+                            </div>
+                            </div>
+                            <?php
+}
 else
 {
     ?>

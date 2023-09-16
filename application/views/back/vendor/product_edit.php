@@ -1036,8 +1036,7 @@ btn1 .fa{
                            
   <div class="form-group btm_border" style="padding-top:30px;"> Extra Info
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
-                                <div class="col-sm-6">
-                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="extra_info" class="checkbox_class" <?= (in_array('extra_info',$checks))?"checked":""; ?>/>
+                                <div class="col-sm-6">`
                                 </div>
                             </div>
                         <div class="form-group btm_border">
@@ -2574,6 +2573,13 @@ $('#amnty').on('keyup', function(){
     </script>
     
     <script type="text/javascript">
+        function create_link(lid)
+    {
+        var txt = $('#'+lid+'_text').val();
+        var link = $('#'+lid+'_link').val();
+        var str = txt+'-'+link;
+        $('#'+lid).val(str);
+    }
         function update_filter(id,col)
         {
             
