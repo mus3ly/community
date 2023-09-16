@@ -132,6 +132,8 @@ class Admin extends CI_Controller
         if ($para1 == 'do_add') {
             $data['name'] = $this->input->post('name');
             $data['status'] = $this->input->post('status');
+            $data['visible'] = $this->input->post('visible');
+            $data['promo_cat'] = $this->input->post('promo_cat');
             $this->db->insert('member_cat', $data);
             recache();
         } else if ($para1 == 'edit') {
@@ -142,6 +144,8 @@ class Admin extends CI_Controller
         } elseif ($para1 == "update") {
             $data['name'] = $this->input->post('name');
             $data['status'] = $this->input->post('status');
+            $data['visible'] = $this->input->post('visible');
+            $data['promo_cat'] = $this->input->post('promo_cat');
             $this->db->where('id', $para2);
             $this->db->update('member_cat', $data);
             recache();

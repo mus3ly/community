@@ -30,6 +30,24 @@
                      value="<?php echo (isset($row['status']) && $row['status'] == 1) ? $row['status'] : '1' ;?>" <?= (isset($row['status']) && $row['status'] == 1) ? 'checked': '' ; ?>	class="" placeholder="<?php echo translate('name');?>" >
                 </div>
             </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" for="demo-hor-1">
+                        <?php echo translate('visible');?>
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="checkbox" name="visible" id="demo-hor-1"
+                               value="<?php echo (isset($row['visible']) && $row['visible'] == 1) ? $row['visible'] : '1' ;?>" <?= (isset($row['visible']) && $row['visible'] == 1) ? 'checked': '' ; ?>	class="" placeholder="<?php echo translate('name');?>" >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" for="demo-hor-1">
+                        <?php echo translate('promo');?>
+                    </label>
+                    <div class="col-sm-6">
+                        <input type="checkbox" name="promo_cat" id="demo-hor-1"
+                               value="<?php echo (isset($row['promo_cat']) && $row['promo_cat'] == 1) ? $row['promo_cat'] : '1' ;?>" <?= (isset($row['promo_cat']) && $row['promo_cat'] == 1) ? 'checked': '' ; ?>	class="" placeholder="<?php echo translate('name');?>" >
+                    </div>
+                </div>
 			</div>
 		</form>
 	</div>
