@@ -5759,7 +5759,7 @@ class Home extends CI_Controller
             }
 
             $page_data['pkgs'] = $this->db->get('membership')->result_array();
-            $page_data['cat'] = $this->db->get('member_cat')->result_array();
+            $page_data['cat'] = $this->db->where('visible','1')->get('member_cat')->result_array();
             // $page_data['def'] = $this->db->where('def',1)->get('package')->row();
             $page_data['page_name'] = "vendor/register";
             $page_data['asset_page'] = "register";
@@ -6284,7 +6284,6 @@ class Home extends CI_Controller
         $this->load->library('form_validation');
         $page_data['page_name'] = "registration";
         if ($para1 == "add_info") {
-            die('OK');
             $msg = '';
             $this->form_validation->set_rules('username', 'First Name', 'required');
             $this->form_validation->set_rules('email', 'Email', 'required|is_unique[user.email]|valid_email', array('required' => 'You have not provided %s.', 'is_unique' => 'This %s already exists.'));
@@ -6312,9 +6311,7 @@ class Home extends CI_Controller
                 if (true) {
                     
                     //
-                    if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
-                        $captcha_answer = $this->input->post('g-recaptcha-response');
-                        $response = $this->recaptcha->verifyResponse($captcha_answer);
+                    if (true) {
 
                         if (true) {
                             $data['username'] = $this->input->post('username');
@@ -6332,29 +6329,22 @@ class Home extends CI_Controller
                             $data['package_info'] = '[]';
                             $data['product_upload'] = $this->db->get_where('package', array('package_id' => 1))->row()->upload_amount;
                             $data['creation_date'] = time();
-                            $data['referral_code'] = RandomString();
-                            // print_r($data);
-                            // die();
+                            $data['referral_code'] = $this->RandomString();
 
                             if ($this->input->post('password1') == $this->input->post('password2')) {
                                 $password = $this->input->post('password1');
                                 $data['password'] = sha1($password);
                                 $this->db->insert('user', $data);
-                                var_dump($this->db->last_qury());
-                                die();
                                 $msg = 'done';
-                                // if ($this->email_model->account_opening('user', $data['email'], $password) == false) {
-                                //     $msg = 'done_but_not_sent';
-                                // } else {
-                                //     $msg = 'done_and_sent';
-                                // }
-                             $this->session->set_flashdata('message', 'Registeration Successfull!');
+                             $this->session->set_flashdata('success', 'Registeration Successfull!');
+                             custom_redirect($_SERVER['HTTP_REFERER']);
                                         // redirect($_SERVER['HTTP_REFERER'], 'refresh');
                                         // here on line6318
                                     } else {
-                                        $this->session->set_flashdata('message', 'Registeration Failed');
+                                        $this->session->set_flashdata('error', 'Registeration Failed');
                                         // redirect($_SERVER['HTTP_REFERER'], 'refresh');
                                            $this->login_set('registration');
+                                           custom_redirect($_SERVER['HTTP_REFERER']);
                                     }
                             echo $msg;
                         } else {

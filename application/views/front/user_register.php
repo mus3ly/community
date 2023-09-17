@@ -21,31 +21,8 @@ $url = base_url('updated/');
           <h2 class="form-title">Customer Registration</h2>
           <p class="form-subtitle">Already A Member ? Click To <a href="#">Login! As Customer</a> Or <a href="#">Sign Up! As Vendor</a></p>
           <?php
-	    if($this->session->flashdata('message'))
-	    {
-	    ?>
-	    <div class="alert alert-danger" id="danger-alert">
-               <button type="button" class="close" data-dismiss="alert">x</button>
-               <?= $this->session->flashdata('message');
-               unset($_SESSION['message'])
-               ?>
-            </div>
-            <?php
-	    }
-            ?>
-          <?php
-	    if($this->session->flashdata('smessage'))
-	    {
-	    ?>
-	    <div class="alert alert-success" id="success-alert">
-               <button type="button" class="close" data-dismiss="alert">x</button>
-               <?= $this->session->flashdata('smessage');
-               unset($_SESSION['smessage'])
-               ?>
-            </div>
-            <?php
-	    }
-            ?>
+          include "flash.php";
+          ?>
           <form action="<?= base_url('home/registration/add_info');?>" method="POST" id="sign_form" class="form-login">
             <div class="row">
               <div class="col-md-6">

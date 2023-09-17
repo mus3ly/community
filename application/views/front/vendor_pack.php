@@ -118,6 +118,19 @@ $url = base_url('updated/');
               </div>
             </div>
             <div class="col-md-6">
+              <div class="form-side">
+                <form action="<?=base_url()?>/vendor_logup/registration" method="GET">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Add Referal Code"  name="ref_code" aria-label="Add Referal Code"
+                        aria-describedby="button-addon2">
+                      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Code</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="col-md-6">
               <div class="skip-btn">
                 <a href="#" class="skip primary-btn">Skip And Continue</a>
               </div>
