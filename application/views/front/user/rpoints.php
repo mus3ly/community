@@ -4,14 +4,21 @@
                                 <table class="table" style="background: #fff;">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th><?php echo translate('image');?></th>
-                                            <th><?php echo translate('name');?></th>
-                                            <th><?php echo translate('remove');?></th>
+                                            <th><?php echo translate('Name');?></th>
+                                            <th><?php echo translate('Email');?></th>
+                                            <th><?php echo translate('Date');?></th>
                                         </tr>
                                     </thead>
+                                    <?php
+                                    foreach($rdata as $v):
+                                    ?>
                                     <tbody id="result4">
+
+                                    <td><?=$v['name']?></td>
+                                    <td><?=$v['email']?></td>
+                                    <td><?= date('m/d/Y H:i:s',$v['create_timestamp'])?></td>
                                     </tbody>
+                                    <?php endforeach;?>
                                 </table>
                            </div>
 

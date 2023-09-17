@@ -81,7 +81,22 @@
                                     <td><?php echo $row['state'];?></td>
                                     <td><b><?php echo translate('city');?></b></td>
                                     <td><?php echo $row['city'];?></td>
+
                                 </tr>
+                                <tr>
+                                    <td><b><?php echo translate('referral code');?></b></td>
+                                    <td><?php echo $row['referral_code'];?></td>
+                                    <td><?php echo translate('referral Members');?></td>
+                                    <?php
+                                    $this->db->where('ref_code',$row['referral_code']);
+
+                                    $result = $this->db->get('vendor')->result_array();
+
+
+                                    ?>
+                                    <td><?php echo count($result);?></td>
+                                </tr>
+
                             </table>
                         </div>
                     </div>

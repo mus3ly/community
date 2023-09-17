@@ -8,13 +8,13 @@ $url = base_url('updated/');
     <section class="signup-form-wrapper">
       <div class="container">
         <div class="page-links">
-          <a href="#">Customer Login</a>
+          <a href="<?=base_url('login_set/login')?>">Customer Login</a>
           <span class="text-divider"></span>
-          <a href="#" class="active">Customer Registration</a>
+          <a href="<?=base_url('home/login_set/registration')?>" class="active">Customer Registration</a>
           <span class="text-divider"></span>
-          <a href="#">Vendor Login</a>
+          <a href="<?=base_url('vendor')?>">Vendor Login</a>
           <span class="text-divider"></span>
-          <a href="#">Vendor Registration</a>
+          <a href="<?=base_url('vendor_logup/registration')?>">Vendor Registration</a>
         </div>
         <div class="forms">
           <!-- Customer login form -->

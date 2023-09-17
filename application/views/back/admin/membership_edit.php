@@ -91,9 +91,9 @@
                     <?php echo translate('promo_code');?>
                         </label>
                 <div class="col-sm-6">
-                    <input type="text" name="promo_code" value="<?php echo $row['promo_code']; ?>" placeholder="<?php echo translate('promo_code'); ?>" class="form-control required">
+                    <input type="text" name="promo_code" value="<?php echo $row['promo_code']; ?>" placeholder="<?php echo translate('promo_code'); ?>" class="form-control ">
                 </div>
-              
+
             </div>
             
             <div class="form-group">
@@ -101,7 +101,7 @@
                     <?php echo translate('promo_limit');?>
                         </label>
                 <div class="col-sm-6">
-                    <input type="text" name="promo_limit" value="<?php echo $row['promo_limit']; ?>" placeholder="<?php echo translate('promo_limit'); ?>" class="form-control required">
+                    <input type="text" name="promo_limit" value="<?php echo $row['promo_limit']; ?>" placeholder="<?php echo translate('promo_limit'); ?>" class="form-control ">
                 </div>
               
             </div>
