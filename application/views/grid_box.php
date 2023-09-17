@@ -27,11 +27,11 @@ $logo = '';
 if ($comp_cover) {
     $img = $this->crud_model->get_img($comp_cover);
     if (isset($img->webp_url) && $img->webp_url) {
-        $img = base_url().$img->webp_url;
+        $img = img_url().$img->webp_url;
     }
     else
     {
-        $img = base_url().$img->path;
+        $img = img_url().$img->path;
     }
 
 } else {
@@ -40,8 +40,8 @@ if ($comp_cover) {
 }
 if ($n['comp_logo']) {
     $vendorlogo = $this->crud_model->get_img($n['comp_logo']);
-    if (isset($vendorlogo->secure_url)) {
-        $vendorlogo = $vendorlogo->secure_url;
+    if (isset($vendorlogo->path)) {
+        $vendorlogo = img_url().$vendorlogo->path;
     }
 
 } else {
@@ -54,11 +54,11 @@ if ($comp_logo) {
 
     if (isset($logo->webp_url) && $logo->webp_url) {
         // $logo = base_url('/').$logo->path;
-        $logo = base_url().$logo->webp_url;
+        $logo = img_url().$logo->webp_url;
     }
     else
     {
-        $logo = base_url().$logo->path;
+        $logo = img_url().$logo->path;
     }
     
 

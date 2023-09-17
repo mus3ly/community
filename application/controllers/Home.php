@@ -1871,6 +1871,9 @@ class Home extends CI_Controller
         } elseif ($para1 == "wishlist") {
             echo $html = $this->load->view('front/user/wishlist',array(),true);
             exit();
+        } elseif ($para1 == "rpoints") {
+            echo $html = $this->load->view('front/user/rpoints',array(),true);
+            exit();
         } elseif ($para1 == "affiliation_point_earnings") {
             $page_data['affiliation_point_earnings'] = $this->db->order_by('used_at', 'desc')->get_where('product_affiliation_code_use', array('affiliator_id ' => $this->session->userdata('user_id')), 100)->result_array();
             $page_data['affiliation_point_earning_total'] = $this->db->get_where('product_affiliation_points_total', array('affiliator_id ' => $this->session->userdata('user_id')))->row_array();
@@ -5600,7 +5603,8 @@ class Home extends CI_Controller
             // $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
 
             if ($this->form_validation->run() == FALSE) {
-                echo validation_errors();
+                $this->session->set_flashdata('error', validation_errors());
+                custom_redirect($_SERVER['HTTP_REFERER'], 'refresh');
 
             } else {
     // var_dump($safe);
@@ -5678,6 +5682,7 @@ class Home extends CI_Controller
                         $data['add_affilite'] = $this->input->post('affiliate');
                         $data['TOC'] = $this->input->post('terms_check');
                         $data['promo'] = $this->input->post('promo');
+                        $data['ref_code'] = $this->input->post('ref_code');
                         if ($this->input->post('affiliate') == 'yes') {
                             $data['aff_TOC'] = $this->input->post('affiliate_terms_check');
                         }
@@ -5749,7 +5754,8 @@ class Home extends CI_Controller
                         }
                     }
                 } else {
-                    echo 'Disallowed charecter : " ' . $char . ' " in the POST';
+                    $this->session->set_flashdata('error', 'Disallowed charecter : " ' . $char . ' " in the POST');
+                custom_redirect($_SERVER['HTTP_REFERER'], 'refresh');
                 }
             }
         } else if ($para1 == 'registration') {
@@ -5759,15 +5765,31 @@ class Home extends CI_Controller
             }
 
             $page_data['pkgs'] = $this->db->get('membership')->result_array();
-            $page_data['cat'] = $this->db->get('member_cat')->result_array();
+            $page_data['cat'] = $this->db->where('promo_cat',0)->where('visible','0')->get('member_cat')->result_array();
+            if(isset($_GET['ref_code']))
+            {
+
+                $code = $_GET['ref_code'];
+                $user = $this->db->where('referral_code',$code)->get('user')->row();
+                if($user)
+                {
+                    $page_data['cat'] = $this->db->where('promo_cat',1)->where('visible','1')->get('member_cat')->result_array();
+                }
+            }
+
+            
             // $page_data['def'] = $this->db->where('def',1)->get('package')->row();
             $page_data['page_name'] = "vendor/register";
             $page_data['asset_page'] = "register";
             $page_data['page_title'] = translate('registration');
             if(isset($_GET['pack']) && $_GET['pack'])
-            $this->load->view('front/vreg', $page_data);
+            {
+                $this->load->view('front/vreg', $page_data);
+            }
             else
-            $this->load->view('front/vendor_pack', $page_data);
+            {
+                $this->load->view('front/vendor_pack', $page_data);
+            }
         } elseif ($para1 == "sub_by_cat") {
             echo $this->crud_model->select_html('sub_category', 'sub_category', 'sub_category_name', 'add', 'form-control demo-chosen-select required', '', 'category', $para2, 'get_brnd');
             exit();
@@ -6284,7 +6306,6 @@ class Home extends CI_Controller
         $this->load->library('form_validation');
         $page_data['page_name'] = "registration";
         if ($para1 == "add_info") {
-            die('OK');
             $msg = '';
             $this->form_validation->set_rules('username', 'First Name', 'required');
             $this->form_validation->set_rules('email', 'Email', 'required|is_unique[user.email]|valid_email', array('required' => 'You have not provided %s.', 'is_unique' => 'This %s already exists.'));
@@ -6312,9 +6333,7 @@ class Home extends CI_Controller
                 if (true) {
                     
                     //
-                    if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
-                        $captcha_answer = $this->input->post('g-recaptcha-response');
-                        $response = $this->recaptcha->verifyResponse($captcha_answer);
+                    if (true) {
 
                         if (true) {
                             $data['username'] = $this->input->post('username');
@@ -6332,29 +6351,22 @@ class Home extends CI_Controller
                             $data['package_info'] = '[]';
                             $data['product_upload'] = $this->db->get_where('package', array('package_id' => 1))->row()->upload_amount;
                             $data['creation_date'] = time();
-                            $data['referral_code'] = RandomString();
-                            // print_r($data);
-                            // die();
+                            $data['referral_code'] = $this->RandomString();
 
                             if ($this->input->post('password1') == $this->input->post('password2')) {
                                 $password = $this->input->post('password1');
                                 $data['password'] = sha1($password);
                                 $this->db->insert('user', $data);
-                                var_dump($this->db->last_qury());
-                                die();
                                 $msg = 'done';
-                                // if ($this->email_model->account_opening('user', $data['email'], $password) == false) {
-                                //     $msg = 'done_but_not_sent';
-                                // } else {
-                                //     $msg = 'done_and_sent';
-                                // }
-                             $this->session->set_flashdata('message', 'Registeration Successfull!');
+                             $this->session->set_flashdata('success', 'Registeration Successfull!');
+                             custom_redirect($_SERVER['HTTP_REFERER']);
                                         // redirect($_SERVER['HTTP_REFERER'], 'refresh');
                                         // here on line6318
                                     } else {
-                                        $this->session->set_flashdata('message', 'Registeration Failed');
+                                        $this->session->set_flashdata('error', 'Registeration Failed');
                                         // redirect($_SERVER['HTTP_REFERER'], 'refresh');
                                            $this->login_set('registration');
+                                           custom_redirect($_SERVER['HTTP_REFERER']);
                                     }
                             echo $msg;
                         } else {

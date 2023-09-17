@@ -423,7 +423,7 @@ foreach($vendors as $kk=> $vv)
             move_uploaded_file($_FILES[$name]['tmp_name'], 'uploads/' . $type . '_image/' . $type . '_' . $id . $ext);
 
             if ($no_thumb == '') {
-                $this->crud_model->img_thumb($type, $id, $ext);
+                // $this->crud_model->img_thumb($type, $id, $ext);
             }
             return 'uploads/' . $type . '_image/' . $type . '_' . $id . $ext;
         } elseif ($multi == 'multi') {
@@ -432,7 +432,7 @@ foreach($vendors as $kk=> $vv)
                 $ib = $this->file_exist_ret($type, $id, $ib);
                 move_uploaded_file($_FILES[$name]['tmp_name'][$i], 'uploads/' . $type . '_image/' . $type . '_' . $id . '_' . $ib . $ext);
                 if ($no_thumb == '') {
-                    $this->crud_model->img_thumb($type, $id . '_' . $ib, $ext);
+                    // $this->crud_model->img_thumb($type, $id . '_' . $ib, $ext);
                 }
             }
         }

@@ -175,6 +175,7 @@
              'propert_type' => $pf["TypeOfProperty"]
              );
      }
+     if($cat)
     $x =  $CI->db->update('product', $cat);
     if($x){
          return true;
@@ -203,7 +204,7 @@
     $pf = array();
     foreach($names as $k=> $v)
     {
-        $v= str_replace(' ', '', $v);
+        $v= strtolower(str_replace(' ', '', $v));
        $pf[$v] = $valus[$k]; 
     }
     $vl = array();
@@ -216,9 +217,17 @@
          {
              if($v['position'])
              {
-                 $v['label']= str_replace(' ', '', $v['label']);
+                 $v['label']= strtolower(str_replace(' ', '', $v['label']));
                  $lb[] = $v['label'];
-                 if(isset($pf[$v['label']]) && $pf[$v['label']])
+                 if($v['type'] == 'weblink')
+                 {
+                    $exp = explode('-',$pf[$v['label']]);
+                    $txt = (isset($exp[0])?$exp[0]:'');
+                    $lnk = (isset($exp[1])?$exp[1]:'');
+
+                    $vl[$v['label']] = '<a href="'.$lnk.'" target="_blank">'.$txt.'</a>';
+                 }
+                 elseif(isset($pf[$v['label']]) && $pf[$v['label']])
                  {
                      if($v['postfix'])
                      {
@@ -273,7 +282,11 @@
  function update_product_meta($pid, $k= '', $v= '')
  {
      $CI =& get_instance();
-     $r = $CI->db->where('pid',$pid)->where('meta_key',$k)->get('product_meta')->row_array(); 
+     $wh = array(
+        'pid'=> $pid,
+        'meta_key'=> $k,
+     );
+     $r = $CI->db->where($wh)->get('product_meta')->row_array(); 
      if($r)
      {
          //update

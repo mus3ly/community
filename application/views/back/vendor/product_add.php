@@ -1389,7 +1389,7 @@ btn1 .fa{
                                 <div class="col-sm-6">
                                     <?php 
                                         $images = $this->crud_model->file_view('product',$row['product_id'],'','','thumb','src','multi','all');
-                                        var_dump();
+                                        
                                         if($images && $num_of_imgs){
                                             foreach ($images as $row1){
                                                 $a = explode('.', $row1);
@@ -2456,6 +2456,13 @@ $('#amnty').on('keyup', function(){
         },
     });
     }
+    function create_link(lid)
+    {
+        var txt = $('#'+lid+'_text').val();
+        var link = $('#'+lid+'_link').val();
+        var str = txt+'-'+link;
+        $('#'+lid).val(str);
+    }
      
     function selectamn(id){
          var url = '<?= base_url('vendor/getAmenties');?>';
@@ -2516,6 +2523,7 @@ $('#amnty').on('keyup', function(){
             +'</div>'
         );
         set_summer();
+
     });
     </script>
 <!--Bootstrap Tags Input [ OPTIONAL ]-->
