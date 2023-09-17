@@ -1865,14 +1865,20 @@ class Home extends CI_Controller
         
         $html = '';
         if ($para1 == "info") {
-            $page_data['user_info'] = $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->result_array();
+            $page_data['user_info'] =$uinfo =  $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->result_array();
             echo $html = $this->load->view('front/user/profile', $page_data,true);
             exit();
         } elseif ($para1 == "wishlist") {
-            echo $html = $this->load->view('front/user/wishlist',array(),true);
+            echo $html = $this->load->view('front/user/wishlist',array(vender_data),true);
             exit();
         } elseif ($para1 == "rpoints") {
-            echo $html = $this->load->view('front/user/rpoints',array(),true);
+            $page_data['user_info'] =$uinfo =  $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->result_array();
+            if($uinfo)
+            {
+                $row = $uinfo[0];
+            }
+            $data['rdata'] = $this->db->where('ref_code',$row['referral_code'])->get('vendor')->result_array();
+            echo $html = $this->load->view('front/user/rpoints',$data,true);
             exit();
         } elseif ($para1 == "affiliation_point_earnings") {
             $page_data['affiliation_point_earnings'] = $this->db->order_by('used_at', 'desc')->get_where('product_affiliation_code_use', array('affiliator_id ' => $this->session->userdata('user_id')), 100)->result_array();
@@ -5766,7 +5772,7 @@ class Home extends CI_Controller
 
             $page_data['pkgs'] = $this->db->get('membership')->result_array();
             $page_data['cat'] = $this->db->where('promo_cat',0)->where('visible','0')->get('member_cat')->result_array();
-            if(isset($_GET['ref_code']))
+            if(isset($_GET['ref_code']) && !isset($_GET['pack']))
             {
 
                 $code = $_GET['ref_code'];

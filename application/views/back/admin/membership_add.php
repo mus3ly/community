@@ -89,7 +89,7 @@
                     <?php echo translate('promo_code');?>
                         </label>
                 <div class="col-sm-6">
-                    <input type="number" name="promo_code" placeholder="<?php echo translate('promo_code'); ?>" class="form-control required">
+                    <input type="number" name="promo_code" placeholder="<?php echo translate('promo_code'); ?>" class="form-control">
                 </div>
               
             </div>
@@ -99,7 +99,7 @@
                     <?php echo translate('promo_limit');?>
                         </label>
                 <div class="col-sm-6">
-                    <input type="number" name="promo_limit" placeholder="<?php echo translate('promo_limit'); ?>" class="form-control required">
+                    <input type="number" name="promo_limit" placeholder="<?php echo translate('promo_limit'); ?>" class="form-control">
                 </div>
               
             </div>
