@@ -17,6 +17,9 @@ $url = base_url('updated/');
           <a href="#" class="active">Vendor Registration</a>
         </div>
         <div class="forms vendor-form">
+          <?php
+            include "flash.php";
+          ?>
           <!-- Customer login form -->
           <h2 class="form-title">Vendor Registration</h2>
           <p class="form-subtitle">Are you a Business? Got an idea to share with your community? Join Community HubLand
@@ -24,6 +27,7 @@ $url = base_url('updated/');
             HubLand affiliate marketing to advertise your own marketing campaings.</p>
           <form action="<?= base_url( 'home/vendor_logup/add_info/')?>" method="POST" class="form-login" id="sign_form" >
               <input type="hidden" name="pack" value="<?= $_GET['pack'] ?>">
+              <input type="hidden" name="ref_code" value="<?= $_GET['ref_code'] ?>">
             <div class="row">
               <div class="col-md-6 col-lg-4">
                 <div class="form-group mb-3">

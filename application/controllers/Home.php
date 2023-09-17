@@ -5600,7 +5600,8 @@ class Home extends CI_Controller
             // $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
 
             if ($this->form_validation->run() == FALSE) {
-                echo validation_errors();
+                $this->session->set_flashdata('error', validation_errors());
+                custom_redirect($_SERVER['HTTP_REFERER'], 'refresh');
 
             } else {
     // var_dump($safe);
@@ -5678,6 +5679,7 @@ class Home extends CI_Controller
                         $data['add_affilite'] = $this->input->post('affiliate');
                         $data['TOC'] = $this->input->post('terms_check');
                         $data['promo'] = $this->input->post('promo');
+                        $data['ref_code'] = $this->input->post('ref_code');
                         if ($this->input->post('affiliate') == 'yes') {
                             $data['aff_TOC'] = $this->input->post('affiliate_terms_check');
                         }
@@ -5749,7 +5751,8 @@ class Home extends CI_Controller
                         }
                     }
                 } else {
-                    echo 'Disallowed charecter : " ' . $char . ' " in the POST';
+                    $this->session->set_flashdata('error', 'Disallowed charecter : " ' . $char . ' " in the POST');
+                custom_redirect($_SERVER['HTTP_REFERER'], 'refresh');
                 }
             }
         } else if ($para1 == 'registration') {
@@ -5759,15 +5762,31 @@ class Home extends CI_Controller
             }
 
             $page_data['pkgs'] = $this->db->get('membership')->result_array();
-            $page_data['cat'] = $this->db->where('visible','1')->get('member_cat')->result_array();
+            $page_data['cat'] = $this->db->where('promo_cat',0)->where('visible','0')->get('member_cat')->result_array();
+            if(isset($_GET['ref_code']))
+            {
+
+                $code = $_GET['ref_code'];
+                $user = $this->db->where('referral_code',$code)->get('user')->row();
+                if($user)
+                {
+                    $page_data['cat'] = $this->db->where('promo_cat',1)->where('visible','1')->get('member_cat')->result_array();
+                }
+            }
+
+            
             // $page_data['def'] = $this->db->where('def',1)->get('package')->row();
             $page_data['page_name'] = "vendor/register";
             $page_data['asset_page'] = "register";
             $page_data['page_title'] = translate('registration');
             if(isset($_GET['pack']) && $_GET['pack'])
-            $this->load->view('front/vreg', $page_data);
+            {
+                $this->load->view('front/vreg', $page_data);
+            }
             else
-            $this->load->view('front/vendor_pack', $page_data);
+            {
+                $this->load->view('front/vendor_pack', $page_data);
+            }
         } elseif ($para1 == "sub_by_cat") {
             echo $this->crud_model->select_html('sub_category', 'sub_category', 'sub_category_name', 'add', 'form-control demo-chosen-select required', '', 'category', $para2, 'get_brnd');
             exit();

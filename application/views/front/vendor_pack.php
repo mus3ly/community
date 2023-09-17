@@ -87,7 +87,7 @@ $url = base_url('updated/');
                       </ul>
                     </div>
                     <div class="pricingTable-signup">
-                      <a href="<?= base_url('vendor_logup/registration'); ?>?pack=<?= $v['membership_id'] ?>">sign up</a>
+                      <a href="<?= base_url('vendor_logup/registration'); ?>?pack=<?= $v['membership_id'] ?><?= (isset($_GET['ref_code']) && $_GET['ref_code'])?'&ref_code='.$_GET['ref_code']:''; ?>">sign up</a>
                     </div>
                   </div>
                 </div>
