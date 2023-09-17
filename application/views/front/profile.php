@@ -3,6 +3,7 @@
 
 $menu[]= array('title'=> 'Profile','icon'=> 'bi bi-people','key'=> 'info');
 $menu[] = array('title'=> 'Wishlist','icon'=> 'bi bi-box-seam','key'=> 'wishlist');
+$menu[] = array('title'=> 'Referal Members','icon'=> 'bi bi-box-seam','key'=> 'rpoints');
 $menu[] = array('title'=> 'Order History','icon'=> 'bi bi-clock-history','key'=> 'order_history');
 $menu[] = array('title'=> 'Edit Profile','icon'=> 'bi bi-people','key'=> 'update_profile');
 
@@ -16,7 +17,7 @@ $url = base_url('updated/');
         <div class="row">
           <div class="col-lg-10 col-md-12 order-lg-2">
             <div class="main-wrapper" id="result">
-            </div>
+            </div>s
           </div>
           <div class="col-lg-2 col-md-12 order-lg-1">
             <div class="user-side">

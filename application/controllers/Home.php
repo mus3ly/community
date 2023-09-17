@@ -1871,6 +1871,9 @@ class Home extends CI_Controller
         } elseif ($para1 == "wishlist") {
             echo $html = $this->load->view('front/user/wishlist',array(),true);
             exit();
+        } elseif ($para1 == "rpoints") {
+            echo $html = $this->load->view('front/user/rpoints',array(),true);
+            exit();
         } elseif ($para1 == "affiliation_point_earnings") {
             $page_data['affiliation_point_earnings'] = $this->db->order_by('used_at', 'desc')->get_where('product_affiliation_code_use', array('affiliator_id ' => $this->session->userdata('user_id')), 100)->result_array();
             $page_data['affiliation_point_earning_total'] = $this->db->get_where('product_affiliation_points_total', array('affiliator_id ' => $this->session->userdata('user_id')))->row_array();
