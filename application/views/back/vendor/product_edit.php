@@ -26,6 +26,100 @@ $row = (array) $product_data;
 $all_op = json_decode($row['options'],true);
 ?>
 <style>
+
+#checkbox_information .form-group h5{
+    color: white !important;
+  
+    text-align: center;
+    background-color: #f36022;
+    margin-left: 20%;
+    margin-right: 20%;
+    padding: 7px !important;
+    border-radius: 10px;
+}
+
+.sec-heading{
+    margin-left: 20%;
+    margin-top: 30px;
+    margin-right: 20%;
+}
+
+.sec-heading label{
+    margin-bottom:10px;
+    font-weight:bold;
+}
+
+.breaddcum{
+    display:flex !important;
+    justify-content:center !important;
+}
+
+#checkbox_information .col-sm-9{
+        margin-left: 20%;
+    padding: 0px;
+    width:60%;
+
+}
+
+#checkbox_information .form-control{
+    height:40px;
+}
+
+
+#checkbox_information .btn-labeled:not(.btn-block):not(.form-icon){
+    padding-right:22px;
+}
+
+#checkbox_information .col-sm-12 {
+        display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ .pull-center {
+  text-align: center !important;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.pull-center i{
+    margin-left: 14%;
+}
+
+
+@media(max-width:991px){
+    #checkbox_information .form-group h5{
+
+    margin-left: 00%;
+    margin-right: 0%;
+   
+}
+
+.sec-heading{
+    margin-left: 0%;
+    margin-top: 20px;
+    margin-right: 0%;
+}
+
+
+.pull-center i{
+    margin-left: 0%;
+}
+#checkbox_information .col-sm-9{
+        margin-left: 10%;
+    padding: 0px;
+    width:90%;
+
+}
+
+
+
+}
+
+
+
  #select_amn2{
     display: flex;
 }
@@ -847,8 +941,8 @@ btn1 .fa{
                            <div id="checkbox_information" class="tab-pane fade <?= ($active_tab == 'checkbox_information')?"active in":''; ?>">
                                  <div class="form-group btn_border">
                             <h5 style="color: red;padding: 0 89px;">Do not exceed more than 30 characters per entry</h5>
-                            <div>
-                                <labe>Section Heading</label>  
+                            <div class="sec-heading">
+                                <label>Section Heading</label>  
                                 <input class="form-control" name="checkbox_h" value="<?= $row['checkbox_h'] ?>" />
                             </div>
                         </div>
@@ -861,7 +955,7 @@ btn1 .fa{
                           ?>
                           <div class="form-group"> 
                            
-                          <div class="col-sm-9">
+                          <div class="col-sm-9 more-data-field">
                             <input type="text" name="checkboxinfo[]" class="moredata form-control" value="<?= $v; ?>" placeholder="Field Name">  
                             </div>
                             
@@ -885,7 +979,7 @@ btn1 .fa{
                             ?>
                          <div id="more_checkbox_fields"></div>                                
                                 <div class="col-sm-12">
-                                    <h4 class="pull-left">
+                                    <h4 class="pull-left pull-center">
                                         <i><?php echo translate('if_you_need_more_field_for_your_product_,_please_click_here_for_more...');?></i>
                                     </h4>
                                     <div id="more_field_btn" class="moredata btn btn-mint btn-labeled fa fa-plus pull-right">
@@ -1036,7 +1130,8 @@ btn1 .fa{
                            
   <div class="form-group btm_border" style="padding-top:30px;"> Extra Info
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
-                                <div class="col-sm-6">`
+                                <div class="col-sm-6">
+                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="extra_info" class="checkbox_class" <?= (in_array('extra_info',$checks))?"checked":""; ?>/>
                                 </div>
                             </div>
                         <div class="form-group btm_border">
@@ -2573,13 +2668,6 @@ $('#amnty').on('keyup', function(){
     </script>
     
     <script type="text/javascript">
-        function create_link(lid)
-    {
-        var txt = $('#'+lid+'_text').val();
-        var link = $('#'+lid+'_link').val();
-        var str = txt+'-'+link;
-        $('#'+lid).val(str);
-    }
         function update_filter(id,col)
         {
             

@@ -5771,7 +5771,8 @@ class Home extends CI_Controller
             }
 
             $page_data['pkgs'] = $this->db->get('membership')->result_array();
-            $page_data['cat'] = $this->db->where('promo_cat',0)->where('visible','0')->get('member_cat')->result_array();
+            $page_data['cat'] = $this->db->where('visible','0')->get('member_cat')->result_array();
+            $page_data['ref'] = false;
             if(isset($_GET['ref_code']) && !isset($_GET['pack']))
             {
 
@@ -5779,7 +5780,7 @@ class Home extends CI_Controller
                 $user = $this->db->where('referral_code',$code)->get('user')->row();
                 if($user)
                 {
-                    $page_data['cat'] = $this->db->where('promo_cat',1)->where('visible','1')->get('member_cat')->result_array();
+                    $page_data['ref'] = true;
                 }
             }
 

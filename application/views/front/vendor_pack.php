@@ -55,6 +55,10 @@ $url = base_url('updated/');
                     $this->db->order_by("sort", "asc");
 
                       $pkg = $this->db->where('mcat', $v['id'])->get('membership')->result_array();
+                      if(isset($ref) && $ref)
+                      {
+                          $pkg = $this->db->where('promo_check',1)->where('mcat', $v['id'])->get('membership')->result_array();
+                      }
                         foreach ($pkg as $k => $v) {
                             $cls = '';
                             if($k == 1)
@@ -68,11 +72,18 @@ $url = base_url('updated/');
                           ?>
                 <div class="col-md-4 col-sm-6">
                   <div class="pricingTable <?= $cls ?>" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+                      <?php
+                      if($v['discount'])
+                          {
+                              ?>
                       <div class="discount-badge">
                       <div class="badge-circle">
                         <p>Save <span class="discount"><?= $v['discount']; ?></span></p>
                       </div>
                     </div>
+                              <?php
+                          }
+                      ?>
                     <div class="pricingTable-header">
                       <i class="fa fa-adjust"></i>
                       <div class="price-value"> £<?= $v['price'] ?>  </div>

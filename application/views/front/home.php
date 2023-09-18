@@ -724,7 +724,17 @@ include "header_new.php";
 
             <span>It's about working together</span></h4>
 
-          <p class="hire_para">That's why we've made a place where small business owners, vendors, bloggers, and others can come together to help their communities and reach more people. Hence, don't let the challenges of community management hold you back. Join us at Community HubLand and unlock the full potential of your online community today.</p>
+          <p class="hire_para"> 
+          That's why we've made a place where
+small Business Owners, Vendors, Bloggers, and others can come together
+On one platform to create a market space where their communities can reach them more easily.
+          </p>
+          
+            <p class="hire_para"> 
+          So, don't let the challenges of community marketing presence hold you back.
+Join us at Community HubLand and access a range of platforms <br>
+to unlock the full potential of your online community today.
+          </p>
           <a href="#" class="secondary-btn white mt-4">SIGN-UP NOW!</a>
           <div class="bottom_circled">
 
