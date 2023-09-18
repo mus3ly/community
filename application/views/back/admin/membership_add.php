@@ -105,7 +105,7 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-4 control-label" for="demo-hor-1">
-                    <?php echo translate('promo check');?>
+                    <?php echo translate('Referal check');?>
                 </label>
                 <div class="col-sm-6">
                     <input type="checkbox" value="1" name="promo_check" >

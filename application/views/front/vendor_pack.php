@@ -54,7 +54,7 @@ $url = base_url('updated/');
                   <?php
                     $this->db->order_by("sort", "asc");
 
-                      $pkg = $this->db->where('mcat', $v['id'])->get('membership')->result_array();
+                      $pkg = $this->db->where('promo_check',0)->where('mcat', $v['id'])->get('membership')->result_array();
                       if(isset($ref) && $ref)
                       {
                           $pkg = $this->db->where('promo_check',1)->where('mcat', $v['id'])->get('membership')->result_array();

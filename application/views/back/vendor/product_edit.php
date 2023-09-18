@@ -22,7 +22,7 @@ function bubbleSort($arr)
     }
     return $arr;
 }
-$row = (array) $product_data;
+$row = (array)$product_data;
 $all_op = json_decode($row['options'],true);
 ?>
 <style>

@@ -14,7 +14,7 @@ $viewtype = $_GET['view'];
     {
         if(isset($_SESSION['ip_info']))
         {
-            $ip_loc = $_SESSION['ip_info']['city'].','.$_SESSION['ip_info']['countryCode'];
+            $ip_loc = $_SESSION['ip_info']['city'].', '.$_SESSION['ip_info']['countryCode'];
             
         }
     }
