@@ -5174,6 +5174,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['stripe_live_id']    = $this->input->post('stripe_live_id');
             $data['promo_code']    = $this->input->post('promo_code');
             $data['promo_limit']    = $this->input->post('promo_limit');
+            $data['promo_check']    = $this->input->post('promo_check');
             $this->db->insert('membership', $data);
             $id = $this->db->insert_id();
             if(!demo()){
@@ -5195,6 +5196,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['stripe_live_id']    = $this->input->post('stripe_live_id');
             $data['promo_code']    = $this->input->post('promo_code');
             $data['promo_limit']    = $this->input->post('promo_limit');
+            $data['promo_check']    = $this->input->post('promo_check');
             $data['mcat']    = $this->input->post('mcat');
             $this->db->where('membership_id', $para2);
             $this->db->update('membership', $data);
@@ -5221,6 +5223,8 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $this->db->join('member_cat','member_cat.id = membership.mcat');
             $this->db->order_by('membership_id', 'desc');
             $page_data['all_memberships'] = $this->db->get()->result_array();
+            var_dump($page_data['all_memberships']);die();
+            var_dump($this->db->last_query());die();
             $this->load->view('back/admin/membership_list', $page_data);
         } elseif ($para1 == 'view') {
             $page_data['membership_data'] = $this->db->get_where('membership', array(

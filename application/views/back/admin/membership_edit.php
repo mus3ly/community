@@ -105,7 +105,15 @@
                 </div>
               
             </div>
-            
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1">
+                    <?php echo translate('promo check');?>
+                </label>
+                <div class="col-sm-6">
+                    <input type="checkbox" value="" name="promo_check" <?php echo ($row['promo_check'])?"checked":""; ?>>
+                </div>
+
+            </div>
             <div class="form-group">
                 <label class="col-sm-4 control-label" for="demo-hor-2"><?php echo translate('package_seal');?></label>
                 <div class="col-sm-6">
