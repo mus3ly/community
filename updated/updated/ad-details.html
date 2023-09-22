@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ad Details | Community Hubland</title>
+
+  <!-- Favicons -->
+  <link href="assets/images/favicon.png" rel="icon">
+  <link href="assets/images/favicon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css' />
+  <link rel='stylesheet'
+    href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css' />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css' />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css' />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css" />
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css'/>
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+  <!-- Template Main CSS File -->
+  <link href="assets/scss/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <!-- Shape Boxes -->
+  <div class="dotted_lines">
+    <img src="assets/images/doted-lines.png" alt="">
+  </div>
+  <!-- <div class="ellipse">
+        <img src="assets/images/Ellipse.png" alt="">
+    </div> -->
+  <div class="lines_shape">
+    <img src="assets/images/lines-shape.png" alt="">
+  </div>
+  <!-- <div class="rounded_box">
+        <img src="assets/images/rounded.png" alt="">
+    </div> -->
+
+  <!-- Header -->
+  <header data-aos="fade-down" data-aos-duration="1000">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="assets/images/logo.png" alt="Logo" class="img-fluid">
+        </a>
+        <div class="mobile-open">
+          <a href="#" class="cart-btn-mb btn btn-theme-transparent hidden-ld" data-toggle="modal" data-target="#popup-cart">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="hidden-xs">
+              <span class="cart_num">0</span>
+            </span>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="fa fa-bars"></span>
+          </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                COMMUNITY PEGS
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Jobs</a></li>
+                <li><a class="dropdown-item" href="#">Charities</a></li>
+                <li><a class="dropdown-item" href="#">Education</a></li>
+                <li><a class="dropdown-item" href="#">Worship</a></li>
+                <li><a class="dropdown-item" href="#">Blogs</a></li>
+                <li><a class="dropdown-item" href="#">Markets</a></li>
+                <li><a class="dropdown-item" href="#">Short Stays</a></li>
+                <li><a class="dropdown-item" href="#">Activities</a></li>
+                <li><a class="dropdown-item" href="#">Other</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Shop</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Directory
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">All Listings</a></li>
+                <li><a class="dropdown-item" href="#">Places</a></li>
+                <li><a class="dropdown-item" href="#">Affiliate</a></li>
+                <li><a class="dropdown-item" href="#">Blogs</a></li>
+                <li><a class="dropdown-item" href="#">Job</a></li>
+                <li><a class="dropdown-item" href="#">Event</a></li>
+                <li><a class="dropdown-item" href="#">News</a></li>
+                <li><a class="dropdown-item" href="#">Charities</a></li>
+                <li><a class="dropdown-item" href="#">Properties</a></li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Account</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">FAQ</a>
+            </li>
+            <li class="nav-item add-listing">
+              <a href="vendor_logup/registration.html" class="">Add Listing
+                <i class="fa fa-plus"></i>
+              </a>
+            </li>
+            <li class="nav-item dropdown signup">
+              <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-box-arrow-in-right"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Customer Login</a></li>
+                <li><a class="dropdown-item" href="#">Customer Sign-up</a></li>
+                <li><a class="dropdown-item" href="#">Vendor Login</a></li>
+                <li><a class="dropdown-item" href="#">Vendor Sign-up</a></li>
+              </ul>
+            </li>
+            <li class="nav-item cart-btn-item">
+              <a href="#" class="btn btn-theme-transparent" data-toggle="modal" data-target="#popup-cart">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="hidden-xs">
+                  <span class="cart_num">0</span>
+                  Item(s)
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="ads-details">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-9 col-md-12 order-lg-1">
+            <div class="ads-single-wrapper">
+              <div class="carousel-outer" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
+                <div id="sync1" class="owl-carousel owl-theme">
+                  <div class="item">
+                      <a href="assets/images/product_image/ad(2).jpg" class="lightbox-image" data-fancybox="images" data-caption="">
+                        <img src="assets/images/product_image/ad(2).jpg" alt="">
+                      </a>
+                  </div>
+                  <div class="item">
+                      <a href="assets/images/product_image/ad(4).jpg" class="lightbox-image" data-fancybox="images" data-caption="">
+                        <img src="assets/images/product_image/ad(4).jpg" alt="">
+                      </a>
+                  </div>
+                  <div class="item">
+                      <a href="assets/images/product_image/ad(5).jpg" class="lightbox-image" data-fancybox="images" data-caption="">
+                        <img src="assets/images/product_image/ad(5).jpg" alt="">
+                      </a>
+                  </div>
+                  <div class="item">
+                      <a href="assets/images/product_image/ad(6).jpg" class="lightbox-image" data-fancybox="images" data-caption="">
+                        <img src="assets/images/product_image/ad(6).jpg" alt="">
+                      </a>
+                  </div>
+                  <div class="item">
+                    <a href="assets/images/product_image/ad(7).jpg" class="lightbox-image" data-fancybox="images" data-caption="">
+                      <img src="assets/images/product_image/ad(7).jpg" alt="">
+                    </a>
+                </div>
+                </div>
+                
+                <div id="sync2"  class="owl-carousel owl-theme">
+                  <div class="item">
+                      <img src="assets/images/product_image/ad(2).jpg" alt="">
+                  </div>
+                  <div class="item">
+                    <img src="assets/images/product_image/ad(4).jpg" alt="">
+                  </div>
+                  <div class="item">
+                    <img src="assets/images/product_image/ad(5).jpg" alt="">
+                  </div>
+                  <div class="item">
+                    <img src="assets/images/product_image/ad(6).jpg" alt="">
+                  </div>
+                  <div class="item">
+                    <img src="assets/images/product_image/ad(7).jpg" alt="">
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12 order-lg-3">
+            
+            <div class="ad-info-wrapper" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+              <div class="info-header">
+                <h2>Relaxing Wooden Chair</h2>
+              </div>
+              <hr>
+              <div class="product-details">
+                <h3>Description</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> <br>
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident, sunt in culpa</p>
+
+                <div class="specification">
+                  <h3>Specification</h3>
+                  <ul>
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Type Of Vehicle</p>
+                            <p class="value">Sale</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Perfomance</p>
+                            <p class="value">Exceeds Expectation,</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Transmission</p>
+                            <p class="value">Manual</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Fuel Type</p>
+                            <p class="value">Petrol</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Type Of Vehicle</p>
+                            <p class="value">Sale</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Perfomance</p>
+                            <p class="value">Exceeds Expectation,</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Transmission</p>
+                            <p class="value">Manual</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Fuel Type</p>
+                            <p class="value">Petrol</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Type Of Vehicle</p>
+                            <p class="value">Sale</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Perfomance</p>
+                            <p class="value">Exceeds Expectation,</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Transmission</p>
+                            <p class="value">Manual</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">Fuel Type</p>
+                            <p class="value">Petrol</p>
+                          </div>
+                        </li>
+                      </div>
+                    </div>
+                  </ul>
+                  <h3>Seller Comment</h3>
+                  <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident, sunt in culpa</p>
+                </div>
+                <div class="specification features">
+                  <h3>Features</h3>
+                  <ul>
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">consectetur adipiscing elit</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">consectetur adipiscing elit</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">consectetur adipiscing elit</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">consectetur adipiscing elit</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">consectetur adipiscing elit</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">consectetur adipiscing elit</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">consectetur adipiscing elit</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">consectetur adipiscing elit</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">consectetur adipiscing elit</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">consectetur adipiscing elit</p>
+                          </div>
+                        </li>
+                      </div>
+                      <div class="col-lg-6 col-md-6">
+                        <li>
+                          <i class="fa fa-check-square"></i>
+                          <div class="texts">
+                            <p class="title">consectetur adipiscing elit</p>
+                          </div>
+                        </li>
+                      </div>
+                    </div>
+                  </ul>
+                </div>
+                <div class="extra-desc">
+                  <div class="row">
+                    <div class="col-lg-5 order-lg-2">
+                      <img src="assets/images/product_image/product_sideimg_1689087271.webp" alt="" class="img-fluid">
+                    </div>
+                    <div class="col-lg-7 order-lg-1">
+                      <h3>Toyota Aqua 2015 Model G LED soft leather.</h3>
+                      <p>A CAR or an AUTOMOBILE is a motor vehicle with wheels. Most definitions of cars say that they run primarily on roads, seat one to eight people, have four wheels, and mainly transport people, not cargo.[1][2]
+  
+                        French inventor <a href="#">Nicolas-Joseph</a> Cugnot built the first steam-powered road vehicle in 1769, while French-born-Swiss inventor François Isaac de Rivaz designed and constructed the first internal combustion powered automobile in 1808. The modern car—a practical, marketable automobile for everyday use—was invented in 1886, when German inventor Carl Benz patented his Benz Patent-Motorwagen. Commercial cars became widely available during the 20th century. One of the first cars affordable by the masses was the 1908 Model T, an American car manufactured by the Ford Motor Company. Cars were rapidly adopted in the US, where they replaced horse-drawn carriages.[3] In Europe and other parts of the world, demand for automobiles did not increase until after World War II.[4] The car is considered an essential part of the developed economy.</p>
+                        <ul>
+                          <li>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Laboriosam, aspernatur!</li>
+                          <li>Voluptatem ad vero aliquid ut, sapiente numquam dolores placeat! Iste?</li>
+                          <li>Aliquid atque ullam reprehenderit libero. Ipsum sunt doloremque quisquam distinctio?</li>
+                        </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ad-info-wrapper">
+              <h2 class="mb-3">Common questions about the product</h2>
+              <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa porro hic officiis sit dolores quidem mollitia ut excepturi dicta architecto tempora laudantium debitis aspernatur omnis placeat, odit autem velit eveniet veritatis commodi facere repudiandae voluptatum? Rem hic harum molestias eaque beatae quos maxime, magnam mollitia perspiciatis!</p>
+              <div class="product-faq">
+                <div class="accordion accordion-flush" id="product-accr">
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="accr-1">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, dolor.
+                      </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="accr-1" data-bs-parent="#product-accr">
+                      <div class="accordion-body">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis voluptas porro animi neque debitis voluptate, nemo nobis sequi non ducimus?</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="accr-2">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        Voluptatem ad vero aliquid ut, sapiente numquam dolores placeat! Iste?
+                      </button>
+                    </h2>
+                    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="accr-2" data-bs-parent="#product-accr">
+                      <div class="accordion-body">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe unde, itaque fugit vero illo ipsam obcaecati quia maiores omnis ut quae reiciendis minima? Quisquam reiciendis amet suscipit error minus eum.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="accr-3">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                        Accordion Item #3
+                      </button>
+                    </h2>
+                    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="accr-3" data-bs-parent="#product-accr">
+                      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="category">
+                <div class="cat-box">
+                  <div class="tag_sec_wrapper">
+
+                    <div class="head_section">
+
+                      <h4>Amenities</h4>
+
+                    </div>
+
+                    <div class="inner_sec">
+
+                      <div class="tag_container">
+
+
+                        <div class="tags_in">
+
+                          <i class="fa fa-check-square"></i>
+
+                          <span>bpage am</span>
+
+                        </div>
+
+
+                        <div class="tags_in">
+
+                          <i class="fa fa-check-square"></i>
+
+                          <span>Leather seats</span>
+
+                        </div>
+
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+                <div class="cat-box">
+                  <div class="tag_sec_wrapper">
+
+                    <div class="head_section">
+
+                      <h4>Tags</h4>
+
+                    </div>
+
+                    <div class="inner_sec">
+
+                      <div class="tag_container">
+
+
+                        <div class="tags_in">
+
+                          <i class="fa fa-check-square"></i>
+
+                          <span>bpage am</span>
+
+                        </div>
+
+
+                        <div class="tags_in">
+
+                          <i class="fa fa-check-square"></i>
+
+                          <span>Leather seats</span>
+
+                        </div>
+                        <div class="tags_in">
+
+                          <i class="fa fa-check-square"></i>
+
+                          <span>bpage am</span>
+
+                        </div>
+
+
+                        <div class="tags_in">
+
+                          <i class="fa fa-check-square"></i>
+
+                          <span>Leather seats</span>
+
+                        </div>
+                        <div class="tags_in">
+
+                          <i class="fa fa-check-square"></i>
+
+                          <span>bpage am</span>
+
+                        </div>
+
+
+                        <div class="tags_in">
+
+                          <i class="fa fa-check-square"></i>
+
+                          <span>Leather seats</span>
+
+                        </div>
+
+
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="share">
+                <div class="report">
+                  <a href="#"><i class="fa fa-flag"></i><span>Report</span></a>
+                </div>
+                <div class="share">
+                  <a href="#"><i class="fab fa-facebook-f"></i></a>
+                  <a href="#"><i class="fab fa-twitter"></i></a>
+                  <a href="#"><i class="fab fa-instagram"></i></a>
+                  <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-12 order-lg-2">
+            <div class="seller-info-wrapper">
+              <aside class="details-sidebar">
+                <div class="widget" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="0">
+                  <h4 class="widget-title">Ad Posted By</h4>
+                  <div class="agent-inner">
+                    <div class="agent-title">
+                      <div class="agent-photo">
+                        <a href="#"><img src="assets/images/img_avatar.png" alt=""></a>
+                      </div>
+                      <div class="agent-details">
+                        <h3><a href="#">Tahmina Anny</a></h3>
+                        <div class="join-at">
+                          <i class="fa fa-clock"></i>June-11-2023
+                        </div>
+                      </div>
+                    </div>
+                    <div class="contact-box">
+                      <i class="fa fa-envelope"></i><a href="#">test@test.com</a>
+                    </div>
+                    <div class="contact-box">
+                      <i class="fa fa-location-dot"></i><a href="#">Lahore</a>
+                    </div>
+                    <a href="#" class="contact-agent">Contact</a>
+                  </div>
+                </div>
+    
+                <div class="widget" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+                  <h4 class="widget-title">Our Location</h4>
+                  <div class="map-wrapper">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387190.279909073!2d-74.25987368715491!3d40.69767006458873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1608297882359!5m2!1sen!2sbd" width="100%" height="250" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                  </div>
+                </div>
+  
+              </aside>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="orange_pathwrap" id="bpage_form" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+        <div class="iframe_box">
+          <div class="getin_touch">
+            <div class="row">
+              <div class="col-md-12 col-lg-6 order-lg-2">
+                <div class="map-side">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124900.03392454954!2d92.90706196707936!3d11.965773023985834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3088d3d85e0fe039%3A0x25c8aaaa513ef4bf!2sSwaraj%20Dweep!5e0!3m2!1sen!2sbd!4v1691688082664!5m2!1sen!2sbd"
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-6 order-lg-1">
+                <div class="form-side">
+                  <h3>Get In Touch</h3>
+                  <form action="#" method="">
+  
+                    <input type="hidden" name="pid" id="pid1" value="1">
+  
+                    <div class="row">
+  
+                      <div class="col-sm-6 form_gapp">
+                        <div class="form_box">
+                          <div class="input-group mb-3">
+                            <span class="input-group-text">
+                              <i class="fa fa-user"></i>
+                            </span>
+                            <input type="text" class="form-control" id="input1" placeholder="First Name">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 form_gapp">
+                        <div class="form_box">
+                          <div class="input-group mb-3">
+                            <span class="input-group-text">
+                              <i class="fa fa-user"></i>
+                            </span>
+                            <input type="text" class="form-control" id="input1" placeholder="Last Name">
+                          </div>
+                        </div>
+                      </div>
+  
+                      <div class="col-sm-6 form_gapp">
+                        <div class="form_box">
+                          <div class="input-group mb-3">
+                            <span class="input-group-text">
+                              <i class="fa fa-envelope"></i>
+                            </span>
+                            <input type="email" class="form-control" id="input1" placeholder="Your email">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 form_gapp">
+                        <div class="form_box">
+                          <div class="input-group mb-3">
+                            <span class="input-group-text">
+                              <i class="fa fa-phone"></i>
+                            </span>
+                            <input type="text" class="form-control" id="input1" placeholder="Phone">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-12 form_gapp">
+                        <div class="form_box">
+                          <div class="input-group align-items-start mb-3">
+                            <span class="input-group-text pt-3">
+                              <i class="fa fa-message"></i>
+                            </span>
+                            <textarea class="form-control" placeholder="Leave a comment here"
+                              style="height: 100px"></textarea>
+                          </div>
+                        </div>
+                      </div>
+  
+                    </div>
+  
+                    <div class="row">
+  
+                      <div class="col-sm-12 form_gapp">
+  
+                        <div class="form_box form-btns">
+  
+                          <button class="form-btn" type="button" id="send">Send</button>
+  
+                          <a href="https://maps.google.com/?q=31.5203696,74.35874729999999" class="form-btn">
+                            GET DIRECTION
+                          </a>
+  
+                        </div>
+  
+                      </div>
+  
+                    </div>
+  
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+  
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer_warp">
+    <div class="container">
+      <div class="footer_up">
+        <!--footer logo start here-->
+        <div class="footer_container first-container">
+          <div class="row align-items-center">
+            <div class="col-lg-3 col-md-6 footer_logo">
+              <a href="#"><img src="assets/images/logo.png" class="img-fluid" alt=""></a>
+              <form action="https://dev.communityhubland.com//home/subscribe"
+                class="mhl_subscribe_fields subscribe_form mt-3" method="post" accept-charset="utf-8">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <button class="btn send-btn" type="button" id="button-addon2">Subscribe</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-md-3 offset-md-3">
+            </div>
+          </div>
+          <!--footer logo Ends here-->
+          <!--footer subscribe Starts here-->
+        </div>
+        <!--footer subscribe Ends here-->
+        <div class="footer_container">
+          <div class="flex_boxes_4 p-0">
+            <!--meddle section-->
+            <div class="row">
+              <!--margin_in_between <div class="col-md-4 resposinve_set hide_me"> -->
+              <div class="col-lg-4 col-sm-6">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <img src="assets/images/volume.png" alt="">
+                  </div>
+                  <div class="col-sm-9">
+                    <div class="about-us">
+                      <h4 class="about_title">About US</h4>
+                      <p>Hire our experienced team of programmers, digital
+                        designers, and marketing professionals.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-sm-6 widget_column">
+                <div class="sec_column">
+                  <h4 class="add_margin_left">Community Pegs</h4>
+                  <div class="align_footer">
+                    <ul class="span_bullets">
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/78.html">Jobs</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/134.html">
+                          Charities</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/305.html">Education</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/351.html">Worship</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/369.html">
+                          Blogs</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/386.html">Markets</a>
+                      </li>
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/431.html">Short Stays</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/429.html">Activities</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/1102.html">Other</a>
+                      </li>
+
+                      <li class="span_bullets_arrows" i="i">
+                        <a href="home/category/853.html">Networking</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/646.html">Stores</a>
+                      </li>
+
+                      <li class="span_bullets_arrows">
+                        <a href="home/category/872.html">Services</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-lg-2 widget_column  for_mobile_left">
+
+                <div class="third_column">
+                  <h4>Company Info</h4>
+                  <ul>
+                    <li>
+                      <a href="home/page/Disclaimer.html">Disclaimer</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Privacy_Notice.html">
+                        Privacy Policy</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Cookie_Policy.html">
+                        Cookie Policy</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Terms_Of_Use.html">Terms of Use</a>
+                    </li>
+                    <li>
+                      <a href="home/page/affiliate_terms_of_use.html">Affiliate Terms of Use</a>
+                    </li>
+                    <li>
+                      <a href="home/page/shop_terms_of_use.html">Shop Terms of Use</a>
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+              <div class="col-sm-6 col-lg-2 widget_column  for_mobile_right">
+
+                <div class="forth_column">
+                  <h4>Discovery</h4>
+                  <ul>
+                    <li>
+                      <a href="home/page/About_Us.html">
+                        About Us</a>
+                    </li>
+                    <li>
+                      <a href="home/page/Services.html">Services</a>
+                    </li>
+                    <li>
+                      <a href="home/page/career.html">Career</a>
+                    </li>
+                    <li>
+                      <a href="home/blog.html">Articles</a>
+                    </li>
+
+                  </ul>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer_container">
+      <div class="footerbtn">
+        <a href="vendor_logup/registration.html">
+          SIGN-UP to Add a Listing
+        </a>
+        <a href="directory.html">
+          Visit Directory
+        </a>
+        <a href="home/login_set/registration.html">
+          Join Our Affiliate Marketing
+        </a>
+      </div>
+    </div>
+    </div>
+    <!--meddle section-->
+
+    <div class="mhl_copyright_footer">
+      <div class="copyright_container">
+        <p>Copyright &copy; 2023 <span>|</span> Community HubLand Ltd</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Vendor JS Files -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js'></script>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>
