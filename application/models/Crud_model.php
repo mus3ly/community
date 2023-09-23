@@ -1997,7 +1997,7 @@ foreach($vendors as $kk=> $vv)
 
     function can_add_product($vendor)
     {
-        return true;//for testing
+//        return true;//for testing
         
         $membership = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->membership;
         // die($membership);
