@@ -1,5 +1,10 @@
 
-
+<?php
+$footer_text =  $this->db->get_where('general_settings',array('type' => 'footer_text'))->row()->value;
+$footer_category =  $this->db->get_where('general_settings',array('type' => 'footer_category'))->row()->value;
+$footer_page =  $this->db->get_where('general_settings',array('type' => 'footer_page'))->row()->value;
+$footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_disc'))->row()->value;
+?>
   <footer class="footer_warp">
 
     <div class="container">
@@ -149,104 +154,34 @@
                   <div class="align_footer">
 
                     <ul class="span_bullets">
+                                           <?php
+                        // die('come');
+                        $x=0;
+                        $brands = $this->db->get('category')->result_array();
+                $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 86))->row()->value,true);
+                                            $result=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result[]=$row;
+                                                }
+                                            }
+
+                    foreach ($brands as $key => $value) {
+                        if(in_array($value['category_id'], $result))
+                        {
+                            $x++;
+                            //  echo $value['category_id'];
+                        ?>
+
+                                <li class="span_bullets_arrows"><a href="<?= base_url('home/category/'.$value['category_id']); ?>"><?= $value['category_name'] ?></a></li>
+                              <?php
+                        }
+                    }
+                              ?>
 
 
 
-                      <li class="span_bullets_arrows">
-
-                        <a href="home/category/78.html">Jobs</a>
-
-                      </li>
-
-
-
-                      <li class="span_bullets_arrows">
-
-                        <a href="home/category/134.html">
-
-                          Charities</a>
-
-                      </li>
-
-
-
-                      <li class="span_bullets_arrows">
-
-                        <a href="home/category/305.html">Education</a>
-
-                      </li>
-
-
-
-                      <li class="span_bullets_arrows">
-
-                        <a href="home/category/351.html">Worship</a>
-
-                      </li>
-
-
-
-                      <li class="span_bullets_arrows">
-
-                        <a href="home/category/369.html">
-
-                          Blogs</a>
-
-                      </li>
-
-
-
-                      <li class="span_bullets_arrows">
-
-                        <a href="home/category/386.html">Markets</a>
-
-                      </li>
-
-                      <li class="span_bullets_arrows">
-
-                        <a href="home/category/431.html">Short Stays</a>
-
-                      </li>
-
-
-
-                      <li class="span_bullets_arrows">
-
-                        <a href="home/category/429.html">Activities</a>
-
-                      </li>
-
-
-
-                      <li class="span_bullets_arrows">
-
-                        <a href="home/category/1102.html">Other</a>
-
-                      </li>
-
-
-
-                      <li class="span_bullets_arrows" i="i">
-
-                        <a href="home/category/853.html">Networking</a>
-
-                      </li>
-
-
-
-                      <li class="span_bullets_arrows">
-
-                        <a href="home/category/646.html">Stores</a>
-
-                      </li>
-
-
-
-                      <li class="span_bullets_arrows">
-
-                        <a href="home/category/872.html">Services</a>
-
-                      </li>
+                      
 
                     </ul>
 
@@ -265,46 +200,18 @@
                   <h4>Company Info</h4>
 
                   <ul>
-
-                    <li>
-
-                      <a href="home/page/Disclaimer.html">Disclaimer</a>
-
-                    </li>
-
-                    <li>
-
-                      <a href="home/page/Privacy_Notice.html">
-
-                        Privacy Policy</a>
-
-                    </li>
-
-                    <li>
-
-                      <a href="home/page/Cookie_Policy.html">
-
-                        Cookie Policy</a>
-
-                    </li>
-
-                    <li>
-
-                      <a href="home/page/Terms_Of_Use.html">Terms of Use</a>
-
-                    </li>
-
-                    <li>
-
-                      <a href="home/page/affiliate_terms_of_use.html">Affiliate Terms of Use</a>
-
-                    </li>
-
-                    <li>
-
-                      <a href="home/page/shop_terms_of_use.html">Shop Terms of Use</a>
-
-                    </li>
+                    <?php 
+                    $categories=json_decode($footer_page);
+                    foreach ($categories as $key => $value) {
+                        $row = $this->db->where('page_id',$value)->get('page')->row();
+                        if($row)
+                        {
+                        ?>
+                        <li><a href="<?= base_url('home/page/'.$row->parmalink); ?>"><?= $row->page_name ?></li></a>
+                        <?php
+                        }
+                    } 
+                    ?>
 
                   </ul>
 
@@ -323,34 +230,18 @@
                   <h4>Discovery</h4>
 
                   <ul>
-
-                    <li>
-
-                      <a href="home/page/About_Us.html">
-
-                        About Us</a>
-
-                    </li>
-
-                    <li>
-
-                      <a href="home/page/Services.html">Services</a>
-
-                    </li>
-
-                    <li>
-
-                      <a href="home/page/career.html">Career</a>
-
-                    </li>
-
-                    <li>
-
-                      <a href="home/blog.html">Articles</a>
-
-                    </li>
-
-
+                    <?php 
+                    $categories=json_decode($footer_disc);
+                    foreach ($categories as $key => $value) {
+                        $row = $this->db->where('page_id',$value)->get('page')->row();
+                        if($row)
+                        {
+                        ?>
+                        <li><a href="<?= base_url('home/page/'.$row->parmalink); ?>"><?= $row->page_name ?></li></a>
+                        <?php
+                        }
+                    }
+                    ?>
 
                   </ul>
 
