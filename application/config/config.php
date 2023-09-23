@@ -22,6 +22,7 @@ $root.= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME
 // $root = 'https://marketplace.hypeplug.paris/';
 $config['base_url'] = $root;
 $config['log_threshold'] = 1;
+$config['stripe_env'] = 1;
 
 // $config['base_url'] = '';
 $config['shippo_token'] = 'shippo_test_52bf877b99c795c0e3a73a8dd2483c417db6f730';

@@ -5388,6 +5388,9 @@ class Home extends CI_Controller
             $stripe_secret = $stripe_secret->value;
                 $stripe_publishable = $this->db->where('type','stripe_publishable')->get('business_settings')->row();
                 $stripe_publishable = $stripe_publishable->value;
+                $env = $this->config->item('stripe_env');
+                if(!$env)
+                {
                 if (isset($pack->stripe_id) && $pack->stripe_id) {
                     try {
                         $path = FCPATH . '/stripe-subscription/vendor/autoload.php';
@@ -5458,6 +5461,81 @@ class Home extends CI_Controller
 
                     </body>
                     <?php
+                }
+                }
+                else
+                {
+                    if (isset($pack->stripe_live_id) && $pack->stripe_live_id) {
+                        try {
+                            $path = FCPATH . '/stripe-subscription/vendor/autoload.php';
+                            require $path;
+                            \Stripe\Stripe::setApiKey($stripe_secret);
+                            $checkout_session = \Stripe\Checkout\Session::create([
+                                'success_url' => base_url() . '/home/success_subscription?track=' . $track,
+                                'cancel_url' => base_url() . '/stripe-subscription/cancel.html',
+                                'payment_method_types' => ['card'],
+                                'mode' => 'subscription',
+                                'line_items' => [[
+                                    'price' => $pack->stripe_live_id,
+                                    // For metered billing, do not pass quantity
+                                    'quantity' => 1,
+                                ]],
+//                           if($coupon){
+//                               'discounts' => [[
+//                                   'coupon' => 'Jf8DLxDL',
+//                               ]],
+//                           }
+                                'subscription_data' => [
+                                    'metadata' => ["plan_id" => $user->pack, "track" => $track, "customer_id" => $_SESSION['subscription_vendor']]],
+                            ]);
+                        } catch (Exception $e) {
+                            echo '<script> alert("Coupon is not for this package.") </script>';
+                            $path = FCPATH . '/stripe-subscription/vendor/autoload.php';
+                            require $path;
+                            \Stripe\Stripe::setApiKey($stripe_secret);
+                            $checkout_session = \Stripe\Checkout\Session::create([
+                                'success_url' => base_url() . '/home/success_subscription?track=' . $track,
+                                'cancel_url' => base_url() . '/stripe-subscription/cancel.html',
+                                'payment_method_types' => ['card'],
+                                'mode' => 'subscription',
+                                'line_items' => [[
+                                    'price' => $pack->stripe_live_id,
+                                    // For metered billing, do not pass quantity
+                                    'quantity' => 1,
+                                ]],
+
+                                'subscription_data' => [
+                                    'metadata' => ["plan_id" => $user->pack, "track" => $track, "customer_id" => $_SESSION['subscription_vendor']]],
+                            ]);
+                        }
+                        ?>
+                        <head>
+                            <title>Stripe Subscription Checkout</title>
+                            <script src="https://js.stripe.com/v3/"></script>
+                        </head>
+                        <body>
+                        <script type="text/javascript">
+                            var stripe = Stripe('<?= $stripe_publishable ?>');
+                            var session = "<?php echo $checkout_session['id']; ?>";
+                            stripe.redirectToCheckout({sessionId: session})
+                                .then(function (result) {
+                                    // If `redirectToCheckout` fails due to a browser or network
+                                    // error, you should display the localized error message to your
+                                    // customer using `error.message`.
+                                    if (result.error) {
+                                        alert(result.error.message);
+                                    }
+                                })
+                                .catch(function (error) {
+                                    console.error('Error:', error);
+                                });
+
+
+                        </script>
+
+                        </body>
+                        <?php
+                    }
                 }
 
             }
