@@ -9634,7 +9634,7 @@ $config['last_link'] = ' ';
         if ($para2 == 'email') {
             $this->load->view('front/shopping_cart/invoice_email', $page_data);
         } else {
-            $this->load->view('front/index', $page_data);
+            $this->load->view('front/index_new', $page_data);
         }
     }
 

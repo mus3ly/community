@@ -156,13 +156,6 @@
                 <td id="shipping"><?= currency($shipping); ?></td>
             </tr>
 
-            <tr class="coupon_disp" <?php if($this->cart->total_discount()<=0){ ?>style="display:none;" <?php } ?>>
-                <td><?php echo translate('coupon_discount');?></td>
-                <td id="disco">
-                    <?php echo currency($this->cart->total_discount()); ?>
-                </td>
-            </tr>
-
             <tfoot>
                 <tr>
                     <td><?php echo translate('grand_total');?>:</td>
@@ -170,23 +163,6 @@
                 </tr>
             </tfoot>
         </table>
-
-
-        <?php if($this->cart->total_discount() <= 0 && $this->session->userdata('couponer') !== 'done' && $this->cart->get_coupon() == 0){ ?>
-            <h5>
-            	<?php echo translate('enter_your_coupon_code_if_you_have_one');?>.
-            </h5>
-            <div class="form-group">
-                <input type="text" class="form-control coupon_code" placeholder="Enter your coupon code">
-            </div>
-            <span class="btn btn-theme btn-block coupon_btn">
-                <?php echo translate('apply_coupon');?>
-            </span>
-        <?php } else { ?>
-            <p>
-              <?php echo translate('coupon_already_activated'); ?>
-            </p>
-        <?php } ?>
     </div>
 
 </div>
