@@ -220,26 +220,56 @@ if(isset($nimgs[0]))
                       </div>
                     </div>
                     <table class="table border mt-3 mb-2">
-                      <tr>
-                        <th class="py-2">Display:</th>
-                        <td class="py-2">13.3-inch LED-backlit display with IPS</td>
+                        <?php
+                        $additional_fields = json_decode($row['additional_fields'], true);
+    $names = array();
+    $valus = array();
+    if(isset($additional_fields['name']) && $additional_fields['name'])
+    {
+        $names = json_decode($additional_fields['name'],true);
+        $valus = json_decode($additional_fields['value'],true);
+    }
+    if($valus && $names)
+    {
+        $col1= array();
+        $col2= array();
+        $i = 1;
+        $lim = 30;
+        $accor = array();
+        foreach($names as $k=> $v)
+        {
+            if(strlen($valus[$k]) > $lim)
+            {
+                $accor[$v] = $valus[$k];
+            }
+            else
+            {
+            $i++;
+            
+            if($i%2 == 0)
+            {
+                if($valus[$k])
+                $col1[$v] = $valus[$k];
+            }
+            else
+            {
+                if($valus[$k])
+                $col2[$v] = $valus[$k];
+            }
+            }
+        }
+        foreach($names as $k=> $v)
+        {
+          ?>
+          <tr>
+              <th class="py-2"><?= $v ?>:</th>
+                        <td class="py-2"><?= $valus[$k]; ?></td>
                       </tr>
-                      <tr>
-                        <th class="py-2">Processor capacity:</th>
-                        <td class="py-2">2.3GHz dual-core Intel Core i5</td>
-                      </tr>
-                      <tr>
-                        <th class="py-2">Camera quality:</th>
-                        <td class="py-2">720p FaceTime HD camera</td>
-                      </tr>
-                      <tr>
-                        <th class="py-2">Memory</th>
-                        <td class="py-2">8 GB RAM or 16 GB RAM</td>
-                      </tr>
-                      <tr>
-                        <th class="py-2">Graphics</th>
-                        <td class="py-2">Intel Iris Plus Graphics 640</td>
-                      </tr>
+          <?php
+        }
+    }
+
+                        ?>
                     </table>
                   </div>
                   <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
