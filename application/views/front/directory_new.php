@@ -50,8 +50,8 @@ $viewtype = $_GET['view'];
                             ?>
                             <li>
                             <span class="marg_add <?= (isset($car_mod) && $car_mod == $v['id']) ? "active" : "" ?>"><i class="fa-solid <?= $v['dir_icon'] ?>"></i></span><a
-                                    href="<?= base_url('directory'); ?>/<?= $v['dir_slug'] ?>"
-                                    class=" <?= (isset($car_mod) && $car_mod == $v['id']) ? "active" : "" ?>"><?php echo translate($v['dir_text']); ?></a>
+                                    href="#"
+                                    onclick="ch_url('<?= $v['dir_slug'] ?>')"class=" <?= (isset($car_mod) && $car_mod == $v['id']) ? "active" : "" ?>"><?php echo translate($v['dir_text']); ?></a>
                         </li>
                             <?php
                         }

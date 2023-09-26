@@ -1869,7 +1869,7 @@ class Home extends CI_Controller
             echo $html = $this->load->view('front/user/profile', $page_data,true);
             exit();
         } elseif ($para1 == "wishlist") {
-            echo $html = $this->load->view('front/user/wishlist',array(vender_data),true);
+            echo $html = $this->load->view('front/user/wishlist',array(),true);
             exit();
         } elseif ($para1 == "rpoints") {
             $page_data['user_info'] =$uinfo =  $this->db->get_where('user', array('user_id' => $this->session->userdata('user_id')))->result_array();

@@ -17,7 +17,7 @@ $url = base_url('updated/');
         <div class="row">
           <div class="col-lg-10 col-md-12 order-lg-2">
             <div class="main-wrapper" id="result">
-            </div>s
+            </div>
           </div>
           <div class="col-lg-2 col-md-12 order-lg-1">
             <div class="user-side">
@@ -49,7 +49,7 @@ $url = base_url('updated/');
                 
                 foreach($menu as $v){
                     ?>
-                    <div class="options-box" onclick="load_section('<?= $v['key']; ?>');">
+                    <div class="options-box" onclick="load_section('<?= $v['key']; ?>');" id="<?= $v['key']; ?>_item">
                   <div class="options-title">
                     <i class="<?=$v['icon']?>"></i>
                     <a href="#"><?= $v['title']; ?></a>
@@ -58,43 +58,6 @@ $url = base_url('updated/');
                     <?php
                 }
                 ?>
-                
-                <div class="options-box">
-                  <div class="options-title">
-                    <i class="bi bi-columns-gap"></i>
-                    <a href="#">Dashboard</a>
-                  </div>
-                </div>
-                <div class="options-box">
-                  <div class="options-title">
-                    <i class="bi bi-box-seam"></i>
-                    <a href="#">Campaigns</a>
-                  </div>
-                </div>
-                <div class="options-box">
-                  <div class="options-title">
-                    <i class="bi bi-wallet2"></i>
-                    <a href="#">Withdraw</a>
-                  </div>
-                </div>
-                <div class="options-box">
-                  <div class="options-title">
-                    <i class="bi bi-gear"></i>
-                    <a href="#">Log</a>
-                  </div>
-                </div>
-                <div class="options-box">
-                  <div class="options-title">
-                    <i class="bi bi-clock-history"></i>
-                    <a href="#">History</a>
-                  </div>
-                </div>
-                <div class="options-box">
-                  <div class="options-title">
-                    <i class="bi bi-sliders2"></i>
-                    <a href="#">Settings</a>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

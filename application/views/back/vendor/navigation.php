@@ -104,12 +104,6 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                             <?php    
                                             }
                                             ?>
-                                            <li <?php if($page_name=="product" && isset($_GET['is_product'])){?> class="active-link" <?php } ?> >
-                                                <a href="<?php echo base_url(); ?>vendor/product?is_product=1">
-                                                    <i class="fa fa-circle fs_i"></i>
-                                                        <?php echo translate('product_listings');?>
-                                                </a>
-                                            </li>
                                         <?php
                                             } if($this->crud_model->vendor_permission('product')) {
                                             ?>
@@ -178,12 +172,6 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
 
 									<?php if($this->crud_model->vendor_permission('product')) {
                                         ?>
-                                        <li <?php if ($page_name == "product" && !isset($_GET['is_event']) && !isset($_GET['is_job']) && !isset($_GET['is_product'])) { ?> class="active-link" <?php } ?> >
-                                            <a href="<?php echo base_url(); ?>vendor/product">
-                                                <i class="fa fa-circle fs_i"></i>
-                                                <?php echo translate('all_listings'); ?>
-                                            </a>
-                                        </li>
                                         <?php
                                             $mod = $this->db->get('modules')->result_array();
                                             foreach($mod as $k=> $v)
@@ -198,12 +186,6 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                             <?php    
                                             }
                                             ?>
-                                            <li <?php if($page_name=="product" && isset($_GET['is_product'])){?> class="active-link" <?php } ?> >
-                                                <a href="<?php echo base_url(); ?>vendor/product?is_product=1">
-                                                    <i class="fa fa-circle fs_i"></i>
-                                                        <?php echo translate('product_listings');?>
-                                                </a>
-                                            </li>
 									<?php
 										}
 									?>

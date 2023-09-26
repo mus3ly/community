@@ -1018,6 +1018,10 @@ class Vendor extends CI_Controller
                   {
                 $data['is_car'] = 1;
                 
+                $data['specification']               = $this->input->post('specification');
+                $data['warranty_info']               = $this->input->post('warranty_info');
+                $data['shipping_info']               = $this->input->post('shipping_info');
+                $data['seller_profile']               = $this->input->post('seller_profile');
                 $data['checkbox_h']               = $this->input->post('checkbox_h');
                 $data['accor_h']               = $this->input->post('accor_h');
                 $data['make']               = $this->input->post('make');
@@ -1317,6 +1321,10 @@ class Vendor extends CI_Controller
                 $data['discip_heading']          = $this->input->post('discip_heading');
                 
                 $data['make']               = $this->input->post('make');
+                $data['specification']               = $this->input->post('specification');
+                $data['warranty_info']               = $this->input->post('warranty_info');
+                $data['shipping_info']               = $this->input->post('shipping_info');
+                $data['seller_profile']               = $this->input->post('seller_profile');
                 $data['model']              = $this->input->post('model');
                 $data['seats']              = $this->input->post('no_of_seats');
                 $data['pid']                = $this->input->post('car_id');
@@ -1653,10 +1661,6 @@ class Vendor extends CI_Controller
             $page_data['brands'] =  $this->db->get('category')->result_array();
              $page_data['social_media']= $this->db->get('bpkg')->result_array();
             $page_data['page_name']   = ($sing->is_bpage)?"bpage_edit":"product_edit";
-            if($sing->is_product)
-            {
-                $page_data['page_name']   = "product_edit1";
-            }
             if($sing->is_blog)
             {
                 $page_data['page_name']   = "blog_edit";

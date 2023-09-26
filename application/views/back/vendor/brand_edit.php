@@ -13,7 +13,7 @@
             <div class="panel-body">
 
                 <div class="form-group">
-                    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('brand_name');?></label>
+                    <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('title');?></label>
                     <div class="col-sm-6">
                         <input type="text" value="<?php echo $row['title'];?>" 
                         	name="name" id="demo-hor-1" class="form-control required">

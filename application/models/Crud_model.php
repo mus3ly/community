@@ -5,11 +5,11 @@ if (!defined('BASEPATH'))
 class Crud_model extends CI_Model
 {
     /*
-	 *	Developed by: Active IT zone
-	 *	Date	: 14 July, 2015
-	 *	Active Supershop eCommerce CMS
-	 *	http://codecanyon.net/user/activeitezone
-	 */
+     *  Developed by: Active IT zone
+     *  Date    : 14 July, 2015
+     *  Active Supershop eCommerce CMS
+     *  http://codecanyon.net/user/activeitezone
+     */
 
     function __construct()
     {
@@ -1997,7 +1997,7 @@ foreach($vendors as $kk=> $vv)
 
     function can_add_product($vendor)
     {
-//        return true;//for testing
+        return true;//for testing
         
         $membership = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->membership;
         // die($membership);
@@ -2272,7 +2272,7 @@ foreach($vendors as $kk=> $vv)
                 'wishlist' => json_encode($wished)
             ));
         }
-        $html = 'Item add tio wishlist successfully! click here to <a href="'.base_url('home/wish_listed').'">View Wishlist</a>';
+        $html = 'Item add tio wishlist successfully! click here to <a href="'.base_url('home/profile?page=wishlist').'">View Wishlist</a>';
         $this->session->set_flashdata('success', $html);
         custom_redirect($_SERVER['HTTP_REFERER'], 'refresh');
         }else{

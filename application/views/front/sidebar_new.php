@@ -35,13 +35,6 @@
             <div class="sidebar mb-4">
               <div id="filter-wrapper" > 
                 <form action="#" method="">
-                  <div class="form-group">
-                    <div class="range-slider-one clearfix">
-                      <h4>Distance Range</h4>
-                      <div class="area-range-slider"></div>
-                      <div class="input"><input type="text" class="property-amount" name="price" readonly></div>
-                    </div>
-                  </div>
                   <?php
                   if(true)
                   {
@@ -69,7 +62,7 @@
                       ?>
                   <div class="form-group">
                     <div class="range-slider-one clearfix">
-                        <p>Custom range slider:</p>
+                        <p>Price Range:</p>
   <input type="range" class="slider rounded" min="1" style="background-color:var(--primary-color);"
   max="<?= $max_price ?>"
   step="1" value="<?= (isset($_GET['sale_price']) && $_GET['sale_price'])?$_GET['sale_price']:$max_price ?>"  oninput="ch_price()" id="myRange">
@@ -82,17 +75,6 @@
                   <?php
                   }
                   ?>
-                  
-                  <div class="row">
-                      <div class="form-group">
-                        <div class="range-slider-one clearfix">
-                            <p><b>Price Range:</b><span class="float-end text-right"><input type="text" name="amount" class="amount" id="inputId" readonly style="border:0; color:#f6931f; font-weight:bold; max-width: 5rem; text-align: right;"></span></p>
-                        <div class="custom-slider slider-range" data-min="1" data-max="<?= $max_dist ?>"  data-id="inputId" data-default-min="1" data-default-max="<?= (isset($_GET['sale_price']) && $_GET['dis_range'])?$_GET['dis_range']:$max_dist ?>"></div>
-                        
-                        </div>
-                    </div>
-
-                  </div>
                   <div class="row">
                   <?php
         $arr = array();
@@ -158,11 +140,11 @@ foreach($arr as $k=> $v)
                             <div class="accordion-item <?= ($open)?'active':''?>">
                     <h2 class="accordion-header" id="item1">
                       <button class="accordion-button accordion-button-sidebar collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#item-accr<?= $key ?>" aria-expanded="true" aria-controls="item-accr1" style="color:white; background-color:var(--primary-color);">
+                        data-bs-target="#item-accr<?= $key ?>" aria-expanded="<?= ($open)?'false':'true'?>" aria-controls="item-accr1" style="color:white; background-color:var(--primary-color);">
                         <a class="text-white" href="<?= base_url('/directory'); ?>/<?= $row['slug'] ?>"><?php echo $row['category_name']; ?></a>
                       </button>
                     </h2>
-                    <div id="item-accr<?= $key ?>" class="accordion-collapse collapse" aria-labelledby="item1"
+                    <div id="item-accr<?= $key ?>" class="accordion-collapse collapse <?= ($open)?'show':''?>" aria-labelledby="item1"
                       data-bs-parent="#accordionOne">
                       <div class="accordion-body">
                         <ul>

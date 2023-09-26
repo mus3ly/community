@@ -366,7 +366,7 @@ btn1 .fa{
                 <div class="tab-base">
                     <!--Tabs Content-->                    
                     <div class="tab-content">
-                       <div id="customer_choice_options1" class="tab-pane fade <?= ($active_tab == 'customer_choice_options1')?"active in":''; ?>">
+                       <div id="product_option" class="tab-pane fade <?= ($active_tab == 'product_option')?"active in":''; ?>">
                             
                             <div class="form-group btm_border">'
                                 <label class="col-sm-2 control-label" for="demo-hor-15">
@@ -557,8 +557,53 @@ btn1 .fa{
                                     <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
                                 </div>
                                 </div>
+                                <?php
+                                if(isset($mod->store_check) && $mod->store_check)
+                                {
+                                    ?>
+
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Specification'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" class="summernotes" name="specification"   id="editor2" height="200" >
+                                        <?php echo $row['specification']; ?></textarea>
+                                    <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
+                                </div>
+                                </div>
+
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Warranty_info'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" class="summernotes" name="warranty_info"   id="editor3" height="200" >
+                                        <?php echo $row['warranty_info']; ?></textarea>
+                                    <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
+                                </div>
+                                </div>
+
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Shipping_info'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" class="summernotes" name="shipping_info"   id="editor4" height="200" >
+                                        <?php echo $row['shipping_info']; ?></textarea>
+                                    <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
+                                </div>
+                                </div>
+
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('seller_profile'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" class="summernotes" name="seller_profile"   id="editor5" height="200" >
+                                        <?php echo $row['seller_profile']; ?></textarea>
+                                    <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
+                                </div>
+                                </div>
+
+                                    <?php
+                                }
+
+                                ?>
                                 <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('tags');?></label>
+                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('eller_profile');?></label>
                                 <div class="col-sm-6">
                                     <input type="text" name="tag" value="<?= $row['tag']; ?>" data-role="tagsinput" placeholder="<?php echo translate('enter comma (,) to add more');?>" class="form-control">
                                 </div>
@@ -1130,9 +1175,7 @@ btn1 .fa{
                            
   <div class="form-group btm_border" style="padding-top:30px;"> Extra Info
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
-                                <div class="col-sm-6">
-                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="extra_info" class="checkbox_class" <?= (in_array('extra_info',$checks))?"checked":""; ?>/>
-                                </div>
+                            
                             </div>
                         <div class="form-group btm_border">
                                     <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('section_heading');?></label>

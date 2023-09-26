@@ -73,6 +73,9 @@ if(isset($nimgs[0]))
       <!-- content -->
         <div class="container">
           <div class="row gx-5">
+                <?php
+        $this->load->view('front/flash');
+        ?>
             <aside class="col-lg-6">
               <div class="product-imgs" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
                 <div class="img-display">
@@ -134,10 +137,7 @@ if(isset($nimgs[0]))
                   </div>
 
                   <p>
-                    Modern look and quality demo item is a streetwear-inspired collection that continues to break away
-                    from the conventions of mainstream fashion. Made in Italy, these black and brown clothing low-top
-                    shirts for
-                    men.
+                    <?= $row['description']; ?>
                   </p>
 
                   <div class="row">

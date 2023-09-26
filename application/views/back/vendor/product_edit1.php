@@ -79,7 +79,7 @@
                                 <div class="col-sm-6" id="brand">
                                     <?php 
                                         $brands=json_decode($this->crud_model->get_type_name_by_id('sub_category',$row['sub_category'],'brand'),true);
-                                        if(count($brands) > 0){
+                                        if($brands && count($brands) > 0){
                                           echo $this->crud_model->select_html('brand','brand','name','edit','demo-chosen-select',$row['brand'],'brand_id',$brands,'','multi'); 
                                         }else{
                                             echo translate("No brands are available for this sub category");

@@ -368,7 +368,7 @@ btn1 .fa{
                         </li>
 
                         <li >
-                            <a data-toggle="tab" href="#text_gallary"><?php echo translate('text_gallary'); ?></a>
+                            <a target="_blank"  href="<?= base_url('vendor/brand'); ?>"><?php echo translate('text_gallary'); ?></a>
                         </li>
 <!-- 
                         <li >

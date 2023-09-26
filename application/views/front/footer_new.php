@@ -27,12 +27,14 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
                 <div class="input-group">
 
-                  <input type="text" class="form-control" placeholder="Your Email">
+                  <input type="text" class="form-control" id="email_send" placeholder="Your Email">
 
                   <button class="btn send-btn" type="button" id="button-addon2">Subscribe</button>
-
+                    
                 </div>
-
+                <div class="success_msg">
+                    <p id="msg_email"></p>
+                </div>
               </form>
 
             </div>
@@ -334,7 +336,7 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
       ?>
       <script>
-      	function search_location()
+        function search_location()
 {
 
     console.log("Here");
@@ -656,8 +658,40 @@ function update_filter(id,col)
   {
       ?>
       <script>
+      $('body').on('click', '.remove_from_wish', function(){
+    var product = $(this).data('pid');
+    var button = $(this);
+    $.ajax({
+      url: base_url+'home/wishlist/remove/'+product,
+      beforeSend: function() {
+        button.parent().parent().hide('fast');
+      },
+      success: function(data) {
+        ajax_load(base_url+'home/wishlist/num/','wishlist_num');
+        button.parent().parent().remove();
+        notify(wishlist_remove,'info','bottom','right');
+      },
+      error: function(e) {
+        console.log(e)
+      }
+    });
+    });
       $(document).ready(function(){
-          load_section('info');
+          <?php
+          if(isset($_GET['page']))
+          {
+              ?>
+              load_section('<?= $_GET['page'] ?>');
+              <?php
+          }
+          else
+          {
+              ?>
+              load_section('info');
+              <?php
+          }
+          ?>
+          
       });
           function load_section(sec){
               $('#result').html('Loading ....');
@@ -698,7 +732,7 @@ function update_filter(id,col)
   {
       ?>
       <script>
-      	function search_location()
+        function search_location()
 {
 
     console.log("Here");
@@ -750,185 +784,185 @@ function select_place(place,txt)
   <!-- Template Main JS File -->
   <script>
   base_url = '<?= base_url() ?>';
-      function to_wishlist(id,e){	
-		e = e || window.event;
-		e = e.target || e.srcElement;
-		var state 		= check_login_stat('state');
-		var product 	= id;
-		var button 		= $(e);
-		var alread 		= button.html();
-		if(button.is("i")){
-			var alread_classes = button.attr('class');	
-		}		
-		state.success(function (data) {
-			if(data == 'hypass'){
-				$.ajax({
-					url: base_url+'home/wishlist/add/'+product,
-					beforeSend: function() {
-						if(button.is("i")){
-							button.attr('class','fa fa-spinner fa-spin fa-fw');	
-						} else {
-							button.find('i').attr('class','fa fa-spinner fa-spin fa-fw');	
-						}	
-					},
-					success: function(data) {
-						if(data == ''){
-							notify(wishlist_add,'info','bottom','right');
-						} else {
-							notify(wishlist_already,'warning','bottom','right');
-						}
-						if(button.is("i")){
-							button.attr('class',alread_classes);	
-						} else {
-							button.html(alread);	
-						}
-					},
-					error: function(e) {
-						console.log(e)
-					}
-				});
-			} else {
-				signin();
-			}
-		});
-	}
+      function to_wishlist(id,e){ 
+    e = e || window.event;
+    e = e.target || e.srcElement;
+    var state     = check_login_stat('state');
+    var product   = id;
+    var button    = $(e);
+    var alread    = button.html();
+    if(button.is("i")){
+      var alread_classes = button.attr('class');  
+    }   
+    state.success(function (data) {
+      if(data == 'hypass'){
+        $.ajax({
+          url: base_url+'home/wishlist/add/'+product,
+          beforeSend: function() {
+            if(button.is("i")){
+              button.attr('class','fa fa-spinner fa-spin fa-fw'); 
+            } else {
+              button.find('i').attr('class','fa fa-spinner fa-spin fa-fw'); 
+            } 
+          },
+          success: function(data) {
+            if(data == ''){
+              notify(wishlist_add,'info','bottom','right');
+            } else {
+              notify(wishlist_already,'warning','bottom','right');
+            }
+            if(button.is("i")){
+              button.attr('class',alread_classes);  
+            } else {
+              button.html(alread);  
+            }
+          },
+          error: function(e) {
+            console.log(e)
+          }
+        });
+      } else {
+        signin();
+      }
+    });
+  }
   </script>
   <script>
-  function notify(message,type,from,align){	
+  function notify(message,type,from,align){ 
       $.notify(message, type);
-		
-	}
-      function to_wishlist(id,e){	
-		e = e || window.event;
-		e = e.target || e.srcElement;
-		var state 		= check_login_stat('state');
-		var product 	= id;
-		var button 		= $(e);
-		var alread 		= button.html();
-		if(button.is("i")){
-			var alread_classes = button.attr('class');	
-		}		
-		state.success(function (data) {
-			if(data == 'hypass'){
-				$.ajax({
-					url: base_url+'home/wishlist/add/'+product,
-					beforeSend: function() {
-						if(button.is("i")){
-							button.attr('class','fa fa-spinner fa-spin fa-fw');	
-						} else {
-							button.find('i').attr('class','fa fa-spinner fa-spin fa-fw');	
-						}	
-					},
-					success: function(data) {
-						if(data == ''){
-							notify(wishlist_add,'info','bottom','right');
-						} else {
-							notify(wishlist_already,'warning','bottom','right');
-						}
-						if(button.is("i")){
-							button.attr('class',alread_classes);	
-						} else {
-							button.html(alread);	
-						}
-					},
-					error: function(e) {
-						console.log(e)
-					}
-				});
-			} else {
-				signin();
-			}
-		});
-	}
-	function reload_header_cart(){
-	    $.getJSON(base_url+"home/cart/whole_list", function(result){
-			var total = 0;
-			var whole_list = '';
-			var count = Object.keys(result).length;
-			$('.cart_num').html(count);
-			$('.header__cart__indicator').html(currency+total.toFixed(2));
-			$('.shopping-cart__top').html('Your Cart('+count+')');
-			$('.top_carted_list').html(whole_list);
-			$('.shopping-cart__total').html(currency+total.toFixed(2));	
-	    });
-	}
-	$(document).ready(function(){
-	    	    reload_header_cart();
-	});
-	
-	function to_cart(id,e){	
-		var product = id;		
-		e = e || window.event;
-		e = e.target || e.srcElement;
-		var elm_type = $(e).data('type');
-		var button = $(e);
-		var alread = button.html();
-		if(button.is("i")){
-			var alread_classes = button.attr('class');	
-		}
-		var type = 'pp';
-		if(button.closest('.row').find('.cart_quantity').length){
-			quantity = button.closest('.margin-bottom-40').find('.cart_quantity').val();
-		}
-		
-		if($('#pnopoi').length){
-			type = 'pp';
-			var form = button.closest('form');
-			var formdata = false;
-			if (window.FormData){
-				formdata = new FormData(form[0]);
-			}
-			var option = formdata ? formdata : form.serialize();
-		} else {
-			type = 'other';
-			var form = $('#cart_form_singl');
-			var formdata = false;
-			if (window.FormData){
-				formdata = new FormData(form[0]);
-			}
-			var option = formdata ? formdata : form.serialize();
-		}
-		
-		$.ajax({
-			url 		: base_url+'home/cart/add/'+product+'/'+type,
-			type 		: 'POST', // form submit method get/post
-			dataType 	: 'html', // request type html/json/xml
-			data 		: option, // serialize form data 
-			cache       : false,
-			contentType : false,
-			processData : false,
-			beforeSend: function() {
-				if(button.is("i")){
-					button.attr('class','fa fa-spinner fa-spin fa-fw');	
-				} else {
-					button.find('i').attr('class','fa fa-spinner fa-spin fa-fw');	
-				}			
-			},
-			success: function(data) {
-				$('.ajax-to-cart').removeClass('btn--wait');
-				if(data == ' added'){
-					reload_header_cart();
-					notify('Add to cart successfully!','success','bottom','right');
-					
-					//sound('successful_cart');
-				} else if (data == 'shortage'){
-					notify(quantity_exceeds,'warning','bottom','right');
-					//sound('cart_shortage');
-				} else if (data == 'already'){
-					notify(product_already,'warning','bottom','right');
-					//sound('already_cart');
-				}
-				if(button.is("i")){
-					button.attr('class',alread_classes);	
-				} else {
-					button.html(alread);	
-				}	
-			},
-			error: function(e) {
-				console.log(e)
-			}
-		});
-	}
+    
+  }
+      function to_wishlist(id,e){ 
+    e = e || window.event;
+    e = e.target || e.srcElement;
+    var state     = check_login_stat('state');
+    var product   = id;
+    var button    = $(e);
+    var alread    = button.html();
+    if(button.is("i")){
+      var alread_classes = button.attr('class');  
+    }   
+    state.success(function (data) {
+      if(data == 'hypass'){
+        $.ajax({
+          url: base_url+'home/wishlist/add/'+product,
+          beforeSend: function() {
+            if(button.is("i")){
+              button.attr('class','fa fa-spinner fa-spin fa-fw'); 
+            } else {
+              button.find('i').attr('class','fa fa-spinner fa-spin fa-fw'); 
+            } 
+          },
+          success: function(data) {
+            if(data == ''){
+              notify(wishlist_add,'info','bottom','right');
+            } else {
+              notify(wishlist_already,'warning','bottom','right');
+            }
+            if(button.is("i")){
+              button.attr('class',alread_classes);  
+            } else {
+              button.html(alread);  
+            }
+          },
+          error: function(e) {
+            console.log(e)
+          }
+        });
+      } else {
+        signin();
+      }
+    });
+  }
+  function reload_header_cart(){
+      $.getJSON(base_url+"home/cart/whole_list", function(result){
+      var total = 0;
+      var whole_list = '';
+      var count = Object.keys(result).length;
+      $('.cart_num').html(count);
+      $('.header__cart__indicator').html(currency+total.toFixed(2));
+      $('.shopping-cart__top').html('Your Cart('+count+')');
+      $('.top_carted_list').html(whole_list);
+      $('.shopping-cart__total').html(currency+total.toFixed(2)); 
+      });
+  }
+  $(document).ready(function(){
+            reload_header_cart();
+  });
+  
+  function to_cart(id,e){ 
+    var product = id;   
+    e = e || window.event;
+    e = e.target || e.srcElement;
+    var elm_type = $(e).data('type');
+    var button = $(e);
+    var alread = button.html();
+    if(button.is("i")){
+      var alread_classes = button.attr('class');  
+    }
+    var type = 'pp';
+    if(button.closest('.row').find('.cart_quantity').length){
+      quantity = button.closest('.margin-bottom-40').find('.cart_quantity').val();
+    }
+    
+    if($('#pnopoi').length){
+      type = 'pp';
+      var form = button.closest('form');
+      var formdata = false;
+      if (window.FormData){
+        formdata = new FormData(form[0]);
+      }
+      var option = formdata ? formdata : form.serialize();
+    } else {
+      type = 'other';
+      var form = $('#cart_form_singl');
+      var formdata = false;
+      if (window.FormData){
+        formdata = new FormData(form[0]);
+      }
+      var option = formdata ? formdata : form.serialize();
+    }
+    
+    $.ajax({
+      url     : base_url+'home/cart/add/'+product+'/'+type,
+      type    : 'POST', // form submit method get/post
+      dataType  : 'html', // request type html/json/xml
+      data    : option, // serialize form data 
+      cache       : false,
+      contentType : false,
+      processData : false,
+      beforeSend: function() {
+        if(button.is("i")){
+          button.attr('class','fa fa-spinner fa-spin fa-fw'); 
+        } else {
+          button.find('i').attr('class','fa fa-spinner fa-spin fa-fw'); 
+        }     
+      },
+      success: function(data) {
+        $('.ajax-to-cart').removeClass('btn--wait');
+        if(data == ' added'){
+          reload_header_cart();
+          notify('Add to cart successfully!','success','bottom','right');
+          
+          //sound('successful_cart');
+        } else if (data == 'shortage'){
+          notify(quantity_exceeds,'warning','bottom','right');
+          //sound('cart_shortage');
+        } else if (data == 'already'){
+          notify(product_already,'warning','bottom','right');
+          //sound('already_cart');
+        }
+        if(button.is("i")){
+          button.attr('class',alread_classes);  
+        } else {
+          button.html(alread);  
+        } 
+      },
+      error: function(e) {
+        console.log(e)
+      }
+    });
+  }
   </script>
   
   <script src="<?= $url ?>/assets/js/main.js"></script>
@@ -975,7 +1009,46 @@ function select_place(place,txt)
     });
   } );
   </script>
+    <script>
+    $('#button-addon2').click(function(){
+        var mail = $('#email_send').val();
+        $.ajax({
+        url: '<?=base_url('home/subscribe')?>',
+        type: "Post",
+        async: true,
+        data: { email : mail },
+        success: function (data) {
+           if(data == ' done'){
+               
+                $('#msg_email').text("Subscribed Successfully!");
+           }else{
+               alert('error');
+           }
+        },
+        error: function (xhr, exception) {
+            var msg = "";
+            if (xhr.status === 0) {
+                msg = "Not connect.\n Verify Network." + xhr.responseText;
+            } else if (xhr.status == 404) {
+                msg = "Requested page not found. [404]" + xhr.responseText;
+            } else if (xhr.status == 500) {
+                msg = "Internal Server Error [500]." +  xhr.responseText;
+            } else if (exception === "parsererror") {
+                msg = "Requested JSON parse failed.";
+            } else if (exception === "timeout") {
+                msg = "Time out error." + xhr.responseText;
+            } else if (exception === "abort") {
+                msg = "Ajax request aborted.";
+            } else {
+                msg = "Error:" + xhr.status + " " + xhr.responseText;
+            }
+           
+        }
+    }); 
 
+    })
+        
+    </script>
 </body>
 
 

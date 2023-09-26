@@ -294,7 +294,7 @@ btn1 .fa{
                 <div class="tab-base">
                     <!--Tabs Content-->                    
                     <div class="tab-content">
-                        <div id="customer_choice_options1" class="tab-pane fade <?= ($active_tab == 'customer_choice_options1')?"active in":''; ?>">
+                        <div id="product_option" class="tab-pane fade <?= ($active_tab == 'product_option')?"active in":''; ?>">
                             <div class="form-group ">
                                 <h4 class=""><?php echo translate('customer_choice_options'); ?></h4>
                             </div>
@@ -384,6 +384,47 @@ btn1 .fa{
                                     <!--<textarea rows="9" name="description" id="summernotes"  class="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
                                 </div>
                                 </div>
+                                <?php
+                                if(isset($mod->store_check) && $mod->store_check)
+                                {
+                                    ?>
+
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Specification'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" class="summernotes" name="specification"   id="editor2" height="200" >
+                                        </textarea>
+                                </div>
+                                </div>
+
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Warranty_info'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" class="summernotes" name="warranty_info"   id="editor3" height="200" >
+                                        </textarea>
+                                </div>
+                                </div>
+
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Shipping_info'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" class="summernotes" name="shipping_info"   id="editor4" height="200" >
+                                        </textarea>
+                                </div>
+                                </div>
+
+                            <div class="form-group btm_border">
+                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('seller_profile'); ?></label>
+                                <div class="col-sm-6">
+                                    <textarea rows="9" class="summernotes" name="seller_profile"   id="editor5" height="200" >
+                                        </textarea>
+                                </div>
+                                </div>
+
+                                    <?php
+                                }
+
+                                ?>
                                 <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('tags');?></label>
                                 <div class="col-sm-6">
@@ -2506,6 +2547,40 @@ $('#amnty').on('keyup', function(){
             +'</div>'
         );
         set_select();
+    });
+        $("#more_additional_options").on('change','.op_type',function(){
+        var co = $(this).closest('.form-group').data('no');
+        if($(this).val() !== 'text' && $(this).val() !== ''){
+            $(this).closest('div').find(".options").html(''
+                +'    <div class="col-sm-12">'
+                +'        <div class="col-sm-12 options margin-bottom-10"></div><br>'
+                +'        <div class="btn btn-mint btn-labeled fa fa-plus pull-right add_op">'
+                +'        <?php echo translate('add_options_for_choice');?></div>'
+                +'    </div>'
+            );
+        } else if ($(this).val() == 'text' || $(this).val() == ''){
+            $(this).closest('div').find(".options").html(''
+                +'    <input type="hidden" name="op_set'+co+'[]" value="none" >'
+            );
+        }
+    });
+    
+    $("#more_additional_options").on('click','.add_op',function(){
+        var co = $(this).closest('.form-group').data('no');
+        $(this).closest('.col-sm-12').find(".options").append(''
+            +'    <div>'
+            +'        <div class="col-sm-10">'
+            +'          <input type="text" name="op_set'+co+'[]" class="form-control required"  placeholder="<?php echo translate('option_name'); ?>">'
+            +'        </div>'
+            +'        <div class="col-sm-2">'
+            +'          <span class="remove_it_n rmon btn btn-danger btn-icon btn-circle icon-sm fa fa-times" onclick="delete_row(this)"></span>'
+            +'        </div>'
+            +'    </div>'
+        );
+    });
+    
+    $('body').on('click', '.rmo', function(){
+        $(this).parent().parent().remove();
     });
 
     $("#more_btn").click(function(){

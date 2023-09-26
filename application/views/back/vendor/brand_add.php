@@ -10,10 +10,10 @@
         <div class="panel-body">
 
             <div class="form-group">
-                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('brand_name');?></label>
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('title');?></label>
                 <div class="col-sm-6">
                     <input type="text" name="name" id="demo-hor-1" 
-                    	placeholder="<?php echo translate('brand_name'); ?>" class="form-control required">
+                    	placeholder="<?php echo translate('title'); ?>" class="form-control required">
                 </div>
             </div>
             <div class="form-group">
@@ -28,10 +28,10 @@
             </div>
             
             <div class="form-group">
-                <label class="col-sm-4 control-label" for="demo-hor-2"><?php echo translate('brand_logo');?></label>
+                <label class="col-sm-4 control-label" for="demo-hor-2"><?php echo translate('select_image');?></label>
                 <div class="col-sm-6">
                     <span class="pull-left btn btn-default btn-file">
-                        <?php echo translate('select_brand_logo');?>
+                        <?php echo translate('select_image');?>
                         <input type="file" name="img" id='imgInp' accept="image">
                     </span>
                     <br><br>

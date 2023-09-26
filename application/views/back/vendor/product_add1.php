@@ -531,6 +531,40 @@ $.ajax(settings).done(function (response) {
         );
         set_select();
     });
+        $("#more_additional_options").on('change','.op_type',function(){
+        var co = $(this).closest('.form-group').data('no');
+        if($(this).val() !== 'text' && $(this).val() !== ''){
+            $(this).closest('div').find(".options").html(''
+                +'    <div class="col-sm-12">'
+                +'        <div class="col-sm-12 options margin-bottom-10"></div><br>'
+                +'        <div class="btn btn-mint btn-labeled fa fa-plus pull-right add_op">'
+                +'        <?php echo translate('add_options_for_choice');?></div>'
+                +'    </div>'
+            );
+        } else if ($(this).val() == 'text' || $(this).val() == ''){
+            $(this).closest('div').find(".options").html(''
+                +'    <input type="hidden" name="op_set'+co+'[]" value="none" >'
+            );
+        }
+    });
+    
+    $("#more_additional_options").on('click','.add_op',function(){
+        var co = $(this).closest('.form-group').data('no');
+        $(this).closest('.col-sm-12').find(".options").append(''
+            +'    <div>'
+            +'        <div class="col-sm-10">'
+            +'          <input type="text" name="op_set'+co+'[]" class="form-control required"  placeholder="<?php echo translate('option_name'); ?>">'
+            +'        </div>'
+            +'        <div class="col-sm-2">'
+            +'          <span class="remove_it_n rmon btn btn-danger btn-icon btn-circle icon-sm fa fa-times" onclick="delete_row(this)"></span>'
+            +'        </div>'
+            +'    </div>'
+        );
+    });
+    
+    $('body').on('click', '.rmo', function(){
+        $(this).parent().parent().remove();
+    });
 
     $("#more_btn").click(function(){
         $("#more_additional_fields").append(''

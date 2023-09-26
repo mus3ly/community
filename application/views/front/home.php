@@ -9,6 +9,11 @@ include "header_new.php";
     #location-result ul li{
         cursor:pointer;
     }
+    
+    .hire_para b{
+        font-weight:900;
+        color:white;
+    }
 </style>
 
 <main>
@@ -725,17 +730,17 @@ include "header_new.php";
             <span>It's about working together</span></h4>
 
           <p class="hire_para"> 
-          That's why we've made a place where
-small Business Owners, Vendors, Bloggers, and others can come together
+          That's why we've made a place where <br>
+small <b>Business Owners, Vendors, Bloggers,</b> and others can come together <br>
 On one platform to create a market space where their communities can reach them more easily.
           </p>
-          
+          <br>
             <p class="hire_para"> 
-          So, don't let the challenges of community marketing presence hold you back.
+          So, don't let the challenges of community marketing presence hold you back. <br>
 Join us at Community HubLand and access a range of platforms <br>
 to unlock the full potential of your online community today.
           </p>
-          <a href="#" class="secondary-btn white mt-4">SIGN-UP NOW!</a>
+          <a href="#" class="secondary-btn white mt-4">SIGN-UP NOW</a>
           <div class="bottom_circled">
 
             <img src="<?= $url ?>assets/images/bottom-circled.png" alt="">
