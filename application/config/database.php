@@ -14,7 +14,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | EXPLANATION OF VARIABLES
 | -------------------------------------------------------------------
 |
-|    ['dsn']      The full DSN string describe a connection to the database.
+|	['dsn']      The full DSN string describe a connection to the database.
 |	['hostname'] The hostname of your database server.
 |	['username'] The username used to connect to the database
 |	['password'] The password used to connect to the database
@@ -61,13 +61,42 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $active_group = 'default';
 $query_builder = TRUE;
+$env = 'dev';
+//$env = 'live';
+$env = 'local';
+if($env == 'live')
+{
 
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'admin_chl',
-	'password' => 'dAKMLswKJf',
-	'database' => 'admin_chl',
+	'username' => 'commzeyu_ci',
+	'password' => '^U!m,u?f?v]8',
+	'database' => 'commzeyu_ci',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+}
+elseif($env == 'dev')
+{
+	$db['default'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'commzeyu_ci',
+	'password' => '^U!m,u?f?v]8',
+	'database' => 'commzeyu_dev',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -84,13 +113,11 @@ $db['default'] = array(
 	'save_queries' => TRUE
 );
 
-
-$ip_server = $_SERVER['SERVER_ADDR'];
-
-if($ip_server == '::1' || $ip_server == "127.0.0.1")
+}
+else
 {
 
-
+	
 
 $db['default'] = array(
 	'dsn'	=> '',
