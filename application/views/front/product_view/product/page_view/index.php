@@ -132,7 +132,7 @@ if(isset($nimgs[0]))
                   </div>
 
                   <div class="mb-3">
-                    <span class="h5 price">$75.00</span>
+                    <span class="h5 price">$<?= $pro['sale_price'] ?></span>
                     <span class="text-muted">/per box</span>
                   </div>
 
@@ -200,13 +200,7 @@ if(isset($nimgs[0]))
                 <div class="tab-content" id="ex1-content">
                   <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
                     <p>
-                      With supporting text below as a natural lead-in to additional content. Lorem ipsum dolor sit amet,
-                      consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                      Ut
-                      enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                      nulla
-                      pariatur.
+                      <?= $row['specification'] ?>
                     </p>
                     <div class="row my-2">
                       <div class="col-12 col-md-6">
@@ -249,37 +243,19 @@ if(isset($nimgs[0]))
                     </table>
                   </div>
                   <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-                    <p>Tab content or sample information now <br />
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                      nisi ut
-                      aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                      culpa qui
-                      officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing
-                      elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                      quis
-                      nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</p>
+                    <p>
+                      <?= $row['warranty_info'] ?>
+                    </p>
                   </div>
                   <div class="tab-pane fade mb-2" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
-                    <p>Another tab content or sample information now <br />
-                      Dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                      magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                      ex ea
-                      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                      fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                      deserunt
-                      mollit anim id est laborum.</p>
+                    <p>
+                      <?= $row['shipping_info'] ?>
+                    </p>
                   </div>
                   <div class="tab-pane fade mb-2" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
-                    <p>Some other tab content or sample information now <br />
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                      nisi ut
-                      aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                      culpa qui
-                      officia deserunt mollit anim id est laborum.</p>
+                    <p>
+                      <?= $row['seller_profile'] ?>
+                    </p>
                   </div>
                 </div>
                 <!-- Pills content -->
@@ -290,33 +266,35 @@ if(isset($nimgs[0]))
                 <div class="card">
                   <div class="card-body">
                     <h5 class="card-title">Similar items</h5>
-                    <div class="d-flex mb-3">
-                      <a href="#" class="me-3">
-                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp"
+                    <?php
+                    $rel = $this->db->where('product_id !',$row['product_id'])->where('module',$row['module'])->limit(5)->get('product');
+                    $rel = $this->db->where('module',$row['module'])->limit(5)->get('product')->result_array();
+                    foreach ($rel as $key => $value) {
+                      $cov = '';
+                      if(isset($value['comp_cover']) && $value['comp_cover'])
+{
+$cov = $this->crud_model->size_img($value['comp_cover'],500,500);
+}
+                      ?>
+                      <div class="d-flex mb-3">
+                      <a href="<?= base_url($value['slug']) ?>" class="me-3">
+                        <img src="<?= $cov ?>"
                           style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
                       </a>
                       <div class="info">
                         <a href="#" class="nav-link mb-1">
-                          Rucksack Backpack Large <br />
-                          Line Mounts
-                        </a>
-                        <strong class="text-dark"> $38.90</strong>
-                      </div>
-                    </div>
-
-                    <div class="d-flex mb-3">
-                      <a href="#" class="me-3">
-                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp"
-                          style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                      </a>
-                      <div class="info">
-                        <a href="#" class="nav-link mb-1">
-                          Summer New Men's Denim <br />
+                          <?= $value['title']; ?><br />
                           Jeans Shorts
                         </a>
-                        <strong class="text-dark"> $29.50</strong>
+                        <strong class="text-dark"> $<?= $value['sale_price'] ?></strong>
                       </div>
                     </div>
+                      <?php
+                    }
+
+                    ?>
+
+                    
 
                     <div class="d-flex mb-3">
                       <a href="#" class="me-3">

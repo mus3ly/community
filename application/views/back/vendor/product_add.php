@@ -392,7 +392,7 @@ btn1 .fa{
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Specification'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" class="summernotes" name="specification"   id="editor2" height="200" >
+                                    <textarea rows="9" class="" name="specification"   id="editor2" height="200" >
                                         </textarea>
                                 </div>
                                 </div>
@@ -400,7 +400,7 @@ btn1 .fa{
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Warranty_info'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" class="summernotes" name="warranty_info"   id="editor3" height="200" >
+                                    <textarea rows="9" class="" name="warranty_info"   id="editor3" height="200" >
                                         </textarea>
                                 </div>
                                 </div>
@@ -408,7 +408,7 @@ btn1 .fa{
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Shipping_info'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" class="summernotes" name="shipping_info"   id="editor4" height="200" >
+                                    <textarea rows="9" class="" name="shipping_info"   id="editor4" height="200" >
                                         </textarea>
                                 </div>
                                 </div>
@@ -416,7 +416,7 @@ btn1 .fa{
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('seller_profile'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" class="summernotes" name="seller_profile"   id="editor5" height="200" >
+                                    <textarea rows="9" class="" name="seller_profile"   id="editor5" height="200" >
                                         </textarea>
                                 </div>
                                 </div>

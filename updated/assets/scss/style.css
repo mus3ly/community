@@ -273,8 +273,11 @@ li:has(.sub-sub-accordion){
 .ads-listing .sidebar-widget .accordion-item .accordion-body ul li:hover a{
     color:#f06021;
 }
-.accordion-button-sidebar{
+.active .accordion-button-sidebar{
         background: rgba(242, 96, 34, 0.1921568627) !important;
+}
+.accordion-button-sidebar{
+        background: #fff !important;
 }
 
 .accordion-button-sidebar a{

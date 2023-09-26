@@ -1012,16 +1012,18 @@ class Vendor extends CI_Controller
             $options = array();
             $num_of_imgs = 0;
                 $cat = $this->input->post('category');
+                $data = array();
                $cat2 = explode(',', $cat);
                $data['module']               = $this->input->post('module');
+               $data['specification']               = $this->input->post('specification');
+                $data['warranty_info']               = $this->input->post('warranty_info');
+                $data['shipping_info']               = $this->input->post('shipping_info');
+                $data['seller_profile']               = $this->input->post('seller_profile');
              if (in_array($this->config->item('car_cat'), $cat2))
                   {
                 $data['is_car'] = 1;
                 
-                $data['specification']               = $this->input->post('specification');
-                $data['warranty_info']               = $this->input->post('warranty_info');
-                $data['shipping_info']               = $this->input->post('shipping_info');
-                $data['seller_profile']               = $this->input->post('seller_profile');
+                
                 $data['checkbox_h']               = $this->input->post('checkbox_h');
                 $data['accor_h']               = $this->input->post('accor_h');
                 $data['make']               = $this->input->post('make');
@@ -1302,8 +1304,14 @@ class Vendor extends CI_Controller
             } else {
                 $num_of_imgs = count($_FILES["images"]['name']);
             }
+            $data = array();
             $pid =$this->db->where('product_id', $para2)->get('product')->row_array();
             $this->crud_model->set_amenities($pid['product_id']);
+            $data['specification']               = $this->input->post('specification');
+                $data['warranty_info']               = $this->input->post('warranty_info');
+                $data['shipping_info']               = $this->input->post('shipping_info');
+                $data['seller_profile']               = $this->input->post('seller_profile');
+
             //   var_dump($this->db->last_query());
             $v_id = $pid['added_by'];
             $vid = json_decode($v_id);

@@ -565,8 +565,7 @@ btn1 .fa{
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Specification'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" class="summernotes" name="specification"   id="editor2" height="200" >
-                                        <?php echo $row['specification']; ?></textarea>
+                                    <textarea rows="9" class="form-control" name="specification"   id="editor2" height="200" ><?php echo $row['specification']; ?></textarea>
                                     <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
                                 </div>
                                 </div>
@@ -574,8 +573,7 @@ btn1 .fa{
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Warranty_info'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" class="summernotes" name="warranty_info"   id="editor3" height="200" >
-                                        <?php echo $row['warranty_info']; ?></textarea>
+                                    <textarea rows="9" class="form-control" name="warranty_info"   id="editor3" height="200" ><?php echo $row['warranty_info']; ?></textarea>
                                     <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
                                 </div>
                                 </div>
@@ -583,8 +581,7 @@ btn1 .fa{
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Shipping_info'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" class="summernotes" name="shipping_info"   id="editor4" height="200" >
-                                        <?php echo $row['shipping_info']; ?></textarea>
+                                    <textarea rows="9" class="form-control" name="shipping_info"   id="editor4" height="200" ><?php echo $row['shipping_info']; ?></textarea>
                                     <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
                                 </div>
                                 </div>
@@ -592,8 +589,7 @@ btn1 .fa{
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('seller_profile'); ?></label>
                                 <div class="col-sm-6">
-                                    <textarea rows="9" class="summernotes" name="seller_profile"   id="editor5" height="200" >
-                                        <?php echo $row['seller_profile']; ?></textarea>
+                                    <textarea rows="9" class="form-control" name="seller_profile"   id="editor5" height="200" ><?php echo $row['seller_profile']; ?></textarea>
                                     <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
                                 </div>
                                 </div>
