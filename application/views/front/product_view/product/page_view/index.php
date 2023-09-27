@@ -140,20 +140,6 @@ if(isset($nimgs[0]))
                     <?= $row['description']; ?>
                   </p>
 
-                  <div class="row">
-                    <dt class="col-3">Type:</dt>
-                    <dd class="col-9">Regular</dd>
-
-                    <dt class="col-3">Color</dt>
-                    <dd class="col-9">Brown</dd>
-
-                    <dt class="col-3">Material</dt>
-                    <dd class="col-9">Cotton, Jeans</dd>
-
-                    <dt class="col-3">Brand</dt>
-                    <dd class="col-9">Reebook</dd>
-                  </div>
-
                   <hr />
 
                   <?php
@@ -205,17 +191,51 @@ if(isset($nimgs[0]))
                     <div class="row my-2">
                       <div class="col-12 col-md-6">
                         <ul class="list-unstyled mb-0">
-                          <li><i class="fas fa-check-square me-2"></i>Some great feature name here</li>
-                          <li><i class="fas fa-check-square me-2"></i>Lorem ipsum dolor sit amet, consectetur</li>
-                          <li><i class="fas fa-check-square me-2"></i>Duis aute irure dolor in reprehenderit</li>
-                          <li><i class="fas fa-check-square me-2"></i>Optical heart sensor</li>
+                          <?php
+                          $left = $right = array();
+                          $chek = json_decode($row['checkbox_xtra_fields']);
+                                foreach($chek as $k=> $v)
+                                {
+                                    if(empty($v))
+                                    {
+                                        unset($chek[$k]);
+                                    }
+                                }
+                                foreach($chek as $k=> $v)
+                                {
+                                  if($k%2 == 0)
+                                  {
+                                    $left[] = $v;
+                                  }
+                                  else
+                                  {
+                                    $right[] = $v;
+                                  }
+                                }
+
+                          ?>
+                          <?php
+                          foreach ($left as $key => $value) {
+                            ?>
+                            <li><i class="fas fa-check-square me-2"></i><?= $valus ?></li>
+
+                            <?php
+                          }
+
+                          ?>
                         </ul>
                       </div>
                       <div class="col-12 col-md-6 mb-0">
                         <ul class="list-unstyled">
-                          <li><i class="fas fa-check-square me-2"></i>Easy fast and ver good</li>
-                          <li><i class="fas fa-check-square me-2"></i>Some great feature name here</li>
-                          <li><i class="fas fa-check-square me-2"></i>Modern style and design</li>
+                          <?php
+                          foreach ($right as $key => $value) {
+                            ?>
+                            <li><i class="fas fa-check-square me-2"></i><?= $valus ?></li>
+
+                            <?php
+                          }
+
+                          ?>
                         </ul>
                       </div>
                     </div>

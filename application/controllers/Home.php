@@ -7530,12 +7530,15 @@ class Home extends CI_Controller
                     
                     $obj = (array)$obj;
                     $msg = '';
-                    foreach ($obj as $k => $v) {
+                    if(isset($obj['messages']))
+                    {
+                        foreach ($obj['messages'] as $k => $v) {
 
-                        if (isset($v[0]))
-                            $msg = $msg . $v[0] . '<br>';
-                        else
-                            $msg = $msg . $v . '<br>';
+                            if (isset($v[0]))
+                                $msg = $msg . $v[0] . '<br>';
+                            else
+                                $msg = $msg . $v . '<br>';
+                        }
                     }
                     $ret = array(
                         'status' => 0,

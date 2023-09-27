@@ -891,6 +891,7 @@ function select_place(place,txt)
   });
   
   function to_cart(id,e){ 
+    alert('OK');
     var product = id;   
     e = e || window.event;
     e = e.target || e.srcElement;

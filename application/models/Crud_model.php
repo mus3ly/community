@@ -1436,19 +1436,17 @@ foreach($vendors as $kk=> $vv)
     //GETTING PRODUCT PRICE CALCULATING DISCOUNT
     function get_product_price($product_id)
     {
-        $price = $this->get_type_name_by_id('product', $product_id, 'sale_price');
+        $number = $price = $this->get_type_name_by_id('product', $product_id, 'sale_price');
         $discount = $this->get_type_name_by_id('product', $product_id, 'discount');
 
         $price = is_numeric($price) ? $price : 0.00;
         $discount = is_numeric($discount) ? $discount : 0.00;
 
         $discount_type = $this->get_type_name_by_id('product', $product_id, 'discount_type');
-
-        $number = 0.00;
         if ($discount_type == 'amount') {
             $number = ($price - $discount);
         }
-        if ($discount_type == 'percent') {
+        elseif ($discount_type == 'percent') {
             $number = ($price - ($discount * $price / 100));
         }
 
