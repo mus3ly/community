@@ -15,8 +15,7 @@
     align-items:center;
 }
 .footer_container .about-full-wrap .col-4 img{
-        height: 75px;
-    width: 156px;
+        height: 75px;x
 }
 
 
@@ -281,7 +280,7 @@ li:has(.sub-sub-accordion){
 }
 
 .accordion-button-sidebar a{
-    color: #f36022 !important;
+    color: #000 !important;
 }
 
 .ads-listing .sidebar-widget .scroll-list ul .active{
@@ -3688,7 +3687,7 @@ footer .mhl_copyright_footer p span {
   color: white;
   padding: 10px 35px;
   border-radius: 20px;
-  background: #ffa442;
+  background: #f26122;
   text-transform: uppercase;
   transition: all 0.3s ease 0s;
   font-weight: 500;
@@ -3698,22 +3697,22 @@ footer .mhl_copyright_footer p span {
   transform: translateY(-5px);
 }
 .pricing-offer .pricingTable.blue .heading {
-  color: #36013f;
+  color: #6e57d2;
 }
 .pricing-offer .pricingTable.blue .price-value {
-  color: #36013f;
+  color: #6e57d2;
 }
 .pricing-offer .pricingTable.blue .pricingTable-signup a {
-  background: #36013f;
+  background: #6e57d2;
 }
 .pricing-offer .pricingTable.blue .pricingTable-signup a:hover {
-  box-shadow: 0 0 10px #36013f;
+  box-shadow: 0 0 10px #6e57d2;
 }
 .pricing-offer .pricingTable.blue .pricingTable-header i {
-  color: #36013f;
+  color: #6e57d2;
 }
 .pricing-offer .pricingTable.blue:hover .pricingTable-header {
-  background: #36013f;
+  background: #6e57d2;
 }
 .pricing-offer .pricingTable.blue:hover .pricingTable-header i {
   color: white;
@@ -3740,6 +3739,31 @@ footer .mhl_copyright_footer p span {
   background: #40c952;
 }
 .pricing-offer .pricingTable.green:hover .pricingTable-header i {
+  color: white;
+}
+.pricing-offer .pricingTable.green:hover .price-value {
+  color: white;
+}
+//yellow
+.pricing-offer .pricingTable.yellow .heading {
+  color: #ffcb0d;
+}
+.pricing-offer .pricingTable.yellow .price-value {
+  color: #ffcb0d;
+}
+.pricing-offer .pricingTable.yellow .pricingTable-signup a {
+  background: #ffcb0d;
+}
+.pricing-offer .pricingTable.yellow .pricingTable-signup a:hover {
+  box-shadow: 0 0 10px #ffcb0d;
+}
+.pricing-offer .pricingTable.yellow .pricingTable-header i {
+  color: #ffcb0d;
+}
+.pricing-offer .pricingTable.yellow:hover .pricingTable-header {
+  background: #ffcb0d;
+}
+.pricing-offer .pricingTable.yellow:hover .pricingTable-header i {
   color: white;
 }
 .pricing-offer .pricingTable.green:hover .price-value {

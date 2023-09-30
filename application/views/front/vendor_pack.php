@@ -42,6 +42,37 @@ $url = base_url('updated/');
                         }
                       ?>
         </ul>
+          <div class="coupon-wrap">
+              <div class="row align-items-center">
+                  <div class="col-md-6">
+                      <div class="form-side">
+                          <form action="<?=base_url()?>home/vendor_signup_promo" method="POST">
+                              <div class="form-group">
+                                  <div class="input-group">
+                                      <input type="text" class="form-control" placeholder="Add Promo Code"  name="promo_code" aria-label="Add Promo Code"
+                                             aria-describedby="button-addon2">
+                                      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Coupon</button>
+                                  </div>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="form-side">
+                          <form action="<?=base_url()?>/vendor_logup/registration" method="GET">
+                              <div class="form-group">
+                                  <div class="input-group">
+                                      <input type="text" class="form-control" placeholder="Add Referal Code"  name="ref_code" aria-label="Add Referal Code"
+                                             aria-describedby="button-addon2">
+                                      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Code</button>
+                                  </div>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+
+              </div>
+          </div>
         <div class="tab-content" id="pricing-tableContent">
             <?php
                         foreach($cat as $k => $v){
@@ -68,6 +99,10 @@ $url = base_url('updated/');
                             elseif($k == 2)
                             {
                                 $cls = 'blue';
+                            }
+                            elseif($k == 3)
+                            {
+                                $cls = 'yellow';
                             }
                           ?>
                 <div class="col-md-4 col-sm-6">
@@ -113,41 +148,7 @@ $url = base_url('updated/');
                         }
                       ?>
         </div>
-        <div class="coupon-wrap">
-          <div class="row align-items-center">
-            <div class="col-md-6">
-              <div class="form-side">
-                <form action="<?=base_url()?>home/vendor_signup_promo" method="POST">
-                  <div class="form-group">
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Add Promo Code"  name="promo_code" aria-label="Add Promo Code"
-                        aria-describedby="button-addon2">
-                      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Coupon</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-side">
-                <form action="<?=base_url()?>/vendor_logup/registration" method="GET">
-                  <div class="form-group">
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Add Referal Code"  name="ref_code" aria-label="Add Referal Code"
-                        aria-describedby="button-addon2">
-                      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Code</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="skip-btn">
-                <a href="#" class="skip primary-btn">Skip And Continue</a>
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
 
     </section>

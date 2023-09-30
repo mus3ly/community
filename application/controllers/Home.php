@@ -3993,7 +3993,7 @@ class Home extends CI_Controller
         $page_data['asset_page'] = "all_category";
         $page_data['page_title'] = translate('frequently_asked_questions');
         $page_data['faqs'] = json_decode($this->crud_model->get_type_name_by_id('business_settings', '11', 'value'), true);
-        $this->load->view('front/index', $page_data);
+        $this->load->view('front/index_new', $page_data);
     }
 
     /* FUNCTION: Search Products */
