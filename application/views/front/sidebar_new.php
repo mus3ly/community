@@ -137,7 +137,7 @@ foreach($arr as $k=> $v)
                         {
                             
                             ?>
-                            <div class="accordion-item <?= ($open)?'active':''?>">
+                            <div class="accordion-item <?= (isset($cat_path[0]) && $cat_path[0] == $row['category_id'])?'active':''?>">
                     <h2 class="accordion-header" id="item1">
                       <button class="accordion-button accordion-button-sidebar collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#item-accr<?= $key ?>" aria-expanded="<?= ($open)?'false':'true'?>" aria-controls="item-accr1" style="color:white; background-color:var(--primary-color);">
@@ -147,7 +147,7 @@ foreach($arr as $k=> $v)
                     <div id="item-accr<?= $key ?>" class="accordion-collapse collapse <?= ($open)?'show':''?>" aria-labelledby="item1"
                       data-bs-parent="#accordionOne">
                       <div class="accordion-body">
-                        <ul>
+                        <ul style="margin-left: 10px;">
                             <?php
                             $sub_cats =  $this->db->where_in('pcat',$row['category_id'])->get('category')->result_array();
                             foreach($sub_cats as $k=> $row1)
@@ -162,7 +162,7 @@ foreach($arr as $k=> $v)
                                         ?>
                                         <li>
                             <div class="accordion accordion-flush sub-sub-accordion" id="sub-list-accordion-1">
-                              <div  class="accordion-item">
+                              <div  class="accordion-item <?= (isset($cat_path[0]) && $cat_path[0] == $row1['category_id'])?'active':''?>">
                                 <h2 class="accordion-header" id="sub-list-1-heading">
                                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSub-1" aria-expanded="true" aria-controls="flush-collapseSub-1">
                                     <?php echo $row1['category_name']; ?>
@@ -170,7 +170,7 @@ foreach($arr as $k=> $v)
                                 </h2>
                                 <div id="flush-collapseSub-1" class="accordion-collapse" aria-labelledby="sub-list-1-heading" data-bs-parent="#sub-list-accordion-1">
                                   <div class="accordion-body">
-                                    <ul>
+                                    <ul style="margin-left: 10px;">
                                       <?php
                             $sub_cats =  $this->db->where_in('pcat',$row1['category_id'])->get('category')->result_array();
                             foreach($sub_cats as $k=> $row2)
@@ -185,15 +185,15 @@ foreach($arr as $k=> $v)
                                         ?>
                                         <li>
                             <div class="accordion accordion-flush sub-sub-accordion" id="sub-list-accordion-1">
-                              <div  class="accordion-item">
+                              <div  class="accordion-item <?= (isset($cat_path[0]) && $cat_path[0] == $row2['category_id'])?'active':''?>">
                                 <h2 class="accordion-header" id="sub-list-1-heading">
-                                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSub-1" aria-expanded="true" aria-controls="flush-collapseSub-1">
-                                    <?php echo $row2['category_name']; ?>
+                                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSub-1" aria-expanded="false" aria-controls="flush-collapseSub-1">
+                                    <?php echo $row2['category_name']; ?> 
                                   </button>
                                 </h2>
-                                <div id="flush-collapseSub-1" class="accordion-collapse" aria-labelledby="sub-list-1-heading" data-bs-parent="#sub-list-accordion-1">
+                                <div id="flush-collapseSub-1" class="accordion-collapse show" aria-labelledby="sub-list-1-heading" data-bs-parent="#sub-list-accordion-1">
                                   <div class="accordion-body">
-                                    <ul>
+                                    <ul style="margin-left: 10px;">
                                       <?php
                             $sub_cats =  $this->db->where_in('pcat',$row2['category_id'])->get('category')->result_array();
                             foreach($sub_cats as $k=> $row3)
@@ -208,7 +208,7 @@ foreach($arr as $k=> $v)
                                         ?>
                                         <li>
                             <div class="accordion accordion-flush sub-sub-accordion" id="sub-list-accordion-1">
-                              <div  class="accordion-item">
+                              <div  class="accordion-item <?= (isset($cat_path[0]) && $cat_path[0] == $row3['category_id'])?'active':''?>">
                                 <h2 class="accordion-header" id="sub-list-1-heading">
                                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSub-1" aria-expanded="true" aria-controls="flush-collapseSub-1">
                                     <?php echo $row3['category_name']; ?>
@@ -216,10 +216,10 @@ foreach($arr as $k=> $v)
                                 </h2>
                                 <div id="flush-collapseSub-1" class="accordion-collapse" aria-labelledby="sub-list-1-heading" data-bs-parent="#sub-list-accordion-1">
                                   <div class="accordion-body">
-                                    <ul>
+                                    <!-- <ul> Nezt level
                                       <li><a href="#">Sub List</a></li>
                                       <li><a href="#">Sub List</a></li>
-                                    </ul>
+                                    </ul> -->
                                   </div>
                                 </div>
                               </div>

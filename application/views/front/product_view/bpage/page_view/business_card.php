@@ -54,14 +54,34 @@ if(true)
                 <div class="social_mediabox">
 
                   <ul>
+                    <?php   ?>
 
-                    <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+                    <?php
 
-                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+           $img='';
 
-                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                    $all = $this->db->get('bpkg')->result_array();
+                    foreach ($all as $k=> $v) {
 
-                    <li><a href="#"><i class="fab fa-pinterest"></i></a></li>
+                                 if($v['share_link'])
+                                 {
+                                  $url = base_url($pro['slug']);
+                                  $link = str_replace('link',$url, $v['share_link']);
+
+
+                ?>
+
+                <li><a href="<?= $link ?>"><i class="bi <?= $v['icon'] ?>"></i></a></li>
+
+                <?php
+
+                                 }
+
+               }
+
+                ?>
+
+                <?php ?>
 
                   </ul>
 

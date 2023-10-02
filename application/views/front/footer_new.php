@@ -5,7 +5,7 @@ $footer_category =  $this->db->get_where('general_settings',array('type' => 'foo
 $footer_page =  $this->db->get_where('general_settings',array('type' => 'footer_page'))->row()->value;
 $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_disc'))->row()->value;
 ?>
-  <footer class="footer_warp">
+<footer class="footer_warp">
 
     <div class="container">
 
@@ -71,13 +71,13 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
                   <div class="row">
 
-                    <div class="col-4">
+                    <div class="col-3">
 
                       <img src="<?= $url ?>assets/images/volume.png" alt="">
 
                     </div>
 
-                    <div class="col-8">
+                    <div class="col-9">
 
                       <div class="about-us mt-0">
 
@@ -96,13 +96,13 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
                 <div class="row">
 
-                  <div class="col-4">
+                  <div class="col-3">
 
                     <img src="<?= $url ?>assets/images/green.jpeg" alt="">
 
                   </div>
 
-                  <div class="col-8">
+                  <div class="col-9">
 
                     <div class="about-us mt-0">
 
@@ -124,13 +124,13 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
                   <div class="row">
 
-                    <div class="col-4">
+                    <div class="col-3">
 
                       <img src="<?= $url ?>assets/images/volume.png" alt="">
 
                     </div>
 
-                    <div class="col-8">
+                    <div class="col-9">
 
                       <div class="about-us mt-0">
 
@@ -1049,6 +1049,11 @@ function select_place(place,txt)
 
     })
         
+    </script>
+    <script type="text/javascript">
+      $('#shareit').click(function(){
+      $('.social_mediabox').toggle();
+      });
     </script>
 </body>
 

@@ -34,7 +34,7 @@ include "header_new.php";
 
               <div class="hero-contents-wrap">
 
-                <h5>Community HubLand - Your Community Marketing Site
+                <h5>COMMUNITY HUBLAND - WHERE OPPORTUNITY MEETS COMMUNITIES
 
                 </h5>
 
@@ -59,13 +59,13 @@ include "header_new.php";
                         <input type="text" class="form-control" placeholder="TACOS, CHEAP DINNER, MAX’S" id="left_box"
 
                           name="q">
-                          <div id="address-result" class="dropdown-box  rounded-0 rounded-bottom">
+                        <!--  <div id="address-result" class="dropdown-box  rounded-0 rounded-bottom">
                             <ul>
                               <li onclick=""><a href="#">Option one</a></li>
                               <li><a href="#">Option two</a></li>
                               <li><a href="#">Option three</a></li>
                             </ul>
-                          </div>
+                          </div> -->
 
                       </div>
 
@@ -156,14 +156,20 @@ include "header_new.php";
 
 
 
-            <p class="color_orange leading_texts fw_500 fs_15">Your Community HubLand marketing platform</p>
+            <p class="color_orange leading_texts fw_500 fs_15">COMMUNITY HUBLAND - A COMMUNITY MARKETING HUB</p>
 
-            <h4 class="h_title">Testimonies from Clients & Associates</h4>
+            <h4 class="h_title">Your Digital Helper</h4>
 
 
 
-            <p class="">Listen to our Community HubLand pioneers</p>
+            <p class="">We know how hard it can be to run a small business in the digital world. That's why we have a bunch 
+                of helpful tools and services to make things easier for you and make your business more successful.</p>
+                
+                <p>Using Community HubLand for your web presence can boost your online reaches in local and international 
+                markets, by giving you instant and easier access to webpages you can customise to your business needs and 
+                utilise as your business virtual hub.</p>
 
+<!--
             <div class="scroll">
 
               <ul>
@@ -225,6 +231,8 @@ include "header_new.php";
                 to learn more...</p>
 
             </div>
+            
+            -->
 
           </div>
 
@@ -262,9 +270,9 @@ include "header_new.php";
 
 
 
-            <p class="color_orange leading_texts fw_500 fs_15" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="00">Look no further for a website, a community marketing
-
-              platform</p>
+            <p class="color_orange leading_texts fw_500 fs_15" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="00">
+                COMMUNITY MARKETING BUSINESS PAGE - YOUR MARKETING HUB
+            </p>
 
 
 
@@ -346,7 +354,7 @@ include "header_new.php";
 
           <div class="full_circle"></div>
 
-          <p>COMMUNITY HUBLAND DIGITAL SERVICES</p>
+          <p>COMMUNITY HUBLAND DIGITAL SERVICES - YOUR OTHER REQUIREMENTS</p>
 
           <h4 class="l_height_1">Professional Business Solutions
 
@@ -498,7 +506,9 @@ include "header_new.php";
 
           <div class="col-lg-7 communitybox">
 
-            <p class="sub-heading" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="00">ADVERTISE YOUR BUSINESS AND IDEAS ON COMMUNITY HUBLAND</p>
+            <p class="sub-heading" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="00">
+                ADVERTISE YOUR BUSINESS AND IDEAS - GATEWAY TO A THRIVING BUSINESS COMMUNITY
+            </p>
 
             <h3 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">We Pride Ourselves in Innovative Marketing Strategies</h3>
 
@@ -731,7 +741,7 @@ include "header_new.php";
 
           <p class="hire_para"> 
           That's why we've made a place where <br>
-small <b>Business Owners, Vendors, Bloggers,</b> and others can come together <br>
+small <b>Business Owners, Vendors, Bloggers, and others</b> can come together <br>
 On one platform to create a market space where their communities can reach them more easily.
           </p>
           <br>
@@ -740,7 +750,7 @@ On one platform to create a market space where their communities can reach them 
 Join us at Community HubLand and access a range of platforms <br>
 to unlock the full potential of your online community today.
           </p>
-          <a href="#" class="secondary-btn white mt-4">SIGN-UP NOW</a>
+          <a href="<?= base_url('vendor_logup/registration'); ?>" class="secondary-btn white mt-4">SIGN-UP NOW</a>
           <div class="bottom_circled">
 
             <img src="<?= $url ?>assets/images/bottom-circled.png" alt="">

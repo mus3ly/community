@@ -965,9 +965,9 @@ btn1 .fa{
                             <?php
                             $old = $row['social_media'];
                             $old = json_decode($old,true);
-                            // var_dump($social_media);
                             $img ='';
-                            foreach($social_media as $k => $v){
+                            $all = $this->db->where('id', $k)->get('bpkg')->row();
+                            foreach($all as $k => $v){
                                 $id = $v['id'];
                                 // var_dump( $id);
                                 // var_dump( $old);

@@ -286,10 +286,14 @@ $viewtype = $_GET['view'];
           <div class="col-md-12 col-lg-2 order-lg-3">
             <div class="ads-sidebar">
               <div class="ads-box mb-4">
-                <img src="<?= $url ?>assets/images/1.jpg" class="img-fluid" alt="">
+                <a href="https://penpath.com/?utm_medium=affiliate&utm_source=com-hubland&utm_campaign=Banner_community-hubland_sept-23&utm_term=pr_banner_affiliate&utm_content=banner-1"  target="_blank">
+                <img src="<?= base_url('ad1.png'); ?>" class="img-fluid" alt="">
+            </a>
               </div>
               <div class="ads-box mb-4">
-                <img src="<?= $url ?>assets/images/11.jpg" class="img-fluid" alt="">
+                <a href="https://theeliteva.co.uk/" target="_blank">
+                <img src="<?= base_url('ad2.png') ?>" class="img-fluid" alt="">
+            </a>
               </div>
             </div>
           </div>          

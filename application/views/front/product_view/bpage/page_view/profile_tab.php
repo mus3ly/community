@@ -642,19 +642,47 @@ $imgs[] = $pimg;
 
 
                           <div class="social-icons">
+                            <?php  
+
+           $img='';
+
+           $social_image = json_decode($pro['social_media'],true);
 
 
-                            <a href="facebook.html" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    // var_dump($k);
+
+                    $all = $this->db->get('bpkg')->result_array();
+
+                    foreach($all as $k=>$v){
+
+                                 
+
+                                 if(isset($social_image[$v['id']])  && $social_image[$v['id']])
+
+                                 {
+                                    $url = $social_image[$v['id']];
+                                    if  ( $ret = parse_url($url) ) {
+
+                                          if ( !isset($ret["scheme"]) )
+                                           {
+                                           $url = "http://{$url}";
+                                           }
+                                    }
+
+                ?>
+
+                <a href="<?= $url ?>"><i class="bi <?= $v['icon'] ?>"></i></a>
+
+                <?php
+
+                                 }
 
 
-                            <a href="twitter.html" target="_blank"><i class="fab fa-twitter"></i></a>
+                             }
 
+                ?>
 
-                            <a href="instagram.html" target="_blank"><i class="fab fa-instagram"></i></a>
-
-                            <a href="instagram.html" target="_blank"><i class="fab fa-dribbble"></i></a>
-                            <a href="instagram.html" target="_blank"><i class="fab fa-youtube"></i></a>
-                            <a href="instagram.html" target="_blank"><i class="fab fa-google"></i></a>
+                <?php ?>
 
                           </div>
                         </div>

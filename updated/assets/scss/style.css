@@ -259,6 +259,9 @@ li:has(.sub-sub-accordion){
 }
 
 .accordion-body .accordion-button{
+    padding-left: 25px !important;
+}
+.active .accordion-button{
     background-color: #fde1d8;
     padding-left: 25px !important;
     color: #f36022;

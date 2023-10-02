@@ -11,6 +11,14 @@ if(isset($product_data[0]))
 ?>
 <?php
     $additional_fields = json_decode($pro['additional_fields'], true);
+    $vid = 0;
+    $add_ar = $rr = json_decode($pro['added_by'],true);
+    if($rr['type'] == 'vendor')
+    {
+      $vid = $rr['id'];
+    }
+    $vendor = $this->db->where('vendor_id',$vid)->get('vendor')->row();
+
     $names = array();
     $valus = array();
     if(isset($additional_fields['name']) && $additional_fields['name'])
@@ -428,10 +436,46 @@ if(isset($product_data[0]))
                   <a href="#"><i class="fa fa-flag"></i><span>Report</span></a>
                 </div>
                 <div class="share">
-                  <a href="#"><i class="fab fa-facebook-f"></i></a>
-                  <a href="#"><i class="fab fa-twitter"></i></a>
-                  <a href="#"><i class="fab fa-instagram"></i></a>
-                  <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                              <?php  
+
+           $img='';
+           $bpage = $this->db->where('product_id',$vendor->bpage)->get('product')->row();
+
+           $social_image = array();
+           if(isset($bpage->social_media) && $bpage->social_media)
+           {
+             $social_image = json_decode($bpage->social_media,true);
+           }
+
+
+                    // var_dump($k);
+
+                    $all = $this->db->get('bpkg')->result_array();
+
+                    foreach($all as $k=>$v){
+                    
+
+                                 
+
+                                 if(isset($social_image[$v['id']])  && $social_image[$v['id']])
+
+                                 {
+
+                                  // $url = $social_image[$v['id']];
+                                    
+
+                ?>
+
+                <a href="<?= $social_image[$v['id']] ?>"><i class="bi <?= $v['icon'] ?>"></i></a>
+
+                <?php
+
+                                 }
+
+
+                             }
+
+                ?>
                 </div>
               </div>
             </div>

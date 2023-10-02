@@ -82,45 +82,23 @@ $url = base_url('updated/');
               <div class="col-md-6 col-lg-4">
                 <div class="form-group mb-3">
                   <div class="custom-select-box">
-                    <select>
-                      <option value="">Select option</option>
-                      <option value="">Select option</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
+                    <?php echo $this->crud_model->select_html('category','buss_type','category_name','signup_cat','demo-chosen-select form-control required','','digital',NULL,''); ?>
                   </div>
                 </div>
               </div>
               <div class="col-md-6 col-lg-4">
                 <div class="form-group mb-3">
                   <div class="custom-select-box">
-                    <select>
-                      <option value="">Select option</option>
-                      <option value="">Select option</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                      <option value="4">One</option>
-                      <option value="5">Two</option>
-                      <option value="6">Three</option>
-                      <option value="7">One</option>
-                      <option value="8">Two</option>
-                      <option value="9">Three</option>
-                    </select>
+                                                        <?php echo $this->crud_model->select_html('category','sub_category','category_name','signup_main_cat','demo-chosen-select form-control required','','digital',NULL); ?>
+
                   </div>
                 </div>
               </div>
               <div class="col-md-6 col-lg-4">
                 <div class="form-group mb-3">
                   <div class="custom-select-box">
-                    <select>
-                      <option value="">Select option</option>
-                      <option value="">Select option</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
+                                                        <?php echo $this->crud_model->select_html('category','sub3_category','category_name','ind_main_cat','demo-chosen-select form-control required','','digital',NULL); ?>
+
                   </div>
                 </div>
               </div>
@@ -137,13 +115,8 @@ $url = base_url('updated/');
               <div class="col-md-6">
                 <div class="form-group mb-3">
                   <div class="custom-select-box">
-                    <select>
-                      <option value="">Select option</option>
-                      <option value="">Select option</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
+                                                    <?php echo $this->crud_model->select_html('countries','country','name','edit','form-control demo-chosen-select required select_country','','',NULL,'select_country'); ?>
+
                   </div>
                 </div>
               </div>

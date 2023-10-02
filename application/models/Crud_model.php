@@ -702,7 +702,7 @@ foreach($vendors as $kk=> $vv)
         $return = '';
         $other = '';
         $multi = 'no';
-        $phrase = 'Choose a ' . $name;
+        $foption = $phrase = 'Choose a ' . translate($name);
         if ($class == 'demo-cs-multiselect') {
             $other = 'multiple';
             $name = $name . '[]';
@@ -731,10 +731,10 @@ foreach($vendors as $kk=> $vv)
                 $return .= '<option value="">'.$phrase.'</option>';
             }
             elseif ($is_none == 'none') {
-                $return .= '<option value="">Choose one</option>
+                $return .= '<option value="">'.$foption.'</option>
                             <option value="none">None/All Brands</option>';
             } else {
-                $return .= '<option value="">Choose one</option>
+                $return .= '<option value="">'.$foption.'</option>
                             <option value="" id="blod_cat">Other</option>';
             }
             $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 71))->row()->value,true);
@@ -806,10 +806,10 @@ foreach($vendors as $kk=> $vv)
         } else {
             $all = $from;
             if ($is_none == 'none') {
-                $return .= '<option value="">Choose one</option>
+                $return .= '<option value="">'.$foption.'</option>
                             <option value="none">None/All Brands</option>';
             } else {
-                $return .= '<option value="">Choose one</option>';
+                $return .= '<option value="">'.$foption.'</option>';
             }
             foreach ($all as $row):
                 if ($type == 'add') {
