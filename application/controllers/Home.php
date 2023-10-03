@@ -578,7 +578,7 @@ class Home extends CI_Controller
 
     public function test1()
     {
-        $r = get_fields_line(33, 2);
+        $r = get_fields_line(97, 5);
         var_dump($r);
         die();
     }
@@ -7530,15 +7530,12 @@ class Home extends CI_Controller
                     
                     $obj = (array)$obj;
                     $msg = '';
-                    if(isset($obj['messages']))
-                    {
-                        foreach ($obj['messages'] as $k => $v) {
+                    foreach ($obj as $k => $v) {
 
-                            if (isset($v[0]))
-                                $msg = $msg . $v[0] . '<br>';
-                            else
-                                $msg = $msg . $v . '<br>';
-                        }
+                        if (isset($v[0]))
+                            $msg = $msg . $v[0] . '<br>';
+                        else
+                            $msg = $msg . $v . '<br>';
                     }
                     $ret = array(
                         'status' => 0,

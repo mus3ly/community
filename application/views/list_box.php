@@ -103,24 +103,24 @@ if ($comp_logo) {
                               </div>
                               <div class="col-md-6 left_fields special_cls car_out">
                                 <div class="meta meta-left">
-                                  <span><a href="#"><?= ($col1)?$col1:get_fields_line($product_id, 1); ?></a></span>
+                                  <?= ($col1)?$col1:get_fields_line($product_id, 1); ?>
                                 </div>
                                 <div class="meta meta-left">
-                                  <span><?= ($col2)?$col2:get_fields_line($product_id, 2); ?></span>
+                                  <?= ($col2)?$col2:get_fields_line($product_id, 2); ?>
                                 </div>
                                 <div class="meta meta-left">
-                                  <span><?= ($col3)?$col3:get_fields_line($product_id, 3); ?></span>
+                                  <?= ($col3)?$col3:get_fields_line($product_id, 3); ?>
                                 </div>
                               </div>
                               <div class="col-md-6 right_fields special_cls car_out">
                                 <div class="meta meta-right">
-                                  <span><?= ($col4)?$col4:get_fields_line($product_id, 4); ?></span>
+                                  <?= ($col4)?$col4:get_fields_line($product_id, 4); ?>
                                 </div>
                                 <div class="meta meta-right">
-                                  <span><?= ($col5)?$col5:get_fields_line($product_id, 5); ?></span>
+                                  <?= ($col5)?$col5:get_fields_line($product_id, 5); ?>
                                 </div>
                                 <div class="meta meta-right">
-                                  <span><?= ($col6)?$col6:get_fields_line($product_id, 6); ?></span>
+                                  <?= ($col6)?$col6:get_fields_line($product_id, 6); ?>
                                 </div>
                               </div>
                               <h2 class="p_me catch_phrase spacing_catch_p"><?= strWordCut($slog, 50); ?> </h2>

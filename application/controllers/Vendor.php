@@ -839,8 +839,8 @@ class Vendor extends CI_Controller
             // die();
             $this->load->view('back/vendor/compain_edit', $page_data);
         }else if ($para1 == 'compain_do_add') {
-		  //  $check = $this->input->post('check');
-		      $this->db->where('product_id', $this->input->post('pro_id'));
+          //  $check = $this->input->post('check');
+              $this->db->where('product_id', $this->input->post('pro_id'));
             $this->db->update('product',array(
                 'is_affiliate' => '1'
                 ));
@@ -863,25 +863,25 @@ class Vendor extends CI_Controller
                         $path = 'uploads/compain'.time().'.jpg';
                         move_uploaded_file($_FILES["banner_img"]['tmp_name'], $path);
                         $data = \Cloudinary\Uploader::upload($path);
-						if(isset($data['public_id']))
-						{
-							$logo_id = $this->crud_model->add_img($path,$data);
-							if($logo_id)
-							{
+                        if(isset($data['public_id']))
+                        {
+                            $logo_id = $this->crud_model->add_img($path,$data);
+                            if($logo_id)
+                            {
                              $this->db->where('compain_id', $id);
                             $this->db->update('compain', array(
                                 'banner_img' => $logo_id
                             ));
-						   }
-						}
-	//top_banner
+                           }
+                        }
+    //top_banner
                     }
                 }
                 recache();
 
         } elseif ($para1 == "update") {
             // die();
-		    $check = $this->input->post('check');
+            $check = $this->input->post('check');
            $data = array(
                 'compain_type' => $this->input->post('compain_type'),
                 'title' => $this->input->post('title'),
@@ -974,7 +974,7 @@ class Vendor extends CI_Controller
 
 
         $list_type = '';
-	    //is_job
+        //is_job
 
         if($this->session->userdata('admin_login') != 'yes')
         {
@@ -1338,6 +1338,7 @@ class Vendor extends CI_Controller
                 $data['pid']                = $this->input->post('car_id');
                 $data['purchase_price']     = $_POST['carprice'];
                 $data['sale_price']     = $_POST['sale_price'];
+                
                 $data['posted_date']        = $this->input->post('cardate_posted');
                 $data['about_desc']        = $this->input->post('about_us');
                 $data['mot']        = $this->input->post('about_us');
@@ -1432,6 +1433,7 @@ class Vendor extends CI_Controller
                 $data[$col] = $_POST[$col];
                 }
             }
+            
         //extra info end
             $data['seo_description']    = $this->input->post('seo_description');
             $data['title']              = $this->input->post('title');
@@ -1488,6 +1490,7 @@ class Vendor extends CI_Controller
             $data['gdesc']             = $this->input->post('gdesc1');
             $data['gtitle']             = $this->input->post('gtitle1');
             
+            
                 if($this->input->post('slug'))
             $data['slug']                 = $this->input->post('slug');
             else
@@ -1537,6 +1540,7 @@ class Vendor extends CI_Controller
             $this->db->where('product_id', $para2);
             
             $this->db->update('product', $data);
+            
             if($para2)
             {
                 $additional_value['name'] = $nm   = $this->input->post('ad_field_names_custom');
