@@ -5,7 +5,6 @@
 
 
 <head>
-
   <meta charset="UTF-8">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,7 +69,7 @@
 
   <div class="dotted_lines">
 
-    <img src="assets/images/doted-lines.png" alt="">
+    <img src="<?= $url ?>assets/images/doted-lines.png" alt="">
 
   </div>
 
@@ -82,7 +81,7 @@
 
   <div class="lines_shape">
 
-    <img src="assets/images/lines-shape.png" alt="">
+    <img src="<?= $url ?>assets/images/lines-shape.png" alt="">
 
   </div>
 

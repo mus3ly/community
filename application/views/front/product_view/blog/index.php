@@ -1,4 +1,6 @@
-
+<?php
+die('OKK');
+?>
 <input type="hidden" value="<?php echo $category; ?>" id="blog_cat" />
 <!-- PAGE WITH SIDEBAR -->
 <section class="page-section with-sidebar">

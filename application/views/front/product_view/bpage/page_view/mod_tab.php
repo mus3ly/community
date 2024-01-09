@@ -30,14 +30,5 @@
             ?>
         
                 </div>
-                <ul class="pagination mt-2">
-
-                  <li onclick="set_value('page','1')" class="active"><a>1</a></li>
-                  <li onclick="set_value('page','2')" class=" "><a>2</a></li>
-                  <li onclick="set_value('page','3')" class=" "><a>3</a></li>
-                  <li onclick="set_value('page','2')"><a>></a></li>
-                  <li onclick="set_value('page','5')"><a>>></a></li>
-
-                </ul>
               </div>
             </div>

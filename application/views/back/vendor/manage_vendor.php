@@ -58,7 +58,7 @@
                         		</div>
                         		<div class="col-sm-3 sidegap_box">
                         			<div class="form-group">
-                                    <label class="control-label" for="demo-hor-1">
+                                    <label class="control-label" for="demo-horSouthern Nation-1">
                                     	<?php echo translate('last_name');?>
                                         	</label>
 	                                        <input type="text" name="l_name" value="<?php echo $row['last_name']; ?>" id="demo-hor-1" class="form-control ">
@@ -148,8 +148,8 @@
                                     <label class="control-label" for="demo-hor-4">
 										<?php echo translate('city');?>
                                     </label>
-                                 <div  id="city_select">
-                                     <?php echo $this->crud_model->select_html('cities','city','name','edit','select_city demo-chosen-select ',$row['city'],'',NULL,'select_city'); ?>
+                                 <div  id="city_select1">
+                                     <input type="text" name="city" value="<?= $row['city'] ?>" placeholder="City (please spell correctly)" />
                                         <?php  //echo $this->crud_model->select_html('cities','city','name','edit','select_city demo-chosen-select' ,'','',$row['city'],'',NULL,'select_city'); ?>
                                     </div>
                                 </div>

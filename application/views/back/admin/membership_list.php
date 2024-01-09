@@ -8,6 +8,7 @@
                 <th><?php echo translate('category');?></th>
                 <th><?php echo translate('price');?></th>
                 <th><?php echo translate('for');?></th>
+                <th><?php echo translate('Prmo_details');?></th>
                 <th class="text-right"><?php echo translate('options');?></th>
             </tr>
         </thead>				
@@ -23,6 +24,7 @@
             <td>Free (Default)</td>
             <td><?php echo currency('','def').'0'; ?></td>
             <td><?php echo translate('lifetime');?></td>
+            <td></td>
             <td class="text-right">
                 <a class="btn btn-success btn-xs btn-labeled fa fa-wrench" data-toggle="tooltip" 
                     onclick="ajax_modal('default','<?php echo translate('edit_vendor_package'); ?>','<?php echo translate('successfully_edited!'); ?>','membership_edit',0)" data-original-title="Edit" data-container="body">
@@ -45,6 +47,20 @@
             <td><?php echo $row['name']; ?></td>
             <td><?php echo currency('','def').$row['price']; ?></td>
             <td><?php echo $row['timespan']; ?> <?php echo translate('days');?></td>
+            <?php
+            if($row['promo_code'])
+            {
+            ?>
+            <td><?php echo $row['promo_code'].'('.$row['promo_limit'].')'; ?></td>
+            <?php
+            }
+            else
+            {
+                ?>
+                <td></td>
+                <?php
+            }
+            ?>
             <td class="text-right">
                 <a class="btn btn-success btn-xs btn-labeled fa fa-wrench" data-toggle="tooltip" 
                     onclick="ajax_modal('edit','<?php echo translate('edit_vendor_package'); ?>','<?php echo translate('successfully_edited!'); ?>','membership_edit','<?php echo $row['membership_id']; ?>')" data-original-title="Edit" data-container="body">

@@ -294,7 +294,7 @@ btn1 .fa{
                 <div class="tab-base">
                     <!--Tabs Content-->                    
                     <div class="tab-content">
-                        <div id="product_option" class="tab-pane fade <?= ($active_tab == 'product_option')?"active in":''; ?>">
+                        <div id="customer_choice_options1" class="tab-pane fade <?= ($active_tab == 'customer_choice_options1')?"active in":''; ?>">
                             <div class="form-group ">
                                 <h4 class=""><?php echo translate('customer_choice_options'); ?></h4>
                             </div>
@@ -384,47 +384,6 @@ btn1 .fa{
                                     <!--<textarea rows="9" name="description" id="summernotes"  class="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
                                 </div>
                                 </div>
-                                <?php
-                                if(isset($mod->store_check) && $mod->store_check)
-                                {
-                                    ?>
-
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Specification'); ?></label>
-                                <div class="col-sm-6">
-                                    <textarea rows="9" class="" name="specification"   id="editor2" height="200" >
-                                        </textarea>
-                                </div>
-                                </div>
-
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Warranty_info'); ?></label>
-                                <div class="col-sm-6">
-                                    <textarea rows="9" class="" name="warranty_info"   id="editor3" height="200" >
-                                        </textarea>
-                                </div>
-                                </div>
-
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Shipping_info'); ?></label>
-                                <div class="col-sm-6">
-                                    <textarea rows="9" class="" name="shipping_info"   id="editor4" height="200" >
-                                        </textarea>
-                                </div>
-                                </div>
-
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('seller_profile'); ?></label>
-                                <div class="col-sm-6">
-                                    <textarea rows="9" class="" name="seller_profile"   id="editor5" height="200" >
-                                        </textarea>
-                                </div>
-                                </div>
-
-                                    <?php
-                                }
-
-                                ?>
                                 <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('tags');?></label>
                                 <div class="col-sm-6">
@@ -484,7 +443,7 @@ btn1 .fa{
                             </div>
                             
                             
-                                    <label class="col-sm-4 control-label" for="demo-hor-12">Feature image</label>
+                                    <label class="col-sm-4 control-label" for="demo-hor-12">Logo image</label>
                                     <div class="col-sm-6">
                                         <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
                                             <input type="file" value="<?= ($row['sneakerimg'])?$row['sneakerimg']:""; ?>" name="sneakerimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control">
@@ -816,13 +775,19 @@ btn1 .fa{
                         </div>
                     
                         <div id="custom_attributes_1" class="tab-pane fade <?= ($active_tab == 'custom_attributes_1')?"active in":''; ?>">
-                            <div>
+                            <div class="form-group">
+                         <div class="col-sm-12">
                                 <labe>Section Heading</label>
-                                <input class="form-control" name="accor_h"  value="" />
+                                <input class="form-control" name="accor_h"   />
+                            </div>
+                         <div class="col-sm-12">
+                                <labe>Section details</label>
+                                <textarea  class="form-control" name="accor_p"></textarea>
+                            </div>
                             </div>
                         <div class="form-group">
                          <div class="col-sm-4">
-                        <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>" value="<?php echo translate('requirements'); ?>">
+                        <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="Eg: <?php echo translate('requirements'); ?>">
                         </div>
                         <div class="col-sm-5">
                          <textarea rows="9"  class="summernotes" data-height="100" data-name="ad_field_values_custom[]" ></textarea>
@@ -831,7 +796,7 @@ btn1 .fa{
                         </div>
                         <div class="form-group">
                          <div class="col-sm-4">
-                        <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="<?php echo translate('field_name'); ?>" value="<?php echo translate('benefits'); ?>">
+                        <input type="text" name="ad_field_names_custom[]" class="form-control required"  placeholder="Eg: <?php echo translate('benefits'); ?>">
                         </div>
                         <div class="col-sm-5">
                          <textarea rows="9"  class="summernotes" data-height="100" name="requirmnts[]"></textarea>
@@ -1326,7 +1291,9 @@ btn1 .fa{
                             </div>
 
                         </div>
+                        
                         <div id="location" class="tab-pane fade <?= ($active_tab == 'location')?"active in":''; ?>">
+                            <div>Please enter the location (city) of the advertisement; or enter the exact values of Latitude and Longitude</div>
                         <input style="width: 186px;
     padding: 0 16px;
     height: 34px;
@@ -1342,7 +1309,7 @@ btn1 .fa{
     padding: 0 16px;
     height: 34px;
     border: 2px solid #ccc;
-    margin: 0 0 13px;" type="text" id="cityLat" value="<?= $row['lat']; ?>" name="lat" />
+    margin: 0 0 13px;" type="text" class="required" id="cityLat" value="<?= $row['lat']; ?>" name="lat" />
                              </div>
                             <div>
                                 <label style="margin:0;display:block;">Longitude</label>
@@ -1350,7 +1317,7 @@ btn1 .fa{
     padding: 0 16px;
     height: 34px;
     border: 2px solid #ccc;
-    margin: 0 0 13px;" type="text" id="cityLng" value="<?= $row['lng']; ?>" name="lng" />
+    margin: 0 0 13px;" type="text" class="required" id="cityLng" value="<?= $row['lng']; ?>" name="lng" />
                             </div>
                         </div>
                         <div id="event_images" class="tab-pane fade <?= ($active_tab == 'event_images')?"active in":''; ?>">
@@ -1430,7 +1397,7 @@ btn1 .fa{
                                 <div class="col-sm-6">
                                     <?php 
                                         $images = $this->crud_model->file_view('product',$row['product_id'],'','','thumb','src','multi','all');
-                                        
+                                        var_dump();
                                         if($images && $num_of_imgs){
                                             foreach ($images as $row1){
                                                 $a = explode('.', $row1);
@@ -2425,7 +2392,7 @@ function showPosition(position) {
             
             if(value == 'other' && input.getAttribute('type') == 'model')
             {
-                var outer = id+'_outer';  
+                var outer = id+'_col';  
              var html = '<input type="text" id="'+input.getAttribute('id')+'" col="'+input.getAttribute('col')+'" rows="9" onkeyup="'+input.getAttribute('onchange')+'" class="form-control required" placeholder="'+input.getAttribute('placeholder')+'" data-height="100" name="ad_field_values[]">';
              document.getElementById(outer).innerHTML = html;
             }
@@ -2497,13 +2464,6 @@ $('#amnty').on('keyup', function(){
         },
     });
     }
-    function create_link(lid)
-    {
-        var txt = $('#'+lid+'_text').val();
-        var link = $('#'+lid+'_link').val();
-        var str = txt+'-'+link;
-        $('#'+lid).val(str);
-    }
      
     function selectamn(id){
          var url = '<?= base_url('vendor/getAmenties');?>';
@@ -2548,40 +2508,6 @@ $('#amnty').on('keyup', function(){
         );
         set_select();
     });
-        $("#more_additional_options").on('change','.op_type',function(){
-        var co = $(this).closest('.form-group').data('no');
-        if($(this).val() !== 'text' && $(this).val() !== ''){
-            $(this).closest('div').find(".options").html(''
-                +'    <div class="col-sm-12">'
-                +'        <div class="col-sm-12 options margin-bottom-10"></div><br>'
-                +'        <div class="btn btn-mint btn-labeled fa fa-plus pull-right add_op">'
-                +'        <?php echo translate('add_options_for_choice');?></div>'
-                +'    </div>'
-            );
-        } else if ($(this).val() == 'text' || $(this).val() == ''){
-            $(this).closest('div').find(".options").html(''
-                +'    <input type="hidden" name="op_set'+co+'[]" value="none" >'
-            );
-        }
-    });
-    
-    $("#more_additional_options").on('click','.add_op',function(){
-        var co = $(this).closest('.form-group').data('no');
-        $(this).closest('.col-sm-12').find(".options").append(''
-            +'    <div>'
-            +'        <div class="col-sm-10">'
-            +'          <input type="text" name="op_set'+co+'[]" class="form-control required"  placeholder="<?php echo translate('option_name'); ?>">'
-            +'        </div>'
-            +'        <div class="col-sm-2">'
-            +'          <span class="remove_it_n rmon btn btn-danger btn-icon btn-circle icon-sm fa fa-times" onclick="delete_row(this)"></span>'
-            +'        </div>'
-            +'    </div>'
-        );
-    });
-    
-    $('body').on('click', '.rmo', function(){
-        $(this).parent().parent().remove();
-    });
 
     $("#more_btn").click(function(){
         $("#more_additional_fields").append(''
@@ -2598,7 +2524,6 @@ $('#amnty').on('keyup', function(){
             +'</div>'
         );
         set_summer();
-
     });
     </script>
 <!--Bootstrap Tags Input [ OPTIONAL ]-->

@@ -1,6 +1,6 @@
 <?php
 
-
+die('summery');
 $url = base_url('updated/');
  include "header_new.php";
 ?>
@@ -40,6 +40,9 @@ $url = base_url('updated/');
                     </p>
                   </div>
                 </div>
+                <?php
+                var_dump($row);
+                ?>
                 <div class="post-excerpt">
                     <p>
                         	<?php echo $row['summery']; ?>

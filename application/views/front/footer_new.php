@@ -1,5 +1,33 @@
-
+<style>
+    .modal-header button{
+            background: none;
+    border: none;
+    float: right;
+    text-align: right;
+    font-size: 20px;
+    width: 100%;
+    }
+    .my_model_body{
+            justify-content: center;
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    font-size: 25px;
+    }
+    .my_modal_header{
+    padding: 7px 10px;
+    justify-content: end;
+    }
+    .center_my_modal{
+        top:35%;
+    }
+    @media (min-width: 576px){
+.modal-sm {
+    --bs-modal-width: 390px;
+}}
+</style>
 <?php
+$url = base_url('updated/').'/';
 $footer_text =  $this->db->get_where('general_settings',array('type' => 'footer_text'))->row()->value;
 $footer_category =  $this->db->get_where('general_settings',array('type' => 'footer_category'))->row()->value;
 $footer_page =  $this->db->get_where('general_settings',array('type' => 'footer_page'))->row()->value;
@@ -27,14 +55,13 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
                 <div class="input-group">
 
-                  <input type="text" class="form-control" id="email_send" placeholder="Your Email">
+                  <input type="text" class="form-control" name="email" placeholder="Your Email">
 
-                  <button class="btn send-btn" type="button" id="button-addon2">Subscribe</button>
-                    
+                  <button class="btn send-btn signup_btn" loading='<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+Submiting ...' type="button" ing= id="button-addon2">Subscribe</button>
+
                 </div>
-                <div class="success_msg">
-                    <p id="msg_email"></p>
-                </div>
+
               </form>
 
             </div>
@@ -71,13 +98,15 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
                   <div class="row">
 
-                    <div class="col-3">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-3 ">
 
-                      <img src="<?= $url ?>assets/images/volume.png" alt="">
+                     <div class="img-box">
+                          <img src="https://studenthubland.com/updated/assets/images/volume.png" alt="">
+                     </div>
 
                     </div>
 
-                    <div class="col-9">
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-9">
 
                       <div class="about-us mt-0">
 
@@ -96,13 +125,15 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
                 <div class="row">
 
-                  <div class="col-3">
+                  <div class="col-lg-3 col-md-3 col-sm-3 col-3 ">
 
-                    <img src="<?= $url ?>assets/images/green.jpeg" alt="">
+                    <div class="img-box">
+                        <img src="https://studenthubland.com/updated/assets/images/green.jpeg" alt="">
+                    </div>
 
                   </div>
 
-                  <div class="col-9">
+                  <div class="col-lg-9 col-md-9 col-sm-9 col-9">
 
                     <div class="about-us mt-0">
 
@@ -124,13 +155,16 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
                   <div class="row">
 
-                    <div class="col-3">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-3">
 
-                      <img src="<?= $url ?>assets/images/volume.png" alt="">
-
+                     <div class="img-box">
+                          <img src="https://studenthubland.com/updated/assets/images/ten.png" alt="ten.png">
+                          <div class="back-10"><h3>B<span>ac</span>k</h3></div>
+                     </div>
+                        
                     </div>
 
-                    <div class="col-9">
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-9">
 
                       <div class="about-us mt-0">
 
@@ -209,13 +243,12 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                         if($row)
                         {
                         ?>
-                        <li><a href="<?= base_url('home/page/'.$row->parmalink); ?>"><?= $row->page_name ?></li></a>
+                        <li><a href="<?= base_url($row->parmalink); ?>"><?= $row->page_name ?></li></a>
                         <?php
                         }
                     } 
                     ?>
-
-                  </ul>
+                           </ul>
 
                 </div>
 
@@ -239,12 +272,13 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
                         if($row)
                         {
                         ?>
-                        <li><a href="<?= base_url('home/page/'.$row->parmalink); ?>"><?= $row->page_name ?></li></a>
+                        <li><a href="<?= base_url($row->parmalink); ?>"><?= $row->page_name ?></li></a>
                         <?php
                         }
                     }
                     ?>
-
+ <li><a href="https://www.facebook.com/communityhubland/" style="padding-left: 0px!important; margin-right:5px;"><img src="<?= base_url(); ?>/uploads/product_image/Facebook_Logo_(2019).png" style="width:23px; "></a><a href="https://www.instagram.com/communityhubland/" style="padding-left: 0px!important; "><img src="<?= base_url(); ?>/uploads/product_image/Instagram-logo-free-download-PNG (1).png" style="width:30px;"></a></li>
+                                      
                   </ul>
 
                 </div>
@@ -278,7 +312,7 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
         </a>
 
         <a href="directory.html">
-
+ 
           Visit Directory
 
         </a>
@@ -310,8 +344,28 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
     </div>
 
   </footer>
+  <!-- The modal -->
+  <div class="centered-div">
+<div class="modal fade center_my_modal" id="shareicon" tabindex="-1" role="dialog" aria-labelledby="modalLabelSmall" aria-hidden="true">
+<div class="modal-dialog modal-sm">
+<div class="modal-content">
 
+<div class="my_modal_header modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
 
+</div>
+
+<div class="my_model_body modal-body">
+
+</div>
+
+</div>
+</div>
+</div>
+
+</div>
 
   <!-- Vendor JS Files -->
 
@@ -323,8 +377,394 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.js"></script>
 
+  <script>
+    function share_icon(id){
+        var url = '<?= base_url(''); ?>home/share_icon/'+id;
+        $('#shareicon').modal('toggle');
+        $('#shareicon .modal-body').load(url);
+
+    }
+    var currency = '£';
+    function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+window.onbeforeunload = function () {
+  window.scrollTo(0, 0);
+}
+    $('body').on('click','.signup_btn',function(event){
+			event.preventDefault();
+			var now = $(this);
+			now.attr("disabled", true);
+			var btntxt = now.html();
+			var form = now.closest('form');  
+			var ing = now.attr('loading');
+			var success = now.data('success');
+			var unsuccessful = now.data('unsuccessful');
+			var rld = now.data('reload');
+			var callback = now.data('callback');
+			var formdata = false;
+			if (window.FormData){
+				formdata = new FormData(form[0]);
+			}
+	
+			$.ajax({
+				url: form.attr('action'), // form action url
+				type: 'POST', // form submit method get/post
+				dataType: 'html', // request type html/json/xml
+				data: formdata ? formdata : form.serialize(), // serialize form data 
+				cache       : false,
+				contentType : false,
+				processData : false,
+				beforeSend: function() {
+					// now.attr('disabled','disabled');
+					$(".btn_dis").attr('disabled','disabled');
+					now.html(ing);
+				},
+				success: function(data) {
+				    now.attr("disabled", false);
+				    
+				    if(parseInt(data.search("already")) >= 0)
+				    {
+				        // alert(data);
+Swal.fire({
+  icon: "error",
+  title: "Oops...",
+  text: "Your email alredy in list",
+  footer: ''
+});
+				        
+				    }
+				    else if(parseInt(data.search("done")) >= 0)
+				    {
+				        // alert(data);
+				        Swal.fire({
+  title: "Yay!",
+  text: "Successfully subscribe",
+  icon: "success"
+});
+				        
+				    }
+				    else if(parseInt(data.search("refresh")) >= 0)
+				    {
+				        // alert(data);
+				        setTimeout(function(){location.reload();}, 1000);
+				        
+				    }
+				    else
+				    {
+				    
+					if(data == 'done' || data.search('done') !== -1){
+						notify(success,'success','bottom','right');
+						if(rld == 'ok'){
+							setTimeout(function(){location.reload();}, 2000);
+						}
+						if(callback == 'order_tracing'){
+							// now.removeAttr('disabled');
+							data = data.replace('done','');
+        					$('#trace_details').html(data);
+						}
+						$(".closeModal").click();
+					} else {
+						$(".btn_dis").removeAttr('disabled');
+						var text = '<div>'+unsuccessful+'</div>'+data;
+						notify(text,'error','bottom','right','Alert');
+					}
+					
+					now.html(btntxt);
+				    }
+				},
+				error: function(e) {
+				    noewattr("disabled", false);
+					console.log(e)
+				}
+			});
+		});
+    function isEmail(emailAdress){
+    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+  if (emailAdress.match(regex)) 
+    return true; 
+
+   else 
+    return false; 
+}
+    function SEND_CONTACT(pid)
+    {
+
+
+
+        var url = 'https://communityhubland.com/home/contact_us';
+
+        var fname = $('#fname__').val();
+
+        var lname = $('#lname').val();
+
+        var email = $('#email__').val();
+        if(!isEmail(email))
+        {
+            Swal.fire({
+  icon: "error",
+  title: "Oops...",
+  text: "Check if your email is correctly written, and whether all fields are entered.",
+  footer: '<a href="#">Why do I have this issue?</a>'
+});
+        }
+
+        var msg = $('#message__').val();
+
+        var phone = $('#phone').val();
+
+        $.ajax({
+
+            url: url,
+
+            type: "get",
+
+            async: true,
+
+
+
+            data: {  fname:fname, email:email, message:msg,phone:phone,lname:lname,pid:pid },
+
+            success: function (data) {
+
+                // const myArr = JSON.parse(JSON.stringify(data));
+
+                if(data == 1){
+                        $('form')[0].reset();
+
+
+                    Swal.fire({
+  title: "Yay!",
+  text: "The vendor will be in touch with you, thank you for contacting.",
+  icon: "success"
+});
+
+                }else{
+
+                    $("#danger").attr("class", "alert alert-danger d-block");
+
+                }
+
+            },
+
+            error: function (xhr, exception) {
+
+                var msg = "";
+
+                if (xhr.status === 0) {
+
+                    msg = "Not connect.\n Verify Network." + xhr.responseText;
+
+                } else if (xhr.status == 404) {
+
+                    msg = "Requested page not found. [404]" + xhr.responseText;
+
+                } else if (xhr.status == 500) {
+
+                    msg = "Internal Server Error [500]." +  xhr.responseText;
+
+                } else if (exception === "parsererror") {
+
+                    msg = "Requested JSON parse failed.";
+
+                } else if (exception === "timeout") {
+
+                    msg = "Time out error." + xhr.responseText;
+
+                } else if (exception === "abort") {
+
+                    msg = "Ajax request aborted.";
+
+                } else {
+
+                    msg = "Error:" + xhr.status + " " + xhr.responseText;
+
+                }
+
+
+
+            }
+
+        });
+
+
+
+
+
+    }
+</script>
+    <?php
+    if(!isset($product))
+    {
+        ?>
   <script src="<?= $url ?>/assets/js/custom-select.js"></script>
+  <?php
+    }
+    ?>
+    <script>
+    
+  function notify(message,type,from,align,title){ 
+      new Notify({
+    status: type,
+    title: title,
+    text: message,
+    effect: 'fade',
+    speed: 300,
+    customClass: null,
+    customIcon: null,
+    showIcon: true,
+    showCloseButton: true,
+    autoclose: true,
+    autotimeout: 3000,
+    gap: 20,
+    distance: 20,
+    type: 1,
+    position: 'right top'
+  })
+    
+  }
+  
+      function to_wishlist(id,e){ 
+    e = e || window.event;
+    e = e.target || e.srcElement;
+    var state     = check_login_stat('state');
+    var product   = id;
+    var button    = $(e);
+    var alread    = button.html();
+    if(button.is("i")){
+      var alread_classes = button.attr('class');  
+    }   
+    state.success(function (data) {
+      if(data == 'hypass'){
+        $.ajax({
+          url: base_url+'home/wishlist/add/'+product,
+          beforeSend: function() {
+            if(button.is("i")){
+              button.attr('class','fa fa-spinner fa-spin fa-fw'); 
+            } else {
+              button.find('i').attr('class','fa fa-spinner fa-spin fa-fw'); 
+            } 
+          },
+          success: function(data) {
+            if(data == ''){
+              notify(wishlist_add,'info','bottom','right','Cart successfully added');
+            } else {
+              notify(wishlist_already,'warning','bottom','right','Cart warning');
+            }
+            if(button.is("i")){
+              button.attr('class',alread_classes);  
+            } else {
+              button.html(alread);  
+            }
+          },
+          error: function(e) {
+            console.log(e)
+          }
+        });
+      } else {
+        signin();
+      }
+    });
+  }
+  function reload_header_cart(){
+      $.getJSON('<?= base_url(); ?>'+"/home/cart/whole_list", function(result){
+      var total = 0;
+      var whole_list = '';
+      var count = Object.keys(result).length;
+      $('.cart_num').html(count);
+      $('.header__cart__indicator').html(currency+total.toFixed(2));
+      $('.shopping-cart__top').html('Your Cart('+count+')');
+      $('.top_carted_list').html(whole_list);
+      $('.shopping-cart__total').html(currency+total.toFixed(2)); 
+      });
+  }
+  $(document).ready(function(){
+            reload_header_cart();
+  });
+  
+  function to_cart(id,e){
+    var product = id;   
+    e = e || window.event;
+    e = e.target || e.srcElement;
+    var elm_type = $(e).data('type');
+    var button = $(e);
+    var alread = button.html();
+    if(button.is("i")){
+      var alread_classes = button.attr('class');  
+    }
+    var type = 'pp';
+    if(button.closest('.row').find('.cart_quantity').length){
+      quantity = button.closest('.margin-bottom-40').find('.cart_quantity').val();
+    }
+    
+    if($('#pnopoi').length){
+      type = 'pp';
+      var form = button.closest('form');
+      var formdata = false;
+      if (window.FormData){
+        formdata = new FormData(form[0]);
+      }
+      var option = formdata ? formdata : form.serialize();
+    } else {
+      type = 'other';
+      var form = $('#cart_form_singl');
+      var formdata = false;
+      if (window.FormData){
+        formdata = new FormData(form[0]);
+      }
+      var option = formdata ? formdata : form.serialize();
+    }
+    
+    $.ajax({
+      url     : '<?= base_url(); ?>'+'/home/cart/add/'+product+'/'+type,
+      type    : 'POST', // form submit method get/post
+      dataType  : 'html', // request type html/json/xml
+      data    : option, // serialize form data 
+      cache       : false,
+      contentType : false,
+      processData : false,
+      beforeSend: function() {
+        if(button.is("i")){
+          button.attr('class','fa fa-spinner fa-spin fa-fw'); 
+        } else {
+          button.find('i').attr('class','fa fa-spinner fa-spin fa-fw'); 
+        }     
+      },
+      success: function(data) {
+        $('.ajax-to-cart').removeClass('btn--wait');
+        if(data == ' added'){
+          reload_header_cart();
+          notify('Add to cart successfully!','success','bottom','right');
+          
+          //sound('successful_cart');
+        } else if (data == 'shortage'){
+          notify(quantity_exceeds,'warning','bottom','right');
+          //sound('cart_shortage');
+        } else if (data == 'already'){
+          notify(product_already,'warning','bottom','right');
+          //sound('already_cart');
+        }
+        if(button.is("i")){
+          button.attr('class',alread_classes);  
+        } else {
+          button.html(alread);  
+        } 
+      },
+      error: function(e) {
+        console.log(e)
+      }
+    });
+  }
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js" integrity="sha512-efUTj3HdSPwWJ9gjfGR71X9cvsrthIA78/Fvd/IN+fttQVy7XWkOAXb295j8B3cmm/kFKVxjiNYzKw9IQJHIuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
@@ -336,6 +776,55 @@ $footer_disc =  $this->db->get_where('general_settings',array('type' => 'footer_
 
       ?>
       <script>
+  $( function() {
+    // Find all slider elements with the class "slider-range"
+    var sliders = $('.slider-range');
+
+    sliders.each(function() {
+      // Get min and max values from data attributes for each slider
+      var slider = $(this);
+      var dynamicMin = <?= (isset($_GET['sale_price']) && explode('-',$_GET['sale_price'])[0])?explode('-',$_GET['sale_price'])[0]:1; ?>;
+      var dynamicMax = <?= (isset($_GET['sale_price']) && explode('-',$_GET['sale_price'])[1])?explode('-',$_GET['sale_price'])[1]:$max_price; ?>;
+      
+      // Get default values from data attributes
+      var defaultMin = slider.data('default-min');
+      var defaultMax = slider.data('default-max');
+
+      var dynamicId = slider.data('id');
+      
+      
+      $('#'+dynamicId).val(defaultMin + " - " + defaultMax)
+
+      slider.slider({
+        range: true,
+        min: dynamicMin,
+        max: dynamicMax,
+        values: [defaultMin, defaultMax],
+        slide: function( event, ui ) {
+          // Find the corresponding input element for each slider
+        //   var amountInput = slider.siblings('.amount');
+        //   amountInput.val("₹" + ui.values[0] + " - ₹" + ui.values[1]);
+        //   console.log(ui.values[0] + " - " + ui.values[1])
+          
+          $('#'+dynamicId).val( ui.values[0] + " - " + ui.values[1]);
+          $('#sale_price').val( ui.values[0] + "-" + ui.values[1]);
+        }
+      });
+      
+      // Find the corresponding input element for each slider and set initial value
+      var amountInput = slider.siblings('.amount');
+      amountInput.val("₹" + dynamicMin + " - ₹" + dynamicMax);
+    });
+  } );
+  </script>
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>
+      <script>
+      $('.demo-chosen-select').chosen();
+      function select_country(id)
+    {
+        $('#form_country').val(id);
+        submit_dform();
+    }
         function search_location()
 {
 
@@ -382,9 +871,25 @@ function select_place(place,txt)
       <script type="text/javascript">
       function ch_price()
       {
+          <?php
+         $is_fil = false;
+               $max = $max_price;
+               $sale_check =0;
+               if($cat_path)
+               {
+               $this->db->where_in('category',$cat_path);
+               $sale_check = $this->db->where('is_filter',1)->where('tbl_col','sale_price')->get('list_fields')->row();
+               }
+            if($sale_check || (isset($is_listing) && $is_listing == 'shop_listing')){
+                $is_fil = true;
+                    ?>
           var sort = document.getElementById("myRange").value;
-    $('#sale_price').val(sort);
+          $('#sale_price').val('1-'+sort);
     $('#max_price').text(sort);
+          <?php
+            }
+          ?>
+    
       }
       function ch_dist()
       {
@@ -410,12 +915,30 @@ function set_value(id, val)
 
 }
 $('.select-items div').click(function(){
-    submit_dform();
+    // submit_dform();
     
 });
 
 function submit_dform()
 {
+         <?php
+         $is_fil = false;
+               $max = $max_price;
+               $sale_check =0;
+               if($cat_path)
+               {
+               $this->db->where_in('category',$cat_path);
+               $sale_check = $this->db->where('is_filter',1)->where('tbl_col','sale_price')->get('list_fields')->row();
+               }
+            if($sale_check || (isset($is_listing) && $is_listing == 'shop_listing')){
+                $is_fil = true;
+                    ?>
+          var sort = document.getElementById("myRange").value;
+    $('#sale_price').val('0-'+sort);
+          <?php
+            }
+          ?>
+    
     var sort = document.getElementById("select_sort").value;
     $('#form_sort').val(sort);
 
@@ -586,32 +1109,33 @@ function custom_filter(cat)
 }
 
 function update_filter(id,col)
-
         {
+            
 
             var input = document.getElementById(id+'_filter');
 
             var value = input.value;
+            // alert(value);
 
             if(value == 'other' && input.getAttribute('type') == 'model')
-
             {
 
                 var outer = id+'_outer';  
+                alert(outer);
 
              var html = '<input type="text" id="'+input.getAttribute('id')+'" col="'+input.getAttribute('col')+'" rows="9" onkeyup="'+input.getAttribute('onchange')+'" class="form-control required" placeholder="'+input.getAttribute('placeholder')+'" data-height="100" name="ad_field_values[]">';
 
              document.getElementById(outer).innerHTML = html;
 
             }
-
             else
-
             {
 
             document.getElementById(col).value = value; 
 
             }
+            submit_dform();
+            return 0;
 
 
 
@@ -654,6 +1178,119 @@ function update_filter(id,col)
       <?php
 
   }
+  elseif(isset($bpage))
+  {
+      ?>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+      <script>
+      function select_rate(r)
+    {
+        $('#rate').val(r);
+        var tot = '<?= $tot ?>';
+        for(var i=1;i<=tot;i++)
+        {
+            var mid = '#star'+i;
+            if(i<= r)
+            {
+                $(mid).addClass('checked');
+            }
+            else
+            {
+                $(mid).removeClass('checked');
+            }
+        }
+    }
+
+    function send_rate(){
+        Swal.fire({
+  title: 'Are you sure?',
+  text: "You can post only ONCE! Please ensure your review is your true rating of this business!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, add it!'
+}).then((result) => {
+  if (result.isConfirmed) {
+      var form = $('#rform');
+
+        var here = $(this);
+
+        $.ajax({
+
+            url: form.attr('action')+'?'+form.serialize(), // form action url
+
+            type: 'POST', // form submit method get/post
+
+            dataType: 'html', // request type html/json/xml
+
+            data: form.serialize(), // serialize form data
+
+            cache       : false,
+
+            contentType : false,
+
+            processData : false,
+
+            beforeSend: function() {
+
+                here.addClass('disabled');
+
+                here.html('submitting'); // change submit button text
+
+            },
+
+            success: function(data) {
+
+                here.fadeIn();
+
+                here.html('Post Review');
+
+                here.removeClass('disabled');
+
+                if(data == " ok"){
+
+                    // notify('Review add successfully!','success','bottom','right');
+                    Swal.fire(
+      'Success!',
+      'Review add successfully!',
+      'success'
+    )
+
+                    // window.location.replace("<?php echo $this->crud_model->product_link($pro['product_id']); ?>");
+
+
+
+                }else {
+                                    Swal.fire(
+      'Oops!',
+      data,
+      'error'
+    )
+
+                    notify(data,'warning','bottom','right');
+
+                }
+
+            },
+
+            error: function(e) {
+
+                console.log(e)
+
+            }
+
+        });
+    
+  }
+})
+        
+
+    }
+    </script>
+      <?php
+  }
   elseif(isset($profile))
   {
       ?>
@@ -694,6 +1331,12 @@ function update_filter(id,col)
           
       });
           function load_section(sec){
+            //   alert(sec);
+              $('.options-title').each(function(i, obj) {
+    $(this).removeClass('active');
+});
+              var mid = '#'+sec+'_item > .options-title';
+              $(mid).addClass('active');
               $('#result').html('Loading ....');
               $.ajax({
         url: '<?= base_url('/home/profile'); ?>/'+sec,
@@ -807,9 +1450,10 @@ function select_place(place,txt)
           },
           success: function(data) {
             if(data == ''){
-              notify(wishlist_add,'info','bottom','right');
+                
+              notify(wishlist_add,'info','bottom','right','Wishlist');
             } else {
-              notify(wishlist_already,'warning','bottom','right');
+              notify(wishlist_already,'warning','bottom','right' ,'Wishlist');
             }
             if(button.is("i")){
               button.attr('class',alread_classes);  
@@ -827,189 +1471,14 @@ function select_place(place,txt)
     });
   }
   </script>
-  <script>
-  function notify(message,type,from,align){ 
-      $.notify(message, type);
-    
-  }
-      function to_wishlist(id,e){ 
-    e = e || window.event;
-    e = e.target || e.srcElement;
-    var state     = check_login_stat('state');
-    var product   = id;
-    var button    = $(e);
-    var alread    = button.html();
-    if(button.is("i")){
-      var alread_classes = button.attr('class');  
-    }   
-    state.success(function (data) {
-      if(data == 'hypass'){
-        $.ajax({
-          url: base_url+'home/wishlist/add/'+product,
-          beforeSend: function() {
-            if(button.is("i")){
-              button.attr('class','fa fa-spinner fa-spin fa-fw'); 
-            } else {
-              button.find('i').attr('class','fa fa-spinner fa-spin fa-fw'); 
-            } 
-          },
-          success: function(data) {
-            if(data == ''){
-              notify(wishlist_add,'info','bottom','right');
-            } else {
-              notify(wishlist_already,'warning','bottom','right');
-            }
-            if(button.is("i")){
-              button.attr('class',alread_classes);  
-            } else {
-              button.html(alread);  
-            }
-          },
-          error: function(e) {
-            console.log(e)
-          }
-        });
-      } else {
-        signin();
-      }
-    });
-  }
-  function reload_header_cart(){
-      $.getJSON(base_url+"home/cart/whole_list", function(result){
-      var total = 0;
-      var whole_list = '';
-      var count = Object.keys(result).length;
-      $('.cart_num').html(count);
-      $('.header__cart__indicator').html(currency+total.toFixed(2));
-      $('.shopping-cart__top').html('Your Cart('+count+')');
-      $('.top_carted_list').html(whole_list);
-      $('.shopping-cart__total').html(currency+total.toFixed(2)); 
-      });
-  }
-  $(document).ready(function(){
-            reload_header_cart();
-  });
   
-  function to_cart(id,e){ 
-    alert('OK');
-    var product = id;   
-    e = e || window.event;
-    e = e.target || e.srcElement;
-    var elm_type = $(e).data('type');
-    var button = $(e);
-    var alread = button.html();
-    if(button.is("i")){
-      var alread_classes = button.attr('class');  
-    }
-    var type = 'pp';
-    if(button.closest('.row').find('.cart_quantity').length){
-      quantity = button.closest('.margin-bottom-40').find('.cart_quantity').val();
-    }
-    
-    if($('#pnopoi').length){
-      type = 'pp';
-      var form = button.closest('form');
-      var formdata = false;
-      if (window.FormData){
-        formdata = new FormData(form[0]);
-      }
-      var option = formdata ? formdata : form.serialize();
-    } else {
-      type = 'other';
-      var form = $('#cart_form_singl');
-      var formdata = false;
-      if (window.FormData){
-        formdata = new FormData(form[0]);
-      }
-      var option = formdata ? formdata : form.serialize();
-    }
-    
-    $.ajax({
-      url     : base_url+'home/cart/add/'+product+'/'+type,
-      type    : 'POST', // form submit method get/post
-      dataType  : 'html', // request type html/json/xml
-      data    : option, // serialize form data 
-      cache       : false,
-      contentType : false,
-      processData : false,
-      beforeSend: function() {
-        if(button.is("i")){
-          button.attr('class','fa fa-spinner fa-spin fa-fw'); 
-        } else {
-          button.find('i').attr('class','fa fa-spinner fa-spin fa-fw'); 
-        }     
-      },
-      success: function(data) {
-        $('.ajax-to-cart').removeClass('btn--wait');
-        if(data == ' added'){
-          reload_header_cart();
-          notify('Add to cart successfully!','success','bottom','right');
-          
-          //sound('successful_cart');
-        } else if (data == 'shortage'){
-          notify(quantity_exceeds,'warning','bottom','right');
-          //sound('cart_shortage');
-        } else if (data == 'already'){
-          notify(product_already,'warning','bottom','right');
-          //sound('already_cart');
-        }
-        if(button.is("i")){
-          button.attr('class',alread_classes);  
-        } else {
-          button.html(alread);  
-        } 
-      },
-      error: function(e) {
-        console.log(e)
-      }
-    });
-  }
-  </script>
   
   <script src="<?= $url ?>/assets/js/main.js"></script>
+  
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-  $( function() {
-    // Find all slider elements with the class "slider-range"
-    var sliders = $('.slider-range');
-
-    sliders.each(function() {
-      // Get min and max values from data attributes for each slider
-      var slider = $(this);
-      var dynamicMin = slider.data('min');
-      var dynamicMax = slider.data('max');
-      
-      // Get default values from data attributes
-      var defaultMin = slider.data('default-min');
-      var defaultMax = slider.data('default-max');
-
-      var dynamicId = slider.data('id');
-      
-      $('#'+dynamicId).val(defaultMin + " - " + defaultMax)
-
-      slider.slider({
-        range: true,
-        min: dynamicMin,
-        max: dynamicMax,
-        values: [defaultMin, defaultMax],
-        slide: function( event, ui ) {
-          // Find the corresponding input element for each slider
-        //   var amountInput = slider.siblings('.amount');
-        //   amountInput.val("₹" + ui.values[0] + " - ₹" + ui.values[1]);
-        //   console.log(ui.values[0] + " - " + ui.values[1])
-          
-          $('#'+dynamicId).val( ui.values[0] + " - " + ui.values[1])
-        }
-      });
-      
-      // Find the corresponding input element for each slider and set initial value
-      var amountInput = slider.siblings('.amount');
-      amountInput.val("₹" + dynamicMin + " - ₹" + dynamicMax);
-    });
-  } );
-  </script>
+  
     <script>
     $('#button-addon2').click(function(){
         var mail = $('#email_send').val();
@@ -1055,6 +1524,95 @@ function select_place(place,txt)
       $('.social_mediabox').toggle();
       });
     </script>
+    
+    <!--shaheer work-->
+  <script>
+     $(document).ready(function(){
+    $('.panel-heading a').click(function(){
+
+        var accordionId = $(this).data('accordion-id');
+
+        $('#acordian_open' + accordionId).toggle();
+    });
+});
+function ajax_load(url,id,type){
+		var list = $('#'+id);
+		$.ajax({
+			url: url, // form action url
+    		cache: false,
+        	dataType: "html",
+			beforeSend: function() {
+				//list.fadeOut();
+
+				if(type !== 'other'){
+					list.html(loading); // change submit button text
+				}
+			},
+			success: function(data) {
+				if(data !== ''){
+					list.html('');
+					list.html(data).fadeIn(); // fade in response data
+				}
+				if(type == 'first'){
+					$('#demo-table').bootstrapTable();
+					set_switchery();
+					$('#demo-table img').each(function() {
+						if($(this).attr('src') !== ''){
+							if($(this).data('im') !== 'fb'){
+						    	$(this).attr('src', $(this).attr('src')+'?random='+new Date().getTime());
+							}
+						}
+					});
+				} else if(type=='form') {
+					//reloadStylesheets();
+			        $('#demo-tp-textinput').timepicker({
+			            minuteStep: 5,
+			            showInputs: false,
+			            disableFocus: true
+			        });
+			        
+				} else if(type=='delete') {
+					ajax_load(base_url+''+user_type+'/'+module+'/'+list_cont_func,'list','first');
+					other_delete();
+				} else if(type=='other') {
+					other();
+				} else if(type == 'signup_cat'){
+					var noty = 'Category update successfully!';
+					$.activeitNoty({
+						type: 'success',
+						icon : 'fa fa-check',
+						message : noty,
+						container : 'floating',
+						timer : 3000
+					});
+					
+					sound('done');
+				// 	ajax_set_list();
+				} else if(type == 'pegs'){
+					var noty = 'Pegs update successfully!';
+					$.activeitNoty({
+						type: 'success',
+						icon : 'fa fa-check',
+						message : noty,
+						container : 'floating',
+						timer : 3000
+					});
+					
+					sound('done');
+				// 	alert();
+				//  	ajax_set_list();
+				}
+			},
+			error: function(e) {
+				console.log(e)
+			}
+		});
+	}
+
+    </script>
+    <!--shaheer work-->
+    
+    
 </body>
 
 

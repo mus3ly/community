@@ -14,6 +14,19 @@ include "header_new.php";
         font-weight:900;
         color:white;
     }
+    .homeaboutimg{max-width:400px;width:100%}
+    .homeabout h6{margin: 20px 0 0;}
+    .homeabout .container{max-width:900px;}
+    .homeabout.community_wrap{background:#fff;padding: 70px 0px 50px;
+       
+    }
+    section.homeabout{
+        z-index: 1;
+    background: unset!important;
+    margin-bottom: -390px;
+    
+    }
+
 </style>
 
 <main>
@@ -30,15 +43,25 @@ include "header_new.php";
 
 
 
-            <div class="col-lg-8 perfect_place">
+            <div class="col-lg-12 perfect_place">
 
               <div class="hero-contents-wrap">
 
-                <h5>COMMUNITY HUBLAND - WHERE OPPORTUNITY MEETS COMMUNITIES
+                <h5 style="color:white; margin-bottom: 15px;">COMMUNITY HUBLAND - WHERE OPPORTUNITY MEETS COMMUNITIES
 
                 </h5>
-
-                <h3>Search Your
+                <h1 style="color:white; font-size: 35px">LOCAL BUSINESS COMMUNITY DIRECTORY</h1> 
+                <h6 style="color:white; margin-bottom: 30px;">BUSINESSES<span class="text-divider color_white" style="top:-7px; font-weight: 400; font-size:15px;"></span>
+                PRODUCTS<span class="text-divider color_white" style="top:-7px; font-weight: 400;"></span>
+                SERVICES<span class="text-divider color_white" style="top:-7px; font-weight: 400;"></span>
+                PROGRAMMES<span class="text-divider color_white" style="top:-7px; font-weight: 400;"></span>
+                RENTALS<span class="text-divider color_white" style="top:-7px; font-weight: 400;"></span>
+                IDEAS<span class="text-divider color_white" style="top:-7px; font-weight: 400;"></span>
+                PUBLICATIONS<span class="text-divider color_white" style="top:-7px; font-weight: 400;"></span>
+                OPPORTUNITIES</h6>
+                
+                  <div class="col-lg-8">
+                <h3 style="font-size: 39px">Search Your
 
                   <b>Communities</b>
 
@@ -46,7 +69,7 @@ include "header_new.php";
 
                 <div class="search_bar border_iner">
 
-                  <form action="https://dev.communityhubland.com/" method="get">
+                  <form action="<?= base_url(); ?>" method="get">
 
                     <div class="form-inner-wrap">
 
@@ -100,11 +123,7 @@ include "header_new.php";
                       <button type="submit" class="search-btn">Search</button>
 
                       <div id="map" class="dropdown-box">
-                        <ul>
-                          <li><a href="#">Option one</a></li>
-                          <li><a href="#">Option two</a></li>
-                          <li><a href="#">Option three</a></li>
-                        </ul>
+                        <ul></ul>
                       </div>
 
                     </div>
@@ -123,7 +142,7 @@ include "header_new.php";
                 ?>
 
               </div>
-
+             </div>
             </div>
 
           </div>
@@ -140,6 +159,12 @@ include "header_new.php";
 
         <div class="row">
 
+        <div class="col-lg-4" >
+            
+            <img src="<?=base_url()?>updated/assets/images/istockphoto.jpeg" style="margin-top:7px; height:90%; "> 
+          
+         </div>
+<!-- 
           <div class="col-lg-6 business_graphic">
 
             <video autoplay="" loop="" muted="">
@@ -149,10 +174,9 @@ include "header_new.php";
                 type="video/mp4">
 
             </video>
+          </div>--> 
 
-          </div>
-
-          <div class="col-lg-6 communitybox every_business hide_on_desk_h">
+          <div class="col-lg-8 communitybox every_business hide_on_desk_h">
 
 
 
@@ -160,15 +184,24 @@ include "header_new.php";
 
             <h4 class="h_title">Your Digital Helper</h4>
 
+<p>Welcome to Community HubLand a local business directory & dedicated online advertising platform. Boost your web presence and enrich your local 
+communities with your offers in minutes.</p>
+ <ul >
 
+    <li><p><img src="<?= $url ?>assets/images/Tick-Square.png" style="margin-bottom: 2px;"><span style="margin-left: 7px;">Our services offer you a business marketing website, immediately after sign-up</span></p> </li>
 
-            <p class="">We know how hard it can be to run a small business in the digital world. That's why we have a bunch 
-                of helpful tools and services to make things easier for you and make your business more successful.</p>
-                
-                <p>Using Community HubLand for your web presence can boost your online reaches in local and international 
-                markets, by giving you instant and easier access to webpages you can customise to your business needs and 
-                utilise as your business virtual hub.</p>
+    <li><p><img src="<?= $url ?>assets/images/Tick-Square.png" style="margin-bottom: 49px;"><span style="margin-top: 5px;margin-left: 7px">With only images and some descriptive texts of your business, you can have your <br>
+    website up and running, on Community HubLand in less than 30 minutes</span></p> </li>
+</ul>
 
+<p>Community HubLand business marketing website, can be easily customised to your business needs and utilised as your business’s virtual hub page.</p> 
+
+<p>See your local business automatically listed on Community HubLand's directory. From sole traders to market stall owners to publishers, realtors and students alike, our local business directory caters to all industry. 
+If you dont see your industry, contact us to have it listed!</p>
+
+<p>We enable customers find and share your business at no costs to you!</p> 
+
+<br>
 <!--
             <div class="scroll">
 
@@ -241,6 +274,49 @@ include "header_new.php";
       </div>
 
     </section>
+    
+    
+    
+    
+    <section class="homeabout community_wrap">
+        <div class="container" style="max-width:90%; ">
+        <div class="row">
+            <div class="col-md-4">
+                <h6 class="color_orange">Expert Assistance</h6>
+                <p>Our expert team is available to guide you through the process, optimising your online presence.
+                </p>
+                
+                <h6 class="color_orange">Directory Listing</h6>
+                <p>Your page will be featured in our directory, simplifying discovery for
+users.</p>
+              <h6 class="color_orange">Content Addition</h6>
+                <p>Add crucial content like events, job listings, blogs, and ads in any category to engage your audience effectively.</p>
+            
+            </div>
+            <div class="col-md-4">
+                <center>
+                <img class="homeaboutimg" src="<?=base_url()?>updated/assets/images/homeabout.jpeg">
+                <div style="text-align:left">
+                <h6 class="color_orange">Page Design</h6>
+                <p>Utilise our user-friendly tools to design your marketing business page, showcasing your products, services, events and more.</p>
+            </div>
+                </center>
+            </div>
+            <div class="col-md-4">
+                  <h6 class="color_orange">Earn Commission Programme</h6>
+                <p>Explore opportunities to earn commissions by referring others to Community HubLand using your referral code.</p>
+                  <h6 class="color_orange">Registration</h6>
+                <p>Create a vendor account for a business hub-site or a customer account to refer and earn, add to wishlist or buy.</p>
+                  <h6 class="color_orange">Profile Customisation</h6>
+                <p>Personalise your business profile
+with your logo, images,
+description, social media and a
+variety of contact details</p>
+                
+            </div>
+        </div>
+        </div>
+    </section>
 
     <section class="community_wrap">
 
@@ -252,7 +328,7 @@ include "header_new.php";
 
       <div class="container">
 
-        <div class="row align-items-center">
+        <div class="row align-items-center" style="padding-top: 70px;">
 
           <div class="col-lg-6 order-lg-2 business_graphic text-center">
 
@@ -271,13 +347,17 @@ include "header_new.php";
 
 
             <p class="color_orange leading_texts fw_500 fs_15" data-aos="fade-down" data-aos-duration="1000" data-aos-delay="00">
-                COMMUNITY MARKETING BUSINESS PAGE - YOUR MARKETING HUB
+                COMMUNITY MARKETING LOCAL BUSINESS PAGE - YOUR MARKETING HUB
             </p>
 
 
 
             <h4 class="h_title m_27" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">Every Business has something to offer their community</h4>
+            
+<p>This platform is designed to help businesses anywhere in the world to connect with markets across borders. You can build your advertisement posts in minutes and post it to any 
+city in the world; and your ad listings will be displays in that community's feed at no extra cost to you.</p>
 
+<p>Our directory is simple to use, by simply signing up and uploading your images and texts, your advertisements will be automaticatically listed in the area you target. Afetrwhich, potential customers can easily get in touch with you via your contact form, phone, email, WhatsApp messenger or through your linked external sites and social media platforms.</p>
 
 
             <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300" class="color_orange leading_texts fw_400 fs_13 add_comma">EVENTS<span
@@ -296,29 +376,27 @@ include "header_new.php";
 
               <li><img src="<?= $url ?>assets/images/Tick-Square.png">List multiple products and services</li>
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Market each ad on its own webpage
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Market each advert on its Own Webpage 
+              <span class="text-divider color_white "></span> Can Post your Affiliate Links on the Shop
 
               </li>
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Contact forms
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Contact Forms
 
-                <span class="text-divider color_white "></span>Shopping cart
+                <span class="text-divider color_white "></span>Shopping Cart for Direct Sales to Customers
+                
+                <span class="text-divider color_white "></span>Instant WhatsApp</li>
 
-                <span class="text-divider color_white "></span>Instant WhatsApp connection</li>
-
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Automatated posts to directory Listings, your socials
-
-                included
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Automatated Posts to Directory Listings
+              <span class="text-divider color_white "></span> Your Socials included
 
               </li>
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Easy blogging, integrated as your perfect marketing tool</li>
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Easy Blogging, integrated as your Perfect Marketing Tool</li>
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">One-click access to affiliate marketing</li>
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png">One-click access to Affiliate Marketing</li>
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Got nothing to sell? Then join and earn from affiliate
-
-                marketing</li>
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Got nothing to sell? Join & Earn from our Affiliate Marketing</li>
 
             </ul>
 
@@ -356,11 +434,10 @@ include "header_new.php";
 
           <p>COMMUNITY HUBLAND DIGITAL SERVICES - YOUR OTHER REQUIREMENTS</p>
 
-          <h4 class="l_height_1">Professional Business Solutions
+          <h4 class="l_height_1">Professional Business Solutions <br>Customised And Designed To Meet Bespoke Needs</h4>
+          
 
-            <span>Customised And Designed To Meet Your Needs</span></h4>
-
-          <p class="hire_para">Hire Professionals -- See Results</p>
+          <p class="hire_para">Hire Professionals -- See Results!</p>
 
           <div class="orange_inner_wrapper">
 
@@ -448,11 +525,9 @@ include "header_new.php";
 
                     <div class="list-texts">
 
-                      <h4>CALL CENTRE SERVICES</h4>
+                      <h4>ACCESS TO WHOLESALE MARKETS</h4>
 
-                      <p>A myriad of low cost, highly efficient customer services from technical to
-
-                        telemarketing and help desk support</p>
+                      <p>A myriad of low cost, wholesale markets globally. If you are looking for a supplier or buyer, contact us and we may be able to link you up with just the right business you need!</p>
 
                     </div>
 
@@ -532,7 +607,7 @@ include "header_new.php";
 
                         <h4>BUSINESS PAGE</h4>
 
-                        <p>to manage and consolidate all your business interests in one place</p>
+                        <p>To manage and consolidate all your business interests in one place</p>
 
                       </div>
 
@@ -679,12 +754,94 @@ include "header_new.php";
       </div>
 
     </section>
+    
+    
+  <section>
+    <div class="container">
+<div class="extrades">
+    <center>
+    <h3 class="color_orange" style="margin-bottom: 20px;">EARN up to 30% COMMISSIONS</h3>
+    </center>
+    <div class="row">
+        <div class="col-md-3 col-2">
+            
+            <!--<img src="<?=base_url()?>updated/assets/images/istockphoto.jpeg"> -->
+          
+         </div>
+        <div class="col-md-6 col-8">
+            <center>
+   <div><p style=" font-weight: 600;">            
+Sign-up free for a customer account, and tick the Affiliate checkbox. 
 
-    <section class="verifed_listings section_spacing_top section_spacing_bottom">
+ That's it! You are in business!</p>
+
+<p style="margin-bottom: 20px;">Explore opportunities to earn commissions, by referring others to Community HubLand 
+
+  with your referral code.</p>
+
+<h4 style="margin-bottom: 10px;">Can businesses put their business up for affilate marketing too?</h4>
+
+<p>Yes it comes free with the vendor account. You tick the Affiliate checkbox, and Voila!</p>
+ 
+<p>Login and upload info-media to your affiliate marketing dashboard.</p>
+
+ <p>We are in the <strong>testing phase</strong>, your info-media would appear instantly on the affiliate marketing <br>
+ panel for free! You may also add commissions if you want to attract more affiliate marketers to your business. It is as simple as that!</p>
+                
+ <br>
+   
+            <button class="joinbtn primary-btn" style="margin-left:20px;">Become an Affiliate Marketer</button><button class="joinbtn primary-btn" style="margin-left:20px;">Test Vendor Affilate Programme</button>
+            <br><br>
+            <div>Already a member?</div>
+            <a href="https://communityhubland.com/login_set/login" style="margin-left:20px;">Customer Login</a><a href="https://communityhubland.com/vendor" style="margin-left:20px;">Vendor Login</a>
+            </center>
+        </div>
+        <div class="col-md-3 col-2">
+         <!--   <img src="<?=base_url()?>updated/assets/images/istockphoto.jpeg">-->
+           </div>
+    </div>
+</div>
+</div>
+  </section>
+
+  
+    <section class="orange_card section_spacing_top" data-aos="fade-up" data-aos-duration="1000">
+
+      <div class="container">
+
+        <div class="orange_card_box">
+
+          <div class="full_circle"></div>
+<center>
+          <h4 class="l_height_1">Success isn't just about tools, <span>it's about working together</span></h4>
+
+          <p class="hire_para"> 
+          That's why we've made a place where <br>
+small <b>Business Owners, Vendors, Bloggers, and any other business type</b> can come together <br>
+on one platform to create a market space, where their communities can reach them more easily.
+          </p>
+          <br>
+            <p class="hire_para"> 
+At Community HubLand you have access to a range of platforms <br>
+to post products, ads, news articles, blogs, or any other community pegs, to unlock the full potential of your online presense.
+          </p>
+  </center>      <!--  <a href="<?= base_url('vendor_logup/registration'); ?>" class="secondary-btn white mt-4">SIGN-UP NOW</a> -->
+          <div class="bottom_circled">
+
+            <img src="<?= $url ?>assets/images/bottom-circled.png" alt="">
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+      <section class="verifed_listings section_spacing_top section_spacing_bottom">
 
       <div class="vertical_dot">
 
-        <img src="<?= $url ?>assets/images/vertical.png" alt="">
+        <img src="<?= $url ?>assets/images/vertical.png" alt="">  
 
       </div>
 
@@ -721,41 +878,6 @@ include "header_new.php";
         <div class="orange_purple">
 
           <img src="<?= $url ?>assets/images/arrow-purple.png" alt="">
-
-        </div>
-
-      </div>
-
-    </section>
-    <section class="orange_card section_spacing_top" data-aos="fade-up" data-aos-duration="1000">
-
-      <div class="container">
-
-        <div class="orange_card_box">
-
-          <div class="full_circle"></div>
-
-          <h4 class="l_height_1">Success isn't just about tools <br>
-
-            <span>It's about working together</span></h4>
-
-          <p class="hire_para"> 
-          That's why we've made a place where <br>
-small <b>Business Owners, Vendors, Bloggers, and others</b> can come together <br>
-On one platform to create a market space where their communities can reach them more easily.
-          </p>
-          <br>
-            <p class="hire_para"> 
-          So, don't let the challenges of community marketing presence hold you back. <br>
-Join us at Community HubLand and access a range of platforms <br>
-to unlock the full potential of your online community today.
-          </p>
-          <a href="<?= base_url('vendor_logup/registration'); ?>" class="secondary-btn white mt-4">SIGN-UP NOW</a>
-          <div class="bottom_circled">
-
-            <img src="<?= $url ?>assets/images/bottom-circled.png" alt="">
-
-          </div>
 
         </div>
 

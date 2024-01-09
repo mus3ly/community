@@ -34,6 +34,7 @@
                         <?php echo translate('select_image');?>
                         <input type="file" name="img" id='imgInp' accept="image">
                     </span>
+                    <span>height: 750 px width: 750 px</span>
                     <br><br>
                     <span id='wrap' class="pull-left" >
                         <img src="<?php echo base_url(); ?>uploads/brand_image/default.jpg" 

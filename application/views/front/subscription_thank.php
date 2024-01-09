@@ -21,11 +21,11 @@ $url = base_url('updated/');
                     
                     <div class="sub_total">
                           <span><h3>Subtotal:</h3></span>
-                  <span><h3>$<?= $amount ?></h3></span>
+                  <span><h3><?= $amount ?></h3></span>
                     </div>
                     <div class="sub_total">
                           <span><h3>Total:</h3></span>
-                  <span><h3>$<?= $amount ?></h3></span>
+                  <span><h3><?= $amount ?></h3></span>
                     </div>
 </div>
 </div>

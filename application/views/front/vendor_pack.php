@@ -8,16 +8,7 @@ $url = base_url('updated/');
     <section class="pricing-offer">
       <div class="container">
           <?php
-                $error = $this->session->flashdata('error');
-                if($error)
-                {
-                    // 
-                    ?>
-                    <div class="alert alert-danger" role="alert">
-  <?= $error; ?>
-</div>
-                    <?php
-                }
+                include 'flash.php';
 
                 ?>
         <ul class="nav nav-pills mb-3" id="pricing-table" role="tablist" data-aos="fade-up" data-aos-duration="1000"
@@ -51,7 +42,7 @@ $url = base_url('updated/');
                                   <div class="input-group">
                                       <input type="text" class="form-control" placeholder="Add Promo Code"  name="promo_code" aria-label="Add Promo Code"
                                              aria-describedby="button-addon2">
-                                      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Coupon</button>
+                                      <button class="btn btn-outline-secondary" type="submit" id="button-addon3">Add Promo Code</button>
                                   </div>
                               </div>
                           </form>
@@ -64,7 +55,7 @@ $url = base_url('updated/');
                                   <div class="input-group">
                                       <input type="text" class="form-control" placeholder="Add Referal Code"  name="ref_code" aria-label="Add Referal Code"
                                              aria-describedby="button-addon2">
-                                      <button class="btn btn-outline-secondary" type="button" id="button-addon2">Add Code</button>
+                                      <button class="btn btn-outline-secondary" type="submit" id="button-addon4">Add Referal Code</button>
                                   </div>
                               </div>
                           </form>
@@ -73,6 +64,7 @@ $url = base_url('updated/');
 
               </div>
           </div>
+          <div class="coupon-wrap">We are in <b>beta phase</b>. Sign-up at these low fees and become <b>Community HubLand’s First-time Settlers</b>. The first 1000 sign-ups gets to <b>keep these low fees forever!</b></div>
         <div class="tab-content" id="pricing-tableContent">
             <?php
                         foreach($cat as $k => $v){
@@ -83,13 +75,23 @@ $url = base_url('updated/');
             <div class="price-boxes-wrap">
               <div class="row">
                   <?php
+                       if($_GET['ref_code'] == '1stCHL')
+                {
+                    $admin_special = 1;
+                }
                     $this->db->order_by("sort", "asc");
-
+                    
+                        $this->db->where('admin_special',0);
                       $pkg = $this->db->where('promo_check',0)->where('mcat', $v['id'])->get('membership')->result_array();
                       if(isset($ref) && $ref)
                       {
+                          if(isset($admin_special))
+                            {
+                                $this->db->where('admin_special',1);
+                            }
                           $pkg = $this->db->where('promo_check',1)->where('mcat', $v['id'])->get('membership')->result_array();
                       }
+                 
                         foreach ($pkg as $k => $v) {
                             $cls = '';
                             if($k == 1)
@@ -104,11 +106,13 @@ $url = base_url('updated/');
                             {
                                 $cls = 'yellow';
                             }
+                            if(!isset($admin_special) && !$v['admin_special'])
+                            {
                           ?>
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-3 col-sm-6">
                   <div class="pricingTable <?= $cls ?>" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
                       <?php
-                      if($v['discount'])
+                      if($v['discount'] > 0)
                           {
                               ?>
                       <div class="discount-badge">
@@ -126,10 +130,10 @@ $url = base_url('updated/');
                     <h3 class="heading"><?= $v['title'] ?></h3>
                     <div class="pricing-content">
                       <ul>
-                        <li>Dynamic Business Page</li>
-                        <li>Shopping Cart</li>
-                        <li><b><?= $v['product_limit'] ?></b>Advertisement Pages</li>
-                        <li>Directory Listings</li>
+                        <li><b>1</b> Business Hub-site</li>
+                        <li>Shopping Display & Cart (Beta)</li>
+                        <li><b><?= $v['product_limit'] ?></b> Ad Web Pages</li>
+                        <li>Automatic Directory Listings</li>
                       </ul>
                     </div>
                     <div class="pricingTable-signup">
@@ -139,6 +143,44 @@ $url = base_url('updated/');
                 </div>
                 <?php
                 
+                        }
+                        elseif(isset($admin_special) &&  $v['admin_special'])
+                        {
+                            ?>
+                            <div class="col-md-3 col-sm-6">
+                  <div class="pricingTable <?= $cls ?>" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
+                      <?php
+                      if($v['discount'] > 0)
+                          {
+                              ?>
+                      <div class="discount-badge">
+                      <div class="badge-circle">
+                        <p>Save <span class="discount"><?= $v['discount']; ?></span></p>
+                      </div>
+                    </div>
+                              <?php
+                          }
+                      ?>
+                    <div class="pricingTable-header">
+                      <i class="fa fa-adjust"></i>
+                      <div class="price-value"> £<?= $v['price'] ?>  </div>
+                    </div>
+                    <h3 class="heading"><?= $v['title'] ?></h3>
+                    <div class="pricing-content">
+                      <ul>
+                        <li><b>1</b> Business Hub-site</li>
+                        <li>Shopping Display & Cart (Beta)</li>
+                        <li><b><?= $v['product_limit'] ?></b> Ad Web Pages</li>
+                        <li>Automatic Directory Listings</li>
+                      </ul>
+                    </div>
+                    <div class="pricingTable-signup">
+                      <a href="<?= base_url('vendor_logup/registration'); ?>?pack=<?= $v['membership_id'] ?><?= (isset($_GET['ref_code']) && $_GET['ref_code'])?'&ref_code='.$_GET['ref_code']:''; ?>">sign up</a>
+                    </div>
+                  </div>
+                </div>
+                            <?php
+                        }
                         }
                 ?>
               </div>

@@ -31,7 +31,20 @@
                             <div class="form-group btm_border">
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('Image');?></label>
                                 <div class="col-sm-6">
-                                    <input type="file" name="file_upload" id="demo-hor-1" placeholder="" value="$row['img']" class="form-control required">
+                                    <input type="file" name="social_media" id="social_media" placeholder="" value="$row['img']" class="form-control required">
+                                    <input type="hidden" name="img" id="social_media_img" value="<?= $row['img'] ?>"/>
+                                    <div id="social_media_box">
+                                        <?php
+                                        if($row['img']){
+                               $img = $this->crud_model->get_img($row['img'])->secure_url;
+                             ?>
+                             <img src="<?= $img ?>" width="50" height="50" />
+                             <?php
+                             } 
+                             
+                                        ?>
+                                        
+                                    </div>
                                 </div>
                             </div>
                             
@@ -52,7 +65,7 @@
                         </span>
                      </div>
                      <div class="col-md-1">
-                     	<span class="btn btn-success btn-md btn-labeled fa fa-wrench pull-right enterer" onclick="form_submit('bpkg_edit','<?php echo translate('successfully_edited!'); ?>');proceed('to_add');" ><?php echo translate('edit');?></span> 
+                     	<span class="btn btn-success btn-md btn-labeled fa fa-wrench pull-right enterer" onclick="form_submit('bpkg_edit','<?php echo translate('successfully_edited!'); ?>');proceed('bpkg_edit');" ><?php echo translate('edit');?></span> 
                      </div>
                 </div>
             </div>

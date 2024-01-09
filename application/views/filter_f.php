@@ -48,7 +48,7 @@ if($type == 'select')
                     
 <div class="form-group <?= $view_cls ?> p-1">   
                             <div class="select_tops">
-                            <div class="custom-select-box"  id="<?= $name ?>_outer" >  
+                            <div class="custom-select-boxcustom-select-box"  id="<?= $name ?>_outer" >  
                             <!--  styled-select -->
                             <select id="<?= $name ?>_filter" type="<?= $type ?>" col="<?= $tbl_col ?>" class="form-select form-control" name="ad_field_names[]" 
                             <?php
@@ -136,7 +136,7 @@ elseif($type == 'text')
 else
 {
     ?>
-<div class="form-group <?= $name ?>">    
+<div class="form-group <?= $view_cls ?> <?= $name ?>">    
                             <div>    
                             <input type="<?= $type ?>" id="<?= $name ?>_filter" col="<?= $tbl_col ?>" rows="9" 
                             <?php

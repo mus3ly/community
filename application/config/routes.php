@@ -58,11 +58,15 @@ $route['vendor_logup/registration'] = 'home/vendor_logup/registration';
 $route['product/(:any)/(:any)'] = 'home/product_view/$1/$2';
 $route['profile'] = 'home/profile';
 $route['login'] = 'home/login';
+$route['verfication'] = 'home/verification';
+$route['verfication_user'] = 'home/verfication_user';
 $route['admin'] = 'admin/main_login';
 $route['vendor'] = 'vendor/main';
 $route['contact'] = 'home/contact';
+$route['about'] = 'home/other_page/about';
+$route['services'] = 'home/other_page/services';
 $route['faq'] = 'home/faq';
-$route['articles'] = 'home/blog';
+$route['Articles'] = 'home/blog';
 $route['directory'] = 'home/directory';
 
 $route['directory/(:any)'] = 'home/directory/$1';

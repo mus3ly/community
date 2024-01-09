@@ -1,12 +1,12 @@
 <?php
 $url = base_url('updated/');
- include "directory_header.php";
+ include "header_new.php";
  $viewtype = 'list';
 if (isset($_GET['view']))
 $viewtype = $_GET['view'];
     $ip_loc = '';
     
-    if(isset($_GET['place_id']))
+    if(isset($_GET['place_id']) && $_GET['place_id'])
     {
         $det = place_details($_GET['place_id']);
     }
@@ -14,12 +14,16 @@ $viewtype = $_GET['view'];
     {
         if(isset($_SESSION['ip_info']))
         {
-            $ip_loc = $_SESSION['ip_info']['city'].', '.$_SESSION['ip_info']['countryCode'];
-            
+        
         }
     }
     
 ?>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.min.css">
+
+<!-- JS -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js"></script>
   <!-- Directory Menu -->
   <div class="directory-menu">
     <div class="container">
@@ -30,17 +34,17 @@ $viewtype = $_GET['view'];
             <ul>
                         <li class="">
                             <span class="marg_add"><i class="fa-solid fa-folder"></i></span><a
-                                    href="<?= base_url('directory'); ?>"
+                                    href="#" onclick="ch_url('/')"
                                     class=" <?= ((isset($cur_slug) && $cur_slug == 'directory_listing') || !(isset($cur_slug))) ? "active" : "" ?>"><?php echo translate('directory'); ?></a>
                         </li>
                         <li>
                             <span class="marg_add"><i class="fa-solid fa-business-time"></i></span><a
-                                    href="<?= base_url('directory/business'); ?>"
+                                    href="#" onclick="ch_url('business')"
                                     class=" <?= (isset($cur_slug) && $cur_slug == 'business') ? "active" : "" ?>"><?php echo translate('business'); ?></a>
                         </li>
                         <li>
                             <span class="marg_add"><i class="fab fa-affiliatetheme"></i></span><a
-                                    href="<?= base_url('directory/affiliate-business'); ?>"
+                                    href="#" onclick="ch_url('affiliate-business')"
                                     class=" <?= (isset($cur_slug) && $cur_slug == 'affiliate-business') ? "active" : "" ?>"><?php echo translate('affiliate'); ?></a>
                         </li>
                         <?php
@@ -73,25 +77,28 @@ $viewtype = $_GET['view'];
             <div class="listings-wrapper">
               <div class="custom-result">
                 <div class="row align-items-center">
-                  <div class="col-sm-12 col-lg-2">
+                  <div class="col-sm-12 col-lg-2 col-md-2">
                     <div class="select_tops hide_on_mobile">
                       <div class="custom-select-box">
                         <select onchange="submit_dform()" id="select_sort" name="sort">
                           <option  value="" <?= !isset($_GET['sort'])?"selected":""?>)?>Sort By</option>
                           <option  value="" <?= !isset($_GET['sort'])?"selected":"" ?>>Sort By</option>
                         <option value="rating_num" <?= (isset($_GET['sort']) && $_GET['sort'] == 'rating_num')?"selected":""; ?> ><?php echo translate('top_rated'); ?></option>
-                        <option value="distance" <?= (isset($_GET['distance']) && $_GET['distance'] == 'distance')?"selected":""; ?>><?php echo translate('near_by'); ?></option>
+                        <!--<option value="distance" <?= (isset($_GET['distance']) && $_GET['distance'] == 'distance')?"selected":""; ?>><?php echo translate('near_by'); ?></option>-->
                         <option value="condition_old" <?= (isset($_GET['sort']) && $_GET['sort'] == 'condition_old')?"selected":""; ?>><?php echo translate('oldest'); ?></option>
                         <option value="condition_new" <?= (isset($_GET['sort']) && $_GET['sort'] == 'condition_new')?"selected":""; ?>><?php echo translate('newest'); ?></option>
                         <option value="most_viewed" <?= (isset($_GET['sort']) && $_GET['sort'] == 'most_viewed')?"selected":""; ?>><?php echo translate('most_viewed'); ?></option>
+                        <option value="tlsale" <?= (isset($_GET['sort']) && $_GET['sort'] == 'tlsale')?"selected":""; ?>><?php echo translate('low_to_top_price'); ?></option>
+                        <option value="ltsale" <?= (isset($_GET['sort']) && $_GET['sort'] == 'ltsale')?"selected":""; ?>><?php echo translate('top_to_low_price'); ?></option>
                         </select>
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-12 col-lg-8 col-md-12 width_on_mobile">
+                  <div class="col-sm-12 col-lg-7 col-md-8 width_on_mobile ">
                     <div class="left_form">
-                        <form name="dir_form" id="dir_form" class="dir_form_css" action="<?php echo parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH); ?>">
+                        <form name="dir_form" id="dir_form" class="dir_form_css" action="<?php echo parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH); ?>"> 
                         <input type="hidden" name="sort" value="" id="form_sort" />
+                        <input type="hidden" name="country" value="<?= (isset($_GET['country'])?$_GET['country']:0) ?>" id="form_country" />
                         <input type="hidden" name="dis_range" value="<?= (isset($_GET['dis_range'])?$_GET['dis_range']:500) ?>" id="dis_range_input" />
                         <input type="hidden" id ="sale_price" name ="sale_price" value="<?= (isset($_GET['sale_price'])?$_GET['sale_price']:$max_price) ?>" />
                         <?php
@@ -143,7 +150,7 @@ $viewtype = $_GET['view'];
                           </div>
                     </div>
                   </div>
-                  <div class="col-md-12 col-lg-2 col-sm-12 width_on_mobile_2">
+                  <div class="col-md-2 col-lg-3 col-sm-12 width_on_mobile_2">
                     <div class="right_directory_menu">
                       <div class="select_tops hide_on_desktop">
                         <div class="custom-select-box">
@@ -284,15 +291,20 @@ $viewtype = $_GET['view'];
           </div>
           
           <div class="col-md-12 col-lg-2 order-lg-3">
-            <div class="ads-sidebar">
-              <div class="ads-box mb-4">
+            <div class="ads-sidebar1">
+              <div class="ads-box1">
                 <a href="https://penpath.com/?utm_medium=affiliate&utm_source=com-hubland&utm_campaign=Banner_community-hubland_sept-23&utm_term=pr_banner_affiliate&utm_content=banner-1"  target="_blank">
                 <img src="<?= base_url('ad1.png'); ?>" class="img-fluid" alt="">
             </a>
               </div>
-              <div class="ads-box mb-4">
+              <div class="ads-box1">
                 <a href="https://theeliteva.co.uk/" target="_blank">
                 <img src="<?= base_url('ad2.png') ?>" class="img-fluid" alt="">
+            </a>
+              </div>
+              <div class="ads-box1">
+                <a href="https://www.discovercars.com/?a_aid=Hubland&amp;a_aid=Hubland&amp;a_bid=61a4ac81" target="_blank">
+                <img src="https://www.discovercars.com/assets/common/img/discovercars-thumbnail.jpg?v=1.0.1868" class="img-fluid" alt="">
             </a>
               </div>
             </div>

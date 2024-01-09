@@ -4,6 +4,14 @@
   *{
       font-family: 'Roboto', sans-serif;
   }
+  .share_icon{
+          position: absolute;
+    top: 8px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+ 
 </style>
 <section class="page-section with-sidebar">
     <div class="container">
@@ -20,19 +28,7 @@
                             $img = $this->crud_model->size_img($row['comp_cover'],500,500);
                         }
 				?>
-            	<article class="post-wrap post-single">
-            	    <div class="post-header">
-                        <h2 class="post-title">
-                        	<?php echo $row['title']; ?>
-                        </h2>
-                        <div class="post-meta">
-                            <P class="low_me">
-							<?php echo translate('by'); ?> 
-							<span class="name"><?php echo $row['author']; ?></span> | 
-							<span class="date"><?= $newDate = formate_date($row['create_at']);?></span>
-							</p>
-                        </div>
-                    </div>
+            	<article class="post-wrap post-single">  
                     <div class="post-media">
                         <img class="img-responsive" src="<?php echo $img; ?>" alt=""/>
                     </div>
@@ -41,10 +37,19 @@
                         <div id="share"></div>
                     </div>
                     <div class="post-body">
+                        <div class="post-header aos-init aos-animate" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                  <h2 class="post-title"><?php echo $row['title']; ?></h2>
+                  <div class="post-meta">
+                    <p class="low_me">
+                      By
+                      <span class="name"><?php echo $row['author']; ?> </span> |
+                      <span class="date"><?= $newDate = formate_date($row['create_at']);?></span>
+                      <a href="#" style="margin-left: 5px;" onclick="share_icon('<?= $product_id ?>')"><i class="bi bi-share"></i></a>
+                    </p>
+                  </div>
+                </div>
                         <div class="post-excerpt">
-                            <p class="text-xl">
-                        		<?php echo $row['summery']; ?>
-                            </p>
+                            <br>
                             <p>
                             	<?php echo $row['description']; ?>
                             </p>

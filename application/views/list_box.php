@@ -1,6 +1,6 @@
 <?php
 $url = base_url('updated/');
-$description = strtolower($description);
+$description = strtolower($summery);
 $vendor_id = json_decode($added_by);
 $id = $vendor_id->id;
 $vendor = $this->db->where('vendor_id', $id)->get('vendor')->row_array();
@@ -74,7 +74,7 @@ if ($comp_logo) {
                         data-lat="31.5203696" data-lng="74.35874729999999" rate="3">
                         <div class="row row_height_new" id="row_hieght">
                           <div class="col-sm-4 col-12 img_col">
-                            <div class="itemimg-wrap  190">
+                            <div class="itemimg-wrap  190" <?= ($is_bpage)?'style="height:190px;"':'' ?>>
                               <a href="<?= base_url($slug); ?>"><img src="<?= $img; ?>"
                                   class="img-fluid item-img" alt=""></a>
                               <div class="logo_withname">
@@ -86,12 +86,12 @@ if ($comp_logo) {
                               </div>
                             </div>
                           </div>
-
+                            
                           <div class="col-sm-8 col-12 desc_col desc_col_in ">
                             <div class="row" id="add_height_in">
 
                               <div class="col-8">
-                                <h1 class="p_me"><a href="<?= base_url($slug); ?>"><?= ceil($distance); ?><?= $title; ?></a>
+                                <h1 class="p_me"><a href="<?= base_url($slug); ?>"><?= $title; ?></a>
                                 </h1>
                               </div>
                               <div class="col-4">
@@ -101,6 +101,10 @@ if ($comp_logo) {
                                     ?>
                                 </div>
                               </div>
+                              <?php
+                            if(!$is_bpage)
+                            {
+                            ?>
                               <div class="col-md-6 left_fields special_cls car_out">
                                 <div class="meta meta-left">
                                   <?= ($col1)?$col1:get_fields_line($product_id, 1); ?>
@@ -123,6 +127,9 @@ if ($comp_logo) {
                                   <?= ($col6)?$col6:get_fields_line($product_id, 6); ?>
                                 </div>
                               </div>
+                              <?php
+                            }
+                              ?>
                               <h2 class="p_me catch_phrase spacing_catch_p"><?= strWordCut($slog, 50); ?> </h2>
 
 
@@ -132,23 +139,53 @@ if ($comp_logo) {
                                   <p class="para_text"><?=strWordCut($description, 280);?> </p>
                                 </div>
                               </div>
+                              
                               <div class="share_iconss icon_shares">
-                                <div class="affliate">
+                                <!--<div class="affliate">-->
+                                <!--</div>-->
+                                <div class="distance">
+                                    <span><?= ceil($distance); ?> km  <?= $city ?></span>
                                 </div>
-                                <!--<a href="#"><i class="fa fa-share"></i></a>-->
-                                <a href="https://maps.google.com/?q=<?= $lat;?>,<?= $lng;?>"><i
+                                
+                             
+                             <div class="social-icon">
+                                 <?php
+                                if($module == 22 || $module == 23 || $module == 4)
+                                {
+                                    if($product_link)
+                                    {
+                                        ?>
+                                        <a class="" href="<?= $product_link ?>" target="_blank" >
+                        <i class="fa fa-globe"></i>
+                        
+                    </a>
+                    <?php
+                                    }
+                                    else
+                                    {
+                                    ?>
+                                <a class="btn btn-add-to cart" onclick="to_cart(<?php echo $product_id; ?>,event)">
+                        <i class="fa fa-shopping-cart"></i>
+                    </a>
+                                <?php
+                                    }
+                                }
+                                ?>
+                                    <a href="https://maps.google.com/?q=<?= $lat;?>,<?= $lng;?>"><i
                                     class="fa fa-map-marker-alt"></i></a>
-                                <a href="#"><i class="fa fa-share"></i></a>
+                                <a href="#" onclick="share_icon('<?= $product_id ?>')"><i class="bi bi-share"></i></a>
                                 <a href="<?php base_url()?>/home/wishlist/add/<?=$product_id?>"><i class="fa fa-heart"></i></a>
                                 <a href="mailto: <?= $bussniuss_email; ?>"><i class="fa fa-envelope"></i></a>
                                 <a href="tel:<?= $bussniuss_phone; ?>"><i class="fa fa-phone"></i></a>
                                 <a href="tel:<?= $bussniuss_phone; ?>"><i class="fa-brands fa-whatsapp"></i></a>
+                             </div>
 
                               </div>
 
 
                             </div>
                           </div>
+                          
                         </div>
                       </div>
                     </div>

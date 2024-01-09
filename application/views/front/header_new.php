@@ -5,7 +5,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> <?= (isset($page_title)?$page_title.' >':'') ?>Community Hubland</title>
+  <?php
+  $home_style = $this->db->get_where('ui_settings', array('type' => 'home_page_style'))->row()->value;
+    $vendor_system   =  $this->crud_model->get_settings_value('general_settings','vendor_system');
+    $physical_system =  $this->crud_model->get_settings_value('general_settings','physical_product_activation');
+    $digital_system  =  $this->crud_model->get_settings_value('general_settings','digital_product_activation');
+    $description     =  $this->crud_model->get_settings_value('general_settings','meta_description');
+    $keywords        =  $this->crud_model->get_settings_value('general_settings','meta_keywords');
+    $author          =  $this->crud_model->get_settings_value('general_settings','meta_author');
+    $system_name     =  $this->crud_model->get_settings_value('general_settings','system_name');
+    $system_title    =  $this->crud_model->get_settings_value('general_settings','system_title');
+    $map_api_key     =  $this->crud_model->get_settings_value('general_settings','api_key');
+    $revisit_after   =  $this->crud_model->get_settings_value('general_settings','revisit_after');
+  include 'includes/top/index.php';
+  ?>
 
   <!-- Favicons -->
   <link href="<?= $url ?>assets/images/favicon.png" rel="icon">
@@ -25,6 +38,8 @@
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css' />
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css' />
   <!-- <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@0.5.5/dist/simple-notify.min.css" />
+
 
   <!-- Template Main CSS File -->
   <link href="<?= $url ?>assets/scss/style.css" rel="stylesheet">
@@ -32,6 +47,9 @@
 </head>
 
 <body>
+    <?php
+    include "preloader.php";
+    ?>
   <!-- Shape Boxes -->
   <div class="dotted_lines">
     <img src="<?= $url ?>assets/images/doted-lines.png" alt="">

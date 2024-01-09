@@ -1,5 +1,10 @@
-<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
 <?php
+$checks = array();
+if($pro['enable_checks'])
+{
+$checks = json_decode($pro['enable_checks']);
+}
 $pimg = '';
 if($pro['firstImg']) {
 
@@ -16,8 +21,6 @@ foreach($imgs as $k=> $v)
     $nimgs[]  = $this->crud_model->size_img($v['img'],500,500);
 }
 $imgs = $nimgs;
-$imgs[] = $pimg;
-$imgs[] = $pimg;
 ?>
 <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
             tabindex="0">
@@ -29,21 +32,28 @@ $imgs[] = $pimg;
                 </div>
 
                 <div class="tab-content-inner">
+                              <?php
+          $checks = array();
+if($pro['enable_checks'])
+{
+$checks = json_decode($pro['enable_checks']);
+}
+          ?>
 
 
-                  <div class="row section_spacing_bottom" id="advertise_info">
+                  <div class="row section_spacing_bottom pb-25" id="advertise_info" style="display:<?= (in_array('section2',$checks))?"none":"flex"; ?>">
                       <?php
                       $cls = 'col-md-12';
                       if($pimg)
                       {
-                          $cls = 'col-md-8';
+                          $cls = 'col-md-7';
                           ?>
+          
+                    <div class="col-sm-5 business_graphic " id="business__graphic" >
 
-                    <div class="col-sm-4 business_graphic " id="business__graphic">
 
 
-
-                      <img src="<?= $pimg ?>" alt="">
+                      <img class="half_img" style="width:100%; object-fit:cover;" src="<?= $pimg ?>" alt="">
 
                     </div>
                     <?php
@@ -52,14 +62,24 @@ $imgs[] = $pimg;
 
                     <div class="<?= $cls ?> communitybox">
 
-                      <b><?= $pro['slogan'] ?></b>
-
+                      <b><?= $pro['disc_slogan']; ?></b>
+                            <?php
+                            if(trim(strip_tags($pro['main_heading'])))
+                            {
+                                ?>
+                                
                             <h3><?= $pro['main_heading'] ?></h3>
-
+                            <?php
+                            }
+                            ?>
+                        <?php
+                        if(trim($pro['description']))
+                        {
+                        ?>
                       <div class="scroll" id="scrol_9sec">
 
                         <div class="desc">
-                          <p ><?= nl2br($pro['description']) ?></p>
+                          <p ><?= trim($pro['description']) ?></p>
                         </div>
 
                         <ul class="listing_none">
@@ -70,21 +90,20 @@ $imgs[] = $pimg;
 
                                     foreach ($feature as $key => $value) {
 
-                                        if($value['fhead'])
+                                        if($value)
 
                                         {
 
                                             ?>
-
                                             <li>
 
-                                                <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
+   <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
 
-                                                <?= $value['fhead'] ?>
 
-                                                <p>- <?= $value['fdet'] ?></p>
+                            <p><strong><?= $value['fhead'];?></strong> <br>
+                              - <?= $value['fdet'] ?></p>
 
-                                            </li>
+                          </li>
 
                                             <?php
 
@@ -97,6 +116,9 @@ $imgs[] = $pimg;
                                 </ul>
 
                       </div>
+                      <?php
+                        }
+                      ?>
 
                       <div id="equal_btnw1">
 
@@ -107,6 +129,13 @@ $imgs[] = $pimg;
                                     if(isset($pro['buttons']) && !empty($pro['buttons'])){
 
                                         $btns  = json_decode($pro['buttons'],true);
+                                        foreach ($btns as $key => $value) {
+                                            if(!$value['txt'])
+                                            {
+                                                unset($btns[$key]);
+                                            }
+                                        }
+                                        
 
                                         $i = 0;
 
@@ -132,7 +161,7 @@ $imgs[] = $pimg;
 
                                                 ?>
 
-                                                <a href="<?= $value['url'] ?>"><?= $value['txt'] ?></a>
+                                                <a href="<?= $value['url'] ?>" class="our_projects1"><?= $value['txt'] ?></a>
 
                                                 <?php
 
@@ -153,22 +182,35 @@ $imgs[] = $pimg;
                     </div>
 
                   </div>
+                  <?php
+                  $content = json_decode($pro['etra_content'],true);
+                  $num = 0;
+                  foreach($content as $k=> $v)
+                  {
+                      if(($v['type'] == 'img') && !empty($v['img']) || ($v['type'] == 'text') && !empty($v['txt']))
+                      {
+                          $num++;
+                      }
+                      else
+                      {
+                          unset($content[$k]);
+                      }
+                  }
+                if($content)
+                {
+                  ?>
 
-                  <div class="sec_div_wrap section_spacing_top section_spacing_bottom">
+                  <div class="sec_div_wrap section_spacing_top section_spacing_bottom" style="display:<?= (in_array('section3',$checks))?"none":"block"; ?>">
+                      
 
                 <?php
 
-                //extra_info
-
-
-
-                if(true)
-
+                if($content)
                 {
+                    // var_dump($pro['etra_content']);
 
-                    $content = json_decode($pro['etra_content'],true);
 
-                    $num = $pro['number_of_column'];
+                    
 
                     $class="12";
 
@@ -180,20 +222,16 @@ $imgs[] = $pimg;
 
                     }
 
-                    else if($num == 2)
+                    elseif($num == 2)
 
                     {
 
                         $class = 6;
 
                     }
-
-                    else if($num == 3)
-
+                    else
                     {
-
                         $class = 4;
-
                     }
 
                     ?>
@@ -201,46 +239,98 @@ $imgs[] = $pimg;
                     <div class="pro_business" id="boxes___3">
 
                         <h3><?= $pro['extra_section_heading'] ?></h3>
+                        <p><?= $pro['col3desc'] ?></p>
 
                     </div>
 
                     <div class="row" id="left_gp">
 
                         <?php
+                        
 
-                        for($i= 1; $i<=$num; $i++)
+                        if($content)
                         {
-                            if(!$content[$k]['data']) {
-                                unset($content[$k]);
-                            }
-                        }
-                        for($i= 1; $i<=$num; $i++)
+                            
+                        foreach($content as $k=> $v)
 
                         {
+                            if($k <= 3)
+                            {
                             $k = $i -1;
                             
-                            if($content[$k]['data']) {
                                 ?>
 
                                 <div class="col-sm-<?= $class ?> webdesign">
+                                    <?php
+                                    if($v['title'])
+                                                {
+                                                    ?>
+                                                    <h3><?= $v['title'] ?></h3>
+                                                    <?php
+                                                }
+                                    ?>
 
                                     <div class="inner_box_design height_auto scroll"
-                                         style="overflow-y: scroll;height:324px;min-height: 324px;max-height: 324px;">
+                                         >
 
-                                        <p class="box_with_img">
+                                        <<?= ($v['type'] == 'img')?'div':'p' ?> class="box_with_img">
                                             <?php 
-                                            if($content[$k]['type'] == 'img' && $content[$k]['data'])
+                                                
+                                            if($v['type'] == 'img' && $v['img'])
                                             {
+                                                $img = $this->crud_model->size_img($v['img'],100,100);
+                                                if($v['title'])
+                                                {
+                                                    ?>
+                                                    
+                                                    <?php
+                                                }
                                                 ?>
-                                                <img src="<?= base_url().$content[$k]['data'] ?>" class="extra_img" />
+                                                <img style="object-fit:cover;" src="<?= $img ?>" class="extra_img" />
                                                 <?php
                                             }
                                             else
                                             {
-                                                echo $content[$k]['data'];
+                                                
+                                                echo $v['txt'];
+                                                ?>
+                                                <ul class="listing_none">
+
+                                    <?php
+
+                                    $feature  = $v['feature'];
+                                    // var_dump($v);
+
+                                    foreach ($feature as $key => $value) {
+
+                                        if($value)
+
+                                        {
+
+                                            ?>
+                                            <li>
+
+   <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
+
+
+                            <p><strong><?= $value['fhead'];?></strong> <br>
+                              - <?= $value['fdet'] ?></p>
+
+                          </li>
+
+                                            <?php
+
+                                        }
+
+                                    }
+
+                                    ?>
+
+                                </ul>
+                                                <?php
                                             }
                                             ?>
-                                        </p>
+                                        </<?= ($v['type'] == 'img')?'div':'p' ?>>
 
                                     </div>
 
@@ -249,7 +339,9 @@ $imgs[] = $pimg;
                                 <?php
 
 
-                            }
+                            }//if less then equal to 3
+                        }//foreach
+                        }
                         }
 
                         ?>
@@ -263,26 +355,39 @@ $imgs[] = $pimg;
                 ?>
 </div>
 
+                    <?php
+                    $imgs = array_filter($imgs, 'strlen');
+                    if($imgs)
+                    {
+                        ?>
+                  <div class="slider_gallery__box" style="display:<?= (in_array('section4',$checks))?"none":"block"; ?>">
+                      <?php
+                        if($pro['gtitle'])
+                        {
+                            ?>
+                      <h3><?= $pro['gtitle'] ?></h3>
+                      <?php
+                        }
+                        ?>
+                    <?php
+                        if(strip_tags($pro['gtitle']))
+                        {
+                            ?>
+                    <p><?= $pro['gdesc'] ?></p>
+                    <?php
+                        }
+                        ?>
+                      <div class="verify_head section_spacing_top" id="left_gp">
 
-                  <div class="dec_div_wrap">
-                    <div class="verify_head section_spacing_top" id="left_gp">
+                      <h3><?= $pro['gal_h'] ?></h3>
 
-                      <h3>Ralph Lauren clothes</h3>
-
-                      <p>Unfortunately, Ralph Lauren has long since outsourced its production. A large part of the polo
-                        shirt</p>
+                      <p><?= $pro['gal_d'] ?></p>
 
                     </div>
-
-
-
-                  </div>
-
-
-                  <div class="slider_gallery__box">
                     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                       <div class="carousel-inner">
                           <?php
+                          
                           foreach($imgs as $k=>$v)
                          {
                              ?>
@@ -310,24 +415,9 @@ $imgs[] = $pimg;
                       </button>
                     </div>
                   </div>
-
-                  <div class="third_sec_wrap section_spacing_top section_spacing_bottom">
-                    <div class="verify_head">
-
-                      <h3><?= $pro['gtitle'] ?></h3>
-
-                    <p><?= $pro['gdesc'] ?></p>
-
-                    </div>
-
-                    <div class="inner_content_tabs">
-
-                      <!--</select>-->
-
-                      <ul class="nav nav-tabs" id="myTab2" role="tablist">
-                          <?php
-
-                            $vid = 0;
+                  <?php
+                    }
+                    $vid = 0;
 
                             $added_by = json_decode($pro['added_by'], true);
 
@@ -338,7 +428,42 @@ $imgs[] = $pimg;
 
                             }
 
-                            $feature  = $this->db->where('vid',$vid)->get('textg')->result_array();
+                            $feature  = json_decode($pro['txt_gal'],true);
+                            if($feature)
+                            {
+                    ?>
+
+                  <div class="third_sec_wrap section_spacing_top section_spacing_bottom" style="display:<?= (in_array('section5',$checks))?"none":"block"; ?>">
+                    <div class="verify_head">
+                        
+                        
+                        <?php
+                        if($pro['ttitle'])
+                        {
+                            ?>
+                      <h3><?= $pro['ttitle'] ?></h3>
+                      <?php
+                        }
+                        ?>
+                    <?php
+                        if(strip_tags($pro['tdesc']))
+                        {
+                            ?>
+                    <p><?= $pro['tdesc'] ?></p>
+                    
+                    <?php
+                        }
+                        ?>
+                    </div>
+
+                    <div class="inner_content_tabs">
+
+                      <!--</select>-->
+
+                      <ul class="nav nav-tabs" id="myTab2" role="tablist">
+                          <?php
+
+                            
                             $i = 0;
                             foreach($feature as $k=> $value)
                                 {
@@ -400,19 +525,60 @@ $imgs[] = $pimg;
                                     ?>
                             <div class="row fix_height" id="advertise_info">
                             
-                              <div class="col-sm-4 business_graphic" id="leftboxx">
+                              <div class="col-sm-5 business_graphic" id="leftboxx">
 
                                 <img src=" <?= base_url($path); ?>" alt="">
 
                               </div>
 
-                              <div class="col-sm-8 communitybox no_box_bd inner_box_design" id="equal_btnw">
+                              <div class="col-sm-7 communitybox no_box_bd inner_box_design" id="equal_btnw">
 
                                 <h3> <?= $value['title'] ?></h3>
 
                                                 <div class="desc">
 
-                                                    <p> <?= $value['detail'] ?></p>
+                                                    <p> <?= $value['txt'] ?></p>
+                                                    <?php
+                                                    // var_dump($value);
+
+                                    $feature  = $value['feature'];
+                                    if($feature)
+                                    {
+                                        ?>
+                                        <ul class="listing_none">
+                                        <?php
+                                    }
+
+                                    foreach ($feature as $key => $value1) {
+
+                                        if($value)
+
+                                        {
+
+                                            ?>
+                                            <li>
+
+   <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
+
+
+                            <p><strong><?= $value1['fhead'];?></strong> <br>
+                              - <?= $value1['fdet'] ?></p>
+
+                          </li>
+
+                                            <?php
+
+                                        }
+
+                                    }
+                                    if($feature)
+                                    {
+                                        ?>
+                                        </ul>
+                                        <?php
+                                    }
+
+                                    ?>
 
                                                 </div>
 
@@ -431,7 +597,7 @@ $imgs[] = $pimg;
 
                                                 <div class="desc">
 
-                                                    <p> <?= $value['detail'] ?></p>
+                                                    <p> <?= $value['txt'] ?></p>
 
                                                 </div>
 
@@ -458,10 +624,16 @@ $imgs[] = $pimg;
 
                     </div>
                   </div>
+                  <?php
+                            }
+                  ?>
                   <!--about-->
 
-
-                  <div class="main_wrp section_spacing_bottom section_spacing_top">
+                <?php
+                if(!in_array('section6',$checks) && $pro['about_title'] && $pro['about_desc'] && $pro['cats'])
+                {
+                ?>
+                  <div class="main_wrp section_spacing_bottom section_spacing_top sec_div_wrap">
 
                     <div class="verify_head ">
 
@@ -474,8 +646,11 @@ $imgs[] = $pimg;
                       <div class="col-lg-8">
 
                         <?php
-                                                $cat = explode(',',$pro['amenities']);
-                                            if($cat){
+                                                $cats = explode(',',$pro['amenities']);
+                                                $cats = array_filter($cats, 'strlen');
+                                                
+                                               
+                                            if($cats  && !in_array('section7',$checks)){
 
                                                 ?>
                         <div class="no_pdding" id="add_rigth">
@@ -495,7 +670,7 @@ $imgs[] = $pimg;
 
                                                                 
 
-                                                                foreach($cat as $kk=>$k){
+                                                                foreach($cats as $kk=>$k){
 
                                                                     ?>
                                                                     <div class="tags_in">
@@ -513,15 +688,6 @@ $imgs[] = $pimg;
                                                                 ?>
 
 
-                                <div class="tags_in">
-
-                                  <i class="fa fa-check-square"></i>
-
-                                  <span>Leather seats</span>
-
-                                </div>
-
-
                               </div>
 
                             </div>
@@ -535,6 +701,7 @@ $imgs[] = $pimg;
                         <?php
 
                                                             $cats = explode(',',$pro['cats']);
+                                                            $cats = array_filter($cats, 'strlen');
 
                                                             if($cats)
                                                             {
@@ -588,21 +755,21 @@ $imgs[] = $pimg;
 
 
 
-                        <?php if(isset($pro['about_address']) && !empty($pro['about_address'])){
+                        <p><?php if(isset($pro['about_address']) && !empty($pro['about_address'])){
 
                                             ?>
 
-                                            <div class="margin-bottom"><i class="fa fa-map-marker"></i> <?= $pro['about_address'];?></div>
+                                            <div class="margin-bottom"><i class="fa fa-map-marker"></i><?= strip_tags($pro['about_address']);?></div>
 
                                             <?php
 
-                                        }if(isset($pro['bussniuss_phone']) && !empty($pro['bussniuss_phone'])){
+                                        }if(isset($pro['ephonen']) && !empty($pro['ephonen'])){
 
 
 
                                             ?>
 
-                                            <div class="margin-bottom"><i class="fa fa-phone"></i> <?= $pro['bussniuss_phone'];?></div>
+                                            <div class="margin-bottom"><i class="fa fa-phone"></i> <?= $pro['ephonen'];?></div>
 
                                             <?php
 
@@ -612,17 +779,17 @@ $imgs[] = $pimg;
 
                                             ?>
 
-                                            <div class="margin-bottom"><i class="fa fa-whatsapp"></i> <?= $pro['whatsapp_number'];?></div>
+                                            <div class="margin-bottom"><i class="fab fa-whatsapp"></i> <?= $pro['whatsapp_number'];?></div>
 
                                             <?php
 
-                                        }if(isset($pro['bussniuss_email']) && !empty($pro['bussniuss_email'])){
+                                        }if(isset($pro['pemail']) && !empty($pro['pemail'])){
 
 
 
                                             ?>
 
-                                            <div class="margin-bottom"><i class="fa fa-envelope"></i> <?= $pro['bussniuss_email'];?></div>
+                                            <div class="margin-bottom"><i class="fa fa-envelope"></i> <?= $pro['pemail'];?></div>
 
                                             <?php
 
@@ -690,6 +857,13 @@ $imgs[] = $pimg;
                       </div>
                     </div>
                   </div>
+                  <?php
+                }
+                  ?>
+                  <?php
+                  if($pro['info_head'] && $pro['info_desc'] && !in_array('info_section',$checks))
+                  {
+                      ?>
                   <div class="mixcher_orange" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="0">
 
                     <div class="shape_doted_mix">
@@ -700,22 +874,123 @@ $imgs[] = $pimg;
                     <h4><?= $pro['info_head']; ?></h4>
 
                     <p><?= $pro['info_desc']; ?></p>
+                    <?php
+
+                                    $feature  = json_decode($pro['about_feature'],true);
+                                    if($feature)
+                                    {
+                                        ?>
+                                        <ul class="listing_none">
+                                        <?php
+                                    }
+
+                                    foreach ($feature as $key => $value) {
+
+                                        if($value)
+
+                                        {
+
+                                            ?>
+                                            <li class="list-with-img">
+
+   <img src="<?= base_url(); ?>updated/assets/images/Tick-Square.png" style="width: 20px;
+    background: white;
+    border-radius: 4px; vertical-align: top;" alt="">
+
+
+                            <p><strong><?= $value['fhead'];?></strong> <br>
+                              - <?= $value['fdet'] ?></p>
+
+                          </li>
+
+                                            <?php
+
+                                        }
+
+                                    }
+                                    if($feature)
+                                    {
+                                        ?>
+                                        </ul>
+                                        <?php
+                                    }
+
+                                    ?>
+                                    <div id="equal_btnw1">
+
+                        <div class="learn_more_btn_bp" style="padding:0px;">
+
+                                    <?php
+
+                                    if(isset($pro['about_buttons']) && !empty($pro['about_buttons'])){
+
+                                        $btns  = json_decode($pro['about_buttons'],true);
+                                        foreach ($btns as $key => $value) {
+                                            if(!$value['txt'])
+                                            {
+                                                unset($btns[$key]);
+                                            }
+                                        }
+                                        
+
+                                        $i = 0;
+
+
+
+                                        foreach ($btns as $key => $value) {
+
+                                            $i++;
+
+                                            if($i %2 !=  0)
+
+                                            {
+
+                                                ?>
+
+                                                <a href="<?= $value['url'] ?>" class="our_projects"><?= $value['txt'] ?></a>
+
+                                                <?php
+
+                                            }
+
+                                            else{
+
+                                                ?>
+
+                                                <a href="<?= $value['url'] ?>" class="our_projects1"><?= $value['txt'] ?></a>
+
+                                                <?php
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                    ?>
+
+                                </div>
+
+                      </div>
 
                     <?php
 
-                    if(isset($pro['info_button']) && !empty($pro['info_button']) && isset($pro['button_url']) &&!empty($pro['button_url'])){
+                    /*if(isset($pro['info_button']) && !empty($pro['info_button']) && isset($pro['button_url']) &&!empty($pro['button_url'])){
 
                         ?><a href="<?= $pro['button_url']; ?>"><?= $pro['info_button']; ?></a>
 
                         <?php
 
-                    }
+                    }*/
 
                     ?>
                   </div>
+                  <?php
+                  }
+                  ?>
 
                 </div>
-                <div class="orange_pathwrap" id="bpage_form">
+                <div class="orange_pathwrap" id="bpage_form" style="display:<?= !in_array('location',$checks)?'block':'none'; ?>">
                   <div class="iframe_box">
                     <div class="getin_touch">
                       <div class="row">
@@ -797,9 +1072,9 @@ $imgs[] = $pimg;
 
                                   <div class="form_box form-btns">
 
-                                    <button class="form-btn" type="button" id="send">Send</button>
+                                    <button class="form-btn" type="button" onclick="SEND_CONTACT('<?= $pro['product_id'] ?>')">Send</button>
 
-                                    <a href="https://maps.google.com/?q=31.5203696,74.35874729999999" class="form-btn">
+                                    <a href="https://maps.google.com/?q=<?=$pro['lat'] ?>,<?=$pro['lng'] ?>" class="form-btn">
                                       GET DIRECTION
                                     </a>
 
@@ -818,6 +1093,21 @@ $imgs[] = $pimg;
                   </div>
 
                 </div>
+                <?php
+                $chek = array();
+                if($pro['tag'])
+                $chek = array_filter(explode(',',$pro['tag']));
+                foreach($chek as $k=> $v)
+                {
+                    if(!trim($v))
+                    {
+                        unset($chek[$k]);
+                    }
+                }
+                if($chek)
+                {
+                $tag = $chek;
+                ?>
                 <div class="tags-wrap">
                   <div class="tag_sec_wrapper" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">
 
@@ -830,165 +1120,62 @@ $imgs[] = $pimg;
                     <div class="inner_sec">
 
                       <div class="tag_container">
-
-
-                        <div class="tags_in">
-
-                          <i class="fa fa-check-square"></i>
-
-                          <span>clothes</span>
-
-                        </div>
-                        <div class="tags_in">
+                          <?php
+                          foreach($tag as $k=> $v)
+                          {
+                              ?>
+                              <div class="tags_in">
 
                           <i class="fa fa-check-square"></i>
 
-                          <span>pants</span>
+                          <span><?= $v ?></span>
 
                         </div>
-                        <div class="tags_in">
+                              <?php
+                          }
+                          ?>
 
-                          <i class="fa fa-check-square"></i>
 
-                          <span>belt</span>
-
-                        </div>
-                        <div class="tags_in">
-
-                          <i class="fa fa-check-square"></i>
-
-                          <span>brand</span>
-
-                        </div>
-                        <div class="tags_in">
-
-                          <i class="fa fa-check-square"></i>
-
-                          <span>guccie</span>
-
-                        </div>
-
-                        <div class="tags_in">
-
-                          <i class="fa fa-check-square"></i>
-
-                          <span>versacce</span>
-
-                        </div>
+                        
                       </div>
 
                     </div>
 
                   </div>
                 </div>
+                <?php
+                }
+                $list = $this->db->where('featured','ok')->get('product')->result_array();
+                if($list)
+                {
+                ?>
                 <div class="verify_head section_spacing_top" data-aos="fade-up" data-aos-duration="1000"
                   data-aos-delay="200">
 
                   <h3>You May Also be Interested In</h3>
 
                   <p>You can now list your business in less than 5 minutes</p>
+                  <div class="row" id="home_p">
+
+          <?php
+          
+          foreach ($list as $key => $row) {
+                                if($key < 3)
+
+                                $this->load->view('grid_box',$row);
+          }
+
+          ?>
+
+        </div>
 
                 </div>
+                <?php
+                }
+                ?>
               </div>
               <div class="report">
                 <a href="#"><i class="fa fa-flag"></i><span>Report</span></a>
               </div>
             </div>
           </div>
-          <script>
-
-    $('#send').on('click' , function(e){
-
-        e.preventDefault();
-
-
-
-        var url = '<?php echo base_url('home/contact_us')?>';
-
-        var fname = $('#fname__').val();
-
-        var lname = $('#lname').val();
-
-        var email = $('#email__').val();
-
-        var msg = $('#message__').val();
-
-        var phone = $('#phone').val();
-
-        var pid = $('#pid1').val();
-
-        $.ajax({
-
-            url: url,
-
-            type: "get",
-
-            async: true,
-
-
-
-            data: {  fname:fname, email:email, message:msg,phone:phone,lname:lname,pid:pid },
-
-            success: function (data) {
-
-                // const myArr = JSON.parse(JSON.stringify(data));
-
-                if(data == 1){
-
-                    $("#success").attr("class", "alert alert-success d-block");
-
-                }else{
-
-                    $("#danger").attr("class", "alert alert-danger d-block");
-
-                }
-
-            },
-
-            error: function (xhr, exception) {
-
-                var msg = "";
-
-                if (xhr.status === 0) {
-
-                    msg = "Not connect.\n Verify Network." + xhr.responseText;
-
-                } else if (xhr.status == 404) {
-
-                    msg = "Requested page not found. [404]" + xhr.responseText;
-
-                } else if (xhr.status == 500) {
-
-                    msg = "Internal Server Error [500]." +  xhr.responseText;
-
-                } else if (exception === "parsererror") {
-
-                    msg = "Requested JSON parse failed.";
-
-                } else if (exception === "timeout") {
-
-                    msg = "Time out error." + xhr.responseText;
-
-                } else if (exception === "abort") {
-
-                    msg = "Ajax request aborted.";
-
-                } else {
-
-                    msg = "Error:" + xhr.status + " " + xhr.responseText;
-
-                }
-
-
-
-            }
-
-        });
-
-
-
-
-
-    });
-
-</script>

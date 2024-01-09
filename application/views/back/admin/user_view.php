@@ -80,6 +80,14 @@
                         <th class="custom_td"><?php echo translate('creation_date');?></th>
                         <td class="custom_td"><?php echo date('d M,Y',$row['creation_date']);?></td>
                     </tr>
+                    <tr>
+                        <th class="custom_td"><?php echo translate('payment_method');?></th>
+                        <td class="custom_td"><?php echo $row['payment_methode'];?></td>
+                    </tr>
+                    <tr>
+                        <th class="custom_td"><?php echo translate('payment_detail');?></th>
+                        <td class="custom_td"><?php echo $row['payment_id'];?></td>
+                    </tr>
                 </table>
               </div>
             </div>

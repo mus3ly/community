@@ -204,7 +204,9 @@
     $pf = array();
     foreach($names as $k=> $v)
     {
+        
         $v= strtolower(str_replace(' ', '', $v));
+        
        $pf[$v] = $valus[$k]; 
     }
     $vl = array();
@@ -220,6 +222,7 @@
              {
                  $v['label']= strtolower(str_replace(' ', '', $v['label']));
                  $lb[] = $v['label'];
+                 
                  if($v['type'] == 'weblink')
                  {
                     $exp = explode('-',$pf[$v['label']]);
@@ -228,15 +231,21 @@
 
                     $vl[$v['label']] = '<a href="'.$lnk.'" target="_blank">'.$txt.'</a>';
                  }
+                 elseif($v['tbl_col'] == 'sale_price')
+                 {
+                     $vl[$v['label']] = $pro->curr.$pf[$v['label']].' '.$v['prefix'];
+                 }
                  elseif(isset($pf[$v['label']]) && $pf[$v['label']])
                  {
                      if($v['postfix'])
                      {
                          
+                         
                          $vl[$v['label']] = $v['postfix'].$pf[$v['label']].' '.$v['prefix'];
                      }
                      else
                      {
+                        //  var_dump($pf[$v['label']]);
                     $vl[$v['label']] = $v['postfix'].$pf[$v['label']].' '.$v['prefix'];        
                      }
                  
@@ -264,6 +273,18 @@
          }
          else
          {
+             if($k == 'dateposted')
+             {
+                 $vl[$k] = '';
+                 if($pro->posted_on && !$pro->update_at)
+                 $vl[$k] = 'posted on '.date('M d, Y',strtotime($pro->posted_on ));
+             }
+             elseif($k == 'dateofupdate')
+             {
+                 $vl[$k] = '';
+                 if($pro->update_at && $pro->posted_on)
+                 $vl[$k] = 'updated on '.date('M d, Y',strtotime($pro->update_at ));
+             }
              $vl[$k] = '<a href="#">'.$vl[$k].'</a>';
          }
      }

@@ -371,9 +371,14 @@ $filterBtns.click(function(e){
    e.target.classList.add('active');
 
    let selector = $(e.target).attr('data-filter');
-   $('#list-grid .filter-list').isotope({
-      filter: selector
-   });
+   
+   $('.stab').each(function(i, obj) {
+    if ($(this).hasClass(selector)) {
+	$(this).show();
+} else {
+  $(this).hide();
+}
+});
    return false;
 });
 

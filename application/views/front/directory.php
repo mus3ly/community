@@ -1,6 +1,6 @@
 <?php
 $url = base_url('html/');
-$viewtype = 'list';f
+$viewtype = 'list';
 if (isset($_GET['view']))
     $viewtype = $_GET['view'];
 ?>

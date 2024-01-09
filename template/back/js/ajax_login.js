@@ -204,11 +204,11 @@
 							container : 'floating',
 							timer : 4000
 						});						
-					} else if(data == 'unapproved'){
+					} else if(data == 'email_unverify'){
 						$.activeitNoty({
 							type: 'danger',
 							icon : 'fa fa-times',
-							message : unapproved,
+							message : email_unverify,
 							container : 'floating',
 							timer : 4000
 						});			

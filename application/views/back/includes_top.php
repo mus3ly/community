@@ -102,6 +102,9 @@
 	
 	<?php $ext =  $this->db->get_where('ui_settings',array('type' => 'fav_ext'))->row()->value;?>
 	<link rel="shortcut icon" href="<?php echo base_url(); ?>uploads/others/favicon.<?php echo $ext; ?>">
+	<?php
+	include "new_css.php";
+	?>
 	<style>
 	    .child_cat_row .col-sm-2{
 	            margin: 10px 0;

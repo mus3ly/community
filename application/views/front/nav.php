@@ -5,10 +5,10 @@
             
         ?>
             <li class="nav-item">
-              <a class="nav-link" href="#">FAQ</a>
+              <a class="nav-link" href="<?= base_url('faq'); ?>">FAQ</a>
             </li>
             <li class="nav-item add-listing">
-              <a href="#" class="">SIGN-UP
+              <a href="<?= base_url('//vendor_logup/registration'); ?>" class="">SIGN-UP
               </a><!-- 
               <a href="<?= base_url('//vendor_logup/registration'); ?>" class="">SIGN-UP
               </a> -->

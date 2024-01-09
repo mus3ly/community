@@ -25,15 +25,19 @@ $vid = 0;
 $othen = array();
                     $this->db->order_by("bpage_sort", "asc");
 
-                    $mods = $this->db->where('bpage_check',1)->get('modules')->result_array();
+                    $mods = $this->db->get('modules')->result_array();
+                    $ptabs = ($pro['tabs'])?json_decode($pro['tabs'],true):array();
                     foreach($mods as $k=> $v)
                     {
+                        if(in_array($v['id'],$ptabs))
                         $othen[] = $v['id'];
                     }
                     
                     ?>
 <main class="directory-main">
     <?php
+    include "flash.php";
+    // die('OKK');
     include "business_card.php";
     ?>
     
@@ -51,13 +55,16 @@ $othen = array();
                     
                     foreach($mods as $k=> $v)
                     {
+                        if(in_array($v['id'],$ptabs))
+                        {
                         $lmod[] = $v['id'];
                         ?>
                         <li class="nav-item" role="presentation">
                 <button class="nav-link" id="tab_m<?= $v['id'] ?>" data-bs-toggle="tab" data-bs-target="#tab_m<?= $v['id'] ?>-pane"
-                  type="button" role="tab" aria-controls="tab_m<?= $v['id'] ?>-pane" aria-selected="false"><?= $v['bpage_text']; ?></button>
+                  type="button" role="tab" aria-controls="tab_m<?= $v['id'] ?>-pane" aria-selected="false"><?= ($v['bpage_text'])?$v['bpage_text']:$v['label']; ?></button>
               </li>
                         <?php
+                        }
                     }
                     ?>
               <li class="nav-item" role="presentation">
@@ -81,7 +88,8 @@ $othen = array();
                     foreach($mods as $k=> $v)
                     {
                         
-                        
+                        if(in_array($v['id'],$ptabs))
+                        {
                         $lmod[] = $mod_id= $nod_i= $v['id'];
                         ?>
                         <div class="tab-pane fade" id="tab_m<?= $v['id'] ?>-pane" role="tabpanel" aria-labelledby="tab_m<?= $v['id'] ?>" tabindex="0">
@@ -91,6 +99,7 @@ $othen = array();
             ?>
           </div>
                         <?php
+                        }
                     }
                     ?>
           <div class="tab-pane fade" id="store-tab-pane" role="tabpanel" aria-labelledby="store-tab" tabindex="0">
@@ -98,13 +107,13 @@ $othen = array();
               <div class="filter-btns">
                 <ul class="filter-tabs">
                   <li>
-                    <button class="inner-filter-btn active">All Listing</button>
+                    <button class="inner-filter-btn active" data-filter="stab">All Listing</button>
                   </li>
                   <li>
-                    <button class="inner-filter-btn" data-filter=".directory-filter">Directory</button>
+                    <button class="inner-filter-btn" data-filter="directory-filter">Directory</button>
                   </li>
                   <li>
-                    <button class="inner-filter-btn" data-filter=".shop-filter">Shop</button>
+                    <button class="inner-filter-btn" data-filter="shop-filter">Shop</button>
                   </li>
                 </ul>
               </div>
@@ -127,18 +136,19 @@ $othen = array();
 
             {
                 $arr = json_decode($sing['added_by'],true);
-                if(isset($arr['type']) && $arr['type'] == 'vendor' && $arr['id'] == $vid && !in_array($sing['module'],$othen))
+                if(isset($arr['type']) && $arr['type'] == 'vendor' && $arr['id'] == $vid && !in_array($sing['module'],$othen) && !$sing['is_bpage'])
                 {
                 ?>
                         <?php
+                        $mod = $this->db->where('id',$sing['module'])->get('modules')->row();
                         $shop_cls = '';
-                        if($sing['is_product'] == 1)
+                        if(isset($mod->store_check) && $mod->store_check)
                         {
-                            $shop_cls = 'shop-filter';
+                            $shop_cls = 'stab shop-filter';
                         }
                         else
                         {
-                            $shop_cls = 'directory-filter';
+                            $shop_cls = 'stab directory-filter';
                         }
                         $sing['shop_cls'] = $shop_cls;
 
@@ -151,424 +161,7 @@ $othen = array();
             }
             
             ?>
-                        
-                        <div class="change-item grid-style directory-filter col-lg-4">
-                          <div class="sidegap_product item white_shadow__box width_set job_list bpaeg_list "
-                            data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200" data-lat="31.5203696"
-                            data-lng="74.35874729999999" rate="3">
-                            <div class="row row_height_new" id="row_hieght">
-                              <div class="col-sm-4 col-12 img_col">
-                                <div class="itemimg-wrap  190">
-                                  <img src="assets/images/listing-2.png" class="img-fluid item-img" alt="">
-                                  <div class="logo_withname">
-                                    <div class="logo_round">
-                                      <img
-                                        src="https://communityhubland.com/uploads/product_image/product_1686489729.webp"
-                                        alt="">
-                                      <span class="status"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="col-sm-8 col-12 desc_col desc_col_in ">
-                                <div class="row" id="add_height_in">
-
-                                  <div class="col-8">
-                                    <h1 class="p_me"><a href="#">Ralph Lauren</a>
-                                    </h1>
-                                  </div>
-                                  <div class="col-4">
-                                    <div class="rate2 p_me">
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star"></i>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6 left_fields special_cls car_out">
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6 right_fields special_cls car_out">
-                                    <div class="meta meta-right">
-                                      <span class="divider"></span><span class="divider"></span>
-                                      <span>Lahore</span>
-                                    </div>
-                                  </div>
-                                  <h2 class="p_me catch_phrase spacing_catch_p">Made to be Worn </h2>
-
-
-                                  <div class="last_desc last_d2 col-md-12 p_me">
-                                    <div class="col-md-12 dec_wrappper p-0">
-
-                                      <p class="para_text">
-                                        ralph lauren corporation is a global leader in the design,
-                                        marketing, and distribution of premium lifestyle products,
-                                        including apparel, accessories, home furnishings, and other
-                                        licenced product categories. </p>
-                                    </div>
-                                  </div>
-                                  <div class="share_iconss icon_shares">
-                                    <div class="affliate">
-                                    </div>
-                                    <!--<a href="#"><i class="fa fa-share"></i></a>-->
-                                    <a href="https://maps.google.com/?q=31.5203696,74.35874729999999"><i
-                                        class="fa fa-map-marker-alt"></i></a>
-                                    <a href="#"><i class="fa fa-share"></i></a>
-                                    <a href="home/wishlist/add/1.html"><i class="fa fa-heart"></i></a>
-                                    <a href="mailto: shaheerumer5668704@gmail.com"><i class="fa fa-envelope"></i></a>
-                                    <a href="tel:"><i class="fa fa-phone"></i></a>
-                                    <a href="tel:"><i class="fa-brands fa-whatsapp"></i></a>
-
-                                  </div>
-
-
-                                </div>
-                              </div>
-                            </div>
-
-                          </div>
-                        </div>
-                        <div class="change-item grid-style directory-filter col-lg-4">
-                          <div class="sidegap_product item white_shadow__box width_set job_list bpaeg_list "
-                            data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300" data-lat="31.5203696"
-                            data-lng="74.35874729999999" rate="3">
-                            <div class="row row_height_new" id="row_hieght">
-                              <div class="col-sm-4 col-12 img_col">
-                                <div class="itemimg-wrap  190">
-                                  <img src="assets/images/listing-1.png" class="img-fluid item-img" alt="">
-                                  <div class="logo_withname">
-                                    <div class="logo_round">
-                                      <img
-                                        src="https://communityhubland.com/uploads/product_image/product_1686489729.webp"
-                                        alt="">
-                                      <span class="status active"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="col-sm-8 col-12 desc_col desc_col_in ">
-                                <div class="row" id="add_height_in">
-
-                                  <div class="col-8">
-                                    <h1 class="p_me"><a href="#">Ralph Lauren</a>
-                                    </h1>
-                                  </div>
-                                  <div class="col-4">
-                                    <div class="rate2 p_me">
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star"></i>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6 left_fields special_cls car_out">
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6 right_fields special_cls car_out">
-                                    <div class="meta meta-right">
-                                      <span class="divider"></span><span class="divider"></span>
-                                      <span>Lahore</span>
-                                    </div>
-                                  </div>
-                                  <h2 class="p_me catch_phrase spacing_catch_p">Made to be Worn </h2>
-
-
-                                  <div class="last_desc last_d2 col-md-12 p_me">
-                                    <div class="col-md-12 dec_wrappper p-0">
-
-                                      <p class="para_text">
-                                        ralph lauren corporation is a global leader in the design,
-                                        marketing, and distribution of premium lifestyle products,
-                                        including apparel, accessories, home furnishings, and other
-                                        licenced product categories. </p>
-                                    </div>
-                                  </div>
-                                  <div class="share_iconss icon_shares">
-                                    <div class="affliate">
-                                    </div>
-                                    <!--<a href="#"><i class="fa fa-share"></i></a>-->
-                                    <a href="https://maps.google.com/?q=31.5203696,74.35874729999999"><i
-                                        class="fa fa-map-marker-alt"></i></a>
-                                    <a href="#"><i class="fa fa-share"></i></a>
-                                    <a href="home/wishlist/add/1.html"><i class="fa fa-heart"></i></a>
-                                    <a href="mailto: shaheerumer5668704@gmail.com"><i class="fa fa-envelope"></i></a>
-                                    <a href="tel:"><i class="fa fa-phone"></i></a>
-                                    <a href="tel:"><i class="fa-brands fa-whatsapp"></i></a>
-
-                                  </div>
-
-
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="change-item grid-style shop-filter col-lg-4">
-                          <div class="sidegap_product item white_shadow__box width_set job_list bpaeg_list "
-                            data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100" data-lat="31.5203696"
-                            data-lng="74.35874729999999" rate="3">
-                            <div class="row row_height_new" id="row_hieght">
-                              <div class="col-sm-4 col-12 img_col">
-                                <div class="itemimg-wrap  190">
-                                  <img src="assets/images/listing-1.png" class="img-fluid item-img" alt="">
-                                  <div class="logo_withname">
-                                    <div class="logo_round">
-                                      <img
-                                        src="https://communityhubland.com/uploads/product_image/product_1686489729.webp"
-                                        alt="">
-                                      <span class="status active"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="col-sm-8 col-12 desc_col desc_col_in ">
-                                <div class="row" id="add_height_in">
-
-                                  <div class="col-8">
-                                    <h1 class="p_me"><a href="#">Ralph Lauren</a>
-                                    </h1>
-                                  </div>
-                                  <div class="col-4">
-                                    <div class="rate2 p_me">
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star"></i>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6 left_fields special_cls car_out">
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                    <div class="meta meta-left">
-                                      <span class="productPrice">500</span><span class="divider"></span><span>Category 1</span><span class="divider"></span>
-                                    </div>
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6 right_fields special_cls car_out">
-                                    <div class="meta meta-right">
-                                      <span class="divider"></span><span class="divider"></span>
-                                      <span>Lahore</span>
-                                    </div>
-                                  </div>
-                                  <h2 class="p_me catch_phrase spacing_catch_p">Made to be Worn </h2>
-
-
-                                  <div class="last_desc last_d2 col-md-12 p_me">
-                                    <div class="col-md-12 dec_wrappper p-0">
-
-                                      <p class="para_text">
-                                        ralph lauren corporation is a global leader in the design,
-                                        marketing, and distribution of premium lifestyle products,
-                                        including apparel, accessories, home furnishings, and other
-                                        licenced product categories. </p>
-                                    </div>
-                                  </div>
-                                  <div class="buy-btn">
-                                    <a href="#">Add to cart</a>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="change-item grid-style shop-filter col-lg-4">
-                          <div class="sidegap_product item white_shadow__box width_set job_list bpaeg_list "
-                            data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200" data-lat="31.5203696"
-                            data-lng="74.35874729999999" rate="3">
-                            <div class="row row_height_new" id="row_hieght">
-                              <div class="col-sm-4 col-12 img_col">
-                                <div class="itemimg-wrap  190">
-                                  <img src="assets/images/listing-2.png" class="img-fluid item-img" alt="">
-                                  <div class="logo_withname">
-                                    <div class="logo_round">
-                                      <img
-                                        src="https://communityhubland.com/uploads/product_image/product_1686489729.webp"
-                                        alt="">
-                                      <span class="status"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="col-sm-8 col-12 desc_col desc_col_in ">
-                                <div class="row" id="add_height_in">
-
-                                  <div class="col-8">
-                                    <h1 class="p_me"><a href="#">Ralph Lauren</a>
-                                    </h1>
-                                  </div>
-                                  <div class="col-4">
-                                    <div class="rate2 p_me">
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star"></i>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6 left_fields special_cls car_out">
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                    <div class="meta meta-left">
-                                      <span class="productPrice">500</span><span class="divider"></span><span>Category 1</span><span class="divider"></span>
-                                    </div>
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6 right_fields special_cls car_out">
-                                    <div class="meta meta-right">
-                                      <span class="divider"></span><span class="divider"></span>
-                                      <span>Lahore</span>
-                                    </div>
-                                  </div>
-                                  <h2 class="p_me catch_phrase spacing_catch_p">Made to be Worn </h2>
-
-
-                                  <div class="last_desc last_d2 col-md-12 p_me">
-                                    <div class="col-md-12 dec_wrappper p-0">
-
-                                      <p class="para_text">
-                                        ralph lauren corporation is a global leader in the design,
-                                        marketing, and distribution of premium lifestyle products,
-                                        including apparel, accessories, home furnishings, and other
-                                        licenced product categories. </p>
-                                    </div>
-                                  </div>
-                                  <div class="buy-btn">
-                                    <a href="#">Add to cart</a>
-                                  </div>
-
-
-                                </div>
-                              </div>
-                            </div>
-
-                          </div>
-                        </div>
-                        <div class="change-item grid-style shop-filter col-lg-4">
-                          <div class="sidegap_product item white_shadow__box width_set job_list bpaeg_list "
-                            data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300" data-lat="31.5203696"
-                            data-lng="74.35874729999999" rate="3">
-                            <div class="row row_height_new" id="row_hieght">
-                              <div class="col-sm-4 col-12 img_col">
-                                <div class="itemimg-wrap  190">
-                                  <img src="assets/images/listing-1.png" class="img-fluid item-img" alt="">
-                                  <div class="logo_withname">
-                                    <div class="logo_round">
-                                      <img
-                                        src="https://communityhubland.com/uploads/product_image/product_1686489729.webp"
-                                        alt="">
-                                      <span class="status active"></span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div class="col-sm-8 col-12 desc_col desc_col_in ">
-                                <div class="row" id="add_height_in">
-
-                                  <div class="col-8">
-                                    <h1 class="p_me"><a href="#">Ralph Lauren</a>
-                                    </h1>
-                                  </div>
-                                  <div class="col-4">
-                                    <div class="rate2 p_me">
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star rated"></i>
-                                      <i class="fa fa-star"></i>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6 left_fields special_cls car_out">
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                    <div class="meta meta-left">
-                                      <span class="productPrice">500</span><span class="divider"></span><span>Category 1</span><span class="divider"></span>
-                                    </div>
-                                    <div class="meta meta-left">
-                                      <span>Category 1</span><span class="divider"></span><span>Category 2</span><span
-                                        class="divider"></span>
-                                    </div>
-                                  </div>
-                                  <div class="col-md-6 right_fields special_cls car_out">
-                                    <div class="meta meta-right">
-                                      <span class="divider"></span><span class="divider"></span>
-                                      <span>Lahore</span>
-                                    </div>
-                                  </div>
-                                  <h2 class="p_me catch_phrase spacing_catch_p">Made to be Worn </h2>
-
-
-                                  <div class="last_desc last_d2 col-md-12 p_me">
-                                    <div class="col-md-12 dec_wrappper p-0">
-
-                                      <p class="para_text">
-                                        ralph lauren corporation is a global leader in the design,
-                                        marketing, and distribution of premium lifestyle products,
-                                        including apparel, accessories, home furnishings, and other
-                                        licenced product categories. </p>
-                                    </div>
-                                  </div>
-                                  <div class="buy-btn">
-                                    <a href="#">Add to cart</a>
-                                  </div>
-
-
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                       </div>
-                      <ul class="pagination mt-2">
-
-                        <li onclick="set_value('page','1')" class="active"><a>1</a></li>
-                        <li onclick="set_value('page','2')" class=" "><a>2</a></li>
-                        <li onclick="set_value('page','3')" class=" "><a>3</a></li>
-                        <li onclick="set_value('page','2')"><a>></a></li>
-                        <li onclick="set_value('page','5')"><a>>></a></li>
-
-                      </ul>
                     </div>
                   </div>
 
@@ -576,7 +169,10 @@ $othen = array();
               </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="reviews-tab-pane" role="tabpanel" aria-labelledby="reviews-tab" tabindex="0">
+          
+        </div>
+      </div>
+      <div class="tab-pane fade" id="reviews-tab-pane" role="tabpanel" aria-labelledby="reviews-tab" tabindex="0">
             <div id="reviews" class="reviews-wrapper tab-content__box">
 
               <div class="container ">
@@ -594,184 +190,149 @@ $othen = array();
 
                   <h3>Add new Review</h3>
 
-                  <form class="" action="https://dev.communityhubland.com/home/add_rate" id="rform">
+                  <form class="" action="<?= base_url('home/add_rate') ?>" id="rform">
+
+                    <input type="hidden" value="<?= $pro['product_id'] ?>" name="pid" id="pid" />
 
                     <div class='rating-stars'>
                       <ul id='stars'>
-                        <li class='star' title='Poor' data-value='1'>
+                          <?php
+                                            $tot = 5;
+                                            for($i = 1 ; $i<=$tot;$i++)
+                                            {
+                                                ?>
+                                                <li class='star' title='Poor' data-value='<?= $i ?>' onclick="select_rate(<?= $i ?>)">
                           <i class='fa fa-star fa-fw'></i>
                         </li>
-                        <li class='star' title='Fair' data-value='2'>
-                          <i class='fa fa-star fa-fw'></i>
-                        </li>
-                        <li class='star' title='Good' data-value='3'>
-                          <i class='fa fa-star fa-fw'></i>
-                        </li>
-                        <li class='star' title='Excellent' data-value='4'>
-                          <i class='fa fa-star fa-fw'></i>
-                        </li>
-                        <li class='star' title='WOW!!!' data-value='5'>
-                          <i class='fa fa-star fa-fw'></i>
-                        </li>
+                                                <?php
+                                            }
+                                            ?>
                       </ul>
                     </div>
                     <input type="hidden" value="0" name="rating" id="rate" />
 
-                    <input type="hidden" value="1" name="pid" id="pid" />
-
                     <div class="form-group mb-3">
-                      <textarea name="" class="form-control" id="" cols="30" rows="3"></textarea>
+                      <textarea name="comment" class="form-control" id="" cols="30" rows="5"></textarea>
                     </div>
-                    <div
-                      class="review-btn text-center margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY">
-                      <a href="login_set/login.html">
-                        <button type="button" class="css-hv9ohz" data-activated="false" data-testid="post-button"
-                          value="submit" data-button="true">Post Review</button>
-                      </a>
-                    </div>
+                    <?php
+
+                    $user = $this->session->userdata('user_id');
+
+                    if($user){
+
+                        ?>
+
+                        <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:100%;text-align:center; width:100%;"><button type="button" class=" css-hv9ohz" onclick="send_rate()" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></div>
+                        
+
+                        <?php
+
+                    }else{
+
+                        ?>
+
+                        <div class=" margin-t4__09f24__G0VVf padding-b6__09f24__hfdiP border-color--default__09f24__NPAKY" style="max-width:100%;text-align:center; width:100%;"><a href="<?= base_url('/login_set/login'); ?>"><button type="button"   class=" css-hv9ohz" data-activated="false" data-testid="post-button" value="submit" data-button="true"><span class="css-1enow5j" data-font-weight="semibold">Post Review</span></button></a></div>
+
+
+
+                        <?php
+
+                    }
+
+                    ?>
                   </form>
 
                 </div>
                 <div class="reviews-grid">
                   <div class="row make_display_block">
-                    <div class="col-sm-4 cilent_gapp">
+                      <?php
 
-                      <div class="info_client">
+                    // var_dump($pro);
 
-                        <img src="assets/images/img_avatar.png" alt="">
+                    $rating = $this->db->where('product_id', $pro['product_id'])->get('user_rating')->result_array();
 
-                        <h4>Raheel</h4>
+                    foreach($rating as $k=> $v){
 
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt praesentium exercitationem
-                          eveniet suscipit temporibus est.</p>
+                        ?>
 
-                        <div class="rating">
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star"></i>
+                        <div class="col-sm-4 cilent_gapp">
+
+                            <div class="info_client">
+
+                                <?php
+
+
+
+                                $user_id = $v['user_id'];
+
+                                $users = $this->db->where('user_id', $user_id)->get('user')->row();
+
+                                // var_dump($users);
+
+                                ?>
+
+                                <img src="
+
+                                <?php
+
+                                // $user_id = $v['user_id'];
+
+                                if(file_exists('uploads/user_image/user_'.$user_id.'.jpg')){
+
+
+
+                                    echo $this->crud_model->file_view('user',$user_id,'100','100','no','src','','','.jpg').'?t='.time();
+
+                                } else if(empty($row['fb_id']) !== true){
+
+                                    echo 'https://graph.facebook.com/'. $row['fb_id'] .'/picture?type=large';
+
+                                } else if(empty($row['g_id']) !== true ){
+
+                                    echo $row['g_photo'];
+
+                                } else {
+
+                                    echo base_url().'uploads/user_image/default.jpg';
+
+                                }
+
+                                ?>
+
+                                " alt="">
+
+                                <h4><?= $users->username?></h4>
+
+                                <p>“<?= $v['comment'];?>”</p>
+
+                                <div class="rating">
+
+                                    <?php
+
+                                    echo $this->crud_model->rate_html($v['rating']);
+
+                                    ?>
+
+                                    <span><?= $v['rating'];?></span>
+
+                                </div>
+
+                            </div>
+
                         </div>
 
-                      </div>
+                        <?php
 
-                    </div>
-                    <div class="col-sm-4 cilent_gapp">
+                    }
 
-                      <div class="info_client">
-
-                        <img src="assets/images/img_avatar.png" alt="">
-
-                        <h4>Raheel</h4>
-
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt praesentium exercitationem
-                          eveniet suscipit temporibus est.</p>
-
-                        <div class="rating">
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star"></i>
-                        </div>
-
-                      </div>
-
-                    </div>
-                    <div class="col-sm-4 cilent_gapp">
-
-                      <div class="info_client">
-
-                        <img src="assets/images/img_avatar.png" alt="">
-
-                        <h4>Raheel</h4>
-
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt praesentium exercitationem
-                          eveniet suscipit temporibus est.</p>
-
-                        <div class="rating">
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star"></i>
-                        </div>
-
-                      </div>
-
-                    </div>
-                    <div class="col-sm-4 cilent_gapp">
-
-                      <div class="info_client">
-
-                        <img src="assets/images/img_avatar.png" alt="">
-
-                        <h4>Raheel</h4>
-
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt praesentium exercitationem
-                          eveniet suscipit temporibus est.</p>
-
-                        <div class="rating">
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star"></i>
-                        </div>
-
-                      </div>
-
-                    </div>
-                    <div class="col-sm-4 cilent_gapp">
-
-                      <div class="info_client">
-
-                        <img src="assets/images/img_avatar.png" alt="">
-
-                        <h4>Raheel</h4>
-
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt praesentium exercitationem
-                          eveniet suscipit temporibus est.</p>
-
-                        <div class="rating">
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star"></i>
-                        </div>
-
-                      </div>
-
-                    </div>
-                    <div class="col-sm-4 cilent_gapp">
-
-                      <div class="info_client">
-
-                        <img src="assets/images/img_avatar.png" alt="">
-
-                        <h4>Raheel</h4>
-
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt praesentium exercitationem
-                          eveniet suscipit temporibus est.</p>
-
-                        <div class="rating">
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star rated"></i>
-                          <i class="fa fa-star"></i>
-                        </div>
-
-                      </div>
-
-                    </div>
+                    ?>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
     </div>
   </main>
+  <?php
+  $bpage = 1;
+  ?>

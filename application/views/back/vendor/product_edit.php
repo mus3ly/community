@@ -22,7 +22,7 @@ function bubbleSort($arr)
     }
     return $arr;
 }
-$row = (array)$product_data;
+$row = (array) $product_data;
 $all_op = json_decode($row['options'],true);
 ?>
 <style>
@@ -366,7 +366,7 @@ btn1 .fa{
                 <div class="tab-base">
                     <!--Tabs Content-->                    
                     <div class="tab-content">
-                       <div id="product_option" class="tab-pane fade <?= ($active_tab == 'product_option')?"active in":''; ?>">
+                       <div id="customer_choice_options1" class="tab-pane fade <?= ($active_tab == 'customer_choice_options1')?"active in":''; ?>">
                             
                             <div class="form-group btm_border">'
                                 <label class="col-sm-2 control-label" for="demo-hor-15">
@@ -557,49 +557,8 @@ btn1 .fa{
                                     <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
                                 </div>
                                 </div>
-                                <?php
-                                if(isset($mod->store_check) && $mod->store_check)
-                                {
-                                    ?>
-
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Specification'); ?></label>
-                                <div class="col-sm-6">
-                                    <textarea rows="9" class="form-control" name="specification"   id="editor2" height="200" ><?php echo $row['specification']; ?></textarea>
-                                    <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
-                                </div>
-                                </div>
-
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Warranty_info'); ?></label>
-                                <div class="col-sm-6">
-                                    <textarea rows="9" class="form-control" name="warranty_info"   id="editor3" height="200" ><?php echo $row['warranty_info']; ?></textarea>
-                                    <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
-                                </div>
-                                </div>
-
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('Shipping_info'); ?></label>
-                                <div class="col-sm-6">
-                                    <textarea rows="9" class="form-control" name="shipping_info"   id="editor4" height="200" ><?php echo $row['shipping_info']; ?></textarea>
-                                    <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
-                                </div>
-                                </div>
-
-                            <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-13"><?php echo translate('seller_profile'); ?></label>
-                                <div class="col-sm-6">
-                                    <textarea rows="9" class="form-control" name="seller_profile"   id="editor5" height="200" ><?php echo $row['seller_profile']; ?></textarea>
-                                    <!--<textarea rows="9" name="description"  class="summernotes" id="summernotes" data-height="200" data-name="description"><?php echo $row['description']; ?></textarea>-->
-                                </div>
-                                </div>
-
-                                    <?php
-                                }
-
-                                ?>
                                 <div class="form-group btm_border">
-                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('eller_profile');?></label>
+                                <label class="col-sm-4 control-label" for="demo-hor-11"><?php echo translate('tags');?></label>
                                 <div class="col-sm-6">
                                     <input type="text" name="tag" value="<?= $row['tag']; ?>" data-role="tagsinput" placeholder="<?php echo translate('enter comma (,) to add more');?>" class="form-control">
                                 </div>
@@ -673,7 +632,7 @@ btn1 .fa{
                             }//hide bus details
                             ?>
                             
-                                    <label class="col-sm-4 control-label" for="demo-hor-12">Feature image</label>
+                                    <label class="col-sm-4 control-label" for="demo-hor-12">Logo image</label>
                                     <div class="col-sm-6">
                                         <span class="pull-left btn btn-default btn-file"> <?php echo translate('choose_file');?>
                                             <input type="file" value="<?= ($row['sneakerimg'])?$row['sneakerimg']:""; ?>" name="sneakerimg" onchange="preview1(this);" id="demo-hor-inputpass" class="form-control">
@@ -1075,9 +1034,15 @@ btn1 .fa{
                             </div>
                         </div>
                         <div id="custom_attributes_1" class="tab-pane fade <?= ($active_tab == 'custom_attributes_1')?"active in":''; ?>">
-                            <div>
+                            <div class="form-group">
+                         <div class="col-sm-12">
                                 <labe>Section Heading</label>
-                                <input class="form-control" name="accor_h"  value="<?= $row['accor_h'] ?>" />
+                                <input class="form-control" name="accor_h"  value="<?= $row['accor_h']; ?>" />
+                            </div>
+                         <div class="col-sm-12">
+                                <labe>Section details</label>
+                                <textarea  class="form-control" name="accor_p"><?= $row['accor_p']; ?></textarea>
+                            </div>
                             </div>
                             <?php
                             $acc = $this->db->where('pid',$row['product_id'])->get('product_to_accordion')->result_array();
@@ -1171,7 +1136,9 @@ btn1 .fa{
                            
   <div class="form-group btm_border" style="padding-top:30px;"> Extra Info
                                 <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('check_this_to_show_on_front');?></label>
-                            
+                                <div class="col-sm-6">
+                                  <input type="checkbox" id="demoCheckbox" name="checks[]" value="extra_info" class="checkbox_class" <?= (in_array('extra_info',$checks))?"checked":""; ?>/>
+                                </div>
                             </div>
                         <div class="form-group btm_border">
                                     <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('section_heading');?></label>
@@ -1218,7 +1185,10 @@ btn1 .fa{
                                 </div>
                                 </div>
                         </div>
+                        
                         <div id="location" class="tab-pane fade <?= ($active_tab == 'location')?"active in":''; ?>">
+                            
+                            <div>Please enter the location (city) of the advertisement; or enter the exact values of Latitude and Longitude</div>
                         <input  style="width: 186px;
     padding: 0 16px;
     height: 34px;
@@ -1234,7 +1204,7 @@ btn1 .fa{
     padding: 0 16px;
     height: 34px;
     border: 2px solid #ccc;
-    margin: 0 0 13px;" type="text" id="cityLat" value="<?= $row['lat']; ?>" name="lat" />
+    margin: 0 0 13px;" type="text"  class="required" id="cityLat" value="<?= $row['lat']; ?>" name="lat" />
                              </div>
                             <div>
                                 <label  style="margin:0 0 0;display:block;">Longitude</label>
@@ -1242,7 +1212,7 @@ btn1 .fa{
     padding: 0 16px;
     height: 34px;
     border: 2px solid #ccc;
-    margin: 0 0 13px;" type="text" id="cityLng" value="<?= $row['lng']; ?>" name="lng" />
+    margin: 0 0 13px;" type="text"  class="required" id="cityLng" value="<?= $row['lng']; ?>" name="lng" />
                             </div>
                         </div>
                         <div id="event_images" class="tab-pane fade <?= ($active_tab == 'event_images')?"active in":''; ?>">
@@ -1372,13 +1342,19 @@ btn1 .fa{
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-md-11">
+                        Here
+                        <a href="<?= base_url(); ?>/vendor/product?module=<?= $row['module'] ?>">
+                        <span class="btn btn-purple btn-labeled fa fa-refresh pro_list_btn pull-right" 
+                            ><?php echo translate('back');?>
+                        </span>
+                        </a>
                         <span class="btn btn-purple btn-labeled fa fa-refresh pro_list_btn pull-right" 
                             onclick="ajax_set_full('add','<?php echo translate('add_product'); ?>','<?php echo translate('successfully_added!'); ?>','product_add',''); "><?php echo translate('reset');?>
                         </span>
                     </div>
                     
                     <div class="col-md-1">
-                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" id="registerbutton" onclick="textarea();validate_listing();" ><?php echo translate('upload');?></span>
+                        <span class="btn btn-success btn-md btn-labeled fa fa-upload pull-right enterer" id="registerbutton" onclick="textarea();validate_listing();" ><?php echo translate('save');?></span>
                     </div>
                     
                 </div>
@@ -1547,7 +1523,7 @@ btn1 .fa{
                 $('#editor1').val(editor1.getData());
                 
             }
-        </script>
+        </script>.
 
 <script>
 function activaTab(tab){

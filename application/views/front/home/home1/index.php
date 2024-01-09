@@ -294,6 +294,31 @@
     </div>
 </div>
 
+<div class="extrades">
+    <center>
+    <h1>Earn up to 50% commisions</h1>
+    <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled</div>
+    </center>
+    <div class="row">
+        <div class="col-md-3">
+          <div class="exdesimg" style="background:url(<?=base_url()?>updated/assets/images/istockphoto.jpeg)"></div>
+                                    
+        </div>
+        <div class="col-md-6">
+            <center>
+            <button class="joinbtn">Join the program</button>
+            <div>Already a member?</div>
+            <a href="">Login</a>
+            </center>
+        </div>
+        <div class="col-md-3">
+            <div class="exdesimg" style="background:url(<?=base_url()?>updated/assets/images/istockphoto.jpeg)"></div>
+                                    
+        </div>
+    </div>
+</div>
+
+
 
 <div class="listing_wrap" id="Verified_listing">
     <div class="container">

@@ -13,6 +13,15 @@ if(isset($product_data[0]))
     $pro = $product_data[0];
 
 }
+$vendor_id = json_decode($pro['added_by']);
+$id = $vendor_id->id;
+$vendor = $this->db->where('vendor_id', $id)->get('vendor')->row_array();
+
+// get product
+$n = $this->db->where('product_id', $vendor['bpage'])->where('is_bpage', 1)->get('product')->row_array();
+$bpage_slug = '';
+if(isset($n['slug']))
+$bpage_slug = $n['slug'];
 $logo = base_url('img_avatar.png');
 if($pro['comp_logo'])
 
@@ -68,6 +77,16 @@ if(isset($nimgs[0]))
     $thumbs = $this->crud_model->file_view('product',$row['product_id'],'','','thumb','src','multi','all');
     $mains = $this->crud_model->file_view('product',$row['product_id'],'','','no','src','multi','all'); 
 ?>
+<style>
+    i.fa.fa-star
+    {
+        color: #ccc;
+    }
+    i.rated
+    {
+        color: var(--primary-color) !important;
+    }
+</style>
                 <main>
     <section class="product-page">
       <!-- content -->
@@ -84,27 +103,27 @@ if(isset($nimgs[0]))
                       foreach($imgs as $k=> $v)
                       {
                           ?>
-                    <img
+                          <img
                       src="<?= $v ?>"
                       alt="shoe image">
-                      <?php
+                          <?php
                       }
                       ?>
                   </div>
                 </div>
                 <div class="img-select">
-                      <?php
+                    <?php
                       foreach($imgs as $k=> $v)
                       {
                           ?>
-                          <div class="img-item">
-                    <a href="#" data-id="2">
+                      <div class="img-item">
+                    <a href="#" data-id="<?= $k+1 ?>">
                       <img
                         src="<?= $v ?>"
                         alt="shoe image">
                     </a>
                   </div>
-                      <?php
+                          <?php
                       }
                       ?>
                 </div>
@@ -118,17 +137,30 @@ if(isset($nimgs[0]))
                   </h4>
                   <div class="d-flex flex-row my-3">
                     <div class="stars mb-1 me-2">
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fa fa-star"></i>
-                      <i class="fas fa-star-half-alt"></i>
-                      <span class="ms-1">
-                        4.5
-                      </span>
+                      <?php
+                    $vendor_id = json_decode($row['added_by']);
+$id = $vendor_id->id;
+$vendor = $this->db->where('vendor_id', $id)->get('vendor')->row_array();
+$n = $this->db->where('product_id', $vendor['bpage'])->where('is_bpage', 1)->get('product')->row_array();
+echo $this->crud_model->rate_html($n['rating_num']);
+                    ?>
                     </div>
-                    <span class="text-muted">154 reviews</span>
-                    <span class="stock ms-2">In stock</span>
+                    <?php
+                    $rcount = $this->db->where('product_id',$vendor['bpage'])->get('user_rating')->result();
+                    // var_dump($this->db->last_query());
+                    ?>
+                    <span class="text-muted"><?= count($rcount) ?> reviews</span>
+                    <span class="stock ms-2"><?php
+                    if($row['current_stock'] > 0){
+                ?>
+                    <?php echo $row['current_stock'].' '.$row['unit'].translate('_available');?>
+                <?php
+                    }else{
+                ?>
+                    <?php echo translate('out_of_stock');?>
+                <?php
+                    }
+                ?></span>
                   </div>
 
                   <div class="mb-3">
@@ -143,7 +175,7 @@ if(isset($nimgs[0]))
                   <hr />
 
                   <?php
-                    include "order_option.php";
+                     include "order_option.php";
                   ?>
                 </div>
               </div>
@@ -317,8 +349,8 @@ if(isset($nimgs[0]))
                   <div class="card-body">
                     <h5 class="card-title">Similar items</h5>
                     <?php
-                    $rel = $this->db->where('product_id !',$row['product_id'])->where('module',$row['module'])->limit(5)->get('product');
-                    $rel = $this->db->where('module',$row['module'])->limit(5)->get('product')->result_array();
+                    $rel = $this->db->where('product_id !=',$row['product_id'])->where('module',$row['module'])->limit(5)->get('product')->result_array();
+                    // $rel = $this->db->where('module',$row['module'])->limit(5)->get('product')->result_array();
                     foreach ($rel as $key => $value) {
                       $cov = '';
                       if(isset($value['comp_cover']) && $value['comp_cover'])
@@ -329,7 +361,7 @@ $cov = $this->crud_model->size_img($value['comp_cover'],500,500);
                       <div class="d-flex mb-3">
                       <a href="<?= base_url($value['slug']) ?>" class="me-3">
                         <img src="<?= $cov ?>"
-                          style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                          style="max-width: 96px; height: 96px;" class="img-md img-thumbnail" />
                       </a>
                       <div class="info">
                         <a href="#" class="nav-link mb-1">
@@ -343,30 +375,6 @@ $cov = $this->crud_model->size_img($value['comp_cover'],500,500);
                     }
 
                     ?>
-
-                    
-
-                    <div class="d-flex mb-3">
-                      <a href="#" class="me-3">
-                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp"
-                          style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                      </a>
-                      <div class="info">
-                        <a href="#" class="nav-link mb-1"> T-shirts with multiple colors, for men and lady </a>
-                        <strong class="text-dark"> $120.00</strong>
-                      </div>
-                    </div>
-
-                    <div class="d-flex">
-                      <a href="#" class="me-3">
-                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp"
-                          style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                      </a>
-                      <div class="info">
-                        <a href="#" class="nav-link mb-1"> Blazer Suit Dress Jacket for Men, Blue color </a>
-                        <strong class="text-dark"> $339.90</strong>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -376,3 +384,6 @@ $cov = $this->crud_model->size_img($value['comp_cover'],500,500);
       </div>
     </section>
   </main>
+  <?php
+  $product = 1;
+  ?>

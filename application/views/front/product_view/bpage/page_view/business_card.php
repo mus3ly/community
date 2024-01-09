@@ -28,8 +28,15 @@ if(true)
 ?>
 <div class="business_card">
       <div class="container  ">
-        <div class="business_banner"
-          style="background: url('<?= $cover ?>');background-position:center;background-size:cover;">
+          <?php
+          $checks = array();
+if($pro['enable_checks'])
+{
+$checks = json_decode($pro['enable_checks']);
+}
+          ?>
+        <div class="business_banner" 
+          style="background: url('<?= $cover ?>');background-position:center;background-size:cover; display:<?= (in_array('section1',$checks))?"none":"block"; ?>">
 
           <div class="overlay_banner__box"></div>
 
@@ -65,8 +72,11 @@ if(true)
 
                                  if($v['share_link'])
                                  {
+                                     if($aff_code)
+                                  $url = base_url($pro['slug']).'?aff='.$aff_code;
+                                  else
                                   $url = base_url($pro['slug']);
-                                  $link = str_replace('link',$url, $v['share_link']);
+                                  $link = str_replace('=link','='.$url, $v['share_link']);
 
 
                 ?>

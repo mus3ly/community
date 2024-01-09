@@ -3,8 +3,9 @@
 
 $menu[]= array('title'=> 'Profile','icon'=> 'bi bi-people','key'=> 'info');
 $menu[] = array('title'=> 'Wishlist','icon'=> 'bi bi-box-seam','key'=> 'wishlist');
-$menu[] = array('title'=> 'Referal Members','icon'=> 'bi bi-box-seam','key'=> 'rpoints');
+
 $menu[] = array('title'=> 'Order History','icon'=> 'bi bi-clock-history','key'=> 'order_history');
+$menu[] = array('title'=> 'Affiliate Members','icon'=> 'bi bi-box-seam','key'=> 'rpoints');
 $menu[] = array('title'=> 'Edit Profile','icon'=> 'bi bi-people','key'=> 'update_profile');
 
 
@@ -47,10 +48,10 @@ $url = base_url('updated/');
                 </div>
                 <?php
                 
-                foreach($menu as $v){
+                foreach($menu as $k=> $v){
                     ?>
                     <div class="options-box" onclick="load_section('<?= $v['key']; ?>');" id="<?= $v['key']; ?>_item">
-                  <div class="options-title">
+                  <div class="options-title <?= (!$k?'active':'') ?>">
                     <i class="<?=$v['icon']?>"></i>
                     <a href="#"><?= $v['title']; ?></a>
                   </div>

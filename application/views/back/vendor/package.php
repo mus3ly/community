@@ -23,23 +23,11 @@
                             <label class="col-sm-4 control-label"><?php echo translate('product');?></label>
                             <div class="col-sm-6">
                                 <select name="membership" id="type" class="demo-chosen-select" onchange="get_membership_info(this.value)">
-                                    <option value="0"
-                                        <?php
-                                            $e_match = $membership;
-                                            if ($e_match == 0) {
-                                                $e_match = 'free';
-                                            }
-                                            if ($e_match == 0) {
-                                                echo 'selected="selected"';
-                                            }
-                                        ?> >
-                                        <?php echo translate('default');?>
-                                    </option>
                                     <?php
                                     $this->db->order_by('mcat','asc');
-                                    $memberships = $this->db->get('membership')->result_array();
+                                    $memberships = $this->db->where('promo_check','1')->get('membership')->result_array();
                                         foreach ($memberships as $row1) {
-                                        $pkg = $this->db->where('package_id', $row1['mcat'])->get('package')->result_array();
+                                        $pkg = $this->db->where('id', $row1['mcat'])->get('member_cat')->result_array();
 
                                         ?>
                                     <option value="<?php echo $row1['membership_id']; ?>"

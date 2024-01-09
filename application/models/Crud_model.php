@@ -16,6 +16,17 @@ class Crud_model extends CI_Model
         parent::__construct();
     }
 
+    public function img_field($id,$media = 0)
+    {
+        $img = $this->db->where('img_id',$id)->get('img')->row();
+        
+        if(!$img)
+        {
+            echo 'No img found';
+            return 0;
+        }
+        $this->load->view('img',array('img'=>$img,'media'=>$media));
+    }
     public function rate_html($rate)
     {
         $rate = ceil($rate);
@@ -47,10 +58,6 @@ class Crud_model extends CI_Model
                 // var_dump($already);
                 if(!$already)
                 {
-                     if($id == 723)
-            {
-                var_dump($v);
-            }
                     $add= array(
                         'name' => $v,
                         'catid' => 0,
@@ -715,6 +722,7 @@ foreach($vendors as $kk=> $vv)
             }
         }
         $return = '<select name="' . $name . '" onChange="' . $onchange . '(this.value,this)" class="' . $class . '" ' . $other . '  data-placeholder="' . $phrase . '" tabindex="2" data-hide-disabled="true" >';
+        
         if (!is_array($from)) {
             if ($condition == '') {
                 $all = $this->db->get($from)->result_array();
@@ -727,6 +735,13 @@ foreach($vendors as $kk=> $vv)
                     $all = $this->db->get($from)->result_array();
                 }
             }
+            if($from == 'modules')
+            {
+                foreach($all as $k=>$v)
+                {
+                    $all[$k][$from.'_id'] = $v['id'];
+                }
+            }
             if ($from == 'countries'|| $from == 'states'|| $from == 'cities') {
                 $return .= '<option value="">'.$phrase.'</option>';
             }
@@ -734,8 +749,7 @@ foreach($vendors as $kk=> $vv)
                 $return .= '<option value="">'.$foption.'</option>
                             <option value="none">None/All Brands</option>';
             } else {
-                $return .= '<option value="">'.$foption.'</option>
-                            <option value="" id="blod_cat">Other</option>';
+                $return .= '<option value="">'.$foption.'</option>';
             }
             $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 71))->row()->value,true);
                                             $result=array();
@@ -1604,6 +1618,7 @@ foreach($vendors as $kk=> $vv)
     //GETTING VENDOR PERMISSION
     function vendor_permission($codename)
     {
+        
         if ($this->session->userdata('vendor_login') !== 'yes') {
             return false;
         } else {
@@ -1995,14 +2010,22 @@ foreach($vendors as $kk=> $vv)
 
     function can_add_product($vendor)
     {
-        return true;//for testing
+        //return true;
+        if(!$this->config->item('stripe_env'))
+        {
+        return true;
+        }
         
         $membership = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->membership;
+        if(!$membership)
+        $membership = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->pack;
+        
+        // var_dump($member/ship);
         // die($membership);
         $expire = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->member_expire_timestamp;
-        $already = $this->db->get_where('product', array('added_by' => '{"type":"vendor","id":"' . $vendor . '"}','status'=>'ok','is_bpage'=> 0))->num_rows();
-        // $already = $already -1;//remove b pages
-        if ($membership == '0') {
+        $already = $this->db->get_where('product', array('added_by' => '{"type":"vendor","id":"' . $vendor . '"}'))->num_rows();
+        $already = $already -1;//remove b pages
+        if (false) {
             $max = $this->db->get_where('general_settings', array('type' => 'default_member_product_limit'))->row()->value;
         } else {
             if($this->db->get_where('membership', array('membership_id' => $membership))->row())
@@ -2015,7 +2038,7 @@ foreach($vendors as $kk=> $vv)
             }
         }
 
-        if ($expire > time() || $membership == '0') {
+        if ($expire > time()) {
             if ($max <= $already) {
                 return false;
             } else if ($max > $already) {

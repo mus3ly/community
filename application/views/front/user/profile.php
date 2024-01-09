@@ -6,16 +6,11 @@
         padding-right:100px;
        
     }
-    
-    #result p{
-        padding-top:15px;
-    }
 </style>
 <?php
-// die('nimra');
-    foreach($user_info as $row)
-    {
-        $profile_image="";
+	foreach($user_info as $row)
+	{
+	    $profile_image="";
         if(file_exists('uploads/user_image/user_'.$row['user_id'].'.jpg')){ 
             $profile_image =  $this->crud_model->file_view('user',$row['user_id'],'100','100','no','src','','','.jpg').'?t='.time();
         } else if(empty($row['fb_id']) !== true){ 
@@ -85,15 +80,46 @@
                                     <td><?php echo $row['state'];?></td>
                                     <td><b><?php echo translate('city');?></b></td>
                                     <td><?php echo $row['city'];?></td>
+
                                 </tr>
+                                <tr>
+                                    <td><b><?php echo translate('referral code');?></b></td>
+                                    <td><?php echo $row['referral_code'];?></td>
+                                    <td><?php echo translate('referral Members');?></td>
+                                    <?php
+                                    $this->db->where('stripe_sub !=',NULL)->where('aff_paid',0)->where('ref_code',$row['referral_code']);
+
+                                    $result = $this->db->get('vendor')->result_array();
+
+
+                                    ?>
+                                    <td><?php echo count($result);?></td>
+                                </tr>
+
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
+            <div class="col-md-12">
+                <div class="row terms_and_conditions p-4">
+                    <?php 
+                    if(isset($row['TOC']) && $row['TOC'] == 'ok'){
+                    ?>
+                    <input type="checkbox" value="" checked disabled><label>Terms & Conditions</label>
+                    <?php
+                    }if(isset($row['add_affilite']) && $row['add_affilite'] == 'yes'){
+                    ?>
+                    <input type="checkbox" disabled value="" checked><label>Join Affiliates</label>
+                    <?php
+                    }if(isset($row['aff_TOC']) && $row['aff_TOC'] == 'ok'){
+                    ?>
+                    <input type="checkbox" disabled value="" checked><label>Affiliates Terms Of Use</label>
+                    <?php 
+                    }
+                    ?>
+                </div>
+            </div>
             <div class="row">
                 <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
@@ -103,7 +129,7 @@
                 </p>
             </div>
             <div class="col-md-12">
-                <div class="row p-2 card-row">
+                <div class="row p-2">
                     <div class="col-md-4 mt-2">
                         
                         <div class="card shadow-sm">
@@ -169,55 +195,55 @@
             </div>
         </div>
     <?php
-    }
+	}
 ?> 
 <script type="text/javascript">
-    function abnv(thiss){
-        $('#savepic').hide();
-        $('#inppic').hide();
-        $('#'+thiss).show();
-    }
-    function change_state(va){
-        $('#state').val(va);
-    }
+	function abnv(thiss){
+		$('#savepic').hide();
+		$('#inppic').hide();
+		$('#'+thiss).show();
+	}
+	function change_state(va){
+		$('#state').val(va);
+	}
 
-    $('.user-profile-img').on('mouseenter',function(){
-        //$('.pic_changer').show('fast');
-    });
+	$('.user-profile-img').on('mouseenter',function(){
+		//$('.pic_changer').show('fast');
+	});
 
-    //$('.set_image').on('click',function(){
-    //    $('#imgInp').click();
-    //});
+	//$('.set_image').on('click',function(){
+	//    $('#imgInp').click();
+	//});
 
-    $('.user-profile-img').on('mouseleave',function(){
-        if($('#state').val() == 'normal'){
-            //$('.pic_changer').hide('fast');
-        }
-    });
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
+	$('.user-profile-img').on('mouseleave',function(){
+		if($('#state').val() == 'normal'){
+			//$('.pic_changer').hide('fast');
+		}
+	});
+	function readURL(input) {
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
 
-            reader.onload = function(e) {
-                $('#blah').css('backgroundImage', "url('"+e.target.result+"')");
-                $('#blah').css('backgroundSize', "cover");
-            }
-            reader.readAsDataURL(input.files[0]);
-            abnv('savepic');
-            change_state('saving');
-        }
-    }
+			reader.onload = function(e) {
+				$('#blah').css('backgroundImage', "url('"+e.target.result+"')");
+				$('#blah').css('backgroundSize', "cover");
+			}
+			reader.readAsDataURL(input.files[0]);
+			abnv('savepic');
+			change_state('saving');
+		}
+	}
 
-    $("#imgInp").change(function() {
-        readURL(this);
-    });
-    
-    
-    window.addEventListener("keydown", checkKeyPressed, false);
-     
-    function checkKeyPressed(e) {
-        if (e.keyCode == "13") {
-            $(":focus").closest('form').find('.submit_button').click();
-        }
-    }
+	$("#imgInp").change(function() {
+		readURL(this);
+	});
+	
+	
+	window.addEventListener("keydown", checkKeyPressed, false);
+	 
+	function checkKeyPressed(e) {
+		if (e.keyCode == "13") {
+			$(":focus").closest('form').find('.submit_button').click();
+		}
+	}
 </script>

@@ -1,4 +1,17 @@
-
+<style>
+   
+    .active2{
+        background:#f36022 !important;
+        padding:10px !important;
+        color:white !important;
+        
+    }
+    .tab_buttons{
+        background:#ddd;
+        padding:10px;
+        color:black;
+    }
+</style>
 <?php
     foreach($user_info as $row)
     {
@@ -11,15 +24,20 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="tabs-wrapper content-tabs">
-                    <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs new_tab">
                         <li class="active">
-                            <a href="#tab1" id="tab1_btn" data-toggle="tab">
+                <a href="#tab1" id="tab1_btn" class="tab_buttons active2" data-toggle="tab">
                                 <?php echo translate('personal_info');?>
                             </a>
                         </li>
                         <li>
-                            <a href="#tab2" id="tab2_btn" data-toggle="tab">
+                            <a href="#tab2" class="tab_buttons" id="tab2_btn" data-toggle="tab">
                                 <?php echo translate('change_password');?>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#tab3" id="tab3_btn" class="tab_buttons" data-toggle="tab">
+                                <?php echo translate('Account information');?>
                             </a>
                         </li>
                     </ul>
@@ -145,6 +163,44 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        
+                        <div class="tab-pane " id="tab3">
+                            <div class="details-wrap">
+                                <div class="block-title alt"> <i class="fa fa-angle-down"></i> <?php echo translate('change_your_payment details');?></div>
+                                <div class="details-box">
+                                    <?php
+                                        echo form_open(base_url() . 'home/registration/update_payment/', array(
+                                            'class' => 'form-delivery',
+                                            'method' => 'post',
+                                            'enctype' => 'multipart/form-data'
+                                        ));
+                                    ?> 
+                                        <div class="row">
+                                              <div class="form-group">
+                                        <select class="form-select" id="changer" name="payment_methode" aria-label="Default select example">
+                                          <option >Choose Payment Methode</option>
+                                          <option value="paypal" <?= ($row['payment_methode'] == 'paypal')?'selected':'' ?>>paypal</option>
+                                          <option value="Payswitch" <?= ($row['payment_methode'] == 'Payswitch')?'selected':'' ?>>Payswitch</option>
+                                         
+                                        </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <input required name="payment_id"id="add_here" type="text" value="<?= $row['payment_id'] ?>" placeholder="Choose Methode" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <span class="btn btn-theme pull-right signup_btn btn btn-success" data-unsuccessful='<?php echo translate('info_update_unsuccessful!'); ?>' data-success='<?php echo translate('info_updated_successfully!'); ?>' data-ing='<?php echo translate('updating..') ?>' >
+                                                    <?php echo translate('update');?>
+                                                </span>
+                                            </div>
+                                            
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
                     </div>
                 </div>
             </div>
@@ -158,11 +214,43 @@
         $('#tab1_btn').click(function(){
            $('#tab2').hide(); 
            $('#tab1').show(); 
+           $( "#tab1_btn" ).addClass( 'active2');
+           $( "#tab2_btn" ).removeClass( 'active2');
+            $( "#tab3_btn" ).removeClass( 'active2');
+           $('#tab3').hide();
         });
         $('#tab2_btn').click(function(){
            $('#tab1').hide(); 
            $('#tab2').show(); 
+           $('#tab3').hide();
+            $( "#tab2_btn" ).addClass( 'active2');
+            $( "#tab1_btn" ).removeClass( 'active2');
+            $( "#tab3_btn" ).removeClass( 'active2');
+        }); 
+        $('#tab3_btn').click(function(){
+           $('#tab1').hide(); 
+           $('#tab2').hide(); 
+         $( "#tab3_btn" ).addClass( 'active2');
+         $( "#tab1_btn" ).removeClass( 'active2');
+            $( "#tab2_btn" ).removeClass( 'active2');
+           $('#tab3').show(); 
         });
     });
-</script>     
+</script>
+<script>
+    $('document').ready(function(){
+       $('#changer').on("change",function(){
+          var paypalText = 'Add paypal Email';
+          var PayswitchText = 'Add Payswitch ID';
+          
+          var my = $('#changer').val(); 
+          if(my == 'paypal'){
+              $('#add_here').attr('placeholder',paypalText)
+          }else if(my = 'Payswitch'){
+                $('#add_here').attr('placeholder',PayswitchText)    
+          }
+          
+       }); 
+    });
+</script>
                                    

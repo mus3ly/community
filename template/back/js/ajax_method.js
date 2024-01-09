@@ -321,7 +321,11 @@
                 take = 'scroll';
             }
             var here = $(this);
-            if(here.val() == ''){
+            if(!here.val()){
+                if(here.is('file'))
+                {
+                    alert('img');
+                }
                 if(!here.is('select')){
                     here.css({borderColor: 'red'});
                     if(here.attr('type') == 'number'){
@@ -423,14 +427,20 @@
             var now = $(this);
             now.closest('div').val(now.code());
         });
+        
 		var alerta = $('#form'); // alert div for show alert message
+		
 
 		var form = $('#'+form_id);
+		$('#'+form_id+'_error').hide();
 		var can = '';
 
 		if(!extra){
 			var extra = '';
 		}
+		form.find('.require_alert').each(function() {
+		 $(this).remove();   
+		});
 		form.find('.summernotes').each(function() {
             var now = $(this);
             now.closest('div').find('.val').val(now.code());
@@ -438,6 +448,26 @@
 		
 		//var form = $(this);
 	    var formdata = false;
+	    if(form_id == 'product_add4')
+	    {
+	        if($("#summery").length)
+	        {
+	        var con = $("#summery").val();
+	        if(con.length < 300)
+	        {
+	               $.activeitNoty({
+							type: 'danger',
+							icon : 'fa fa-minus',
+							message : 'About Listing  should be greater then 300 chracters',
+							container : 'floating',
+							timer : 3000
+						});
+						sound('cancelled');
+						return 0;
+	        }
+	        }
+
+		}
 	    if (window.FormData){
 	        formdata = new FormData(form[0]);
 	    }
@@ -452,9 +482,24 @@
             }
             var here = $(this);
             
-            if(here.val() == ''){
-                console.log(here.attr('name'));
-                if(!here.is('select')){
+            if(!here.val()){
+                console.log(here.attr('type')+'='+here.attr('name')+'='+here.attr('value'));
+                if(here.attr('type') == 'file' && !parseInt(here.attr('value')))
+                {
+                    can = 'no';
+                    var mid = '#'+here.attr('id')+'_alert';
+                    sound('form_submit_problem');
+                        $(mid).html(''
+                            +'  <span id="'+take+'" class="label label-danger require_alert" >'
+                            +'      '+txt
+                            +'  </span>'
+                        );
+                }
+                else if(!here.is('select')){
+                    if(here.attr('type') != 'file')
+                    {
+                    can = 'no';
+                    }
                     here.css({borderColor: 'red'});
                     if(here.attr('type') == 'number'){
                         txt = '*'+mbn;
@@ -463,14 +508,18 @@
                     if(here.closest('div').find('.require_alert').length){
 
                     } else {
+                        if(here.attr('type') != 'file')
+                        {
                         sound('form_submit_problem');
                         here.closest('div').append(''
                             +'  <span id="'+take+'" class="label label-danger require_alert" >'
                             +'      '+txt
                             +'  </span>'
                         );
+                        }
                     }
                 } else if(here.is('select')){
+                    can = 'no'
                     here.closest('div').find('.chosen-single').css({borderColor: 'red'});
                     if(here.closest('div').find('.require_alert').length){
 
@@ -484,14 +533,12 @@
                     }
 
                 }
-                var topp = 100;
-                if(form_id == 'product_add' || form_id == 'product_edit' || form_id == 'fields_edit'){
-                } else {
-	                $('html, body').animate({
-	                    scrollTop: $("#scroll").offset().top - topp
-	                }, 500);
+                if(can == 'no')
+                {
+                    $('#'+form_id+'_error').show();
+                window.scrollTo({top: 0, behavior: 'smooth'});
                 }
-                can = 'no';
+                // can = 'no';
             }
 
 			if (here.attr('type') == 'email'){
@@ -507,7 +554,7 @@
 							+'  </span>'
 						);
 					}
-					can = 'no';
+					
 				}
 			}
 
@@ -530,6 +577,46 @@
 			 }
 			 var buttonp = $('.enterer');
 			 var old = buttonp.html();
+			 if(form_id == 'product_add4')
+			 {
+			     if($("#shipping_info").length)
+	        {
+	            
+	        var con = tinyMCE.get('shipping_info').getContent();
+	        formdata.append('shipping_info',con);
+	        $('#product_add4').append('<textarea style="visibility:hidden" name="shipping_info">'+con+'</textarea>');
+	        }
+	        
+	        if($("#warranty_info").length)
+	        {
+	            
+	        var con = tinyMCE.get('warranty_info').getContent();
+	        formdata.append('warranty_info',con);
+	        $('#product_add4').append('<textarea style="visibility:hidden" name="warranty_info">'+con+'</textarea>');
+	        }
+	        
+	        if($("#customer_comment").length)
+	        {
+	            
+	        var con = tinyMCE.get('customer_comment').getContent();
+	        formdata.append('customer_comment',con);
+	        $('#product_add4').append('<textarea style="visibility:hidden" name="customer_comment">'+con+'</textarea>');
+	        }
+	        if($("#seller_profile").length)
+	        {
+	            
+	        var con = tinyMCE.get('seller_profile').getContent();
+	        formdata.append('seller_profile',con);
+	        $('#product_add4').append('<textarea style="visibility:hidden" name="seller_profile">'+con+'</textarea>');
+	        }
+	        if($("#description").length)
+	        {
+	        var con = tinyMCE.get('description').getContent();
+formdata.append('description',con);
+	        $('#description').val(con);
+	        }
+	         form = $('#'+form_id);
+			 }
 			 
 				$.ajax({
 					url: act, // form action url
@@ -552,6 +639,39 @@
 		}
 						
 						
+						if(form_id == 'product_add4'){
+						    $('.enterer').removeClass('disabled');
+						    $('.enterer').text(old);
+						    $('#form').html(old);
+						    $('.fa-refresh').show();
+						    if(IsJsonString(data))
+						    {
+						    data = JSON.parse(data);
+							if(data['rurl'])
+							{
+							    window.location.replace(data['rurl']);
+							}
+						    }
+							else
+							{
+							    if(!data)
+							    {
+							    ajax_set_list();
+							    }
+							    else
+							    {
+							        $.activeitNoty({
+							type: 'danger',
+							icon : 'fa fa-minus',
+							message : data,
+							container : 'floating',
+							timer : 3000
+						});
+						sound('cancelled');
+						return 0;
+							    }
+							}
+						}
 						if(form_id == 'vendor_approval'){
 							noty = enb_ven;
 						}

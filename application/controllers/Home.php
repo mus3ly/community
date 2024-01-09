@@ -80,6 +80,11 @@ class Home extends CI_Controller
         }
         return $output;
     }
+    public function other_page($slug)
+    {
+        $data = array('page'=>$slug);
+        $this->load->view('front/page',$data);
+    }
     public function decide($slug)
     {
         $product = $this->db->where('slug',$slug)->get('product')->row();
@@ -111,6 +116,10 @@ class Home extends CI_Controller
         $this->load->library('spreadsheet');
         $this->load->library("pagination");
         //add affliate log
+        if (isset($_GET['aff'])) {
+            setcookie('aff', $_GET['aff'], strtotime('+7 days'));
+            // var_dump($_COOKIE['aff']);
+        }
         if (isset($_GET['aff_id'])) {
             setcookie('aff_id', $_GET['aff_id'], strtotime('+7 days'));
 
@@ -541,12 +550,19 @@ class Home extends CI_Controller
     public function add_rate()
     {
         if (isset($_GET['rating']) && isset($_GET['comment']) && isset($_GET['pid']) && $this->session->userdata('user_login') == "yes") {
+            $already = $this->db->where('product_id',$_GET['pid'])->where('user_id',$this->session->userdata('user_id'))->get('user_rating')->result_array();
+            if($already)
+            {
+                echo 'You can rate only once';
+                die();
+            }
             $in = array(
                 'comment' => $_GET['comment'],
                 'rating' => $_GET['rating'],
                 'product_id' => $_GET['pid'],
                 'user_id' => $this->session->userdata('user_id'),
             );
+            
             $r = $this->db->insert('user_rating', $in);
             //calculate rating 
             $all = $this->db->where('product_id',$_GET['pid'])->get('user_rating')->result_array();
@@ -567,7 +583,7 @@ class Home extends CI_Controller
             
             if ($r) {
             
-                echo 1;
+                echo 'ok';
                 exit();
             }
         } else {
@@ -576,11 +592,67 @@ class Home extends CI_Controller
         }
     }
 
+    public function verfication_user()
+    {
+        $page = 'invalid_user';
+        if(isset($_GET['vcode']))
+        {
+            $vendor = $this->db->where('vcode',$_GET['vcode'])->get('user')->row();
+            $this->db->where('vcode',$_GET['vcode'])->update('user',array('vcode'=>'','email_ver'=>'1'));
+            if($vendor)
+            $page = 'thank_user';
+        }
+        $this->load->view('front/'.$page);
+    }
+    public function check_strong_password($str)
+    {
+       if (preg_match('#[0-9]#', $str) && preg_match('#[a-zA-Z]#', $str)) {
+         return TRUE;
+       }
+       $this->form_validation->set_message('check_strong_password', 'The password field must be contains at least one letter and one digit.');
+       return FALSE;
+    }
+
+    public function verification()
+    {
+        $page = 'invalid';
+        if(isset($_GET['vcode']))
+        {
+            $vendor = $this->db->where('vcode',$_GET['vcode'])->get('vendor')->row();
+            $this->db->where('vcode',$_GET['vcode'])->update('vendor',array('vcode'=>'','email_ver'=>'1'));
+            if($vendor)
+            $page = 'thank';
+        }
+        $this->load->view('front/'.$page);
+    }
     public function test1()
     {
-        $r = get_fields_line(97, 5);
+        $r = $this->email_model->verifiction_email(33,'user');
         var_dump($r);
         die();
+    }
+    public function resend_verification()
+    {
+        if(isset($_GET['token']))
+        {
+            $id = base64_decode($_GET['token']);
+            $user = $this->db->where('user_id',$id)->get('user')->row();
+            if($user)
+            {
+        $r = $this->email_model->verifiction_email(33,'user');
+        $this->session->set_flashdata('success', 'verification email send successfiully! ');
+            }
+            else
+            {
+                $this->session->set_flashdata('error', 'invalid link!');
+            }
+        }
+        else
+        {
+            $this->session->set_flashdata('error', 'invalid link!');
+            
+        }
+        custom_redirect(base_url('login_set/login'), 'refresh');
     }
 
     public function latest_load()
@@ -664,7 +736,7 @@ class Home extends CI_Controller
               </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="<?= base_url('directory/directory-store'); ?>">Shop</a>
+              <a class="nav-link" href="<?= base_url('directory/store'); ?>">Shop</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="<?= base_url('directory'); ?>" role="button" data-bs-toggle="dropdown"
@@ -741,7 +813,7 @@ class Home extends CI_Controller
     }
     public function home_file1(){
         ob_start();
-         $all_category =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 87))->row()->value,true);
+         $all_category =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value,true);
           $result=array();
         foreach($all_category as $k => $row ){
          if($this->crud_model->if_publishable_category($row)){
@@ -873,6 +945,8 @@ class Home extends CI_Controller
         {
             $page_data['data'] = $this->home_json(1);
             $page_data['page'] = 'home';
+            $page_data['meta_file'] = "home";
+        $page_data['page_title'] = 'Local Business Directory for SMBs in Cardiff and South Wales | Community HubLand';
 
             echo $this->load->view('front/home', $page_data,true);
             exit();
@@ -898,7 +972,8 @@ class Home extends CI_Controller
         // $home_style = 2;
         $page_data['page_name'] = "home/home" . $home_style;
         $page_data['asset_page'] = "home";
-        $page_data['page_title'] = translate('home');
+        $page_data['meta_file'] = "home";
+        $page_data['page_title'] = 'Local Business Directory for SMBs in Cardiff and South Wales | Community HubLand';
         $page_data['new'] = 1;
         // $this->benchmark->mark('code_start');
 
@@ -1416,6 +1491,7 @@ class Home extends CI_Controller
         $page_data = array();
         if ($uid) {
             $already = $this->db->where('type', $type)->where('uid', $uid)->get('affliate_user')->row();
+            // var_dump($already);
             if (!$already) {
                 //add new account
                 $in = array(
@@ -1842,7 +1918,7 @@ class Home extends CI_Controller
             $page_data['page_name'] = "affliate";
             $page_data['asset_page'] = "user_profile";
             $page_data['page_title'] = translate('affliate');
-            $this->load->view('front/index', $page_data);
+            $this->load->view('front/index_new', $page_data);
         }
         /*$page_data['all_products'] = $this->db->get_where('user', array(
             'user_id' => $this->session->userdata('user_id')
@@ -1877,7 +1953,23 @@ class Home extends CI_Controller
             {
                 $row = $uinfo[0];
             }
-            $data['rdata'] = $this->db->where('ref_code',$row['referral_code'])->get('vendor')->result_array();
+            $member_cat = $this->db->get('member_cat')->result_array();
+            $cats = array();
+            foreach($member_cat as $k=> $v)
+            {
+                $cats[$v['id']] = $v['name'];
+            }
+            $pack = $this->db->get('membership')->result_array();
+            foreach($pack as $k=> $v)
+            {
+                $pid= $v['membership_id'];
+                $coun =  $this->db->where('aff_paid',0)->where('stripe_sub !=',NULL)->where('pack',$pid)->where('ref_code',$row['referral_code'])->get('vendor')->result_array();
+                $pcoun =  $this->db->where('aff_paid',1)->where('stripe_sub !=',NULL)->where('pack',$pid)->where('ref_code',$row['referral_code'])->get('vendor')->result_array();
+                $pack[$k]['vendors'] = count($coun);
+                $pack[$k]['pvendors'] = count($pcoun);
+                $pack[$k]['cat'] = $cats[$v['mcat']];
+            }
+            $data['rdata'] = $pack;
             echo $html = $this->load->view('front/user/rpoints',$data,true);
             exit();
         } elseif ($para1 == "affiliation_point_earnings") {
@@ -3341,6 +3433,7 @@ class Home extends CI_Controller
     }
     public function category($para1 = "", $para2 = "", $min = "", $max = "", $text = '',$req_type = '', $req_data = '')
     {
+        
         $this->load->library("pagination");
         $pag_where = " `status` = 'ok' AND `comp_cover` > 0";
         $place_id;
@@ -3352,7 +3445,8 @@ class Home extends CI_Controller
         }
         if($req_type == 'module')
         {
-            $page_data['cat_path']  = array($req_data->category);
+            $cat = $this->db->where('category_id',$req_data->category)->get('category')->row();
+            $page_data['cat_path']  = explode(',',$cat->path);
             $page_data['car_mod']  = $req_data->id;
             $page_data['cur_slug']  = $req_data->dir_slug;
             if($pag_where)
@@ -3425,7 +3519,6 @@ class Home extends CI_Controller
             $pag_where = 'sub_category = '.$para2;
         }
 
-
         if ($para1 == "" || $para1 == "0") {
             $type = 'other';
         } else {
@@ -3447,6 +3540,7 @@ class Home extends CI_Controller
     $this->db->from('product');
     $query = $this->db->get();
     $r=$query->row();
+    
         if(isset($r->sale_price))
         $page_data['max_price'] = floatval($r->sale_price);
         if(!$page_data['max_price'])
@@ -3508,17 +3602,40 @@ class Home extends CI_Controller
                 }
             }
         }
+        $salewh = $pag_where;
         if($req_data == 'shop')
         {
             if(isset($_GET['sale_price']) && $_GET['sale_price'])
                 {
                     if($pag_where)
                     {
-                        $pag_where .= " AND `sale_price` >= '1' AND `sale_price` <= '".$_GET['sale_price']."'";
+                        $exp = explode('-',$_GET['sale_price']);
+                        
+                        $pag_where .= " AND `sale_price` >= '".$exp[0]."' AND `sale_price` <= '".$exp[1]."'";
                     }
                     else
                     {
-                        $pag_where .= " `sale_price` >= '1' AND `sale_price` <= '".$_GET['sale_price']."'";
+                        $pag_where .= " `sale_price` >= '".$exp[0]."' AND `sale_price` <= '".$exp[1]."'";
+                    }
+                }
+        }
+        if(empty($req_data))
+        {
+            if(isset($_GET['sale_price']) && $_GET['sale_price'])
+                {
+                    $exp = explode('-',$_GET['sale_price']);
+                    if(!isset($exp[1]))
+                    {
+                        $exp[0] = 0;
+                        $exp[1] = $_GET['sale_price'];
+                    }
+                    if($pag_where)
+                    {
+                        $pag_where .= " AND `sale_price` >= '".$exp[0]."' AND `sale_price` <= '".$exp[1]."'";
+                    }
+                    else
+                    {
+                        $pag_where .= " `sale_price` >= '".$exp[0]."' AND `sale_price` <= '".$exp[1]."'";
                     }
                 }
         }
@@ -3530,13 +3647,14 @@ class Home extends CI_Controller
             {
                 if($v['tbl_col'] == 'sale_price' && !empty($_GET[$v['tbl_col']]))
                 {
+                    $exp = explode('-',$_GET['sale_price']);
                     if($pag_where)
                     {
-                        $pag_where .= "AND `sale_price` >= '1' AND `sale_price` <= '".$_GET[$v['tbl_col']]."'";
+                        $pag_where .= "AND  `sale_price` <= '".$exp[1]."'";
                     }
                     else
                     {
-                        $pag_where .= " `sale_price` >= '1' AND `sale_price` <= '".$_GET[$v['tbl_col']]."'";
+                        $pag_where .= " `sale_price` <= '".$exp[1]."'";
                     }
                 }
                 elseif(( empty($v['condition_type']) || $v['condition_type'] == '=') && !empty($_GET[$v['tbl_col']]))
@@ -3552,6 +3670,20 @@ class Home extends CI_Controller
                 }
                 
             }
+        }
+        
+        $this->db->where($salewh)->select_max('sale_price');
+    $this->db->from('product');
+    $query = $this->db->get();
+    $r=$query->row();
+    // var_dump($this->db->last_query());
+    // var_dump($r);
+    
+        if(isset($r->sale_price))
+        $page_data['max_price'] = floatval($r->sale_price);
+        if(!$page_data['max_price'])
+        {
+            $page_data['max_price'] = 0;
         }
         
         $page_data['is_listing'] = 'directory_listing';
@@ -3570,7 +3702,6 @@ class Home extends CI_Controller
         if (isset($page_data['cur_slug']) && $page_data['cur_slug']) {
             $page_data['is_listing'] = (isset($listing_types[$page_data['cur_slug']])) ? $listing_types[$page_data['cur_slug']] : "";
         }
-        // die($pag_where);//test query
         if(!$page_data['cur_slug'])
         {
             $page_data['cur_slug'] = 'directory_listing';
@@ -3613,6 +3744,18 @@ class Home extends CI_Controller
             $min = 0;
             $max = 50000000;
         }
+        
+            if(isset($_GET['country']) && $_GET['country'])
+                {
+                    if($pag_where)
+                    {
+                        $pag_where .= " AND `country` = '".$_GET['country']."'";
+                    }
+                    else
+                    {
+                        $pag_where .= " `country` = '".$_GET['country']."'";
+                    }
+                }
         if($para1 && !$para2)
         {
 
@@ -3727,6 +3870,7 @@ class Home extends CI_Controller
             $pag_where = 'brand ='.$brandtag_data->brand_id;
         }
         $page_data['range'] = $min . ';' . $max;
+        
         $page_data['cur_category'] = $para1;
         $page_data['cur_sub_category'] = $para2;
         $page_data['text'] = $text;
@@ -3745,6 +3889,8 @@ class Home extends CI_Controller
             $this->db->limit($config["per_page"], $start);
             $lat = '';
             $lng = '';
+            if(empty($_GET['country']))
+            {
             if (isset($place_id) && $place_id) {
                 //$place_id
                 $det = place_details($place_id);
@@ -3771,10 +3917,11 @@ class Home extends CI_Controller
                 // $lat = '51.4866';
                 // $lng = '-3.1549';
             }
+            }
             
             
             $dis_range = isset($_GET['dis_range'])?'0-'.$_GET['dis_range']:'0-500';
-            if ($lat && $lng) {
+            if ($lat && $lng && empty($_GET['country'])) {
                 
                 $dis_range = explode('-', $dis_range);
                 $mind = $dis_range[0];
@@ -3785,51 +3932,72 @@ class Home extends CI_Controller
                     $pag_where .= " AND lat != '' AND lng != '' ";
                     $pag_where .= " AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') >= ".$mind;
                     $pag_where .= " AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') <= ".$maxd;
+                    $salewh .= " AND lat != '' AND lng != '' ";
+                    $salewh .= " AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') >= ".$mind;
+                    $salewh .= " AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') <= ".$maxd;
                 }
                 else
                 {
                     $pag_where = " lat != '' AND lng != '' ";
+                    $salewh = " lat != '' AND lng != '' ";
+                    $salewh .= "AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') >= ".$mind;
                     $pag_where .= "AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') >= ".$mind;
+                    $salewh .= " AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') <= ".$maxd;
                     $pag_where .= " AND getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') <= ".$maxd;
                 }
                 
             }
+            
             
             $sort = (isset($_GET['sort'])?$_GET['sort']:"rating_num");
 
             if ($sort == 'most_viewed') {
                 $this->db->order_by('number_of_view', 'desc');
             }
-            if ($sort == 'condition_old') {
+            elseif ($sort == 'condition_old') {
                 $this->db->order_by('product_id', 'asc');
             }
-            if ($sort == 'condition_new') {
+            elseif ($sort == 'condition_new') {
                 $this->db->order_by('product_id', 'desc');
             }
-            if ($sort == 'rating_num') {
+            elseif ($sort == 'rating_num') {
                 $this->db->order_by('rating_num', 'desc');
             }
+            elseif ($sort == 'ltsale') {
+                $this->db->order_by('sale_price', 'desc');
+            }
+            
+            elseif ($sort == 'tlsale') {
+                $this->db->order_by('sale_price', 'asc');
+            }
+            
             
             if($pag_where)
             {
                 if($lat && $lng)
                 {
-            $page_data['all_products'] = $this->db->select("product.*,getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') as distance")->where($pag_where)->get('product')->result_array();
-        }
-        else
-        {
-
-            $page_data['all_products'] = $this->db->select("product.*")->where($pag_where)->get('product')->result_array();
-        }
+                    
+                    $page_data['all_products'] = $this->db->select("product.*,getDistance(product.lat,product.lng,'" . $lat . "','" . $lng . "') as distance")->where($pag_where)->get('product')->result_array();
+                }
+                else
+                {
+        
+                    $page_data['all_products'] = $this->db->select("product.*")->where($pag_where)->get('product')->result_array();
+                }
+            
+            
+            
             //  var_dump($this->db->last_query());
             //  die();
             
             
             
-            $this->db->where($pag_where)->select_max('sale_price');
-    $this->db->from('product');
-    $query = $this->db->get();
-    $r=$query->row();
+            
+            
+            $this->db->where($salewh)->select_max('sale_price');
+            $this->db->from('product');
+            $query = $this->db->get();
+            $r=$query->row();
         if(isset($r->sale_price) && !empty($r->sale_price))
         {
         $page_data['max_price'] = floatval($r->sale_price);
@@ -3843,7 +4011,6 @@ class Home extends CI_Controller
         {
             $page_data['max_price'] = 0;
         }
-        
             }
             else
             {
@@ -3886,6 +4053,7 @@ class Home extends CI_Controller
             $config['last_link'] = ' ';
             $this->pagination->initialize($config);
         //pagination end
+        
         
         echo $this->load->view('front/directory_new', $page_data,true);
         exit();
@@ -4379,6 +4547,7 @@ class Home extends CI_Controller
 
             if (isset($range)) {
                 $p = explode(';', $range);
+                
                 $this->db->where('sale_price >=', $p[0]);
                 $this->db->where('sale_price <=', $p[1]);
             }
@@ -4480,6 +4649,8 @@ class Home extends CI_Controller
 
             if (isset($range)) {
                 $p = explode(';', $range);
+                var_dump($p);
+                var_dump('79');
                 $this->db->where('sale_price >=', $p[0]);
                 $this->db->where('sale_price <=', $p[1]);
             }
@@ -4669,6 +4840,8 @@ class Home extends CI_Controller
 
             if (isset($range)) {
                 $p = explode(';', $range);
+                var_dump($p);
+                var_dump('71');
                 $this->db->where('sale_price >=', $p[0]);
                 $this->db->where('sale_price <=', $p[1]);
             }
@@ -4854,7 +5027,7 @@ class Home extends CI_Controller
         } else {
             redirect(base_url() . '', 'refresh');
         }
-        $this->load->view('front/page', $page_data);
+        $this->load->view('front/index_new', $page_data);
     }
 
 
@@ -4985,10 +5158,46 @@ class Home extends CI_Controller
         echo json_encode($product_data);
         die();
     }
+    function share_icon($id)
+    {
+        $ltype = '';
+        $uid = 0;
+        if ($this->session->userdata('user_login') == 'yes') {
+            $uid = $this->session->userdata('user_id');
+            $ltype = 'user';
+        } elseif ($this->session->userdata('vendor_login') == 'yes') {
+            $uid = $this->session->userdata('vendor_id');
+            $ltype = 'vendor';
+        }
+        $aff_code = '';
+        $pro = $this->db->where('product_id',$id)->get('product')->row();
+    
+        if($uid)
+        {
+            $aff_code = base64_encode($ltype.'-'.$uid);
+        }
+        $all = $this->db->get('bpkg')->result_array();
+                    foreach ($all as $k=> $v) {
+
+                                 if($v['share_link'])
+                                 {
+                                     if($aff_code)
+                                  $url = base_url($pro->slug).'?aff='.$aff_code;
+                                  else
+                                  $url = base_url($pro->slug);
+                                  $link = str_replace('link',$url, $v['share_link']);
+                                 }
+                                 ?>
+                                 <li><a href="<?= $link ?>"><i class="bi <?= $v['icon'] ?>"></i></a></li>
+                                 <?php
+                        
+                    }//foreach
+    }
 
     function product_view($para1 = "", $para2 = "")
     {
         $user_id = $this->session->userdata('user_id') ? $this->session->userdata('user_id') : 0;
+        
         $this->crud_model->_set_variation($para1);
         $vendors = array();
         /*$vendors[] = $this->db->get_where('product', array('product_id' => $para1, 'status' => 'ok'))->row();**/
@@ -5037,6 +5246,20 @@ class Home extends CI_Controller
 
         $page_data['page_name'] = "product_view/" . $type . "/page_view";
         $page_data['product_type'] = $type;
+        $ltype = '';
+        $uid = 0;
+        if ($this->session->userdata('user_login') == 'yes') {
+            $uid = $this->session->userdata('user_id');
+            $ltype = 'user';
+        } elseif ($this->session->userdata('vendor_login') == 'yes') {
+            $uid = $this->session->userdata('vendor_id');
+            $ltype = 'vendor';
+        }
+    
+        if($uid)
+        {
+            $page_data['aff_code'] = $code = base64_encode($ltype.'-'.$uid);
+        }
         $page_data['asset_page'] = "product_view_" . $type;
         $page_data['product_data'] = $product_data->result_array();
         $page_data['page_title'] = !empty($product_data->row()->seo_title) ? $product_data->row()->seo_title : $product_data->row()->title;
@@ -5090,6 +5313,7 @@ class Home extends CI_Controller
         }
         else
         {
+        
         $this->load->view('front/index_new', $page_data);
         }
     }
@@ -5262,7 +5486,7 @@ class Home extends CI_Controller
             $page_data['page_name'] = "others/contact";
             $page_data['asset_page'] = "contact";
             $page_data['page_title'] = translate('contact');
-            $this->load->view('front/index', $page_data);
+            $this->load->view('front/index_new', $page_data);
         }
     }
 
@@ -5348,12 +5572,12 @@ class Home extends CI_Controller
             $v = $this->db->where('vendor_id', $pack->vendor)->update('vendor',array('membership'=>$pack->vendor));
             if($v){
             $vendor = $this->db->where('vendor_id',$pack->vendor)->get('vendor')->row();
-            $this->email_model->payment_success($vendor->email,$pack->amount.'$') ;
+            $this->email_model->payment_success($vendor->email,currency($pack->amount)) ;
             }
             $page_data = array();
             //zohaib yhn bho success ki mail
             $page_data['page_name'] = "subscription_thank";
-            $page_data['amount'] = $pack->amount;
+            $page_data['amount'] = currency($pack->amount);
             // $page_data['asset_page'] = "register";
             $page_data['page_title'] = translate('registration');
             $this->load->view('front/subscription_thank', $page_data);
@@ -5367,10 +5591,15 @@ class Home extends CI_Controller
         // $_SESSION['subscription_vendor'] = 1;//for test
         
         if($vid)
+        {
          $_SESSION['subscription_vendor'] = $vid;
+        }
+        
         if (isset($_SESSION['subscription_vendor'])) {
+        
 
             $user = $this->db->where('vendor_id', $_SESSION['subscription_vendor'])->get('vendor')->row();
+                
             if (isset($user->pack) && $user->pack) {
                 $pack = $this->db->where('membership_id', $user->pack)->get('membership')->row();
 
@@ -5392,6 +5621,7 @@ class Home extends CI_Controller
                 if(!$env)
                 {
                 if (isset($pack->stripe_id) && $pack->stripe_id) {
+                    
                     try {
                         $path = FCPATH . '/stripe-subscription/vendor/autoload.php';
                         require $path;
@@ -5411,16 +5641,19 @@ class Home extends CI_Controller
 //                                   'coupon' => 'Jf8DLxDL',
 //                               ]],
 //                           }
-                            'subscription_data' => [
+                             'subscription_data' => [
                                 'metadata' => ["plan_id" => $user->pack, "track" => $track, "customer_id" => $_SESSION['subscription_vendor']]],
                         ]);
+                    
+                        $_SESSION['subscription_vendor'] = null;
+                unset($_SESSION['subscription_vendor']);
                     } catch (Exception $e) {
                         echo '<script> alert("Coupon is not for this package.") </script>';
                         $path = FCPATH . '/stripe-subscription/vendor/autoload.php';
                         require $path;
                         \Stripe\Stripe::setApiKey($stripe_secret);
                         $checkout_session = \Stripe\Checkout\Session::create([
-                            'success_url' => base_url() . '/home/success_subscription?track=' . $track,
+                            '¥success_url' => base_url() . '/home/success_subscription?track=' . $track,
                             'cancel_url' => base_url() . '/stripe-subscription/cancel.html',
                             'payment_method_types' => ['card'],
                             'mode' => 'subscription',
@@ -5434,6 +5667,8 @@ class Home extends CI_Controller
                                 'metadata' => ["plan_id" => $user->pack, "track" => $track, "customer_id" => $_SESSION['subscription_vendor']]],
                         ]);
                     }
+                    
+                    
                     ?>
                     <head>
                         <title>Stripe Subscription Checkout</title>
@@ -5467,7 +5702,8 @@ class Home extends CI_Controller
                 {
                     if (isset($pack->stripe_live_id) && $pack->stripe_live_id) {
                         try {
-                            $path = FCPATH . '/stripe-subscription/vendor/autoload.php';
+                            $path = FCPATH . 'stripe-subscription/vendor/autoload.php';
+                        
                             require $path;
                             \Stripe\Stripe::setApiKey($stripe_secret);
                             $checkout_session = \Stripe\Checkout\Session::create([
@@ -5488,6 +5724,8 @@ class Home extends CI_Controller
                                 'subscription_data' => [
                                     'metadata' => ["plan_id" => $user->pack, "track" => $track, "customer_id" => $_SESSION['subscription_vendor']]],
                             ]);
+                            $_SESSION['subscription_vendor'] = null;
+                            unset($_SESSION['subscription_vendor']);
                         } catch (Exception $e) {
                             echo '<script> alert("Coupon is not for this package.") </script>';
                             $path = FCPATH . '/stripe-subscription/vendor/autoload.php';
@@ -5547,6 +5785,7 @@ class Home extends CI_Controller
             die();
             die('Forbidden request!');
         }
+        
 
     }
 
@@ -5564,7 +5803,7 @@ class Home extends CI_Controller
         $in['title'] = $user->company;
         $in['brand'] = $user->cat1;
         $in['cat2'] = $user->cat2;
-        $in['cat3'] = $user->cat3;
+        $in['category'] = $user->cat3;
         $in['name'] = $user->name;
         $in['address1'] = $user->address1;
         $in['address2'] = $user->address2;
@@ -5572,6 +5811,15 @@ class Home extends CI_Controller
         $in['city'] = $user->city;
         $in['state'] = $user->state;
         $in['status'] = 'ok';
+        $lat = '';
+        $lng = '';
+        if(isset($_SESSION['ip_info']))
+        {
+            $lat = $_SESSION['ip_info']['lat'];
+            $lng = $_SESSION['ip_info']['lon'];
+        }
+        $in['lat'] = $lat;
+        $in['lng'] = $lng;
         $in['bussniuss_phone'] = $user->phone;
         $in['whatsapp_number'] = $user->whatsapp;
         $in['bussniuss_email'] = $user->email;
@@ -5605,7 +5853,6 @@ class Home extends CI_Controller
                 'tax' => 0
             );
             $this->cart->insert($data);
-            $_SESSION['subscription_vendor'] = $id;
             return   "checkout";
         } else {
             $pack = $this->db->where('amount', 0)->get('package')->row();
@@ -5649,20 +5896,32 @@ class Home extends CI_Controller
     function vendor_logup($para1 = "", $para2 = "")
     {
 
-        // var_dump($_REQUEST);
+            if(isset($_SESSION['subscription_vendor']) && $_SESSION['subscription_vendor'])
+            {
+                
+                $vid = $_SESSION['subscription_vendor'];
+                // unset($_SESSION['subscription_vendor']);
+            $this->vendor_subscription($vid);
+            }
         if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
             $this->load->library('recaptcha');
         }
         $this->load->library('form_validation');
         if ($para1 == "add_info") {
+            
+            $_SESSION["reg_ven"] = $_POST;
+            
             $msg = '';
             $this->load->library('form_validation');
             $safe = 'yes';
             $char = '';
             $this->form_validation->set_rules('name', 'First Name', 'required');
+            $this->form_validation->set_rules('last_name', 'Last Name', 'required');
+            $this->form_validation->set_rules('company', 'Business Name', 'required');
             $this->form_validation->set_rules('email', 'Email', 'valid_email|required|is_unique[vendor.email]', array('required' => 'You have not provided %s.', 'is_unique' => 'This %s already exists.'));
-            $this->form_validation->set_rules('password1', 'Password', 'required|matches[password2]');
+            $this->form_validation->set_rules('password1', 'Password', 'required');
             $this->form_validation->set_rules('password2', 'Confirm Password', 'required');
+            // $this->form_validation->set_rules('password1', 'Password', 'required|min_length[8]|max_length[25]|callback_check_strong_password');
             $this->form_validation->set_rules('address1', 'Address Line 1', 'required');
             // $this->form_validation->set_rules('display_name', 'Display Name', 'required');
             $this->form_validation->set_rules('state', 'State', 'required');
@@ -5674,25 +5933,38 @@ class Home extends CI_Controller
             if ($this->input->post('company')) {
                 $num = $this->db->where('title', $this->input->post('company'))->get('product');
                 if ($num->num_rows() > 0) {
-                    echo "Company Already exit";
-                    $this->form_validation->set_rules('company', 'Company', 'required', array('required' => translate('company_name_already_teken_please_try_unique_name')));
+                    $error =  "Company Already exist";
+                    $this->session->set_flashdata('error', $error);
+                echo 'refresh';
+                exit();
                 }
             }
 
-            // if ($this->input->post('affiliate') == 'yes') {
-            //     $this->form_validation->set_rules('affiliate_terms_check', 'Affiliate Terms of Use', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
-            // }
+            if ($this->input->post('affiliate') == 'yes') {
+                $this->form_validation->set_rules('affiliate_terms_check', 'Affiliate Terms of Use', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
+            }
 
 
-            // $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
+            $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
 
             if ($this->form_validation->run() == FALSE) {
-                $this->session->set_flashdata('error', validation_errors());
-                custom_redirect($_SERVER['HTTP_REFERER'], 'refresh');
+                $errors = $this->form_validation->error_array();
+                $value = reset($errors);
+                if($value)
+                {
+                 $this->session->set_flashdata('error', $value);
+                }
+                     echo 'refresh';
+                     exit();
 
             } else {
-    // var_dump($safe);
-    // die('nimraaa');
+                if(!$this->check_strong_password($this->input->post('password1')))
+                {
+                    $val = 'The password field must be contains at least one letter and one digit.';
+                    $this->session->set_flashdata('error', $val);
+                    echo 'refresh';
+                     exit();
+                }
                 if ($safe = 'yes') {
                     if (false) {
                         // if (true) {
@@ -5744,7 +6016,6 @@ class Home extends CI_Controller
                         //     exit();
                         // }
                     } else {
-                        // die('nimra');
                         $data['name'] = $this->input->post('name');
                         $data['email'] = $this->input->post('email');
                         $data['address1'] = $this->input->post('address1');
@@ -5756,17 +6027,33 @@ class Home extends CI_Controller
                         $data['city'] = $this->input->post('city');
                         $data['zip'] = $this->input->post('zip');
                         $data['pack'] = $this->input->post('pack');
-                        // $data['cat1'] = $this->input->post('buss_type');
+                         $data['cat1'] = $this->input->post('buss_type');
                         $data['phone'] = $this->input->post('phone');
-                        // $data['whatsapp'] = $this->input->post('wphone');
-                        // $data['cat2'] = this->input->post('sub_category');
-                        // $data['cat3'] = $this->input->post('sub3_category');
+                         $data['whatsapp'] = $this->input->post('wphone');
+                        $data['cat2'] = $this->input->post('sub_category');
+                        $data['cat3'] = $this->input->post('sub3_category');
                         $data['middle_name'] = $this->input->post('middle_name');
                         $data['last_name'] = $this->input->post('last_name');
                         $data['add_affilite'] = $this->input->post('affiliate');
                         $data['TOC'] = $this->input->post('terms_check');
                         $data['promo'] = $this->input->post('promo');
                         $data['ref_code'] = $this->input->post('ref_code');
+                            if(isset($_COOKIE['aff']) && $_COOKIE['aff'])
+                            {
+                                $d = explode('-',base64_decode($_COOKIE['aff']));
+                                if(isset($d[0]) && $d[0] == 'user')
+                                {
+                                    $uid = $d[1];
+                                    $user = $this->db->where('user_id',$uid)->get('user')->row();
+                                    if(isset($user->referral_code) && $user->referral_code)
+                                    {
+                                        $data['ref_code'] = $user->referral_code;
+                                    }
+                                }
+                                unset($_COOKIE['aff']);
+    setcookie('aff', '', time() - 3600, '/');
+                            }
+                            
                         if ($this->input->post('affiliate') == 'yes') {
                             $data['aff_TOC'] = $this->input->post('affiliate_terms_check');
                         }
@@ -5775,10 +6062,10 @@ class Home extends CI_Controller
                         $data['approve_timestamp'] = 0;
                         $data['membership'] = 0;
                         $data['status'] = 'pending';
+                        
 
 
                         if ($this->input->post('password1') == $this->input->post('password2')) {
-                            
                             $password = $this->input->post('password1');
                             $data['password'] = sha1($password);
                             $x = $this->db->insert('vendor', $data);
@@ -5787,12 +6074,56 @@ class Home extends CI_Controller
                             if(!$vid)
                             {
                                var_dump($this->db->last_query());
+                               die();
                             }
-                         
                             $this->vendor_page($vid);
-                            $this->vendor_subscription($vid);
-                            $this->email_model->account_opening('vendor', $data['email'], $password);
-                            $this->email_model->vendor_reg_email_to_admin($data['email'], $password);
+                            
+                            $promo = $this->input->post('promo');
+                            if($promo)
+                            {
+                                
+                            $pack = $this->db->where('promo_code',$promo)->get('membership')->row();
+                            
+                            if($vid && $pack)
+                            {
+                                $up = array();
+                            $up['pack'] = $pack->membership_id;
+                            $up['membership'] = $pack->membership_id;
+                            if($pack->days)
+                            {
+                                //member_expire_timestamp
+                            }
+                                $this->db->where('vendor_id',$vid)->update('vendor',$up);
+                            }
+                            }
+                            if(isset($pack->price) && $pack->price == 0)
+                            {
+                                
+                                unset($_SESSION["subscription_vendor"]);
+                                $promo = $this->input->post('promo');
+                                $_SESSION['success'] = 'Wonderful, your account has been created successfully! Please verify your email, then wait for your account approval, before logging in.';
+                                $this->session->set_flashdata('success', 'Wonderful, your account has been created successfully! Please verify your email, then wait for your account approval, before logging in.');
+                                $exp = '';
+            if($pack->timespan)
+                            {
+                                $date = date('Y-m-d');
+                                $exp = strtotime(date('Y-m-d', strtotime($date. ' + '.$pack->timespan.' days'))); 
+                            }
+            $v = $this->db->where('vendor_id', $vid)->update('vendor',array('membership'=> $pack->membership_id,'stripe_sub'=> '','member_expire_timestamp'=>$exp));
+                                $this->email_model->verifiction_email($vid,'vendor');
+                                $this->email_model->account_opening('vendor', $this->input->post('email'), $password);
+                                $this->email_model->vendor_reg_email_to_admin($this->input->post('email'), $password);
+                            }
+                            else
+                            {
+                                $this->email_model->account_opening('vendor', $data['email'], $password);
+            $this->email_model->vendor_reg_email_to_admin($data['email'], $password);
+                                $_SESSION['subscription_vendor'] = $vid;
+                            }
+                            unset($_SESSION["reg_ven"]);
+                            echo 'refresh';
+                            exit();
+                            
                             //  here on line 5667
                             
                             // redirect(base_url() . 'home/vendor_subscription', 'refresh');
@@ -5836,6 +6167,12 @@ class Home extends CI_Controller
                             // $msg = 'done';
 
                         }
+                        else
+                        {
+                    $this->session->set_flashdata('error', 'The Password field does not match the Confirm Password field.');
+                     echo 'refresh';
+                     exit();
+                        }
                     }
                 } else {
                     $this->session->set_flashdata('error', 'Disallowed charecter : " ' . $char . ' " in the POST');
@@ -5851,6 +6188,10 @@ class Home extends CI_Controller
             $page_data['pkgs'] = $this->db->get('membership')->result_array();
             $page_data['cat'] = $this->db->where('visible','0')->get('member_cat')->result_array();
             $page_data['ref'] = false;
+            if($_GET['ref_code'] == '1stCHL')
+            {
+            $page_data['ref'] = true;
+            }
             if(isset($_GET['ref_code']) && !isset($_GET['pack']))
             {
 
@@ -5873,6 +6214,7 @@ class Home extends CI_Controller
             }
             else
             {
+                // custom_redirect($_SERVER['HTTP_REFERER'], 'refresh');
                 $this->load->view('front/vendor_pack', $page_data);
             }
         } elseif ($para1 == "sub_by_cat") {
@@ -5887,12 +6229,15 @@ class Home extends CI_Controller
     
     function vendor_signup_promo(){
             $promo = $this->input->post('promo_code');
+            if(!$promo && isset($_SESSION['reg_ven']['promo']))
+            {
+                $promo = $_SESSION['reg_ven']['promo'];
+            }
             $chk = $this->db->where('promo_code',$promo)->get('membership')->row();
             if($chk && $chk->promo_limit){
                 $page_data['promo'] = $_POST['promo_code'];
-                $page_data['page_name'] = "vendor/register";
-                $page_data['asset_page'] = "register";
-                $this->load->view('front/vreg', $page_data);
+                $url= base_url().'vendor_logup/registration?pack='.$chk->membership_id.'&promo='.$promo;
+                custom_redirect($url, 'refresh');
             }else{
                 $_SESSION['error'] = 'invalid promocode or expired';
                 $this->session->set_flashdata('error', 'invalid promocode or expired');
@@ -5922,7 +6267,10 @@ class Home extends CI_Controller
             if ($this->form_validation->run() == FALSE) {
                 // echo validation_errors();/
                 $this->session->set_flashdata('error', validation_errors());
-                custom_redirect($_SERVER['HTTP_REFERER']);
+                
+
+                echo 'refresh';
+                exit();
             } else {
                 // var_dump(sha1($this->input->post('password')));
                 $signin_data = $this->db->get_where('user', array(
@@ -5931,33 +6279,42 @@ class Home extends CI_Controller
                 ));
                 if ($signin_data->num_rows() > 0) {
                     foreach ($signin_data->result_array() as $row) {
-                        $this->session->set_userdata('user_login', 'yes');
                         
-                        $this->session->set_userdata('user_id', $row['user_id']);
-                        $this->session->set_userdata('user_name', $row['username']);
-                        $this->session->set_flashdata('alert', 'successful_signin');
                         $this->db->where('user_id', $row['user_id']);
                         $this->db->update('user', array(
                             'last_login' => time()
                         ));
+                        if($row['email_ver'])
+                        {
+                            $this->session->set_userdata('user_login', 'yes');
+                        
+                        $this->session->set_userdata('user_id', $row['user_id']);
+                        $this->session->set_userdata('user_name', $row['username']);
+                        $this->session->set_flashdata('alert', 'successful_signin');
                         $this->session->set_flashdata('message', 'Login Successfull!');
-                         custom_redirect(base_url() . 'home/profile');
+                        }
+                        else
+                        {
+                            $this->session->set_flashdata('error', 'You email is not verfified! chreck your email or <a href="'.base_url('home/resend_verification/').'?token='.base64_encode($row['user_id']).'">Click Here</a> to resend verification email');
+                        }
+                         echo 'refresh';
+                        exit();
                     }
                 } else {
                     $this->session->set_flashdata('error', 'Login Failed!  Incorrect Email Or Password.Please Try Again');
-                    custom_redirect($_SERVER['HTTP_REFERER']);
+                    echo 'refresh';
+                exit();
                 }
             }
         } else if ($para1 == 'forget') {
-            if (demo()) {
-                echo "Action blocked in demo";
-                exit;
-            }
             $this->load->library('form_validation');
             $this->form_validation->set_rules('email', 'Email', 'required');
 
             if ($this->form_validation->run() == FALSE) {
-                echo validation_errors();
+                $this->session->set_flashdata('error', validation_errors());
+                $_SESSION['forget_error'] = 1;
+                echo 'refresh';
+                exit();
             } else {
                 $query = $this->db->get_where('user', array(
                     'email' => $this->input->post('email')
@@ -5969,12 +6326,21 @@ class Home extends CI_Controller
                     $this->db->where('user_id', $user_id);
                     $this->db->update('user', $data);
                     if ($this->email_model->password_reset_email('user', $user_id, $password)) {
-                        echo 'email_sent';
+                        $this->session->set_flashdata('success', 'For reset your password check your email');
+                $_SESSION['forget_error'] = 1;
+                echo 'refresh';
+                exit();
                     } else {
-                        echo 'email_not_sent';
+                        $this->session->set_flashdata('error', 'Server error');
+                $_SESSION['forget_error'] = 1;
+                echo 'refresh';
+                exit();
                     }
                 } else {
-                    echo 'email_nay';
+                    $this->session->set_flashdata('error', 'Account does not exist');
+                $_SESSION['forget_error'] = 1;
+                echo 'refresh';
+                exit();
                 }
             }
         }
@@ -6029,6 +6395,7 @@ class Home extends CI_Controller
 
     function contact_us()
     {
+        
 
         $fname = $_GET['fname'];
         $lname = $_GET['lname'];
@@ -6054,9 +6421,7 @@ class Home extends CI_Controller
         $report = $this->db->insert('contact_us', $data);
         $lastid = $this->db->insert_id();
         if ($report) {
-            $email = $this->email_model->contact_email($lastid, 'contact');
-            // var_dump($email);
-            // die('ok');
+            $email = $this->email_model->contact_email($lastid, $email);
             if ($email == "true") {
                 echo '1';
                 //  $ret = array(
@@ -6269,7 +6634,7 @@ class Home extends CI_Controller
                 $this->load->view('front/user/login/quick_modal', $page_data);
             } else {
 
-                $this->load->view('front/index2', $page_data);
+                $this->load->view('front/login', $page_data);
             }
         } elseif ($para1 == 'registration') {
             if ($this->crud_model->get_settings_value('general_settings', 'captcha_status', 'value') == 'ok') {
@@ -6392,16 +6757,22 @@ class Home extends CI_Controller
         $page_data['page_name'] = "registration";
         if ($para1 == "add_info") {
             $msg = '';
+            $_SESSION["reg_user"] = $_POST;
+
             $this->form_validation->set_rules('username', 'First Name', 'required');
+            $this->form_validation->set_rules('surname', 'Last Name', 'required');
             $this->form_validation->set_rules('email', 'Email', 'required|is_unique[user.email]|valid_email', array('required' => 'You have not provided %s.', 'is_unique' => 'This %s already exists.'));
+            $this->form_validation->set_rules('phone', 'Phone', 'required');
             $this->form_validation->set_rules('password1', 'Password', 'required|matches[password2]');
             $this->form_validation->set_rules('password2', 'Confirm Password', 'required');
             $this->form_validation->set_rules('address1', 'Address Line 1', 'required');
-            $this->form_validation->set_rules('phone', 'Phone', 'required');
-            $this->form_validation->set_rules('surname', 'Last Name', 'required');
+            
+            
             $this->form_validation->set_rules('zip', 'ZIP', 'required');
             $this->form_validation->set_rules('city', 'City', 'required');
             $this->form_validation->set_rules('state', 'State', 'required');
+            $this->form_validation->set_rules('password1', 'Password', 'required|min_length[8]|max_length[25]|callback_check_strong_password');
+
 //            $this->form_validation->set_rules('referral_code', 'referral code', 'required');
             // $this->form_validation->set_rules('country', 'Country', 'required');
             // $this->form_validation->set_rules('terms_check', 'Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_terms_&_conditions')));
@@ -6409,19 +6780,18 @@ class Home extends CI_Controller
             //     $this->form_validation->set_rules('affiliate_terms_check', 'Affiliates Terms & Conditions', 'required', array('required' => translate('you_must_agree_with_affiliates_terms_of_use')));
             // }
             if ($this->form_validation->run() == FALSE) {
-                 $this->session->set_flashdata('message', validation_errors());
-                 $this->login_set('registration');
+                $errors = $this->form_validation->error_array();
+                $value = reset($errors);
+                if($value)
+                {
+                 $this->session->set_flashdata('error', $value);
+                }
+                     echo 'refresh';
+                     exit();
                 // redirect($_SERVER['HTTP_REFERER'], 'refresh');
                 // echo validation_errors();
             } else {
-                // die('nimra');
-                if (true) {
-                    
-                    //
-                    if (true) {
-
-                        if (true) {
-                            $data['username'] = $this->input->post('username');
+                       $data['username'] = $this->input->post('username');
                             $data['email'] = $this->input->post('email');
                             $data['address1'] = $this->input->post('address1');
                             $data['address2'] = $this->input->post('address2');
@@ -6443,72 +6813,18 @@ class Home extends CI_Controller
                                 $data['password'] = sha1($password);
                                 $this->db->insert('user', $data);
                                 $msg = 'done';
-                             $this->session->set_flashdata('success', 'Registeration Successfull!');
-                             custom_redirect($_SERVER['HTTP_REFERER']);
-                                        // redirect($_SERVER['HTTP_REFERER'], 'refresh');
-                                        // here on line6318
-                                    } else {
-                                        $this->session->set_flashdata('error', 'Registeration Failed');
-                                        // redirect($_SERVER['HTTP_REFERER'], 'refresh');
-                                           $this->login_set('registration');
-                                           custom_redirect($_SERVER['HTTP_REFERER']);
-                                    }
-                            echo $msg;
+                                $insert_id = $this->db->insert_id();
+                                $this->email_model->verifiction_email($insert_id,'user');
+                             $this->session->set_flashdata('success', 'Account created successfully! , Please verify your email and Login');
+                             $_SESSION['reg_user'] = array();
+                                        echo 'refresh';
+                                           exit();
                         } else {
-                            echo translate('please_fill_the_captcha');
+                            $this->session->set_flashdata('error', 'Password not matched');
+                     echo 'refresh';
                         }
-                    } else {
-                        // die('nimra');
-                        $data['username'] = $this->input->post('username');
-                        $data['email'] = $this->input->post('email');
-                        $data['address1'] = $this->input->post('address1');
-                        $data['address2'] = $this->input->post('address2');
-                        $data['phone'] = $this->input->post('phone');
-                        $data['surname'] = $this->input->post('surname');
-                        $data['zip'] = $this->input->post('zip');
-                        $data['city'] = $this->input->post('city');
-                        $data['state'] = $this->input->post('state');
-                        $data['country'] = $this->input->post('country');
-                        // $data['add_affilite'] = $this->input->post('affiliate');
-                        $data['TOC'] = $this->input->post('terms_check');
-                        if ($this->input->post('affiliate') == 'yes') {
-                            $data['aff_TOC'] = $this->input->post('affiliate_terms_check');
-                        }
-                        $data['langlat'] = '';
-                        $data['wishlist'] = '[]';
-                        $data['package_info'] = '[]';
-                        $data['product_upload'] = $this->db->get_where('package', array('package_id' => 1))->row()->upload_amount;
-                        $data['creation_date'] = time();
-                        
-
-                        if ($this->input->post('password1') == $this->input->post('password2')) {
-                                $password = $this->input->post('password1');
-                                $data['password'] = sha1($password);
-                                $this->load->database();
-                                $insert = $this->db->insert('user', $data);
-                                $str = $this->db->last_query();
-                                
-                                // $msg = 'done';
-                                // if ($this->email_model->account_opening('user', $data['email'], $password) == false) {
-                                //     $msg = 'done_but_not_sent';
-                                // } else {
-                                //     $msg = 'done_and_sent';
-                                // }
-                             $this->session->set_flashdata('smessage', 'Registeration Successfull!');
-                                        // redirect($_SERVER['HTTP_REFERER'], 'refresh');
-                                        // here on line 6367
-                                        custom_redirect($_SERVER['HTTP_REFERER']);
-                                    } else {
-                                        $this->session->set_flashdata('message', 'Registeration Failed');
-                                        // redirect($_SERVER['HTTP_REFERER'], 'refresh');
-                                           $this->login_set('registration');
-                                    }
-                        echo $msg;
-                    }
-                } else {
-                    echo 'Disallowed charecter : " ' . $char . ' " in the POST';
-                }
-            }
+            }//if no error validation
+        
         } else if ($para1 == "update_info") {
             $id = $this->session->userdata('user_id');
             $data['username'] = $this->input->post('username');
@@ -6547,6 +6863,16 @@ class Home extends CI_Controller
                 }
             }
 
+        } 
+        elseif($para1 == "update_payment") 
+        {
+            $data['payment_methode'] = $this->input->post('payment_methode');
+            $data['payment_id'] = $this->input->post('payment_id');
+                        $this->db->where('user_id', $this->session->userdata('user_id'));
+                        $this->db->update('user', $data);
+                        echo 'done';
+                        exit();
+
         } else if ($para1 == "change_picture") {
             $id = $this->session->userdata('user_id');
             if (!demo()) {
@@ -6554,7 +6880,7 @@ class Home extends CI_Controller
             }
             echo 'done';
         } else {
-            $this->load->view('front/registration', $page_data);
+            $this->load->view('front/user_register', $page_data);
         }
     }
 
@@ -7007,7 +7333,7 @@ class Home extends CI_Controller
         if ($para1 == "add") {
             $qty = $this->input->post('qty');
             $color = $this->input->post('color');
-            $option = array('color' => array('title' => 'Color', 'value' => $color));
+            $option = array();
             $all_op = json_decode($this->crud_model->get_type_name_by_id('product', $para2, 'options'), true);
             if ($all_op) {
                 foreach ($all_op as $ro) {
@@ -9189,7 +9515,7 @@ class Home extends CI_Controller
 $config['last_link'] = ' ';
             $this->pagination->initialize($config);
         // $page_data['blogs'] = $this->db->get('blog')->result_array();
-        $this->load->view('front/index1', $page_data);
+        $this->load->view('front/index_new', $page_data);
     }
     function blog($para1 = "")
     {
@@ -9219,7 +9545,7 @@ $config['last_link'] = ' ';
             // $config['first_link'] = 'First';
 $config['last_link'] = ' ';
             $this->pagination->initialize($config);
-        $this->load->view('front/index', $page_data);
+        $this->load->view('front/index_new', $page_data);
     }
 
     /* FUNCTION: Loads Contact Page */
@@ -9362,7 +9688,7 @@ $config['last_link'] = ' ';
         $page_data['page_name'] = 'blog/blog_view';
         $page_data['asset_page'] = 'blog_view';
         $page_data['page_title'] = $this->db->get_where('blog', array('blog_id' => $para1))->row()->title;
-        $this->load->view('front/index.php', $page_data);
+        $this->load->view('front/index_new.php', $page_data);
     }
 
     function others_product($para1 = "")
@@ -10520,20 +10846,209 @@ $config['last_link'] = ' ';
 
     function test_mail()
     {
-        $from = 'sample@mail.com';
+        $from = 'info@communityhubland.com';
         $from_name = 'sample';
-        $to = 'email@gmail.com';
+        $to = 'dipanshu.chawla@matarcompany.com';
         $sub = 'email test';
         $msg = 'email test ' . date('Y-m-d H:i:s');
+        ob_start(); //Start remembering everything that would normally be outputted, but don't quite do anything with it yet
+        ?>
+        
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Matar Social Media </title>
+  <style>
+    img{
+      width: 100%;
+    }
+
+    img{
+      width: 100%;
+    }
+    
+ul {
+  list-style: none;
+  display: flex;
+}
+ul li {
+  display: inline-block;
+  color: #fff;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+  font-size: 42px;
+  text-decoration: underline;
+  line-height: 118px;
+  padding: 0 18px;
+}
+ul li:first-child {
+  width: 53%;
+}
+ul li img {
+  width: 60px;
+  padding-top: 42px;
+}
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+body {
+  min-height: 100vh;
+  background-size: cover;
+}
+.logo {
+  width: 346px;
+  margin-top: 72px;
+  padding-left: 25px;
+}
+h1 {
+  text-align: center;
+  font-size: 73px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 804;
+  color: #fff;
+  margin: 50px 0 0;
+}
+h2 {
+  text-align: center;
+  font-size: 40px;
+  font-weight: normal;
+  font-family: 'Poppins', sans-serif;
+  margin: 0 0 0;
+  color: #fff;
+}
+  p {
+  text-align: center;
+  margin-bottom: 50px;
+}
+p a {
+  color: #fff;
+  text-align: center;
+  display: inline-block;
+  font-size: 30px;
+  font-family: 'Poppins', sans-serif;
+}
+@media only screen and (max-width: 767px){
+  body {
+    margin: 0;
+  }
+  .logo {
+    width: 250px;
+    padding-top: 50px;
+    padding-left: 0;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 35px;
+    margin: 30px 0 4px;
+  }
+  h2 {
+    font-size: 23px;
+    margin: 0 0 30px;
+  }
+  ul {
+    padding-left: 0;
+    display: block;
+    text-align: center;
+  }
+  ul li img {
+    width: 45px;
+    padding-top: 15px;
+  }
+  body {
+        background-position: center !important;
+    }
+  ul li:first-child {
+    width: 100%;
+    padding: 0;
+  }
+  ul li {
+    font-size: 22px;
+    text-decoration: underline;
+    line-height: 40px;
+    padding: 0 5px;
+  }
+}
+
+  </style>
+</head>
+<body style="background-image: url('https://messejaat.com/matar-social/bg.png');">
+  <div class="container">
+    <div class="logo">
+      <a href="#"><img src="https://messejaat.com/matar-social/matar.png"></a>
+    </div>
+    <h1>Follow Our Official</h1>
+    <h2>Social Media Channels</h2>
+    <ul>
+      <li>Matar Holding Company</li>
+      <li><a target="_blank"  href="https://www.linkedin.com/company/matar-albaqmi-holding-co/" target="_blank"><img src="https://messejaat.com/matar-social/linkedin.png"></a></li>
+      <li><a target="_blank"  href="https://www.facebook.com/matarholdingco/" target="_blank"><img src="https://messejaat.com/matar-social/facebook.png"></a></li>
+      <li><a target="_blank"  href="https://twitter.com/matarholding" target="_blank"><img src="https://messejaat.com/matar-social/twitter.png"></a></li>
+      <li><a target="_blank"  href="https://www.youtube.com/@matarholding" target="_blank"><img src="https://messejaat.com/matar-social/youtube.png"></a></li>
+    </ul>
+
+    <ul>
+      <li>Nafa Arabia Feed</li>
+      <li><a target="_blank"  href="https://www.linkedin.com/company/nafa-alarabia-feeds/" target="_blank"><img src="https://messejaat.com/matar-social/linkedin.png"></a></li>
+      <li><a target="_blank"  href="https://www.facebook.com/nafaarabiafeed" target="_blank"><img src="https://messejaat.com/matar-social/facebook.png"></a></li>
+      <li><a target="_blank"  href="https://twitter.com/FeedsNafa" target="_blank"><img src="https://messejaat.com/matar-social/twitter.png"></a></li>
+      
+    </ul>
+    <ul>
+      <li>Dijla Poultry</li>
+      <li><a target="_blank"  href="https://www.linkedin.com/company/dijla-poultry-ksa/" target="_blank"><img src="https://messejaat.com/matar-social/linkedin.png"></a></li>
+      <li><a target="_blank"  href="https://www.facebook.com/profile.php?id=61552249853536" target="_blank"><img src="https://messejaat.com/matar-social/facebook.png"></a></li>
+      <li><a target="_blank"  href="https://twitter.com/DijlaPoultry" target="_blank"><img src="https://messejaat.com/matar-social/twitter.png"></a></li>
+    </ul>
+
+    <ul>
+      <li>Salama Radiator</li>
+      <li><a target="_blank"  href="https://www.linkedin.com/company/salama-radiators/" target="_blank"><img src="https://messejaat.com/matar-social/linkedin.png"></a></li>
+      
+      <li><a target="_blank"  href="https://www.facebook.com/salamaradiator" target="_blank"><img src="https://messejaat.com/matar-social/facebook.png"></a></li>
+      <li><a target="_blank"  href="https://twitter.com/RadiatorSalama" target="_blank">
+      <img src="https://messejaat.com/matar-social/twitter.png"></a></li>
+      <li><a target="_blank"  href="https://www.instagram.com/salamaradiator" target="_blank"><img src="https://messejaat.com/matar-social/instagram.png"></a></li>
+    </ul>
+
+    <ul>
+      <li>Salama Engineering</li>
+      <li><a target="_blank"  href="https://www.linkedin.com/company/salama-engineering-industries/" target="_blank"><img src="https://messejaat.com/matar-social/linkedin.png"></a></li>
+      <li><a target="_blank"  href="https://www.facebook.com/salamaengineering" target="_blank"><img src="https://messejaat.com/matar-social/facebook.png"></a></li>
+       <li><a target="_blank"  href="https://twitter.com/SEngIndustries" target="_blank"><img src="https://messejaat.com/matar-social/twitter.png"></a></li>
+      <li><a target="_blank"  href="https://www.instagram.com/salamaengineeringindustries/" target="_blank"><img src="https://messejaat.com/matar-social/instagram.png"></a></li>
+    </ul>
+
+    <ul>
+      <li>Hemmah Arabia</li>
+      <li><a target="_blank"  href="https://www.linkedin.com/company/hemmah-arabia/" target="_blank"><img src="https://messejaat.com/matar-social/linkedin.png"></a></li>
+      <li><a target="_blank"  href="https://www.facebook.com/profile.php?id=61551886306059" target="_blank"><img src="https://messejaat.com/matar-social/facebook.png"></a></li>
+      <li><a target="_blank"  href="https://twitter.com/Hemmah_Arabia" target="_blank"><img src="https://messejaat.com/matar-social/twitter.png"></a></li>
+      <li><a target="_blank"  href="https://www.instagram.com/hemmah_arabia/" target="_blank"><img src="https://messejaat.com/matar-social/instagram.png"></a></li>
+    </ul>
+
+    <p><a target="_blank" href="http://matarcompany.com/">matarcompany.com</a></p>
+  </div>
+
+
+</body>
+</html>
+        <?php
+$msg = ob_get_contents(); //Gives whatever has been "saved"
+ob_end_clean(); //Stops saving things and discards whatever was saved
+ob_flush(); //Stops saving and outputs it all at once
+
 
         $this->load->model('email_model');
-        $this->email_model->do_email($from, $from_name, $to, $sub, $msg);
+        $r = $this->email_model->do_email($from, $from_name, $to, $sub, $msg);
+        var_dump($r);
     }
 
     function test()
     {
-        var_dump(get_fields_line(39, 3));
-        die();
+        $em = 'mchbck.work@gmail.com';
+        var_dump($r);
+        die('44');
         // $pac = $this->crud_model->get_product_affiliation_codes_from_cookies();
         //
         // echo "<pre>";

@@ -54,6 +54,11 @@ class Email_model extends CI_Model
 			if($background !== 'style_1'){
 				$final_email = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
 				$final_email = str_replace('[[body]]',$email_body,$final_email);
+				$home_top_logo = $this->db->get_where('ui_settings',array('type' => 'home_top_logo'))->row()->value;
+				$logo =base_url().'uploads/logo_image/logo_'.$home_top_logo.'.png';
+				$banner = $this->db->get_where('email_template', array('email_template_id' => 1))->row()->banner;
+      					$final_email = str_replace('[[banner]]',$banner,$final_email);
+      				    $final_email = str_replace('[[logo]]',$logo,$final_email);
 				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
 			}else{
 				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $email_body);
@@ -67,7 +72,7 @@ class Email_model extends CI_Model
     }
     
     
-    function payment_success($id, $amount)
+    function payment_success($id, $amount,$type='12')
     {
         //$this->load->database();
         $from_name  = $this->db->get_where('general_settings',array('type' => 'system_name'))->row()->value;
@@ -79,18 +84,28 @@ class Email_model extends CI_Model
             $from = $this->db->get_where('general_settings', array('type' => 'system_email'))->row()->value;
         }
 
-            $sub    = $this->db->get_where('email_template', array('email_template_id' => 12))->row()->subject;
+            $sub    = $this->db->get_where('email_template', array('email_template_id' => $type))->row()->subject;
             $user = $this->db->where('email', $id)->get('vendor')->row();
             $to     = $user->email;
+            
             $to_name =$user->name;
 			
-			$email_body      = $this->db->get_where('email_template', array('email_template_id' => 12))->row()->body;
+			$email_body      = $this->db->get_where('email_template', array('email_template_id' => $type))->row()->body;
 
             $background = $this->db->get_where('ui_settings',array('type' => 'email_theme_style'))->row()->value;
             
-		    $final_email = str_replace('[from]',$to_name,$email_body);
-		    $final_email = str_replace('[amount]',$amount,$email_body);
-			if($background !== 'style_1'){
+		    $email_body = str_replace('[from]',$to_name,$email_body);
+		    $email_body = str_replace('[amount]',$amount,$email_body);
+		    
+			if($background){
+			    $temp = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
+			    $final_email = str_replace('[[body]]',$email_body,$temp);
+				$home_top_logo = $this->db->get_where('ui_settings',array('type' => 'home_top_logo'))->row()->value;
+				$logo =base_url().'uploads/logo_image/logo_'.$home_top_logo.'.png';
+				$banner = $this->db->get_where('email_template', array('email_template_id' => $type))->row()->banner;
+      					$final_email = str_replace('[[banner]]',$banner,$final_email);
+      				    $final_email = str_replace('[[logo]]',$logo,$final_email);
+      				    //die();
 				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
 			}else{
 				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $email_body);
@@ -102,7 +117,6 @@ class Email_model extends CI_Model
             }
             
     }
-    
     function subscription_cancellation($id)
     {
         //$this->load->database();
@@ -114,27 +128,33 @@ class Email_model extends CI_Model
         else if($protocol == 'mail'){
             $from = $this->db->get_where('general_settings', array('type' => 'system_email'))->row()->value;
         }
+        $type = 13;
 
-            $sub    = $this->db->get_where('email_template', array('email_template_id' => 13))->row()->subject;
-            $mail =$this->db->get_where('product', array('product_id' => $query->row()->pid))->row()->bussniuss_email;
-
-            // $sub    = $this->db->get_where('email_template', array('email_template_id' => 10))->row()->subject;
-            $to     = '';
-            $to_name ='' ;
+            $sub    = $this->db->get_where('email_template', array('email_template_id' => $type))->row()->subject;
+            $user = $this->db->where('email', $id)->get('vendor')->row();
+            $to     = $user->email;
+            
+            $to_name =$user->name;
 			
-			$email_body      = $this->db->get_where('email_template', array('email_template_id' => 13))->row()->body;
+			$email_body      = $this->db->get_where('email_template', array('email_template_id' => $type))->row()->body;
 
             $background = $this->db->get_where('ui_settings',array('type' => 'email_theme_style'))->row()->value;
             
-		
-			if($background !== 'style_1'){
-				$final_email = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
-				$final_email = str_replace('[[body]]',$email_body,$final_email);
+		    $email_body = str_replace('[[to]]',$to_name,$email_body);
+		    $email_body = str_replace('[amount]',$amount,$email_body);
+		    
+			if($background){
+			    $temp = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
+			    $final_email = str_replace('[[body]]',$email_body,$temp);
+				$home_top_logo = $this->db->get_where('ui_settings',array('type' => 'home_top_logo'))->row()->value;
+				$logo =base_url().'uploads/logo_image/logo_'.$home_top_logo.'.png';
+				$banner = $this->db->get_where('email_template', array('email_template_id' => $type))->row()->banner;
+      					$final_email = str_replace('[[banner]]',$banner,$final_email);
+      				    echo $final_email = str_replace('[[logo]]',$logo,$final_email);
+      				    die();
 				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
-				$this->do_email($from, $from_name, $mail, $sub, $final_email);
 			}else{
 				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $email_body);
-				$this->do_email($from, $from_name, $mail, $sub, $final_email);
 			}
             if($send_mail == true){
             return $send_mail;
@@ -211,43 +231,53 @@ class Email_model extends CI_Model
         }
 
         $query  = $this->db->get_where('contact_us', array('id' => $id));
+        if(isset($query->row()->pid) && $query->row()->pid)
+        {
+            $to = $this->db->get_where('product', array('product_id' => $query->row()->pid))->row();
+            if(isset($to->bussniuss_email))
+            {
+                $to = $to->bussniuss_email;
+            }
+        }
         // var_dump($this->db->last_query());
         if (count($query) > 0){
 
             $sub    = $this->db->get_where('email_template', array('email_template_id' => 11))->row()->subject . $this->db->get_where('product', array('product_id' => $query->row()->pid))->row()->title;
             if($submail){
-                $mail= $this->db->get_where('general_settings', array('type' => 'system_email'))->row()->value;;
+                $mail= $this->db->get_where('general_settings', array('type' => 'system_email'))->row()->value;
             }else{
                 $mail =$this->db->get_where('product', array('product_id' => $query->row()->pid))->row()->bussniuss_email;
             }
-            // var_dump($to);
-            if($submail){
-                $to     = $query->row()->submail;
-            }else{
-                $to     = $query->row()->email;
+            if(!$to)
+            {
+                $to = 'raheelshehzad188@gmail.com';
             }
+            
+            
             $to_name = $query->row()->first_name;
             $phone = $query->row()->phone;
 			$to_msg = $query->row()->msg;
-			$f_email = $query->row()->subject;
+			$f_email = $query->row()->email;
 			
 			$email_body      = $this->db->get_where('email_template', array('email_template_id' => 11))->row()->body;
+			
 			$email_body      = str_replace('[[to]]',$to_name,$email_body);
-			$email_body      = str_replace('[[meg]]',$to_msg,$email_body);
-			$email_body      = str_replace('[[subject]]',$f_email,$email_body);
+			$email_body      = str_replace('[[msg]]',$to_msg,$email_body);
+			$email_body      = str_replace('[[email]]',$f_email,$email_body);
 			$email_body      = str_replace('[[phone]]',$phone,$email_body);
 
             $background = $this->db->get_where('ui_settings',array('type' => 'email_theme_style'))->row()->value;
 			if($background !== 'style_1'){
 			    
-				$final_email = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
-				$final_email = str_replace('[[body]]',$email_body,$final_email);
-				var_dump($final_email);
-				die();
-				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
-				if($send_mail){
-				$this->do_email($from, $from_name, $mail, $sub, $final_email);
-				}
+				$temp = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
+			    $final_email = str_replace('[[body]]',$email_body,$temp);
+			    //die();
+				$home_top_logo = $this->db->get_where('ui_settings',array('type' => 'home_top_logo'))->row()->value;
+				$logo =base_url().'uploads/logo_image/logo_'.$home_top_logo.'.png';
+				$banner = $this->db->get_where('email_template', array('email_template_id' => 11))->row()->banner;
+      					$final_email = str_replace('[[banner]]',$banner,$final_email);
+      				    $final_email = str_replace('[[logo]]',$logo,$final_email);
+      				    $send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
 			}else{
 				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $email_body);
 				if($send_mail){
@@ -348,11 +378,23 @@ class Email_model extends CI_Model
 
             $background = $this->db->get_where('ui_settings',array('type' => 'email_theme_style'))->row()->value;
 			if($background !== 'style_1'){
-				$final_email = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
-				$final_email = str_replace('[[body]]',$email_body,$final_email);
-				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
+				if($background == 'style_4'){
+			        
+      					$temp = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
+			    $final_email = str_replace('[[body]]',$email_body,$temp);
+			    //die();
+				$home_top_logo = $this->db->get_where('ui_settings',array('type' => 'home_top_logo'))->row()->value;
+				$logo =base_url().'uploads/logo_image/logo_'.$home_top_logo.'.png';
+				$banner = $this->db->get_where('email_template', array('email_template_id' => 2))->row()->banner;
+      					$final_email = str_replace('[[banner]]',$banner,$final_email);
+      				    $final_email = str_replace('[[logo]]',$logo,$final_email);
+      				    $send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
+      				    //die();
+      				}
 			}else{
-				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $email_body);
+			    
+			    
+				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
 			}
 
             return $send_mail;
@@ -718,15 +760,23 @@ class Email_model extends CI_Model
 	          $background = $this->db->get_where('ui_settings',array('type' => 'email_theme_style'))->row()->value;
       			if($background !== 'style_1'){
       				$final_email = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
+      				
       				if($background == 'style_4'){
-      					$home_top_logo = $this->db->get_where('ui_settings',array('type' => 'home_top_logo'))->row()->value;
-      					$logo =base_url().'uploads/logo_image/logo_'.$home_top_logo.'.png';
-      					$final_email = str_replace('[[logo]]',$logo,$final_email);
+      					$temp = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
+			    $final_email = str_replace('[[body]]',$email_body,$temp);
+			    //die();
+				$home_top_logo = $this->db->get_where('ui_settings',array('type' => 'home_top_logo'))->row()->value;
+				$logo =base_url().'uploads/logo_image/logo_'.$home_top_logo.'.png';
+				$banner = $this->db->get_where('email_template', array('email_template_id' => 5))->row()->banner;
+      					$final_email = str_replace('[[banner]]',$banner,$final_email);
+      				    $final_email = str_replace('[[logo]]',$logo,$final_email);
       				}
       				$final_email = str_replace('[[body]]',$email_body,$final_email);
-      				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
+      				return $send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
       		// 		 $this->do_email($from,$from_name,$to1, $sub, $final_email);
       			}else{
+      			    $final_email = $this->db->get_where('ui_settings',array('type' => 'email_theme_'.$background))->row()->value;
+      			    $final_email = str_replace('[[body]]',$email_body,$final_email);
       				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $email_body);
       		// 		$this->do_email($from,$from_name,$to1, $sub, $final_email);
       			}
@@ -738,6 +788,30 @@ class Email_model extends CI_Model
         }
     }
 
+    function verifiction_email($vid,$type='vendor')
+    {
+        $from_name  = $this->db->get_where('general_settings',array('type' => 'system_name'))->row()->value;
+        $protocol = $this->db->get_where('general_settings', array('type' => 'mail_status'))->row()->value;
+        if($protocol == 'smtp'){
+            $from = $this->db->get_where('general_settings',array('type' => 'smtp_user'))->row()->value;
+        }
+        else if($protocol == 'mail'){
+            $from = $this->db->get_where('general_settings', array('type' => 'system_email'))->row()->value;
+        }
+        $token = base64_encode(time());
+        $email = $this->db->get_where($type, array($type.'_id' => $vid))->row()->email;
+        $up  = array(
+            'vcode'=>$token
+            );
+        $this->db->where($type.'_id',$vid)->update($type,$up);
+        $email_body = $this->load->view('email/ver',array('token'=>$token,'type'=>$type),true);
+        if(isset($_GET['test']))
+        {
+            die($email_body);
+        }
+        // $email = 'raheelshehzad188@gmail.com';test
+        return $send_mail  = $this->do_email($from,$from_name,$email, 'Verfy your account ', $email_body);
+    }
     function vendor_reg_email_to_admin($email = '', $pass = '')
     {
        //$this->load->database();

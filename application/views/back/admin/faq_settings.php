@@ -1,4 +1,5 @@
-<?php            
+<?php        
+
 	$faqs = json_decode($this->db->get_where('business_settings', array(
 		'type' => 'faqs'
 	))->row()->value,true);
@@ -33,6 +34,7 @@
                             <?php
                                 if(!empty($faqs)){
                                     foreach($faqs as $row1){
+                                      
                             ?> 
                                 <div class="form-group btm_border">
                                     <div class="col-sm-4">

@@ -1,24 +1,33 @@
 							<div class="information-title">
-                            	Referal Members</div>
+                            	Affiliate Members</div>
                             <div class="wishlist">
                                 <table class="table" style="background: #fff;">
                                     <thead>
                                         <tr>
-                                            <th><?php echo translate('Name');?></th>
-                                            <th><?php echo translate('Email');?></th>
-                                            <th><?php echo translate('Date');?></th>
+                                            <th colspan="2"><?php echo translate('Name');?></th>
+                                            <th colspan="2"><?php echo translate('Type');?></th>
+                                            
+                                            <th><?php echo translate('unpaid_vendors');?></th>
+                                            <th><?php echo translate('paid_vendors');?></th>
                                         </tr>
                                     </thead>
+                                    <tbody id="result4">
                                     <?php
                                     foreach($rdata as $v):
+                                        if($v['vendors'] || $v['pvendors'])
+                                        {
                                     ?>
-                                    <tbody id="result4">
+                                    <tr>
 
-                                    <td><?=$v['name']?></td>
-                                    <td><?=$v['email']?></td>
-                                    <td><?= date('m/d/Y H:i:s',$v['create_timestamp'])?></td>
+                                    <td colspan="2"><?=strip_tags($v['title']);?></td>
+                                    <td colspan="2"><?=strip_tags($v['cat']);?></td>
+                                    <td><?=$v['vendors']?></td>
+                                    <td><?=$v['pvendors']?></td>
+                                    </tr>
+                                    <?php 
+                                        }
+                                    endforeach;?>
                                     </tbody>
-                                    <?php endforeach;?>
                                 </table>
                            </div>
 
@@ -28,23 +37,3 @@
                             <div class="pagination_box">
 
                             </div>
-
-                            <script>                                                                    
-                                function wish_listed(page){
-                                    if(page == 'no'){
-                                        page = $('#page_num4').val();   
-                                    } else {
-                                        $('#page_num4').val(page);
-                                    }
-                                    var alerta = $('#result4');
-                                    alerta.load('<?php echo base_url();?>home/wish_listed/'+page,
-                                        function(){
-                                            //set_switchery();
-                                        }
-                                    );   
-                                }
-                                $(document).ready(function() {
-                                    wish_listed('0');
-                                });
-
-                            </script>

@@ -101,7 +101,7 @@ if($this->session->userdata('user_login')== "yes"){
 
 
     <div class="col-md-12">
-        <span class="btn btn-theme-dark ship_btn" onclick="load_smethods();">
+        <span class="btn btn-theme-dark ship_btn" onclick="load_orders();">
             <?php echo translate('next');?>
         </span>
     </div>

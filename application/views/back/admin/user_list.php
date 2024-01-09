@@ -6,6 +6,8 @@
                 <th><?php echo translate('image');?></th>
                 <th><?php echo translate('name');?></th>
                 <th><?php echo translate('total_purchase');?></th>
+                <th><?php echo translate('unpaid_affiliate');?></th>
+                <th><?php echo translate('paid_affiliate');?></th>
                 <th class="text-right"><?php echo translate('options');?></th>
             </tr>
         </thead>				
@@ -14,6 +16,15 @@
             $i = 0;
             foreach($all_users as $row){
                 $i++;
+                $uid= $row['user_id'];
+                $aff_paid = array();
+                $aff_upaid = array();
+                if($row['referral_code'])
+                {
+                
+                $aff_paid = $this->db->where('stripe_sub !=',NULL)->where('ref_code',$row['referral_code'])->where('aff_paid',1)->get('vendor')->result_array();
+                $aff_upaid = $this->db->where('stripe_sub !=',NULL)->where('ref_code',$row['referral_code'])->where('aff_paid',0)->get('vendor')->result_array();
+                }
         ?>                
         <tr>
             <td><?php echo $i; ?></td>
@@ -31,7 +42,20 @@
             </td>
             <td><?php echo $row['username']; ?></td>
             <td class="text-right"><?php echo currency('','def').$this->crud_model->total_purchase($row['user_id']); ?></td>
+            <td class="text-right"><?php echo ($aff_upaid)?count($aff_upaid):''; ?></td>
+            <td class="text-right"><?php echo ($aff_paid)?count($aff_paid):''; ?></td>
             <td class="text-right">
+                <?php
+                if($aff_upaid)
+                {
+                ?>
+                <a class="btn btn-mint btn-xs btn-labeled fa fa-location-arrow" data-toggle="tooltip" 
+                    onclick="ajax_modal('clear_aff','<?php echo translate('view_profile'); ?>','<?php echo translate('successfully_viewed!'); ?>','user_view','<?php echo $row['user_id']; ?>')" data-original-title="View" data-container="body">
+                        <?php echo translate('Clear Payment');?>
+                </a>
+                <?php
+                }
+                ?>
                 <a class="btn btn-mint btn-xs btn-labeled fa fa-location-arrow" data-toggle="tooltip" 
                     onclick="ajax_modal('view','<?php echo translate('view_profile'); ?>','<?php echo translate('successfully_viewed!'); ?>','user_view','<?php echo $row['user_id']; ?>')" data-original-title="View" data-container="body">
                         <?php echo translate('profile');?>

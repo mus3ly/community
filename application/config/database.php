@@ -63,16 +63,16 @@ $active_group = 'default';
 $query_builder = TRUE;
 // $env = 'dev';
 //$env = 'live';
-$env = 'local';
+ $env = 'local';
 if($env == 'live')
 {
 
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'commzeyu_ci',
+	'username' => 'commzeyu_live',
 	'password' => '^U!m,u?f?v]8',
-	'database' => 'commzeyu_ci',
+	'database' => 'commzeyu_live',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

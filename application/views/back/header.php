@@ -54,20 +54,6 @@
                 </li>
                 <!--End Navigation toogle button-->
             </ul>
-            <?php
-            if ($this->session->userdata('title') == 'vendor') {
-            ?>
-            <div id="countdown" style="display:none;">
-    <ul>
-      <li><span id="days"><b></b></span><br>Days</li>
-      <li><span id="hours"></span><br>Hours</li>
-      <li><span id="minutes"></span><br>Minutes</li>
-      <li><span id="seconds"></span><br>Seconds</li>
-    </ul>
-  </div>
-  <?php
-}
-  ?>
 
             <ul class="nav navbar-top-links pull-right">
                 <li>

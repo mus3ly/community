@@ -15,44 +15,6 @@ $row = $pro;
         <div class="buttons">
             <?php
                 $all_op = json_decode($row['options'],true);
-                // var_dump($all_op);
-                $all_c = json_decode($row['color'],true);
-                    if($all_c){
-            ?>
-            <div class="options">
-                
-                <h3 class="title"><?php echo translate('color_:');?></h3>
-                <div class="content">
-                    <ul class="list-inline colors">
-                        <?php
-                            $n = 0;
-                            foreach($all_c as $i => $p){
-                                $c = '';
-                                $n++;
-                                if($a = $this->crud_model->is_added_to_cart($row['product_id'],'option','color')){
-                                    if($a == $p){
-                                        $c = 'checked';
-                                    }
-                                } else {
-                                    if($n == 1){
-                                        $c = 'checked';
-                                    }
-                                }
-                        ?>
-                            <li>
-                                <input type="radio" style="display:block;" id="c-<?php echo $i; ?>" value="<?php echo $p; ?>" <?php echo $c; ?> name="color">
-                                <label class="active_color" style="background:<?php echo $p; ?>;" for="c-<?php echo $i; ?>"></label>
-                            </li>
-                        <?php
-                            }
-                        ?>
-                    </ul>
-                </div>
-            </div>
-            <?php
-                }
-            ?>
-            <?php
                 if(!empty($all_op)){
                     foreach($all_op as $i=>$row1){
                         $type = $row1['type'];
@@ -172,7 +134,7 @@ $row = $pro;
             $pro = $this->db->get_where('product', array('product_id' => $row['product_id']))->row();
             if($pro->product_link){?>
             
-                <a href="<?= $pro->product_link?>" class="btn btn-add-to cart"> Go To Shop</a>
+                <a href="<?= $pro->product_link?>" target="_blank" class="btn btn-add-to cart"> Go To Shop</a>
             <?php }else{?>
         <span class="btn btn-add-to cart" onclick="to_cart(<?php echo $row['product_id']; ?>,event)">
             <i class="fa fa-shopping-cart"></i>
@@ -200,20 +162,6 @@ $row = $pro;
             </span>
         </span>
         </a>
-        <?php
-            $compare = $this->crud_model->is_compared($row['product_id']);
-        ?>
-        <span class="btn btn-add-to compare btn_compare"  onclick="do_compare(<?php echo $row['product_id']; ?>,event)">
-            <i class="fa fa-exchange"></i>
-            <span class="hidden-sm hidden-xs">
-                            <?php if($compare == 'yes'){
-                    echo translate('_compared');
-                    } else {
-                    echo translate('_compare');
-                    }
-                ?>
-            </span>
-        </span>
         <?php if($this->crud_model->is_product_affiliation_on($row['product_id']) && $this->session->userdata('user_login') == "yes" && $this->crud_model->get_settings_value('general_settings', 'product_affiliation_set', 'value') == 'ok') { ?>
         <span class="btn btn-add-to btn-warning"
               data-toggle="collapse" data-target="#affiliate_share_collapse" aria-controls="affiliate_share_collapse" role="button" aria-expanded="false">
@@ -226,15 +174,11 @@ $row = $pro;
         </span>
         <?php } ?>
                 <?php
-                    $added_by = json_decode($row['added_by'],true);
-                    $product_added_by = $added_by['type'] == "admin" ? translate('admin') : translate('seller');
-                    $send_msg = $added_by['type'] == "admin" ? "ticket" : "message_to_vendor";
-                    $seller_id = $added_by['id'];
-                    $bpage = $this->db->where('added_by','{"type":"vendor","id":'.$seller_id.'}')->where('is_bpage',1)->get('product')->row();
-                    if(isset($bpage->slug))
+                    
+                    if(isset($bpage_slug) && $bpage_slug)
                     {
                 ?>
-                <a href="<?php echo base_url(); ?><?php echo $bpage->slug; ?>#bpage_form" class="btn btn-add-to btn-primary"  role="button" aria-expanded="false">
+                <a href="<?php echo base_url(); ?><?php echo base_url($bpage_slug); ?>#bpage_form" class="btn btn-add-to btn-primary"  role="button" aria-expanded="false">
             <i class="fa fa-paper-plane"></i>
             <span class="hidden-sm hidden-xs">
                                 <?php echo translate('contact_with')." ".$product_added_by; ?>
@@ -243,7 +187,43 @@ $row = $pro;
         <?php
                     }
         ?>
+        
     </div>
+    <span class="share_icons">
+                        <!-- 
+<div class="a2a_kit a2a_kit_size_32 a2a_default_style mt-3">
+<a class="a2a_dd" href="https://www.addtoany.com/share"></a>
+<a class="a2a_button_facebook"></a>
+<a class="a2a_button_whatsapp"></a>
+<a class="a2a_button_twitter"></a>
+
+</div>
+<script async src="https://static.addtoany.com/menu/page.js"></script>
+<!-- AddToAny END -->
+<?php
+$all = $this->db->get('bpkg')->result_array();
+                    foreach ($all as $k=> $v) {
+
+                                 if($v['share_link'])
+                                 {
+                                     if($aff_code)
+                                  $url = base_url($row['slug']).'?aff='.$aff_code;
+                                  else
+                                  $url = base_url($row['slug']);
+                                  $link = str_replace('link',$url, $v['share_link']);
+
+
+                ?>
+
+                <li><a href="<?= $link ?>"><i class="bi <?= $v['icon'] ?>"></i></a></li>
+
+                <?php
+
+                                 }
+
+               }
+               ?>
+                    </span>
     <?php if($this->crud_model->is_product_affiliation_on($row['product_id']) && $this->session->userdata('user_login') == "yes" && $this->crud_model->get_settings_value('general_settings', 'product_affiliation_set', 'value') == 'ok') { ?>
     <div class="collapse pt-5" id="affiliate_share_collapse">
         <div class="panel panel-bordered">
@@ -274,3 +254,45 @@ $row = $pro;
     <div id="share"></div>
 </div>
 <hr class="page-divider small"/>
+<script>
+$(document).ready(function() {
+	$('#share').share({
+		urlToShare: '<?php echo $this->crud_model->product_link($row['product_id']); ?>',
+		networks: ['facebook','googleplus','twitter','linkedin','tumblr','in1','stumbleupon','digg'],
+		theme: 'square'
+	});
+});
+function check_checkbox(){
+	$('.checkbox input[type="checkbox"]').each(function(){
+        if($(this).prop('checked') == true){
+			$(this).closest('label').find('.cr-icon').addClass('add');
+		}else{
+			$(this).closest('label').find('.cr-icon').addClass('remove');
+		}
+    });
+}
+function check(now){
+	if($(now).find('input[type="checkbox"]').prop('checked') == true){
+		$(now).find('.cr-icon').removeClass('remove');
+		$(now).find('.cr-icon').addClass('add');
+	}else{
+		$(now).find('.cr-icon').removeClass('add');
+		$(now).find('.cr-icon').addClass('remove');
+	}
+}
+function decrease_val(){
+	var value=$('.quantity-field').val();
+	if(value > 1){
+		var value=--value;
+	}
+	$('.quantity-field').val(value);
+}
+function increase_val(){
+	var value=$('.quantity-field').val();
+	var max_val =parseInt($('.quantity-field').attr('max'));
+	if(value < max_val){
+		var value=++value;
+	}
+	$('.quantity-field').val(value);
+}
+</script>

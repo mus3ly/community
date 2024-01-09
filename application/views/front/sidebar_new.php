@@ -41,8 +41,9 @@
                       $max_dist = 500;
                       ?>
                   <div class="form-group">
+                      <?php echo $this->crud_model->select_html('countries','country','name','edit','demo-chosen-select  select_country',(isset($_GET['country'])?$_GET['country']:NULL),'',NULL,'select_country'); ?>
                     <div class="range-slider-one clearfix">
-                        <p>Distance slider:</p>
+                        <p>Distance Range:</p>
   <input type="range" class="slider rounded" min="1" style="background-color:var(--primary-color);"
   max="<?= $max_dist ?>"
   step="1" value="<?= (isset($_GET['sale_price']) && $_GET['dis_range'])?$_GET['dis_range']:$max_dist ?>"  oninput="ch_dist()" id="mydRange">
@@ -65,12 +66,30 @@
                         <p>Price Range:</p>
   <input type="range" class="slider rounded" min="1" style="background-color:var(--primary-color);"
   max="<?= $max_price ?>"
-  step="1" value="<?= (isset($_GET['sale_price']) && $_GET['sale_price'])?$_GET['sale_price']:$max_price ?>"  oninput="ch_price()" id="myRange">
+  step="1" value="<?= (isset($_GET['sale_price']) && $_GET['sale_price'])?explode('-',$_GET['sale_price'])[1]:$max_price ?>"  oninput="ch_price()" id="myRange">
   <div class="row">
       <div class="col-md-6" id="min_price" style="text-align:left">1</div>
-      <div class="col-md-6" id="max_price" style="text-align:right"><?= (isset($_GET['sale_price']) && $_GET['sale_price'] > 0 )?$_GET['sale_price']:$max_price; ?></div>
+      <div class="col-md-6" id="max_price" style="text-align:right"><?= (isset($_GET['sale_price']) && isset(explode('-',$_GET['sale_price'])[1]) && explode('-',$_GET['sale_price'])[1] > 0 )?explode('-',$_GET['sale_price'])[1]:$max_price; ?></div>
   </div>
                     </div>
+                  </div>
+                  <?php
+                  }
+                  ?>
+                  <?php
+                  if(isset($max_price) && $max_price && false)
+                  {
+                    //   var_dump($max_price);
+                      ?>
+                  <div class="row">
+                      <div class="form-group">
+                        <div class="range-slider-one clearfix">
+                            <p><b>Price Range:</b><span class="float-end text-right"><input type="text" name="amount" class="amount" id="inputId" readonly style="border:0; color:#f6931f; font-weight:bold; max-width: 5rem; text-align: right;"></span></p>
+                        <div class="custom-slider slider-range" data-min="1" value="500" data-max="<?= (isset($_GET['sale_price']) && isset(explode('-',$_GET['sale_price'])[1])?explode('-',$_GET['sale_price'])[1]:$max_price) ?>"  data-id="inputId" data-default-min="1" data-default-max="<?= $max_price ?>"></div>
+                        
+                        </div>
+                    </div>
+
                   </div>
                   <?php
                   }
@@ -80,10 +99,11 @@
         $arr = array();
         if($cat_path)
         {
+            var_dump($cat_path);
         $this->db->where_in('category',$cat_path);
         $this->db->order_by("filter_sort", "ASC");
-$arr = $this->db->where('is_filter',1)->where('hide_filter',0)->get('list_fields')->result_array();
-}
+        $arr = $this->db->where('is_filter',1)->where('hide_filter',0)->get('list_fields')->result_array();
+        }
 foreach($arr as $k=> $v)
 {
     if($v['tbl_col'] != 'sale_price')
@@ -165,7 +185,7 @@ foreach($arr as $k=> $v)
                               <div  class="accordion-item <?= (isset($cat_path[0]) && $cat_path[0] == $row1['category_id'])?'active':''?>">
                                 <h2 class="accordion-header" id="sub-list-1-heading">
                                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSub-1" aria-expanded="true" aria-controls="flush-collapseSub-1">
-                                    <?php echo $row1['category_name']; ?>
+                                    <?php echo $row1['category_name']; ?> 
                                   </button>
                                 </h2>
                                 <div id="flush-collapseSub-1" class="accordion-collapse" aria-labelledby="sub-list-1-heading" data-bs-parent="#sub-list-accordion-1">
@@ -188,7 +208,7 @@ foreach($arr as $k=> $v)
                               <div  class="accordion-item <?= (isset($cat_path[0]) && $cat_path[0] == $row2['category_id'])?'active':''?>">
                                 <h2 class="accordion-header" id="sub-list-1-heading">
                                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSub-1" aria-expanded="false" aria-controls="flush-collapseSub-1">
-                                    <?php echo $row2['category_name']; ?> 
+                                    <?php echo $row2['category_name']; ?>  
                                   </button>
                                 </h2>
                                 <div id="flush-collapseSub-1" class="accordion-collapse show" aria-labelledby="sub-list-1-heading" data-bs-parent="#sub-list-accordion-1">

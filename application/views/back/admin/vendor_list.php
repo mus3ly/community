@@ -3,9 +3,10 @@
         <thead>
             <tr>
                 <th><?php echo translate('logo');?></th>
-                <th><?php echo translate('display_name');?></th>
                 <th><?php echo translate('name');?></th>
+                <th><?php echo translate('email_status');?></th>
                 <th><?php echo translate('status');?></th>
+                
 
                 <th class="text-right"><?php echo translate('options');?></th>
             </tr>
@@ -33,8 +34,12 @@
                 ?>
                 
             </td>
-            <td><?php echo $row['display_name']; ?></td>
             <td><?php echo $row['name']; ?></td>
+            <td>
+            	<div class="label label-<?php if($row['email_ver'] == 1){ ?>purple<?php } else { ?>danger<?php } ?>">
+                	<?php echo ($row['email_ver'])?'Verified':'Unverified'; ?>
+                </div>
+            </td>
             <td>
             	<div class="label label-<?php if($row['status'] == 'approved'){ ?>purple<?php } else { ?>danger<?php } ?>">
                 	<?php echo $row['status']; ?>

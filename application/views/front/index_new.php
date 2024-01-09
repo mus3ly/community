@@ -1,5 +1,6 @@
 <?php
-$url = base_url('updated/');
+
+$url = base_url('updated/').'/';
  include "header_new.php";
 ?>
 

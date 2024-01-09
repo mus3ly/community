@@ -433,6 +433,7 @@
         var module = "login";
 
 		var unapproved = "<?php echo translate('account_not_approved._wait_for_approval.'); ?>";
+		var email_unverify = "<?php echo translate('email_unverify.'); ?>";
 
 		
 

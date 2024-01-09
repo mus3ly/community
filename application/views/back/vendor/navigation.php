@@ -1,4 +1,6 @@
 <?php
+$vid = (isset($_SESSION['vendor_id'])?$_SESSION['vendor_id']:0);
+$vendor = $this->db->where('vendor_id',$vid)->get('vendor')->row();
 $physical_check = $this->crud_model->get_type_name_by_id('general_settings','68','value');
 $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69','value');
 ?>
@@ -11,7 +13,9 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                     <ul id="mainnav-menu" class="list-group">
                         <!--Category name-->
                         <li class="list-header"></li>
-
+                        <?php
+                        if($this->crud_model->can_add_product($vid)){
+                        ?>
                         <!--Menu list item-->
                         <li <?php if($page_name=="dashboard"){?> class="active-link" <?php } ?>
                         	style="border-top:1px solid rgba(69, 74, 84, 0.7);">
@@ -90,20 +94,18 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                                         <?php echo translate('all_listings');?>
                                                 </a>
                                             </li>
-                                            <?php
-                                            $mod = $this->db->get('modules')->result_array();
-                                            foreach($mod as $k=> $v)
-                                            {
-                                            ?>
-                                             <li <?php if($page_name=="product" && isset($_GET['module']) && $_GET['module'] == $v['id']){?> class="active-link" <?php } ?> >
-                                                <a href="<?php echo base_url(); ?>vendor/product?module=<?= $v['id'] ?>">
+                                             <li <?php if($page_name=="product_add2"){?> class="active-link" <?php } ?> >
+                                                <a href="<?php echo base_url(); ?>vendor/product/add">
                                                     <i class="fa fa-circle fs_i"></i>
-                                                        <?php echo $v['label'];?>
+                                                        Create listings
                                                 </a>
                                             </li>
-                                            <?php    
-                                            }
-                                            ?>
+                                             <li <?php if($page_name=="product"){?> class="active-link" <?php } ?> >
+                                                <a href="<?php echo base_url(); ?>vendor/product">
+                                                    <i class="fa fa-circle fs_i"></i>
+                                                        My listings
+                                                </a>
+                                            </li>
                                         <?php
                                             } if($this->crud_model->vendor_permission('product')) {
                                             ?>
@@ -172,20 +174,18 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
 
 									<?php if($this->crud_model->vendor_permission('product')) {
                                         ?>
-                                        <?php
-                                            $mod = $this->db->get('modules')->result_array();
-                                            foreach($mod as $k=> $v)
-                                            {
-                                            ?>
-                                             <li <?php if($page_name=="product" && isset($_GET['module']) && $_GET['module'] == $v['id']){?> class="active-link" <?php } ?> >
-                                                <a href="<?php echo base_url(); ?>vendor/product?module=<?= $v['id'] ?>">
+                                             <li <?php if($page_name=="product"){?> class="active-link" <?php } ?> >
+                                                <a href="<?php echo base_url(); ?>vendor/product/add">
                                                     <i class="fa fa-circle fs_i"></i>
-                                                        <?php echo $v['label'];?>
+                                                        Create listings
                                                 </a>
                                             </li>
-                                            <?php    
-                                            }
-                                            ?>
+                                             <li <?php if($page_name=="product"){?> class="active-link" <?php } ?> >
+                                                <a href="<?php echo base_url(); ?>vendor/product">
+                                                    <i class="fa fa-circle fs_i"></i>
+                                                        My listings
+                                                </a>
+                                            </li>
 									<?php
 										}
 									?>
@@ -226,6 +226,9 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                         <?php
 							}
 						?>
+						<?php
+                        }
+						?>
                         <!----------------Blog-------------->
                     	<?php /*
 							if($this->crud_model->vendor_permission('sale')){
@@ -243,6 +246,9 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
 							}
 						*/
 						?>
+						<?php
+                        if($this->crud_model->can_add_product($vid)){
+                        ?>
 
                         <!--  Payment from Admin -->
 						<?php
@@ -306,41 +312,9 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                             </a>
                         </li>
                         <!--Menu list item-->
-                        <?php
-                            }
-                        ?>
-                        <?php
-                            if($this->crud_model->vendor_permission('site_settings')){
-                        ?>
-                        <!--Menu list item-->
-                        <li <?php if($page_name=="site_settings"){?> class="active-link" <?php }
-
-                        ?> >
-                        <?php
-                        $vend = $this->db->where('vendor_id',$this->session->userdata('vendor_id'))->get('vendor')->row();
-                        ?>
-                            <a href="<?php echo $this->crud_model->product_link($vend->bpage); ?>?edit=1" target="_blank">
-                                <i class="fa fa-wrench"></i>
-                                    <span class="menu-title">
-                                        <?php echo translate('business_page_live_edit');?>
-                                    </span>
-                            </a>
-                        </li>
-                        <li <?php if($page_name=="site_settings"){?> class="active-link" <?php }
-
-                        ?> >
-
-                            <a href="<?php echo base_url('vendor/brand');?>" target="_blank">
-                                <i class="fa fa-wrench"></i>
-                                    <span class="menu-title">
-                                        <?php echo translate('text_gallery');?>
-                                    </span>
-                            </a>
-                        </li>
-                        <!--Menu list item-->
-                        <?php
-                            }
-                        ?>
+                        
+                        
+                        
 
                         <?php
                             if($this->crud_model->vendor_permission('business_settings')){
@@ -372,6 +346,10 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                 	<?php echo translate('Affiliates');?>
                                 </span>
                         </a></li>
+                        <?php
+                            }
+                        }
+                        ?>
                         <li
                                 style="border-top:1px solid rgba(69, 74, 84, 0.7);">
                             <a href="<?php echo base_url(); ?>vendor/package">
@@ -379,13 +357,27 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
                                 <span class="menu-title"> Upgrade Membership</span>
                             </a>
                         </li>
+                        <?php
+                        if($vendor->stripe_sub)
+                        {
+                            ?>
+                        <li onclick="myFunction()"
+                                style="border-top:1px solid rgba(69, 74, 84, 0.7);">
+                            <a onclick="myFunction()">
+                                <i class="fa fa-user-plus   "></i>
+                                <span class="menu-title"> Cancel Membership</span>
+                            </a>
+                        </li>
+                        <?php
+                        }
+                        ?>
                 </div>
             </div>
         </div>
     </div>
 </nav>
 
-<style>
+<style> 
 	ul ul ul li a{
 		padding-left:80px !important;
 	}
@@ -393,3 +385,14 @@ $digital_check = $this->crud_model->get_type_name_by_id('general_settings','69',
 		background:#2f343b !important;
 	}
 </style>
+<script>
+function myFunction() {
+  var r = confirm("Are you sure you want to cancel your account? You would be immediately logged off, and you would need to upgrade before you accessing your account again. If you are sure, then go ahead:!");
+  var url = '<?php echo base_url(); ?>vendor/stripe_cencel?back=1';
+  if(r)
+  {
+  window.location.replace(url);
+
+  }
+}
+</script>

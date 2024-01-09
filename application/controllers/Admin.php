@@ -350,8 +350,6 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                                             {
                                                 $key = array_search($para2, $result);
                                                 unset($result[$key]);
-
-
                                             }
                                             else
                                             {
@@ -360,6 +358,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                                             }
                                             $json = json_encode($result);
                                             $this->db->where('ui_settings_id', 35)->update('ui_settings',array('value'=>$json));
+                                            echo $json;
         }  elseif ($para1 == 'pegs') {
             // die('ok');
             $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 86))->row()->value,true);
@@ -1819,20 +1818,11 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 }
                 recache();
         } elseif ($para1 == "update") {
+            
             $data['name']        = $this->input->post('name');
+            $data['img']        = $this->input->post('img');
             $this->db->where('id', $para2);
             $this->db->update('bpkg', $data);
-            if($_FILES['img']['name']!== ''){
-                $path = $_FILES['img']['name'];
-
-                $ext = pathinfo($path, PATHINFO_EXTENSION);
-
-                $data_logo['img']       = 'bpkg_'.$para2.'.'.$ext;
-                $this->crud_model->file_up("img", "bpkg", $para2, '', 'no', '.'.$ext);
-                $this->db->where('id', $para2);
-                if($path)
-                $this->db->update('bpkg', $data_logo);
-            }
             $this->crud_model->set_category_data(0);
             recache();
         } elseif ($para1 == 'delete') {
@@ -4509,6 +4499,23 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['username']    = $this->input->post('user_name');
             $data['description'] = $this->input->post('description');
             $this->db->insert('user', $data);
+        } else if ($para1 == 'clear_aff') {
+            $user = $this->db->get_where('user', array(
+                'user_id' => $para2
+            ))->row();
+            if(isset($user->referral_code))
+            {
+                $code = $user->referral_code;
+                $r = $this->db->where('ref_code',$code)->update('vendor',array('aff_paid'=>1));
+                if($r)
+                {
+                    
+                    echo  $this->load->view('ref_success')->output->final_output;
+                    // var_dump($r);
+                    die();
+                }
+            }
+            die();
         } else if ($para1 == 'edit') {
             $page_data['user_data'] = $this->db->get_where('user', array(
                 'user_id' => $para2
@@ -5196,7 +5203,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $data['stripe_live_id']    = $this->input->post('stripe_live_id');
             $data['promo_code']    = $this->input->post('promo_code');
             $data['promo_limit']    = $this->input->post('promo_limit');
-            $data['promo_check']    = $this->input->post('promo_check');
+            $data['promo_check']    = ($this->input->post('promo_check'))?$this->input->post('promo_check'):0;
             $data['mcat']    = $this->input->post('mcat');
             $this->db->where('membership_id', $para2);
             $this->db->update('membership', $data);

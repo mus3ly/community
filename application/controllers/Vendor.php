@@ -23,12 +23,244 @@ class Vendor extends CI_Controller
         $this->load->library('pum');
         
     }
+    public function vendor_page($id)
+    {
+
+
+        $user = $this->db->where('vendor_id', $id)->get('vendor')->row();
+
+        $added_by = array(
+            'type' => 'vendor',
+            'id' => $id,
+        );
+        $in = array();
+        $in['title'] = $user->company;
+        $in['brand'] = $user->cat1;
+        $in['cat2'] = $user->cat2;
+        $in['category'] = $user->cat3;
+        $in['name'] = $user->name;
+        $in['address1'] = $user->address1;
+        $in['address2'] = $user->address2;
+        $in['country'] = $user->country;
+        $in['city'] = $user->city;
+        $in['state'] = $user->state;
+        $in['status'] = 'ok';
+        $lat = '';
+        $lng = '';
+        if(isset($_SESSION['ip_info']))
+        {
+            $lat = $_SESSION['ip_info']['lat'];
+            $lng = $_SESSION['ip_info']['lon'];
+        }
+        $in['lat'] = $lat;
+        $in['lng'] = $lng;
+        $in['bussniuss_phone'] = $user->phone;
+        $in['whatsapp_number'] = $user->whatsapp;
+        $in['bussniuss_email'] = $user->email;
+        $in['zip'] = $user->zip;
+        $in['added_by'] = json_encode($added_by);
+        $in['is_bpage'] = 1;
+        $in['slug'] = slugify($user->company);
+
+        $this->db->insert('product', $in);
+        $pid = $this->db->insert_id();
+        // create_slug($pid);
+        $v = $this->db->where('vendor_id', $id)->update('vendor', array('bpage' => $pid));
+        //s
+        if($user->promo == ''){
+        if ($user->pack) {
+            $pack = $this->db->where('membership_id', $user->pack)->get('membership')->row();
+            $option = array(
+                'ads' => $pack->product_limit,
+            );
+            $this->cart->destroy();
+            $data = array(
+                'id' => $user->pack,
+                'qty' => 1,
+                'signup_pkg' => 1,
+                'option' => json_encode($option),
+                'vendor' => $id,
+                'vendor_name' => $user->title,
+                'price' => $pack->price,
+                'name' => $pack->title,
+                'shipping' => 0,
+                'tax' => 0
+            );
+            $this->cart->insert($data);
+            $_SESSION['subscription_vendor'] = $id;
+            return   "checkout";
+        } else {
+            $pack = $this->db->where('amount', 0)->get('package')->row();
+            $this->process_pack($id, 0);
+            return 0;
+        }
+        }else{
+            $promo = $user->promo;
+            $chk = $this->db->where('promo_code',$promo)->get('membership')->row();
+            $new = $chk->promo_limit -1;
+            $chk = $this->db->where('promo_code',$promo)->update('membership',array('promo_limit'=> $new));
+            return 'vendor_promo';
+        }
+        //bpage
+    }
+    function cats_edit($pid,$type= 'get',$cat = 0){
+        if($pid)
+        {
+            $pro = $this->db->where('product_id',$pid)->get('product')->row();
+            if($type == 'add' && $cat)
+            {
+                if($pro->category)
+                $pro->category = $pro->category.','.$cat;
+                else
+                $pro->category = $cat;
+            }
+            $cats = array_filter(explode(',',$pro->category));
+            if($type == 'remove')
+            {
+                unset($cats[count($cats)-1]);
+            }
+            ?>
+            <input type="hidden" id="category" value="<?= ($cats)?implode(',',$cats):""; ?>" name="category"/>
+            <?php
+            $r = $this->db->where('product_id',$pid)->update('product',array('category'=>implode(',',$cats)));
+            if(true)
+            {
+                if(count($cats))
+                {
+                    $para2 = $cats[count($cats)-1];
+                         $sing = $this->db->where('category_id',$para2)->get('category')->row();
+                         if($sing)
+                          $level = $sing->level;
+       
+            $breed = array();
+            
+            $cid = $para2;
+            for ($i=1; $i <= $level; $i++) { 
+             
+                 $srow = $this->db->where('category_id',$cid)->get('category')->row_array();
+               if(isset($srow) && !empty($srow)){
+                   $breed[] = $cid;
+                 $cid = $srow['pcat'];
+                //  var_dump($cid);
+               }
+            }
+            if($breed)
+            {
+                ?>
+                <div class="breaddcum">
+                    <ul>
+                        <?php
+                        $cat = array();
+                        foreach(array_reverse($breed) as $k=> $v)
+                        {
+                            $cat[] = $v;
+                            $crow = $this->db->where('category_id',$v)->get('category')->row();
+                            ?>
+                            <li><?= $crow->category_name;?>
+                            <?php
+                            if($v == $para2)
+                            {
+                            ?>
+                            <i onclick="cats_edit(<?=$pid?>,'remove')" class="cross_icon fa-solid fa-xmark"></i>
+                            <?php
+                            }
+                            ?>
+                            </li>
+                            <?php
+                        }
+                        ?>
+
+
+                    </ul>
+                </div>
+                <?php
+                $all_category =  $this->db->where('pcat',$para2)->get('category')->result_array();
+                    foreach($all_category as $k=>$v){
+                                if(true)
+                                {
+                            ?>
+                                <div class="col-md-4 col-sm-12 col-xs-12 " onclick="cats_edit(<?=$pid?>,'add','<?= $v['category_id'];?>')" >
+                                    <a href="javascript:void(0);"><div class="flip-card ">
+                                  <div class="flip-card-inner">
+                                    <div class="flip-card-front ">
+                                        <!--<i class="fa <?= $v['fa_icon'];?>" aria-hidden="true"></i>-->
+                                        <!--<br>-->
+                                        <p><?= $v['category_name'];?></p>
+                                    </div>
+                                    <!--<div class="flip-card-back"><p><?= $v['category_name'];?> </p></div>-->
+                                  </div>
+                                </div>
+                                </a>
+                                </div>
+                                <?php 
+                                }
+                }
+                ?>
+                <?php
+            }
+                }
+                else
+                {
+                    $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value, true);
+                       $result=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result[]=$row;
+                                                }
+                                            }
+                    // var_dump($result);
+                    // die();
+                   $all_category =  $this->db->where_in('category_id',$result)->get('category')->result_array();
+                    foreach($all_category as $k=>$v){
+                                if(true)
+                                {
+                            ?>
+                                <div class="col-md-4 col-sm-12 col-xs-12 " onclick="cats_edit(<?=$pid?>,'add','<?= $v['category_id'];?>')" >
+                                    <a href="#"><div class="flip-card ">
+                                  <div class="flip-card-inner">
+                                    <div class="flip-card-front ">
+                                        <!--<i class="fa <?= $v['fa_icon'];?>" aria-hidden="true"></i>-->
+                                        <!--<br>-->
+                                        <p><?= $v['category_name'];?></p>
+                                    </div>
+                                    <!--<div class="flip-card-back"><p><?= $v['category_name'];?> </p></div>-->
+                                  </div>
+                                </div>
+                                </a>
+                                </div>
+                                <?php 
+                                }
+                }
+            }
+        }
+        }
+        exit();
+    }
     function admin_fields(){
     {
         if(isset($_GET['cats']))
         {
             $cats = $_GET['cats'];
             $pid = (isset($_GET['pid'])?$_GET['pid']:0);
+            $pro = $this->db->where('product_id',$pid)->get('product')->row_array();
+              
+                          
+            $old_values = array();
+            if(isset($pro['additional_fields'])){
+                        $exp = json_decode($pro['additional_fields']);
+                        // var_dump($exp);
+                        $ex = json_decode($exp->name);
+                        $values = json_decode($exp->value);
+                        
+                          foreach($ex as $k => $v){
+                              $val = $values[$k];
+                        $txt = strip_tags($val);
+                        if($val)
+                        {
+                            $old_values[trim($v)] = $val;
+                        }
+                          }
+              }
             $cats = explode(',',$cats);
             if(count($cats) == 1)
             {
@@ -41,7 +273,41 @@ class Vendor extends CI_Controller
             $fields = $this->db->where_in('category', $cats)->get('list_fields')->result_array();
             foreach($fields as $k=> $v)
             {
-                $v['pid'] = $pid;
+                $v['val'] = '';
+                
+                if(isset($old_values[trim($v['label'])]))
+                $v['val'] = $old_values[trim($v['label'])];
+                // var_dump($v['label']);
+                // if($v['label'] == 'List your best features')
+                // {
+                //     $v['val'] = 'Test';
+                // }
+                if($v['name'] == 'date_posted')
+                {
+                    if($pro['status'] == 'draft' && !$pro['posted_on'])
+                    {
+                        $v['val'] = date('M d, Y',strtotime(date('Y-m-d') ));
+                        
+                    }
+                    else
+                    {
+                        
+                        $v['val'] = date('M d, Y',strtotime($pro['posted_on'] ));
+                    }
+                }
+                if($v['name'] == 'date_updated')
+                {
+                    if($pro['status'] == 'draft')
+                    {
+                        $v['val'] = ' ';
+                        
+                    }
+                    else
+                    {
+                        $v['val']- date('M d, Y',strtotime(date('Y-m-d') ));
+                    }
+                }
+                // if($v['name'] != 'date_posted' &&$v['name'] != 'date_updated')
                 $this->load->view('admin_f',$v);
             }
         }
@@ -308,14 +574,14 @@ class Vendor extends CI_Controller
             $this->load->view('back/index', $page_data);
         }
     }
-    function get_state($id)
+    function get_state($id,$val = 0)
     {
-        echo $this->crud_model->select_html('states','state','name','edit','select_state form-control demo-chosen-select required','','country_id',$id,'select_state','single');
+        echo $this->crud_model->select_html('states','state','name','edit','select_state form-control demo-chosen-select required',$val,'country_id',$id,'select_state','single');
         exit();
     }
-    function get_city($id)
+    function get_city($id,$val = 0)
     {
-        echo $this->crud_model->select_html('cities','city','name','edit','select_city form-control demo-chosen-select required','','state_id',$id,'select_city','single');
+        echo $this->crud_model->select_html('cities','city','name','edit','select_city form-control demo-chosen-select required',$val,'state_id',$id,'select_city','single');
         exit();
     }
 
@@ -410,7 +676,7 @@ class Vendor extends CI_Controller
                                 {
                                     $amn = $this->db->where('amenity_id',$v['am_id'])->get('amenity')->row();
                                     ?>
-                                <p  id="am_<?= $v['id'] ?>"><span onclick="delete_ament('<?= $v['id'] ?>')">x</span><?= $amn->name ?></p>
+                                <p  id="am_<?= $v['id'] ?>"><span class="sec_sev_close" onclick="delete_ament('<?= $v['id'] ?>')">x</span><?= $amn->name ?></p>
                                 <?php
                                 }
 
@@ -436,7 +702,6 @@ class Vendor extends CI_Controller
         if(isset($_POST['img']))
         {
             $pid = (isset($_POST['pid']))?$_POST['pid']:0;
-            $this->load->library('cloudinarylib');
             $img = $_POST['img'];
             $base64string = $img;
     $uploadpath   = 'uploads/';
@@ -446,12 +711,12 @@ class Vendor extends CI_Controller
     $imagebase64  = base64_decode($parts[1]);
     $file         = $uploadpath . uniqid() . '.png';
     file_put_contents($file, $imagebase64);
-
-            $data = \Cloudinary\Uploader::upload($file);
-            if(isset($data['public_id']))
+            if($file)
                                             {
                                                 $logo_id = $this->crud_model->add_img($file,$data);
                                                 $data['img_id'] = $logo_id;
+                                                $data['path'] = $file;
+                                                $data['url'] = base_url($file);
                                                 if($logo_id && $pid)
                                                 {
                                                    $in = array(
@@ -614,7 +879,11 @@ class Vendor extends CI_Controller
                     'password' => sha1($this->input->post('password'))
                 ));
                 if ($login_data->num_rows() > 0) {
-                    if($login_data->row()->status == 'approved'){
+                    if($login_data->row()->status == 'approved' && $login_data->row()->email_ver){
+                        if(!$login_data->row()->bpage)
+                        {
+                         $this->vendor_page($login_data->row()->vendor_id);
+                        }
                         foreach ($login_data->result_array() as $row) {
                             $this->session->set_userdata('login', 'yes');
                             $this->session->set_userdata('vendor_login', 'yes');
@@ -624,7 +893,14 @@ class Vendor extends CI_Controller
                             echo 'lets_login';
                         }
                     } else {
+                        if(!$login_data->row()->email_ver)
+                        {
+                         echo 'email_unverify';   
+                        }
+                        else
+                        {
                         echo 'unapproved';
+                        }
                     }
                 } else {
                     echo 'login_failed';
@@ -638,7 +914,7 @@ class Vendor extends CI_Controller
     function logout()
     {
         $this->session->sess_destroy();
-        redirect(base_url() . 'vendor', 'refresh');
+        custom_redirect(base_url() . 'vendor');
     }
 
     /*Product coupon add, edit, view, delete */
@@ -968,6 +1244,382 @@ class Vendor extends CI_Controller
         }
         
     }
+    public function createSlug($str, $delimiter = '-'){
+
+    $slug = strtolower(trim(preg_replace('/[\s-]+/', $delimiter, preg_replace('/[^A-Za-z0-9-]+/', $delimiter, preg_replace('/[&]/', 'and', preg_replace('/[\']/', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str))))), $delimiter));
+    return $slug;
+
+}
+    function create_slug($id)
+    {
+        if(isset($_GET['title']))
+        {
+            $title = $_GET['title'];
+            $slug = $this->createSlug($title);
+            if($id)
+            {
+                $this->db->where('product_id !=',$id);
+            }
+            $this->db->like('slug',$slug);
+            $row = $this->db->get('product')->row();
+            if($row)
+            {
+               $slug = $slug.$this->session->userdata('vendor_id'); 
+            }
+            if($id)
+            {
+                $this->db->where('product_id !=',$id);
+            }
+            $this->db->like('slug',$slug);
+            $row = $this->db->get('product')->row();
+            if($row)
+            {
+                $slug = '';
+                
+            }
+            echo $slug;
+            exit();
+    
+            
+        }
+    }
+    function bpage_cat($page,$type='',$cat=0)
+    {
+        if($type == 'remove' && $page && $cat)
+        {
+            $pro = $this->db->where('product_id',$page)->get('product')->row();
+        $breed = explode(',',$pro->category);
+        foreach($breed as $k=> $v)
+        {
+            if($v == $cat)
+            {
+                unset($breed[$k]);
+            }
+        }
+        $this->db->where('product_id',$page)->update('product',array('category'=>implode(',',$breed)));
+        
+        ?>
+        <div class="cat_breed">
+                    <ul>
+                        <?php
+                        $cat = array();
+                        foreach($breed as $k=> $v)
+                        {
+                            $cat = $this->db->where('category_id',$v)->get('category')->row();
+                            ?>
+                            <p id="am_99"><span class="sec_sev_close" onclick="bpage_cat('<?= $page ?>','remove','<?= $v ?>');">x</span><?= $cat->category_name ?></p>
+                            <?php
+                        }
+                        ?>
+
+
+                    </ul>
+                </div>
+                <?php
+        }
+        if($type == 'select' && $page && $cat)
+        {
+            $pro = $this->db->where('product_id',$page)->get('product')->row();
+        $breed = array_filter(explode(',',$pro->category));
+        if(!in_array($cat,$breed))
+        {
+        $breed[] = $cat;
+        }
+        $this->db->where('product_id',$page)->update('product',array('category'=>implode(',',$breed)));
+        
+        ?>
+        <input type="hidden" id="category" value="<?= implode(',',$breed) ?>" />
+        <div class="cat_breed">
+                    <ul>
+                        <?php
+                        $cat = array();
+                        foreach($breed as $k=> $v)
+                        {
+                            $cat = $this->db->where('category_id',$v)->get('category')->row();
+                            ?>
+                            <p id="am_99"><span class="sec_sev_close" onclick="bpage_cat('<?= $page ?>','remove','<?= $v ?>');">x</span><?= $cat->category_name ?></p>
+                            <?php
+                        }
+                        ?>
+
+
+                    </ul>
+                </div>
+                
+                <?php
+        }
+        if($type == 'get' && $page)
+        {
+            $pro = $this->db->where('product_id',$page)->get('product')->row();
+        $breed = explode(',',$pro->category);
+        
+        ?>
+        <input type="hidden" id="category" value="<?= implode(',',$breed) ?>" />
+                    <div class="cat_breed col-md-12">
+                    <ul>
+                        <?php
+                        $cat = array();
+                        foreach($breed as $k=> $v)
+                        {
+                            $cat = $this->db->where('category_id',$v)->get('category')->row();
+                            ?>
+                            <p id="am_99"><span class="sec_sev_close" onclick="bpage_cat('<?= $page ?>','remove','<?= $v ?>');">x</span><?= $cat->category_name ?></p>
+                            <?php
+                        }
+                        ?>
+
+
+                    </ul>
+                </div>
+               
+                <?php
+        }
+        elseif($type == 'child')
+        {
+            ?>
+            
+            <?php
+            if(!$cat)
+            {
+                 $categories =json_decode($this->db->get_where('ui_settings',array('ui_settings_id' => 35))->row()->value, true);
+                       $result=array();
+                                            foreach($categories as $row){
+                                                if($this->crud_model->if_publishable_category($row)){
+                                                    $result[]=$row;
+                                                }
+                                            }
+                    // var_dump($result);
+                    // die();
+                   $brands =  $this->db->where_in('category_id',$result)->get('category')->result_array();
+            }
+            else
+            {
+            $brands = $this->db->where('pcat',$cat)->get('category')->result_array();
+            }
+            foreach($brands as $k=>$v){
+                if(true)
+                {
+            ?>
+            
+                <div class="col-md-4 col-sm-12 col-xs-12 <?= ($product_data->category == $v['category_id'])?"active":"" ?>" >
+                    <a href="javascript:void(0);"><div class="flip-card ">
+                  <div class="flip-card-inner">
+                    <div class="flip-card-front ">
+                        <div>
+                            <p><?= $v['category_name'];?></p>
+                        </div>
+                        <div class="cat_icons" style="margin-top: 40px;">
+                            <?php
+                            $childs = $this->db->where('pcat',$v['category_id'])->get('category')->result_array();
+                            if($childs)
+                            {
+                            ?>
+                            <i  onclick="bpage_cat('<?= $page ?>','child','<?= $v['category_id']; ?>');" class="fa-solid fa-children"></i>
+                            <?php
+                            }
+                            ?>
+                            <i  onclick="bpage_cat('<?= $page ?>','select','<?= $v['category_id']; ?>');" class="fa-solid fa-check-to-slot"></i>
+                        </div>
+                    </div>
+                    
+                  </div>
+                </div>
+                </a>
+                </div>
+                <?php
+                }
+            }
+        }
+        
+    }
+    function save_product($id)
+    {
+        if(!$id)
+        {
+            $data = array();
+            $id = $vendor_id->id;
+$vendor = $this->db->where('vendor_id', $this->session->userdata('vendor_id'))->get('vendor')->row_array();
+
+// get product
+$n = $this->db->where('product_id', $vendor['bpage'])->where('is_bpage', 1)->get('product')->row_array();
+            $data['title'] = $this->input->post('title');
+            
+            $data['added_by']             = json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id')));
+            $data['vendor_id'] =$vid = $this->session->userdata('vendor_id');
+            $vendor = $this->db->where('vendor_id',$vid)->get('vendor')->row();
+            $country = $this->db->where('countries_id',$vendor->country)->get('countries')->row();
+            $data['country'] = $vendor->country;
+            $data['country'] = $vendor->country;
+            $data['bussniuss_email'] = $vendor->email;
+            $data['bussniuss_phone'] = $vendor->phone;
+            $data['curr'] = $country->currency_symbol;
+            $data['slog'] = $this->input->post('slog');
+            $data['slug'] = $this->input->post('slug');
+            $data['seo_description'] = $this->input->post('seo_description');
+            $data['seo_title'] = $this->input->post('seo_title');
+            $data['module'] = $this->input->post('module');
+            $data['tag'] = $this->input->post('tag');
+            $data['comp_cover'] = $this->input->post('comp_cover');
+            $data['summery'] = $this->input->post('summery');
+            $data['status'] = 'draft';
+            $data['lat'] = $n['lat'];
+            $data['lng'] = $n['lng'];
+            $data['create_at'] = date('Y-m-d H:i:s');
+            $mod = $this->db->where('id',$this->input->post('module'))->get('modules')->row();
+            if($mod)
+            {
+                $data['category'] = ($mod->sub_category)?$mod->category.','.$mod->sub_category:$mod->category;
+            }
+            
+            $this->db->insert('product',$data);
+            $id = $this->db->insert_id();
+            if($id)
+            {
+                echo json_encode(array('rurl'=>base_url('vendor/product/edit/'.$id)));
+            }
+        }
+        else
+        {
+            
+            $old = $this->db->where('product_id',$id)->get('product')->row_array();
+            
+            
+            $cols = $this->db->list_fields('product');
+            $this->load->helper(array('form', 'url'));
+
+            $this->load->library('form_validation');
+            $errm = '';
+
+            foreach($cols as $k=> $v)
+            {
+                $err = $this->db->where('column',$v)->get('product_validation')->row();
+                if($err)
+                {
+                    $this->form_validation->set_rules($err->column, translate($err->column), $err->type);
+                }
+            }
+            // var_dump($_POST['description']);
+            // if(isset($_POST['description']) && strlen(strip_tags($_POST['description'])) < 300)
+            // {
+            //     $errm = 'Detail must be greater then 300 chracters';
+            // }
+
+                if ($this->form_validation->run() == FALSE || $errm)
+                {
+                        if($errm)
+                        {
+                            echo $errm;
+                        }
+                        else
+                        {
+                        echo validation_errors();
+                        }
+                }
+                else
+                {
+                    
+                    $options = $up = array();
+                    if($old['status'] == 'draft')
+                    {
+                        $up['posted_on'] = date('Y-m-d H:i:s');
+                    }
+                    else
+                    {
+                        $up['update_at'] = date('Y-m-d H:i:s');
+                    }
+                    
+                    $up['status'] = 'ok';
+                    $data['added_by']             = json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id')));
+            $data['vendor_id'] =$vid = $this->session->userdata('vendor_id');
+            $vendor = $this->db->where('vendor_id',$vid)->get('vendor')->row();
+            $country = $this->db->where('countries_id',$vendor->country)->get('countries')->row();
+            $up['country'] = $vendor->country;
+            $up['curr'] = $country->currency_symbol;
+                    $up['checkbox_xtra_fields'] = json_encode($this->input->post('checkboxinfo'));
+                    $js = array('feature','buttons','amenities','text','etra_content','enable_checks','social_media','txt_gal','about_buttons','about_feature','tabs');
+                    $up['info_button']        = $this->input->post('button_txt');
+            $up['button_url']         = $this->input->post('button_url');
+                    foreach($js as $k=> $v)
+                    {
+                        if(!isset($_POST[$v]))
+                        {
+                            $_POST[$v] = array();
+                        }
+                    }
+                    foreach($cols as $k=> $v)
+                    {
+                        if(isset($_POST[$v]))
+                        {
+                            if(in_array($v,$js))
+                            {
+                                
+                            $up[$v] = json_encode($this->input->post($v));
+                            }
+                            else
+                            $up[$v] = $this->input->post($v);
+                        }
+                    }
+                            $choice_titles              = $this->input->post('op_title');
+            $choice_types               = $this->input->post('op_type');
+            $choice_no                  = $this->input->post('op_no');
+            if($choice_titles && count($choice_titles ) > 0){
+                foreach ($choice_titles as $i => $row) {
+                    $choice_options         = $this->input->post('op_set'.$choice_no[$i]);
+                    $options[]              =   array(
+                                                    'no' => $choice_no[$i],
+                                                    'title' => $choice_titles[$i],
+                                                    'name' => 'choice_'.$choice_no[$i],
+                                                    'type' => $choice_types[$i],
+                                                    'option' => $choice_options
+                                                );
+                }
+            }
+            $up['options']            = json_encode($options);
+                    $additional_value = array();
+                    $additional_value['name']   = $this->input->post('ad_field_names_custom');
+            $additional_value['value']   = $this->input->post('ad_field_values_custom');
+            $up['additional_fields_new'] = json_encode($additional_value);
+            $additional_fields = array();
+            $additional_fields['name']  = json_encode($this->input->post('ad_field_names'));
+            $additional_fields['value'] = json_encode($this->input->post('ad_field_values'));
+            $up['additional_fields']  = json_encode($additional_fields);
+                    $up['number_of_column']        = $num  = $this->input->post('number_of_column');
+        $rtra = $this->input->post('etra_content');
+        // var_dump($rtra);
+        $up['description'] = $_POST['description'];
+                    $r = $this->db->where('product_id',$id)->update('product',$up);
+                   if($r)
+                   {
+                       
+                $am_arr = array();
+                                $exp = $this->db->where('pid', $id)->get('product_to_amenity')->result_array();
+                foreach($exp as $k=> $v)
+                                {
+                                    $amn = $this->db->where('amenity_id',$v['am_id'])->get('amenity')->row();
+                                    $am_arr[] = $amn->name;
+                                }
+                                $this->db->where('product_id',$id)->update('product',array('amenities'=>implode(',',$am_arr)));
+                                            $additional_value['name'] = $nm   = $this->input->post('ad_field_names_custom');
+            $additional_value['value']  = $vls = $this->input->post('ad_field_values_custom');
+                    $this->db->where('pid',$id)->delete('product_to_accordion');
+                foreach($additional_value['name'] as $k=> $v)
+                {
+                    $in = array(
+                        'pid'=>$id,
+                        'title' => $nm[$k],
+                        'detail' => $vls[$k]
+                        );
+                    $r = $this->db->insert('product_to_accordion',$in);
+                }
+                update_col($id);
+                   }
+                   else
+                   {
+                       echo 'Somthing working wrong';
+                   }
+                }
+        }
+    }
     function product($para1 = '', $para2 = '', $para3 = '')
     {
 
@@ -1026,6 +1678,9 @@ class Vendor extends CI_Controller
                 
                 $data['checkbox_h']               = $this->input->post('checkbox_h');
                 $data['accor_h']               = $this->input->post('accor_h');
+                $data['accor_p']               = $this->input->post('accor_p');
+                $data['gal_h']               = $this->input->post('gal_h');
+                $data['gal_d']               = $this->input->post('gal_d');
                 $data['make']               = $this->input->post('make');
                 $data['model']              = $this->input->post('model');
                 $data['seats']              = $this->input->post('no_of_seats');
@@ -1174,6 +1829,12 @@ class Vendor extends CI_Controller
             $choice_no                    = $this->input->post('op_no');
 
             $data['added_by']             = json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id')));
+            $data['vendor_id'] =$vid = $this->session->userdata('vendor_id');
+            $vendor = $this->db->where('vendor_id',$vid)->get('vendor')->row();
+            $country = $this->db->where('countries_id',$vendor->country)->get('countries')->row();
+            $data['country'] = $vendor->country;
+            $data['country'] = $vendor->country;
+            $data['curr'] = $country->currency_symbol;
 
             if (true) {
                 $slug_ver = $this->db->where('slug',$slug)->get('product')->row();
@@ -1307,6 +1968,14 @@ class Vendor extends CI_Controller
             $data = array();
             $pid =$this->db->where('product_id', $para2)->get('product')->row_array();
             $this->crud_model->set_amenities($pid['product_id']);
+            $data['vendor_id'] =$vid = $this->session->userdata('vendor_id');
+            $vendor = $this->db->where('vendor_id',$vid)->get('vendor')->row();
+            $country = $this->db->where('countries_id',$vendor->country)->get('countries')->row();
+            $data['curr'] = $country->currency_symbol;
+            $data['tag']    = $this->input->post('tag');
+            
+            $data['meta_title']               = $this->input->post('meta_title');
+            $data['meta_title']               = $this->input->post('meta_title');
             $data['specification']               = $this->input->post('specification');
                 $data['warranty_info']               = $this->input->post('warranty_info');
                 $data['shipping_info']               = $this->input->post('shipping_info');
@@ -1383,10 +2052,14 @@ class Vendor extends CI_Controller
             
 
             $data['seo_title']          = $this->input->post('seo_title');
+            $data['seo_description']    = $this->input->post('seo_description');
             $data['down_text']      = $this->input->post('down_text');
             $data['uper_text']      = $this->input->post('uper_text');
             $data['checkbox_h']               = $this->input->post('checkbox_h');
                 $data['accor_h']               = $this->input->post('accor_h');
+                $data['accor_p']               = $this->input->post('accor_p');
+                $data['gal_h']               = $this->input->post('gal_h');
+                $data['gal_d']               = $this->input->post('gal_d');
         $data['etra_content']          = json_encode($this->input->post('etra_content'));
         $data['number_of_column']        = $num  = $this->input->post('number_of_column');
         $rtra = $this->input->post('etra_content');
@@ -1398,7 +2071,14 @@ class Vendor extends CI_Controller
                 $im = 'img_col'.$i;
                 if(isset($_FILES[$im]['name']) && $_FILES[$im]['name'])
                 {
-                    $path = 'uploads/product_image/'.$im.'.webp';
+                    $path = 'uploads/product_image/'.time().$i.'.webp';
+                    if(file_exists($path)) {
+    chmod($path,0755); //Change the file permissions if allowed
+    $r = unlink($path); //remove the file
+    // var_dump($r);
+    // var_dump($path);
+}
+
 
                          move_uploaded_file($_FILES[$im]['tmp_name'], $path);
                     $rtra[$i]['data'] = $path;
@@ -1470,7 +2150,6 @@ class Vendor extends CI_Controller
             $data['extra_section_heading']      = $this->input->post('extra_section_heading');
             $data['about_address']      = $this->input->post('about_address');
             // $data['listing_amenities']    = json_encode($this->input->post('listingamenities'));
-            $data['tag']                = $this->input->post('tag');
             $data['color']              = json_encode($option);
             $data['num_of_imgs']        = $num + $num_of_imgs;
             $data['front_image']        = 0;
@@ -1510,7 +2189,9 @@ class Vendor extends CI_Controller
             $data['social_media']       = json_encode($this->input->post('social'));
             $data['name']                  = $this->input->post('name1');
             $data['pemail']                  = $this->input->post('email1');
+            $data['whatsapp_number']                  = $this->input->post('whatsapp_number');
             $data['ephonen']                  = $this->input->post('pphone');
+            $data['bussniuss_phone']                  = $this->input->post('pphone');
             $data['amen_check']                  = $this->input->post('checkamenities');
             $data['address1']              = $this->input->post('address');
             $data['address2']              = $this->input->post('address2');
@@ -1641,8 +2322,13 @@ class Vendor extends CI_Controller
         }
         else if ($para1 == 'edit') {
             
-
+            if($this->crud_model->can_add_product($this->session->userdata('vendor_id'))){
             $sing = $this->db->where('product_id' , $para2)->get('product')->row();
+            $added_by = json_decode($sing->added_by,true);
+            if(isset($added_by['id']) && $added_by['id'] != $this->session->userdata('vendor_id'))
+            {
+                $this->logout();
+            }
             $page_data['brandss'] =  $this->db->where('pcat', '369')->get('category')->result_array();
             $attrs = $this->db->where('product_id' , $para2)->get('attribute_to_values')->result_array();
             $page_data['product_data'] = $this->db->get_where('product', array(
@@ -1653,7 +2339,7 @@ class Vendor extends CI_Controller
                 'product_id' => $para2
             ))->result_array();
             
-            $page_data['row'] =(array) $sing;
+            $page_data['row'] = $sing;
             if(isset($sing->module) && $sing->module)
             {
                 $module = $sing->module;
@@ -1672,12 +2358,20 @@ class Vendor extends CI_Controller
                 $page_data['warehouse'] =  $this->db->where('uid',$vid)->get('address')->result_array();
             $page_data['brands'] =  $this->db->get('category')->result_array();
              $page_data['social_media']= $this->db->get('bpkg')->result_array();
-            $page_data['page_name']   = ($sing->is_bpage)?"bpage_edit":"product_edit";
+            $page_data['page_name']   = ($sing->is_bpage)?"product_add2":"product_add2";
             if($sing->is_blog)
             {
                 $page_data['page_name']   = "blog_edit";
             }
             $this->load->view('back/index', $page_data);
+            }
+            else
+            {
+             $page_data['page_name'] = 'product_limit';
+                $this->load->view('back/index', $page_data);   
+            }
+            
+            
 
         }
         else if ($para1 == 'view') {
@@ -1728,7 +2422,7 @@ class Vendor extends CI_Controller
             ?>
             <ul>
                                         <?php
-                                        $this->db->order_by("id", "desc");
+                                        $this->db->order_by("id", "asc");
 
                                         $imgs = $this->db->where('pid',$pid)->get('product_to_images')->result_array();
                                         foreach ($imgs as $key => $value) {
@@ -1747,35 +2441,11 @@ class Vendor extends CI_Controller
             <?php
         }
         elseif ($para1 == 'list') {
-            if(isset($mod))
-            {
-                $this->db->where('module',$mod->id);
-            }
             $this->db->order_by('product_id', 'desc');
             $this->db->where('added_by',json_encode(array('type'=>'vendor','id'=>$this->session->userdata('vendor_id'))));
             $this->db->where('download=',NULL);
             $this->db->where('is_bpage=',0);
             $page_data['type']='';
-            if(isset($_GET['is_product']))
-            {
-            $page_data['type']='is_product';
-            $page_data['is_product']=1;
-            }
-            if(isset($_GET['is_blog']))
-            {
-            $page_data['type']='is_blog';
-            $page_data['is_blog']=1;
-            }
-            if(isset($_GET['is_job']))
-            {
-            $page_data['type']='is_job';
-            $page_data['is_job']=1;
-            }
-            if(isset($_GET['is_event']))
-            {
-                $page_data['type']='is_event';
-            $page_data['is_event']=1;
-            }
             $page_data['all_product'] = $this->db->get('product')->result_array();
              $this->load->view('back/vendor/product_list', $page_data);
         }
@@ -1974,6 +2644,8 @@ class Vendor extends CI_Controller
                 recache();
             }
         } elseif ($para1 == 'sub_by_cat') {
+            $para2 = str_replace("-", ",", $para2);
+
             $brands = $this->db->where('pcat',$para2)->get('category')->result_array();
             $sing = $this->db->where('category_id',$para2)->get('category')->row();
             // var_dump($sing);
@@ -2024,11 +2696,7 @@ class Vendor extends CI_Controller
             }
             if(!$brands)
             {
-               echo $next = '
-                <div class="text-center justify-content-center"><h5>There are no more categories </h5>
-                <a onclick ="next_tab();"  style="margin-right:10px"><button type="button" class="btn btn-primary"> Click here </button></a>to move to next tab.
-                </div>
-                ';
+               echo $next = '';
                 exit();
             }
 
@@ -2037,7 +2705,7 @@ class Vendor extends CI_Controller
                 {
             ?>
                 <div class="col-md-4 col-sm-12 col-xs-12 <?= ($product_data->category == $v['category_id'])?"active":"" ?>" onclick="selecttype('<?= $v['category_id'];?>')" >
-                    <a href="#"><div class="flip-card ">
+                    <a href="javascript:void(0);"><div class="flip-card ">
                   <div class="flip-card-inner">
                     <div class="flip-card-front <?= ($product_data->category == $v['category_id'])?"active":"" ?>">
                         <p><?= $v['category_name'];?></p>
@@ -2063,7 +2731,7 @@ class Vendor extends CI_Controller
         } elseif ($para1 == 'add') {
 
             if($this->crud_model->can_add_product($this->session->userdata('vendor_id'))){
-                $page_data['brand'] =  $this->db->get('brand')->result_array();
+                $page_data['modules'] =  $this->db->get('modules')->result();
                 $vid = $this->session->userdata('vendor_id');
                 $page_data['warehouse'] =  $this->db->where('uid',$vid)->get('address')->result_array();
                 $page_data['brandss'] =  $this->db->where('pcat', '369')->get('category')->result_array();
@@ -2084,7 +2752,7 @@ class Vendor extends CI_Controller
                 $page_data['brands'] =  $this->db->where('pcat',$page_data['mod_cat']->category_id)->get('category')->result_array();
             }
                     // $this->load->view('back/vendor/product_add', $page_data);
-                    $page_data['page_name']   = "product_add";
+                    $page_data['page_name']   = "product_add2";
                     if(isset($_GET['is_product']))
                     {
                         $page_data['page_name']   = "product_add1";
@@ -2443,7 +3111,6 @@ $price = $this->crud_model->getMainPrice($v['product_id']);
         }
 
         $product_data['shipping_cost'] = is_numeric($product['shipping_cost']) ? $product['shipping_cost'] : 0;
-        $product_data['tag'] = $product['tag'];
         $product_data['is_bundle'] = 'no';
         $product_data['color'] = null;
         $product_data['current_stock'] = is_numeric($product['add_stock']) ? $product['add_stock'] : 0;
@@ -3373,17 +4040,21 @@ $price = $this->crud_model->getMainPrice($v['product_id']);
 
 
     /* Manage Business Settings */
-    function stripe_cencel($vid)
+    function stripe_cencel($vid = 0)
     {
+        if(!$vid)
+        {
+            $vid = $this->session->userdata('vendor_id');
+        }
         $user = $this->db->where('vendor_id', $vid)->get('vendor')->row();
         if(isset($user->stripe_sub) && $user->stripe_sub)
         {
-            // die($user->stripe_sub);
             $stripe_secret = $this->db->where('type','stripe_secret')->get('business_settings')->row();
             $stripe_secret = $stripe_secret->value;
                 $stripe_publishable = $this->db->where('type','stripe_publishable')->get('business_settings')->row();
                 $b64 = 'c2tfdGVzdF81MUt4Y0RsQXV6VjdhTGl3eFNVNnVjWkVVdHBFaGZSbmF0UEpneDg2cXAwalEwbHNPYVVwWG9LYVk3T1VHZHJ5S0w3UURZU2ZGMU9Na0tjMU1kSHdya29CVDAwTVZTOEhPTGQ6';//
                 $b64 = base64_encode($stripe_secret.':');
+                //die();
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
@@ -3406,11 +4077,16 @@ curl_close($curl);
 $resp = json_decode($response,true);
 if(isset($resp['status']) && $resp['status'] == 'canceled')
 {
-    $user = $this->db->where('vendor_id', $vid)->update('vendor',array('stripe_sub'=>''));
+     $user = $this->db->where('vendor_id', $vid)->update('vendor',array('stripe_sub'=>''));
     
     //successfully cancel
 }
 }
+if(isset($_GET['back']))
+    {
+        $this->session->sess_destroy();
+        custom_redirect(base_url() . 'vendor', 'refresh');
+    }
 
     }
     function package($para1 = "", $para2 = "")
@@ -3432,6 +4108,10 @@ if(isset($resp['status']) && $resp['status'] == 'canceled')
             } else {
                 redirect(base_url() . 'vendor/package/', 'refresh');
             }
+        }if ($para1 == 'cancel') {
+            $vendor         = $this->session->userdata('vendor_id');
+            $this->stripe_cencel($vendor);
+            
         } else {
             $page_data['page_name'] = "package";
             $this->load->view('back/index', $page_data);

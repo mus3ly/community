@@ -64,10 +64,14 @@
 
 
 </style>
+<?php
+$CI =& get_instance();
+$url = $CI->config->item('img_url');
+?>
 <div id="loading">
     <div id="loading-center">
         <div id="loading-center-absolute">
-<img src="https://ads.strokedev.net/uploads/logo_image/logo_81.png">
+<img src="<?= $url; ?>/uploads/logo_image/logo_81.png">
         </div>
     </div>
 </div>

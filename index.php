@@ -76,7 +76,6 @@ if(!isset($_COOKIE["dev_test"]))
  * @since	Version 1.0.0
  * @filesource test sublime git
  */
-
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
