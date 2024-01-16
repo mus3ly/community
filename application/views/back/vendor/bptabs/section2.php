@@ -40,7 +40,7 @@
                                                 if(true)
                                                 {
                                                     ?>
-                                                    <div class="h-100 row border">
+                                                    <div class="margin-bttom-15 h-100 row border">
                         <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent=".row">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -73,7 +73,7 @@
     </div>
     
     <button target=".feature_bulet" class=" ad_more_btn btn btn-primary" content='
-    <div class="h-100 row border">
+    <div class="h-100 margin-bttom-15 row border">
                         <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent=".row">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -103,7 +103,7 @@
                                                 if($value)
                                                 {
                                                     ?>
-                                                    <div class="h-100 row border">
+                                                    <div class="h-100 margin-bttom-15 row border">
                         <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent=".row">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -136,7 +136,7 @@
     </div>
     
     <button target=".buttons_bulet" class=" ad_more_btn btn btn-primary" content='
-    <div class="h-100 row border">
+    <div class="h-100 margin-bttom-15 row border">
                         <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent=".row">
                             <i class="fa-solid fa-xmark"></i>
                         </button>

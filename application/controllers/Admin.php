@@ -1251,6 +1251,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $data['front_view'] = $this->input->post('front_view');
                 $data['bpage_text'] = $this->input->post('bpage_text');
                 $data['filter_file'] = $this->input->post('filter_file');
+                $data['sorting'] = $this->input->post('n_sorting');
                 $data['tabs'] = json_encode($tabs);
                 $this->db->insert('modules',$data); 
                 // $str = $this->db->last_query();
@@ -1293,6 +1294,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                 $data['category'] = $this->input->post('category');
                 $data['sub_category'] = $this->input->post('sub_category');
                 $data['front_view'] = $this->input->post('front_view');
+                $data['sorting'] = $this->input->post('n_sorting');
                 $data['filter_file'] = $this->input->post('filter_file');
                 $data['tabs'] = json_encode($tabs);
             $this->db->where('id', $para2);
@@ -1322,8 +1324,9 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
                $this->db->select('modules.*,category.*');
                 $this->db->from('modules');
                 $this->db->join('category', 'modules.category = category.category_id');
-                // $this->db->order_by('sort', 'asc');
+                $this->db->order_by('sorting', 'asc');
                  $page_data['all_amenitys'] = $this->db->get()->result_array();
+                //  echo $this->db->last_query();
                  $this->load->view('back/admin/mod_list', $page_data);
             }
 
@@ -4644,6 +4647,7 @@ $sql = "UPDATE  `category` SET `level` = '".$para2."' WHERE `pcat`  IN ('$ids')"
             $approval = 'ok';
             if ($approval == 'ok') {
                 $data['status'] = 'approved';
+                $data['email_ver'] = '1';
             } else {
                 $data['status'] = 'pending';
             }

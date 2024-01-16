@@ -6,6 +6,8 @@ include "header_new.php";
 
 ?>
 <style>
+
+
     #location-result ul li{
         cursor:pointer;
     }
@@ -26,6 +28,38 @@ include "header_new.php";
     margin-bottom: -390px;
     
     }
+    .community_wrap ul li {
+    display: flex;
+    align-items: start;
+}
+@media screen and (max-width: 425px) {
+    .container{
+    padding:0 30px!important;
+}
+footer .img-box{
+    padding:0!important;
+}
+.hero-title{
+    font-size:30px!important;
+}
+.hero-title-tags{
+    font-size:14px!important;
+    line-height: 1.4;
+}
+
+.hero-title-s{
+        font-size:24px!important;
+}
+.d-flex-al{
+    
+
+    display: flex;
+    align-items: start;
+}
+.d-flex-al span{
+    margin-top: 0px!important;
+}
+}
 
 </style>
 
@@ -50,8 +84,8 @@ include "header_new.php";
                 <h5 style="color:white; margin-bottom: 15px;">COMMUNITY HUBLAND - WHERE OPPORTUNITY MEETS COMMUNITIES
 
                 </h5>
-                <h1 style="color:white; font-size: 35px">LOCAL BUSINESS COMMUNITY DIRECTORY</h1> 
-                <h6 style="color:white; margin-bottom: 30px;">BUSINESSES<span class="text-divider color_white" style="top:-7px; font-weight: 400; font-size:15px;"></span>
+                <h1 class="hero-title" style="color:white; margin-bottom:10px; font-size: 35px">LOCAL BUSINESS COMMUNITY DIRECTORY</h1> 
+                <h6 class="hero-title-tags" style="color:white; margin-bottom: 30px;">BUSINESSES<span class="text-divider color_white" style="top:-7px; font-weight: 400; font-size:15px;"></span>
                 PRODUCTS<span class="text-divider color_white" style="top:-7px; font-weight: 400;"></span>
                 SERVICES<span class="text-divider color_white" style="top:-7px; font-weight: 400;"></span>
                 PROGRAMMES<span class="text-divider color_white" style="top:-7px; font-weight: 400;"></span>
@@ -61,7 +95,7 @@ include "header_new.php";
                 OPPORTUNITIES</h6>
                 
                   <div class="col-lg-8">
-                <h3 style="font-size: 39px">Search Your
+                <h3 class="hero-title-s" style="font-size: 39px">Search Your
 
                   <b>Communities</b>
 
@@ -188,9 +222,9 @@ include "header_new.php";
 communities with your offers in minutes.</p>
  <ul >
 
-    <li><p><img src="<?= $url ?>assets/images/Tick-Square.png" style="margin-bottom: 2px;"><span style="margin-left: 7px;">Our services offer you a business marketing website, immediately after sign-up</span></p> </li>
+    <li><p class="d-flex-al"><img src="<?= $url ?>assets/images/Tick-Square.png" style="margin-bottom: 2px;"><span style="margin-left: 7px;">Our services offer you a business marketing website, immediately after sign-up</span></p> </li>
 
-    <li><p><img src="<?= $url ?>assets/images/Tick-Square.png" style="margin-bottom: 49px;"><span style="margin-top: 5px;margin-left: 7px">With only images and some descriptive texts of your business, you can have your <br>
+    <li><p class="d-flex-al"><img class="m-zero" src="<?= $url ?>assets/images/Tick-Square.png" style="margin-bottom: 49px;"><span style="margin-top: 5px; margin-left: 7px">With only images and some descriptive texts of your business, you can have your <br>
     website up and running, on Community HubLand in less than 30 minutes</span></p> </li>
 </ul>
 
@@ -374,29 +408,29 @@ city in the world; and your ad listings will be displays in that community's fee
 
             <ul class="ls_7" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="500">
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">List multiple products and services</li>
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png"><span>List multiple products and services</span></span></li>
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Market each advert on its Own Webpage 
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png"><span>Market each advert on its Own Webpage 
               <span class="text-divider color_white "></span> Can Post your Affiliate Links on the Shop
 
-              </li>
+              </span></li>
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Contact Forms
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png"><span>Contact Forms
 
                 <span class="text-divider color_white "></span>Shopping Cart for Direct Sales to Customers
                 
-                <span class="text-divider color_white "></span>Instant WhatsApp</li>
+                <span class="text-divider color_white "></span>Instant WhatsApp</span></li>
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Automatated Posts to Directory Listings
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png"><span>Automatated Posts to Directory Listings
               <span class="text-divider color_white "></span> Your Socials included
 
-              </li>
+              </span></li>
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Easy Blogging, integrated as your Perfect Marketing Tool</li>
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png"><span>Easy Blogging, integrated as your Perfect Marketing Tool</span></li>
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">One-click access to Affiliate Marketing</li>
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png"><span>One-click access to Affiliate Marketing</span></li>
 
-              <li><img src="<?= $url ?>assets/images/Tick-Square.png">Got nothing to sell? Join & Earn from our Affiliate Marketing</li>
+              <li><img src="<?= $url ?>assets/images/Tick-Square.png"><span>Got nothing to sell? Join & Earn from our Affiliate Marketing</span></li>
 
             </ul>
 
@@ -760,46 +794,41 @@ city in the world; and your ad listings will be displays in that community's fee
     <div class="container">
 <div class="extrades">
     <center>
-    <h3 class="color_orange" style="margin-bottom: 20px;">EARN up to 30% COMMISSIONS</h3>
+    <h3 class="color_orange lh-sm" style="margin-bottom: 20px;">EARN up to 30% COMMISSIONS</h3>
     </center>
     <div class="row">
-        <div class="col-md-3 col-2">
+        <div class="col-md-3 col-2 dd-none">
             
             <!--<img src="<?=base_url()?>updated/assets/images/istockphoto.jpeg"> -->
           
          </div>
-        <div class="col-md-6 col-8">
+        <div class="col-md-6 col-8 w-full">
             <center>
-   <div><p style=" font-weight: 600;">            
+   <div><p style="margin-bottom: 10px; text-align:left; ">            
 Sign-up free for a customer account, and tick the Affiliate checkbox. 
 
- That's it! You are in business!</p>
-
-<p style="margin-bottom: 20px;">Explore opportunities to earn commissions, by referring others to Community HubLand 
+ That's it! You are in business!</p><p style="margin-bottom: 10px; text-align:left; ">Explore opportunities to earn commissions, by referring others to Community HubLand 
 
   with your referral code.</p>
 
-<h4 style="margin-bottom: 10px;">Can businesses put their business up for affilate marketing too?</h4>
+<h4 class="lh-sm" style="margin-bottom: 10px; text-algn:left;">Can businesses put their business up for affilate marketing too?</h4>
 
-<p>Yes it comes free with the vendor account. You tick the Affiliate checkbox, and Voila!</p>
- 
-<p>Login and upload info-media to your affiliate marketing dashboard.</p>
+<p style="text-align:left; margin-bottom: 10px;">Yes it comes free with the vendor account. You tick the Affiliate checkbox, and Voila! Login and upload info-media to your affiliate marketing dashboard.</p>
 
- <p>We are in the <strong>testing phase</strong>, your info-media would appear instantly on the affiliate marketing <br>
- panel for free! You may also add commissions if you want to attract more affiliate marketers to your business. It is as simple as that!</p>
+ <p style="text-align:left;">We are in the testing phase, your info-media would appear instantly on the affiliate marketing panel for free! You may also add commissions if you want to attract more affiliate marketers to your business. It is as simple as that!</p>
                 
  <br>
    
-            <button class="joinbtn primary-btn" style="margin-left:20px;">Become an Affiliate Marketer</button><button class="joinbtn primary-btn" style="margin-left:20px;">Test Vendor Affilate Programme</button>
+            <button class="joinbtn primary-btn m-zero mb-1" style="margin-left:20px;">Become an Affiliate Marketer</button><button class="joinbtn primary-btn m-zero" style="margin-left:20px;">Test Vendor Affilate Programme</button>
             <br><br>
             <div>Already a member?</div>
             <a href="https://communityhubland.com/login_set/login" style="margin-left:20px;">Customer Login</a><a href="https://communityhubland.com/vendor" style="margin-left:20px;">Vendor Login</a>
-            </center>
+           </div> </center>
         </div>
-        <div class="col-md-3 col-2">
+        <div class="col-md-3 col-2 dd-none">
          <!--   <img src="<?=base_url()?>updated/assets/images/istockphoto.jpeg">-->
            </div>
-    </div>
+    
 </div>
 </div>
   </section>

@@ -118,6 +118,13 @@
                     	  value="1"  >
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('sorting');?></label>
+                <div class="col-sm-6">
+                    <input type="number" name="n_sorting" class="form-control" id="demo-hor-1" 
+                    	  value=""  >
+                </div>
+            </div>
             
             
             

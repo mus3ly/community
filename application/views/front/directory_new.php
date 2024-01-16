@@ -94,7 +94,7 @@ $viewtype = $_GET['view'];
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-12 col-lg-7 col-md-8 width_on_mobile ">
+                  <div class="col-sm-12 col-lg-8 col-md-8 width_on_mobile ">
                     <div class="left_form">
                         <form name="dir_form" id="dir_form" class="dir_form_css" action="<?php echo parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH); ?>"> 
                         <input type="hidden" name="sort" value="" id="form_sort" />
@@ -150,7 +150,7 @@ $viewtype = $_GET['view'];
                           </div>
                     </div>
                   </div>
-                  <div class="col-md-2 col-lg-3 col-sm-12 width_on_mobile_2">
+                  <div class="col-md-2 col-lg-2 col-sm-12 width_on_mobile_2">
                     <div class="right_directory_menu">
                       <div class="select_tops hide_on_desktop">
                         <div class="custom-select-box">

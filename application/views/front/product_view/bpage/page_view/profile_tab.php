@@ -260,7 +260,7 @@ $checks = json_decode($pro['enable_checks']);
                             
                                 ?>
 
-                                <div class="col-sm-<?= $class ?> webdesign">
+                                <div class="col-sm-<?= $class ?> webdesign communitybox">
                                     <?php
                                     if($v['title'])
                                                 {
@@ -270,7 +270,7 @@ $checks = json_decode($pro['enable_checks']);
                                                 }
                                     ?>
 
-                                    <div class="inner_box_design height_auto scroll"
+                                    <div class="inner_box_design height_auto scroll scrl-container"
                                          >
 
                                         <<?= ($v['type'] == 'img')?'div':'p' ?> class="box_with_img">
@@ -299,7 +299,7 @@ $checks = json_decode($pro['enable_checks']);
                                     <?php
 
                                     $feature  = $v['feature'];
-                                    // var_dump($v);
+                                    // var_dump($feature);
 
                                     foreach ($feature as $key => $value) {
 
@@ -331,8 +331,15 @@ $checks = json_decode($pro['enable_checks']);
                                             }
                                             ?>
                                         </<?= ($v['type'] == 'img')?'div':'p' ?>>
+                                       <div class="scrl-down">
 
-                                    </div>
+	
+	
+			<span class="m_scroll_arrows1 unu1"></span>
+			<span class="m_scroll_arrows1 doi1"></span>
+			<span class="m_scroll_arrows1 trei1"></span>
+
+                             </div>       </div>
 
                                 </div>
 
@@ -429,7 +436,7 @@ $checks = json_decode($pro['enable_checks']);
                             }
 
                             $feature  = json_decode($pro['txt_gal'],true);
-                            if($feature)
+                            if(true)
                             {
                     ?>
 
@@ -459,7 +466,17 @@ $checks = json_decode($pro['enable_checks']);
                     <div class="inner_content_tabs">
 
                       <!--</select>-->
-
+                        <?php
+                        foreach($feature as $k=> $v)
+                        {
+                            if(!$v['txt'])
+                            {
+                                unset($feature[$k]);
+                            }
+                        }
+                        if(count($feature) > 0)
+                        {
+                        ?>
                       <ul class="nav nav-tabs" id="myTab2" role="tablist">
                           <?php
 
@@ -475,7 +492,7 @@ $checks = json_decode($pro['enable_checks']);
                                     $i++;
 
                                     $tab = 'tab-'.$i;
-                                    if($i <= 4)
+                                    if($i <= 5)
                                 {
 
                                     ?>
@@ -493,6 +510,9 @@ $checks = json_decode($pro['enable_checks']);
                                 }
                             ?>
                       </ul>
+                      <?php
+                        }
+                      ?>
                       <div class="tab-content" id="myTab2Content">
                           <?php
                           $i = 0;
@@ -506,7 +526,7 @@ $checks = json_decode($pro['enable_checks']);
                                     $i++;
 
                                     $tab = 'tab-'.$i;
-                                    if($i <= 4)
+                                    if($i <= 5)
                                 {
                                     $media = $value['img'];
 
@@ -600,6 +620,45 @@ $checks = json_decode($pro['enable_checks']);
                                                     <p> <?= $value['txt'] ?></p>
 
                                                 </div>
+                                                <?php
+                                                $feature  = $value['feature'];
+                                    if($feature)
+                                    {
+                                        ?>
+                                        <ul class="listing_none">
+                                        <?php
+                                    }
+
+                                    foreach ($feature as $key => $value1) {
+
+                                        if($value)
+
+                                        {
+
+                                            ?>
+                                            <li>
+
+   <img src="<?= base_url(); ?>template/front/images/Tick-Square.png" alt="">
+
+
+                            <p><strong><?= $value1['fhead'];?></strong> <br>
+                              - <?= $value1['fdet'] ?></p>
+
+                          </li>
+
+                                            <?php
+
+                                        }
+
+                                    }
+                                    if($feature)
+                                    {
+                                        ?>
+                                        </ul>
+                                        <?php
+                                    }
+
+                                    ?>
 
                               </div>
 
@@ -630,7 +689,7 @@ $checks = json_decode($pro['enable_checks']);
                   <!--about-->
 
                 <?php
-                if(!in_array('section6',$checks) && $pro['about_title'] && $pro['about_desc'] && $pro['cats'])
+                if(!in_array('section6',$checks) && $pro['about_title'] && $pro['about_desc'])
                 {
                 ?>
                   <div class="main_wrp section_spacing_bottom section_spacing_top sec_div_wrap">
@@ -641,7 +700,10 @@ $checks = json_decode($pro['enable_checks']);
                       <p><?= $pro['about_desc']; ?></p>
 
                     </div>
-
+                    <?php
+                    if($pro['cats'])
+                    {
+                        ?>
                     <div class="row">
                       <div class="col-lg-8">
 
@@ -712,7 +774,7 @@ $checks = json_decode($pro['enable_checks']);
 
                             <div class="head_section">
 
-                              <h4>CATEGORIES</h4>
+                              <h4>We Service these Industry Sectors</h4>
 
                             </div>
 
@@ -856,6 +918,9 @@ $checks = json_decode($pro['enable_checks']);
 
                       </div>
                     </div>
+                    <?php
+                    }
+                    ?>
                   </div>
                   <?php
                 }
@@ -1179,3 +1244,33 @@ $checks = json_decode($pro['enable_checks']);
               </div>
             </div>
           </div>
+          
+        <script>
+        
+       document.addEventListener('DOMContentLoaded', function () {
+   
+    function checkOverflow(container) {
+        var scrlDown = container.querySelector('.scrl-down');
+
+        if (container.scrollHeight > container.clientHeight) {
+            scrlDown.style.display = 'block';
+        } else {
+            scrlDown.style.display = 'none';
+        }
+    }
+
+    var scrlContainers = document.querySelectorAll('.scrl-container');
+    scrlContainers.forEach(function (container) {
+        checkOverflow(container);
+    });
+
+    var newContentButton = document.getElementById('addContentButton');
+    newContentButton.addEventListener('click', function () {
+       
+        scrlContainers.forEach(function (container) {
+            checkOverflow(container);
+        });
+    });
+});
+
+</script>

@@ -1,20 +1,11 @@
                                         <div class="form-group">
-                                    <label><?= (isset($img->label)&& $img->label)?$img->label:''; ?></label>
+                                    <label><?= (isset($img->label)&& $img->label)?$img->label:''; ?></label><span><?= ($img->detail)?'('.$img->detail.')':'' ?></span>
                                     <br>
                                         <div class="btn btn-default btn-file"> <?php echo translate('choose_');?><?= (isset($img->label)&& $img->label)?$img->label:''; ?>
                                             <input data-id="<?= $media ?>" type="file" value="<?= $media ?>" name="<?= (isset($img->img_key) && $img->img_key)?$img->img_key:''; ?>_file" id="<?= (isset($img->img_key)&& $img->img_key)?$img->img_key:''; ?>"  class="form-control <?= (isset($img->is_required)&& $img->is_required)?'required':''; ?>">
                                         </div>
                                         <div class"img_alert" id="<?= (isset($img->img_key) && $img->img_key)?$img->img_key:''; ?>_alert"></div>
                                         <br>
-                                        <?php
-                                        if($img->detail)
-                                        {
-                                            ?>
-                                            <span class="img_detail"><?= $img->detail ?></span>
-                                            <?php
-                                        }
-                                        ?>
-                                        <br><br>
                                         <input type="hidden" value="<?= $media ?>" id="<?= (isset($img->img_key)&& $img->img_key)?$img->img_key:''; ?>_img" name="<?= (isset($img->img_key)&& $img->img_key)?$img->img_key:''; ?>" />
                                         <span id="<?= (isset($img->img_key)&& $img->img_key)?$img->img_key:''; ?>_box" >
 

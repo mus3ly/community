@@ -710,6 +710,10 @@ foreach($vendors as $kk=> $vv)
         $other = '';
         $multi = 'no';
         $foption = $phrase = 'Choose a ' . translate($name);
+        if($from == 'modules')
+                {
+                    $this->db->order_by("sorting", "asc");
+                }
         if ($class == 'demo-cs-multiselect') {
             $other = 'multiple';
             $name = $name . '[]';
@@ -725,6 +729,7 @@ foreach($vendors as $kk=> $vv)
         
         if (!is_array($from)) {
             if ($condition == '') {
+                
                 $all = $this->db->get($from)->result_array();
             } else if ($condition !== '') {
 
@@ -2017,11 +2022,11 @@ foreach($vendors as $kk=> $vv)
         }
         
         $membership = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->membership;
-        if(!$membership)
-        $membership = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->pack;
         
-        // var_dump($member/ship);
-        // die($membership);
+        
+        
+        
+         
         $expire = $this->db->get_where('vendor', array('vendor_id' => $vendor))->row()->member_expire_timestamp;
         $already = $this->db->get_where('product', array('added_by' => '{"type":"vendor","id":"' . $vendor . '"}'))->num_rows();
         $already = $already -1;//remove b pages
@@ -2039,6 +2044,7 @@ foreach($vendors as $kk=> $vv)
         }
 
         if ($expire > time()) {
+        
             if ($max <= $already) {
                 return false;
             } else if ($max > $already) {

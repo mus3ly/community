@@ -7,6 +7,12 @@
     .margin-left-50{
         margin-left: 50px !important;
     }
+    .margin-bttom-15{
+        margin-bottom:15px !important;
+    }
+    .margin-bttom-30{
+        margin-bottom:30px !important;
+    }
     .card{
         background:#fff;
         padding 10px;

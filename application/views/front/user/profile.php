@@ -73,7 +73,7 @@
                                     <td><b><?php echo translate('address');?></b></td>
                                     <td><?php echo $row['address1'];?> <?php echo $row['address2'];?></td>
                                     <td><b><?php echo translate('country');?></b></td>
-                                    <td><?php echo $row['country'];?></td>
+                                    <td><?php echo $this->db->where('countries_id',$row['country'])->get('countries')->row()->name;?></td>
                                 </tr>
                                 <tr>
                                     <td><b><?php echo translate('state');?></b></td>
@@ -85,7 +85,7 @@
                                 <tr>
                                     <td><b><?php echo translate('referral code');?></b></td>
                                     <td><?php echo $row['referral_code'];?></td>
-                                    <td><?php echo translate('referral Members');?></td>
+                                    <td>Customer Referrals</td>
                                     <?php
                                     $this->db->where('stripe_sub !=',NULL)->where('aff_paid',0)->where('ref_code',$row['referral_code']);
 
@@ -108,11 +108,19 @@
                     ?>
                     <input type="checkbox" value="" checked disabled><label>Terms & Conditions</label>
                     <?php
-                    }if(isset($row['add_affilite']) && $row['add_affilite'] == 'yes'){
+                    }
+                    if(isset($row['add_affilite']) && $row['add_affilite'] == 'yes'){
                     ?>
                     <input type="checkbox" disabled value="" checked><label>Join Affiliates</label>
                     <?php
-                    }if(isset($row['aff_TOC']) && $row['aff_TOC'] == 'ok'){
+                    }
+                    else
+	                {
+	                    ?>
+	                    <input type="checkbox" value="yes"><label>Join Affiliates</label>
+	                    <?php
+	                }
+                    if(isset($row['aff_TOC']) && $row['aff_TOC'] == 'ok'){
                     ?>
                     <input type="checkbox" disabled value="" checked><label>Affiliates Terms Of Use</label>
                     <?php 

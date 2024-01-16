@@ -1,6 +1,6 @@
 <div id="info_section1">
     <span id="bullet_html" style="display:none" content='
-    <div class="h-100 margin-bttom-15 row border">
+    <div class="h-100 row border">
                         <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent=".row">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -37,29 +37,24 @@
             <div class="row">
     <div class="col3_bulet col-md-12" style="
     gap: 20px;
+    display: grid;
 ">
         <?php
         $mkey = 0;
         if(true)
                                         {
-                                            if(!$row['etra_content'])
-                                            {
                                             $feature = array(array('type'=>''));
-                                            }
                                             if($row['etra_content'])
-                                            {
                                             $feature  = json_decode($row['etra_content'],true);
-                                            $mkey = count($feature);
-                                            }
-                                            $i = 0;
+                                            
                                             foreach ($feature as $key => $value) {
-                                                $i++;
+                                                if($key > $mkey)
+                                                $mkey = $key;
                                                 if(true)
                                                 {
-                                                    $key = $i;
                                                     ?>
-                                                    <div class="h-100 margin-bttom-30 row border">
-                        <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent2=".col3_bulet" minus-btn="#add_colbtn" parent=".row">
+                                                    <div class="h-100 row border">
+                        <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent2=".col3_bulet" parent=".row">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                         <div class="col-md-12">
@@ -104,7 +99,7 @@
                     </div>
                     
     </div>
-    <div class="col-md-12" id="sec3bull_<?= $key ?>" style="display:<?= (isset($value['type']) && $value['type'] == 'img')?'none':'block' ?>">
+    <div class="col-md-12">
     <div class="c13tesfeature_bulet<?= $key ?>" >
         <?php
         if($row['feature'])
@@ -115,7 +110,7 @@
                                                 if(true)
                                                 {
                                                     ?>
-                                                    <div class="h-100 margin-bttom-15 row border">
+                                                    <div class="h-100 row border">
                         <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent=".row">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -151,18 +146,15 @@
     
      
 </div>
-</div>
     
                                                     <?php
                                                 }
                                             }
                                         }
         ?>
-    
-    </div>
         <button target=".col3_bulet"  class="col3_bulet_btn ad_more_btn btn btn-primary pull-right" content='
-    <div class="h-100 margin-bttom-30 row border">
-                        <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent"  parent2=".col3_bulet" minus-btn="#add_colbtn" parent=".row">
+    <div class="h-100 row border">
+                        <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent"  parent2=".col3_bulet" parent=".row">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                         <div class="form-group">
@@ -202,7 +194,8 @@
                     <button target=".cindex3testfeature_buletindex" outer="index"  load="bullet_html" load-url="<?= base_url('vendor/section/tg_bullet') ?>" content="Test index" class="ad_more_btn btn btn-primary">Add Feture bullet</button>
                     </div>
     </div>
-    ' index="<?= $mkey ?>" id="add_colbtn" limit="3" rtime="25">Add Column</button>
+    ' index="<?= $mkey ?>" limit="3" rtime="25">Add Column</button>
+    </div>
     </div>
     
     

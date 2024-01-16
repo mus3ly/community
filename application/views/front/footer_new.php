@@ -351,9 +351,9 @@ Submiting ...' type="button" ing= id="button-addon2">Subscribe</button>
 <div class="modal-content">
 
 <div class="my_modal_header modal-header">
-<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button>
+<button onclick="close_model('shareicon')" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
 
 </div>
 
@@ -395,6 +395,11 @@ Submiting ...' type="button" ing= id="button-addon2">Subscribe</button>
         return false;
     }
     return true;
+}
+function close_model(id)
+{
+$('#'+id).modal('hide');
+    
 }
 window.onbeforeunload = function () {
   window.scrollTo(0, 0);

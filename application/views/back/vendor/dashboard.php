@@ -3,7 +3,26 @@
 <script src="<?php echo base_url(); ?>template/back/amcharts/serial.js" type="text/javascript"></script>
 <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/tags/markerclusterer/1.0/src/markerclusterer.js"></script>
 <script src="<?php echo base_url(); ?>template/back/plugins/gauge-js/gauge.min.js"></script>
+<style>
 
+
+/*#container .table-striped>tbody>tr:nth-child(odd) {*/
+/*    background-color: rgb(242 97 34 / 6%)!important;*/
+/*}*/
+
+
+
+#container .panel-title {
+   
+    padding: 0px 0 0 8px;
+  
+}
+tbody tr td:first-child {
+    font-weight: 700!important;
+}
+
+
+</style>
 <div id="content-container">	
     <div id="page-title">
         <!--here---->
@@ -23,14 +42,14 @@
                             </h3>
                         </div>
                         <div class="panel-body">
-                            <div class="text-center">
+                            <div class="">
 
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <tr>
                                         	<td><?php echo translate('display_name'); ?> </td>
                                             <td><?php
-                                            echo $vend->display_name; ?></td>
+                                            echo $vend->name.' '.$vend->last_name; ?></td>
                                         </tr>
                                         <tr>
                                         	<td><?php echo translate('email'); ?> </td>
@@ -42,9 +61,32 @@
                                             <td><?php
                                             echo $vend->company; ?></td>
                                         </tr>
+                                        <?php
+                                        $row = $this->db->where('membership_id',$vend->membership)->get('membership')->row();
+                                        ?>
+                                        
                                         <tr>
-                                            <td><?php echo translate('total_products'); ?> </td>
-                                            <td><?php echo $this->db->get_where('product',array('added_by'=>'{"type":"vendor","id":"'.$this->session->userdata('vendor_id').'"}'))->num_rows(); ?></td>
+                                            <td>Package Web Pages </td>
+                                            <td><?php echo $row->product_limit; ?></td>
+                                        </tr>
+                                        <?php $fill = $this->db->get_where('product',array('added_by'=>'{"type":"vendor","id":"'.$this->session->userdata('vendor_id').'"}'))->num_rows(); ?>
+                                        
+                                        <tr>
+                                            <td>Business Page </td>
+                                            <td>1</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ad Listing Pages </td>
+                                            <td><?php echo $fill; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Remaining Pages </td>
+                                            <td><?php echo $row->product_limit-($fill+1); ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Package Expiry </td>
+                                            <td><?php echo date('l, d F Y H:i:s', $vend->member_expire_timestamp); 
+ ?></td>
                                         </tr>
                                     </table>
                                 </div>

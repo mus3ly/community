@@ -1,4 +1,23 @@
                      <div class="row">
+                         <span id="tgbullet_html" style="display:none" content='
+    <div class="h-100 margin-bttom-15 row border">
+                        <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent=".row">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <div class="col-md-12">
+                        <div class="form-group">
+                            <label>index: Heading</label>
+                            <input type="text" class="form-control required" value="" name="txt_gal[oindex][feature][index][fhead]" placeholder=" ">
+                        </div>
+                    </div>
+                        <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Detail</label>
+                            <textarea class="form-control required" value="" name="txt_gal[oindex][feature][index][fdet]" rows="5"></textarea>
+                        </div>
+                    </div>
+    </div>
+    ' >Add Bullet Point</span>
                          <div class="col-md-12">
                          
                             <div class="form-group btm_border">
@@ -28,19 +47,22 @@
                                             $feature  = json_decode($row['txt_gal'],true);
                                             //$feature = array();
                                             //  var_dump(count($feature));
+                                            $kcount = 0;
                                             foreach ($feature as $key => $value) {
                                                 if($key > $mkey)
                                                 $mkey = $key;
                                                 if(true)
                                                 {
+                                                    $kcount++;
                                                     ?>
-                                                    <div class="h-100 row border">
+                                                    <div class="h-100 margin-bttom-30 row border">
                         <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent=".row">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                             <div class="col-md-12" id="text_<?= $key ?>" style="display:block">
                         <div class="form-group">
-                            <label>Title</label>
+                            <div style="nargin-bottom:14px;"><b>Item <?= $kcount ?></b></div>
+                            <label> Title</label>
                             <input type="text" class="form-control <?= ($value)?'required':'' ?>" value="<?= $value['title']; ?>" name="txt_gal[<?= $key ?>][title]"/>
                         </div>
                     </div>
@@ -76,26 +98,27 @@
                         <div class="form-group">
                             <label>Detail</label>
                             <textarea id="textinput_<?= $key ?>" class="form-control <?= ($value)?'required':'' ?>" name="txt_gal[<?= $key ?>][txt]"><?= $value['txt'] ?></textarea>
-                        </div>
-                    </div>
-<div class="col-md-12">
+                            <div class="col-md-12">
     <div class="tgfeature_bulet<?= $key ?>">
         <?php
         if($row['feature'])
                                         {
                                             $tgfeature  = $value['feature'];
                                             // var_dump($tgfeature);
+                                            $fkcount = 0;
                                             foreach ($tgfeature as $fkey => $tgvalue) {
+                                                
                                                 if(true)
                                                 {
+                                                    $fkcount++;
                                                     ?>
-                                                    <div class="h-100 row border">
+                                                    <div class="h-100 margin-bttom-15 row border">
                         <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent=".row">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                                                     <div class="col-md-12">
                                                         <div class="form-group">
-                                                            <label>Heading</label>
+                                                            <label> <?= $kcount ?>-<?= $fkcount?>: Heading</label>
                                                             
                                                             <input type="text" class="form-control required"  name="txt_gal[<?= $key ?>][feature][<?= $fkey ?>][fhead]" value="<?php
                                                             echo ($tgvalue['fhead']?$tgvalue['fhead']:'');
@@ -122,26 +145,11 @@
     </div>
     <button target=".tgfeature_bulet<?= $key ?>" outer="<?= $key ?>"  index="<?= count($tgfeature)-1; ?>"  load="tgbullet_html" load-url="<?= base_url('vendor/section/tg_bullet') ?>" content="Test <?= $key ?>" class="ad_more_btn btn btn-primary">Add Bullet Point</button>
     
-    <span id="tgbullet_html" style="display:none" content='
-    <div class="h-100 row border">
-                        <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent=".row">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                        <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Heading</label>
-                            <input type="text" class="form-control required" value="" name="txt_gal[oindex][feature][index][fhead]" placeholder=" ">
-                        </div>
-                    </div>
-                        <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Detail</label>
-                            <textarea class="form-control required" value="" name="txt_gal[oindex][feature][index][fdet]" rows="5"></textarea>
-                        </div>
-                    </div>
-    </div>
-    ' >Add Bullet Point</span> 
+     
 </div>
+                        </div>
+                    </div>
+
     </div>
                                                     <?php
                                                 }
@@ -151,14 +159,14 @@
     </div>
     </div>
     
-    <button target=".text_gal" class=" ad_more_btn btn btn-primary" content='
-    <div class="h-100 row border">
+    <button target=".text_gal" class="pull-right ad_more_btn btn btn-primary" content='
+    <div class="h-100 margin-bttom-30 row border">
                         <button type="button" class="pull-right mt-1 btn btn-icon btn-circle btn-sm btn-soft-danger remove-parent" parent=".row">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                         <div class="col-md-12" id="text_index" style="display:block">
                         <div class="form-group">
-                            <label>Title</label>
+                            <label>index : Title</label>
                             <input type="text" class="form-control required" name="txt_gal[index][title]"/>
                         </div>
                     </div>
@@ -176,7 +184,7 @@
                             <input data-id="0" type="file" value="742" name="txt_gal_index" id="txt_gal_index" class="form-control" style="border-color: red;">
                                         </span>
                                         <div id="txt_gal_index_box"></div>
-                            <input type="hidden"  value="" name="txt_gal[index][img]" class="required" id="txt_gal_index_img" placeholder=" ">
+                            <input type="hidden"  value="" name="txt_gal[index][img]" class="" id="txt_gal_index_img" placeholder=" ">
                         </div>
                     </div>
                     
@@ -187,12 +195,12 @@
                             <textarea id="textinput_index" class="form-control required" name="txt_gal[index][txt]"></textarea>
                         </div>
                     </div>
-                    <div class="col-md-12"><h5>Add Bullet p`Point</h5></div>
+                    <div class="col-md-12"><h5>Add Bullet Point</h5></div>
                     <div class="col-md-12 tgfeature_buletindex"></div>
                     <button target=".tgfeature_buletindex" outer="index"  load="tgbullet_html" load-url="<?= base_url('vendor/section/tg_bullet') ?>" content="Test index" class="ad_more_btn btn btn-primary">Add Feture bullet</button>
                     
     </div>
-    ' index="<?= $mkey ?>" limit="7" rtime="15">Add Gallery Item</button>
+    ' index="<?= $mkey ?>" limit="5" rtime="19">Add Gallery Item</button>
     </div>
     
     </div>

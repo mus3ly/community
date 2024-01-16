@@ -23,6 +23,18 @@ class Vendor extends CI_Controller
         $this->load->library('pum');
         
     }
+    public function preview_btn($id)
+    {
+        $user = $this->db->where('product_id', $id)->get('product')->row();
+        if($user)
+        {
+            custom_redirect(base_url($user->slug));
+        }
+        else
+        {
+            custom_redirect(base_url());
+        }
+    }
     public function vendor_page($id)
     {
 
@@ -895,15 +907,15 @@ class Vendor extends CI_Controller
                     } else {
                         if(!$login_data->row()->email_ver)
                         {
-                         echo 'email_unverify';   
+                         echo translate('email_unverify');   
                         }
                         else
                         {
-                        echo 'unapproved';
+                        echo translate('unapproved');
                         }
                     }
                 } else {
-                    echo 'login_failed';
+                    echo translate('login_failed_vendor');
                 }
             }
         }
@@ -1431,6 +1443,15 @@ class Vendor extends CI_Controller
             }
         }
         
+    }
+    function column3($type,$id)
+    {
+        if($type == 'add')
+        {
+            echo $this->load->view('sections/add_column3.php',array('pid'=>$id),true);
+            exit();
+        }
+        die('OKK');
     }
     function save_product($id)
     {
@@ -2343,6 +2364,8 @@ $n = $this->db->where('product_id', $vendor['bpage'])->where('is_bpage', 1)->get
             if(isset($sing->module) && $sing->module)
             {
                 $module = $sing->module;
+                $this->db->order_by("sorting", "asc");
+
                 $mod = $this->db->where('id',$module)->get('modules')->row();
                 if(isset($mod->category))
                 {
@@ -2615,7 +2638,7 @@ $n = $this->db->where('product_id', $vendor['bpage'])->where('is_bpage', 1)->get
                                 class=\"btn btn-success btn-xs btn-labeled fa fa-eye\" data-toggle=\"tooltip\" data-original-title=\"Delete\" data-container=\"body\"> 
                                     ".translate('affliate')." 
                             </a>
-                            <a href='".base_url('home/product_view/').$row['product_id']."'\"
+                            <a target='_blank' href='".base_url($row['slug'])."'\"
                                 class=\"btn btn-info btn-xs btn-labeled fa fa-eye\" data-toggle=\"tooltip\" data-original-title=\"Delete\" data-container=\"body\"> 
                                     ".translate('view')."
                             </a>
@@ -2731,7 +2754,7 @@ $n = $this->db->where('product_id', $vendor['bpage'])->where('is_bpage', 1)->get
         } elseif ($para1 == 'add') {
 
             if($this->crud_model->can_add_product($this->session->userdata('vendor_id'))){
-                $page_data['modules'] =  $this->db->get('modules')->result();
+                $page_data['modules'] =  $this->db->order_by("sorting", "asc")->get('modules')->result();
                 $vid = $this->session->userdata('vendor_id');
                 $page_data['warehouse'] =  $this->db->where('uid',$vid)->get('address')->result_array();
                 $page_data['brandss'] =  $this->db->where('pcat', '369')->get('category')->result_array();
@@ -2748,9 +2771,6 @@ $n = $this->db->where('product_id', $vendor['bpage'])->where('is_bpage', 1)->get
                     {
                     $page_data['brands'] =  $this->db->where_in('category_id',$result)->get('category')->result_array();
                     } 
-            {
-                $page_data['brands'] =  $this->db->where('pcat',$page_data['mod_cat']->category_id)->get('category')->result_array();
-            }
                     // $this->load->view('back/vendor/product_add', $page_data);
                     $page_data['page_name']   = "product_add2";
                     if(isset($_GET['is_product']))

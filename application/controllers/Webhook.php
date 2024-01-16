@@ -19,58 +19,67 @@ class Webhook extends CI_Controller
         
         if(isset($data['data']['object']['subscription_details']['metadata']['track']) && $data['type'] == 'invoice.payment_succeeded')
         {
-            $r = $this->db->insert('stripe_webhook',array('data'=>$payload,'track'=>$data['data']['object']['subscription_details']['metadata']['track'],'uid'=>$data['data']['object']['subscription_details']['metadata']['customer_id'],'type'=>$data['type']));
             
-            $track = $data['data']['object']['subscription_details']['metadata']['track'];
-            $plan_id = $data['data']['object']['subscription_details']['metadata']['plan_id'];
+            $meta_data = $data['data']['object']['subscription_details']['metadata'];
+            $r = $this->db->insert('stripe_webhook',array('data'=>$payload,'track'=>$meta_data['track'],
+            'uid'=>$meta_data['customer_id'],'type'=>$data['type']));
+            $meta_data = $data['data']['object']['subscription_details']['metadata'];
+            $uid = $meta_data['customer_id'];
+            $track = $meta_data['track'];
+            $plan_id = $meta_data['plan_id'];
+            
             $stripe_sub = $data['data']['object']['id'];
-            $pack = $this->db->where('track_id',$track)->get('membership_payment')->row();
+            $pack = $this->db->where('membership_id',$plan_id)->get('membership')->row();
             $exp = '';
             if($pack->timespan)
                             {
-                                $date = date('Y-m-d');
-                                $exp = strtotime(date('Y-m-d', strtotime($date. ' + '.$pack->timespan.' days'))); 
+                                $date = date('Y-m-d H:i:s');
+                                $exp = strtotime(date('Y-m-d H:i:s', strtotime($date. ' + '.$pack->timespan.' days'))); 
                             }
-            $v = $this->db->where('vendor_id', $pack->vendor)->update('vendor',array('membership'=> $plan_id,'stripe_sub'=> $stripe_sub,'member_expire_timestamp'=>$exp));
-            $vendor = $this->db->where('vendor_id',$pack->vendor)->get('vendor')->row();
-            $this->email_model->payment_success($vendor->email,currency($pack->amount),14) ;
+            $v = $this->db->where('vendor_id', $uid)->update('vendor',array('membership'=> $plan_id,'stripe_sub'=> $stripe_sub,'member_expire_timestamp'=>$exp));
+            $vendor = $this->db->where('vendor_id',$uid)->get('vendor')->row();
+            $this->email_model->payment_success($vendor->email,"&#xA3;".$pack->price,14) ;
         }
         elseif(isset($data['data']['object']['subscription_details']['metadata']['track']) && $data['type'] == 'invoice.payment_succeeded')
         {
             $r = $this->db->insert('stripe_webhook',array('data'=>$payload,'track'=>$data['data']['object']['subscription_details']['metadata']['track'],'uid'=>$data['data']['object']['subscription_details']['metadata']['customer_id'],'type'=>$data['type']));
             
             $track = $data['data']['object']['subscription_details']['metadata']['track'];
-            $plan_id = $data['data']['object']['subscription_details']['metadata']['plan_id'];
+            $plan_id = $data['data']['object']['metadata']['plan_id'];
+            
             $stripe_sub = $data['data']['object']['id'];
-            $pack = $this->db->where('track_id',$track)->get('membership_payment')->row();
+            $pack = $this->db->where('membership_id',$plan_id)->get('membership')->row();
             $exp = '';
             if($pack->timespan)
                             {
-                                $date = date('Y-m-d');
-                                $exp = strtotime(date('Y-m-d', strtotime($date. ' + '.$pack->timespan.' days'))); 
+                                $date = date('Y-m-d H:i:s');
+                                $exp = strtotime(date('Y-m-d H:i:s', strtotime($date. ' + '.$pack->timespan.' days'))); 
                             }
+                            
             $v = $this->db->where('vendor_id', $pack->vendor)->update('vendor',array('membership'=> $plan_id,'stripe_sub'=> $stripe_sub,'member_expire_timestamp'=>$exp));
             $vendor = $this->db->where('vendor_id',$pack->vendor)->get('vendor')->row();
-            $this->email_model->payment_success($vendor->email,currency($pack->amount),14) ;
+            $this->email_model->payment_success($vendor->email,"&#xA3;".$pack->amount,14) ;
         }
         else if(isset($data['data']['object']['metadata']['track']) && $data['type'] == 'customer.subscription.created')
         {
             $r = $this->db->insert('stripe_webhook',array('data'=>$payload,'track'=>$data['data']['object']['metadata']['track'],'uid'=>$data['data']['object']['metadata']['customer_id'],'type'=>$data['type']));
             $track = $data['data']['object']['metadata']['track'];
+            $vid = $data['data']['object']['metadata']['customer_id'];
             $plan_id = $data['data']['object']['metadata']['plan_id'];
+            
             $stripe_sub = $data['data']['object']['id'];
-            $pack = $this->db->where('track_id',$track)->get('membership_payment')->row();
+            $pack = $this->db->where('membership_id',$plan_id)->get('membership')->row();
             $exp = '';
             if($pack->timespan)
                             {
-                                $date = date('Y-m-d');
-                                $exp = strtotime(date('Y-m-d', strtotime($date. ' + '.$pack->timespan.' days'))); 
+                                $date = date('Y-m-d H:i:s');
+                                $exp = strtotime(date('Y-m-d H:i:s', strtotime($date. ' + '.$pack->timespan.' days'))); 
                             }
-            $v = $this->db->where('vendor_id', $pack->vendor)->update('vendor',array('membership'=> $plan_id,'stripe_sub'=> $stripe_sub,'member_expire_timestamp'=>$exp));
-            $r = $this->email_model->verifiction_email($pack->vendor,'vendor');
+            $v = $this->db->where('vendor_id', $vid)->update('vendor',array('membership'=> $plan_id,'stripe_sub'=> $stripe_sub,'member_expire_timestamp'=>$exp));
+            $r = $this->email_model->verifiction_email($vid,'vendor');
             var_dump($r);
-            var_dump('vendor id is'.$pack->vendor);
-            $vendor = $this->db->where('vendor_id',$pack->vendor)->get('vendor')->row();
+            var_dump('vendor id is'.$vid);
+            $vendor = $this->db->where('vendor_id',$vid)->get('vendor')->row();
             $this->email_model->account_opening('vendor', $vendor->email, $password);
             $this->email_model->vendor_reg_email_to_admin($vendor->email, $password);
         }

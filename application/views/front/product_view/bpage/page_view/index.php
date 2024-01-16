@@ -105,6 +105,20 @@ $othen = array();
           <div class="tab-pane fade" id="store-tab-pane" role="tabpanel" aria-labelledby="store-tab" tabindex="0">
             <div class="filter-listings">
               <div class="filter-btns">
+                  <?php
+            $there = 0;
+            foreach($pros as $sing)
+
+            {
+                $arr = json_decode($sing['added_by'],true);
+                if(isset($arr['type']) && $arr['type'] == 'vendor' && $arr['id'] == $vid && !in_array($sing['module'],$othen) && !$sing['is_bpage'])
+                {
+                    $there = 1;
+                }
+            }
+            if($there)
+            {
+                ?>
                 <ul class="filter-tabs">
                   <li>
                     <button class="inner-filter-btn active" data-filter="stab">All Listing</button>
@@ -116,8 +130,14 @@ $othen = array();
                     <button class="inner-filter-btn" data-filter="shop-filter">Shop</button>
                   </li>
                 </ul>
+                <?php
+                }
+                ?>
               </div>
-
+                <?php
+            if($there)
+            {
+                ?>
               <div class="filter-content">
                 <div class="filter-pane active">
                   <div class="listings shop-product">
@@ -169,6 +189,15 @@ $othen = array();
               </div>
             </div>
           </div>
+          <?php
+            }
+            else
+            {
+                ?>
+                <h2 class="check-later">Please check back later... <br>We'll post some products and services soon!</h2>
+                <?php
+            }
+          ?>
           
         </div>
       </div>

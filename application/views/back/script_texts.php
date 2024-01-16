@@ -189,12 +189,14 @@ $(document).ready(function(){
 	function chcol(i)
 	{
 	    var type = $('#type_'+i).val();
+	    
 	    if(type == 'img')
 	    {
 	        $('#img_'+i).show();
 	        $('#colimg_'+i+'_img').addClass('required');
 	        $('#textinput_'+i).removeClass('required');
 	        $('#text_'+i).hide();
+	        $('#sec3bull_'+i).hide();
 	    }
 	    else
 	    {
@@ -202,6 +204,7 @@ $(document).ready(function(){
 	        $('#textinput_'+i).addClass('required');
 	        $('#colimg_'+i+'_img').removeClass('required');
 	        $('#text_'+i).show();
+	        $('#sec3bull_'+i).show();
 	    }
 	}
 	function del_cat(id , pid,col= 0){
@@ -1099,6 +1102,10 @@ $('#amnty').on('keyup', function(){
         rtime = 5;
         var target = $(this).attr('target');
         var ind = parseInt($(this).attr('index'));
+        if(!ind)
+        {
+            ind = 0;
+        }
         ind++;
         if(ind > limit)
         {
@@ -1117,23 +1124,38 @@ $('#amnty').on('keyup', function(){
         if(load)
         {
             content = $('#'+load).attr('content');
+            if(content)
+            {
             for(var i = 1;i <= 10;i++)
         {
             content = content.replace("oindex", outer);
         }
+            }
+            
         }
+        if(content)
+            {
         for(var i = 1;i <= rtime;i++)
         {
             content = content.replace("index", ind);
         }
+            }
 
         $(target).append(content);
     });
     $(document).on('click', '.remove-parent', function() {
                     var $this = $(this);
+                    var mbtn = $this.attr("minus-btn");
                     var parent = $this.attr("parent");
                     var parent2 = $this.attr("parent2");
-                    if(parent2)
+                    if(mbtn)
+                    {
+                        var mid = mbtn;
+                        var ind = $(mid).attr('index');
+                        ind--;
+                        $(mid).attr('index',ind);
+                    }
+                    else if(parent2)
                     {
                         var mid = parent2+'_btn';
                         var ind = $(mid).attr('index');
@@ -1256,6 +1278,10 @@ $('.exra_chnge').change(function(){
         }
     }
 });
+function preview_btn(pid)
+{
+    alert(pid);
+}
 function preview_3(input,i) {
         alert('preview'+i);
         console.log(input.files);

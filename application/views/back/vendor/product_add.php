@@ -1622,7 +1622,7 @@ function activaTab(tab){
                 alert('Please add minimum 300 character in description');
                 return 0;
             }
-        form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');
+        form_submit('product_add','<?php echo translate('product_has_been_uploaded!'); ?>');preview_btn();
     }
     window.preview = function (input) {
         if (input.files && input.files[0]) {

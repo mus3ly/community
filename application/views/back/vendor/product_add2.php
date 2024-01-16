@@ -136,7 +136,8 @@ $tabs = bubbleSort($tabs);
                             <div class="form-group btm_border">
                                 <label><?php echo translate('module');?></label>
                                 <div class="col-sm-12">
-                                    <?php 
+                                    <?php
+                                    // $this->db->order_by("sorting", "asc");
                                     echo $this->crud_model->select_html('modules','module','label','add','demo-chosen-select required',(isset($row->module)?$row->module:''),NULL,NULL,NULL); ?>
                                 </div>
                             </div>
@@ -145,7 +146,18 @@ $tabs = bubbleSort($tabs);
                             ?>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Title</label> 
+                                    <?php
+                                    $title = '';
+                                    if($row->is_bpage)
+                                    {
+                                        $title = 'Business Title';
+                                    }
+                                    else
+                                    {
+                                        $title = 'Advertisement Title';
+                                    }
+                                    ?>
+                                    <label><?= $title ?></label> 
                                     <input type="text" id="title" onkeyup="create_slug('<?= (isset($row->product_id)&& $row->product_id)?$row->product_id:0 ?>')"  class="form-control  required" value="<?= (isset($row->product_id)&& $row->title)?$row->title:'' ?>"
                                         name="title" placeholder=" ">
                                         
@@ -163,7 +175,18 @@ $tabs = bubbleSort($tabs);
 
                             <div class="col-md-12"> 
                                 <div class="form-group">
-                                    <label>Slogan</label>
+                                    <label>Your <?php
+                                    $title = '';
+                                    if($row->is_bpage)
+                                    {
+                                        $title = 'Business';
+                                    }
+                                    else
+                                    {
+                                        $title = 'Advertisement';
+                                    }
+                                    echo $title;
+                                    ?> Slogan</label>
                                     <input type="text" class="form-control  required" value="<?= (isset($row->slog)&& $row->slug)?$row->slog:'' ?>"
                                         name="slog" placeholder=" ">
                                 </div>
@@ -171,7 +194,7 @@ $tabs = bubbleSort($tabs);
 
                             <div class="col-md-12"> 
                                 <div class="form-group">
-                                    <label>About Listing</label>
+                                    <label>Directory Listing Description Text</label>
                                     <textarea name="summery" id="summery" class="form-control  required" rows="4" cols="50"><?= (isset($row->summery)&& $row->summery)?$row->summery:'' ?></textarea>
                                 </div>
                             </div>
@@ -445,7 +468,7 @@ $checks = json_decode($row['enable_checks']);
                     if(isset($row['product_id']))
                     {
                         ?>
-                        <a class="btn btn-info btn-md btn-labeled fa fa-upload pull-right" href="<?= base_url($row['slug']); ?>" target="_blank" ><?php echo translate('preview');?></a>
+                        <a class="btn btn-info btn-md btn-labeled fa fa-upload pull-right" href="<?= base_url('vendor/preview_btn/'.$row['product_id']); ?>" target="_blank" ><?php echo translate('preview');?></a>
                     <?php
                     }
                     

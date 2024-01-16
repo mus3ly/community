@@ -6,6 +6,7 @@
 					<th><?php echo translate('no');?></th>
 					<th><?php echo translate('name');?></th>
 					<th><?php echo translate('Category');?></th>
+					<!--<th><?php //echo translate('sorting');?></th>-->
 				</tr>
 			</thead>
 				
@@ -20,6 +21,7 @@
                     
                     <td><?php echo $row['label']; ?></td>
                     <td><?php echo $row['category_name']; ?></td>
+                    <!--<td><?php //echo $row['sorting']; ?></td>-->
                     
                     <td class="text-right">
                         <a class="btn btn-success btn-xs btn-labeled fa fa-wrench" data-toggle="tooltip" 

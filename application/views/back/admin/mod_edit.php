@@ -121,6 +121,13 @@
                     	  value="1" <?php if($amenity_data['hide_bus'] == '1' ){echo 'checked';} ?> >
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label" for="demo-hor-1"><?php echo translate('sorting');?></label>
+                <div class="col-sm-6">
+                    <input type="number" name="n_sorting" class="form-control" id="demo-hor-1" 
+                    	  value="<?php echo $amenity_data['sorting']; ?>"  >
+                </div>
+            </div>
             <div>
                 <table style="width:100%">
   <tr>

@@ -169,11 +169,13 @@ $url = base_url('updated/');
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group mb-3"  id="stats_select">
+                <div class="form-group mb-3"  id="stats_select1">
+                    <input type="text" class="form-control" placeholder="<?= translate('state'); ?>" value="<?= (isset($reg_ven['state'])?$reg_ven['state']:null) ?>" name="state" />
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group mb-3" id="city_select">
+                <div class="form-group mb-3" id="city_select1">
+                    <input type="text" class="form-control" placeholder="<?= translate('city'); ?>" value="<?= (isset($reg_ven['city'])?$reg_ven['city']:null) ?>" name="city" />
                 </div>
               </div>
               <div class="col-md-6">

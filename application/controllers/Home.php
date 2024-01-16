@@ -639,8 +639,8 @@ class Home extends CI_Controller
             $user = $this->db->where('user_id',$id)->get('user')->row();
             if($user)
             {
-        $r = $this->email_model->verifiction_email(33,'user');
-        $this->session->set_flashdata('success', 'verification email send successfiully! ');
+        $r = $this->email_model->verifiction_email($id,'user');
+        $this->session->set_flashdata('success', 'Verification email sent successfully! ');
             }
             else
             {
@@ -5572,7 +5572,6 @@ class Home extends CI_Controller
             $v = $this->db->where('vendor_id', $pack->vendor)->update('vendor',array('membership'=>$pack->vendor));
             if($v){
             $vendor = $this->db->where('vendor_id',$pack->vendor)->get('vendor')->row();
-            $this->email_model->payment_success($vendor->email,currency($pack->amount)) ;
             }
             $page_data = array();
             //zohaib yhn bho success ki mail
@@ -6295,13 +6294,13 @@ class Home extends CI_Controller
                         }
                         else
                         {
-                            $this->session->set_flashdata('error', 'You email is not verfified! chreck your email or <a href="'.base_url('home/resend_verification/').'?token='.base64_encode($row['user_id']).'">Click Here</a> to resend verification email');
+                            $this->session->set_flashdata('error', 'You email is not verfified! Check your email or <a href="'.base_url('home/resend_verification/').'?token='.base64_encode($row['user_id']).'">Click Here</a> to resend verification email');
                         }
                          echo 'refresh';
                         exit();
                     }
                 } else {
-                    $this->session->set_flashdata('error', 'Login Failed!  Incorrect Email Or Password.Please Try Again');
+                    $this->session->set_flashdata('error', 'Login failed, please check your email or password');
                     echo 'refresh';
                 exit();
                 }
@@ -6735,7 +6734,7 @@ class Home extends CI_Controller
 
     /* FUNCTION: Customer Reg
     istration*/
-    public function RandomString($length = 10) {
+    public function RandomString($length = 5) {
         return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
     }
     function registration($para1 = "", $para2 = "")
@@ -6815,7 +6814,7 @@ class Home extends CI_Controller
                                 $msg = 'done';
                                 $insert_id = $this->db->insert_id();
                                 $this->email_model->verifiction_email($insert_id,'user');
-                             $this->session->set_flashdata('success', 'Account created successfully! , Please verify your email and Login');
+                             $this->session->set_flashdata('success', 'Account created successfully! Please verify your email and Login');
                              $_SESSION['reg_user'] = array();
                                         echo 'refresh';
                                            exit();
@@ -11046,7 +11045,10 @@ ob_flush(); //Stops saving and outputs it all at once
 
     function test()
     {
-        $em = 'mchbck.work@gmail.com';
+        $em = 'raheelshehzad188@gmail.com';
+        // $em = 'mchbck.work@gmail.com';
+        $am = 5;
+        $r = $this->email_model->subscription_cancellation($em) ;
         var_dump($r);
         die('44');
         // $pac = $this->crud_model->get_product_affiliation_codes_from_cookies();

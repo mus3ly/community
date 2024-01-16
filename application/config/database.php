@@ -62,8 +62,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 // $env = 'dev';
-//$env = 'live';
- $env = 'local';
+$env = 'live';
+// $env = 'local';
 if($env == 'live')
 {
 

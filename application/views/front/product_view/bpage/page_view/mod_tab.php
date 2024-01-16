@@ -7,13 +7,14 @@
     $pros = $this->db->where('module',$mid)->get('product')->result_array();
         ?>
         <?php
-
+        $there = 0;
             foreach($pros as $sing)
 
             {
                 $arr = json_decode($sing['added_by'],true);
                 if(isset($arr['type']) && $arr['type'] == 'vendor' && $arr['id'] == $vid)
                 {
+                    $there = 1;
                 ?>
 
                         <?php
@@ -25,6 +26,12 @@
                     <?php
                 }
 
+            }
+            if(!$there)
+            {
+                ?>
+                <h2 class="check-later">Please check back later... <br>We'll post some products and services soon!</h2>
+                <?php
             }
 
             ?>

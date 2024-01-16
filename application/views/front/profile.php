@@ -41,7 +41,7 @@ $url = base_url('updated/');
                             ?>" class="img-fluid" alt="">
                   </div>
                   <div class="texts">
-                    <h4 class="user-name"><?php echo $row['username'];?> <?php echo translate('last_name');?></h4>
+                    <h4 class="user-name"><?php echo $row['username'];?> <?php echo $row['surname'];?></h4>
                     <h5 class="user-title">Member</h5>
                     <a href="<?= base_url('home/logout'); ?>" class="logout">Log Out</a>
                   </div>

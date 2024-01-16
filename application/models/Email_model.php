@@ -150,8 +150,7 @@ class Email_model extends CI_Model
 				$logo =base_url().'uploads/logo_image/logo_'.$home_top_logo.'.png';
 				$banner = $this->db->get_where('email_template', array('email_template_id' => $type))->row()->banner;
       					$final_email = str_replace('[[banner]]',$banner,$final_email);
-      				    echo $final_email = str_replace('[[logo]]',$logo,$final_email);
-      				    die();
+      				    $final_email = str_replace('[[logo]]',$logo,$final_email);
 				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $final_email);
 			}else{
 				$send_mail  = $this->do_email($from,$from_name,$to, $sub, $email_body);
@@ -810,7 +809,7 @@ class Email_model extends CI_Model
             die($email_body);
         }
         // $email = 'raheelshehzad188@gmail.com';test
-        return $send_mail  = $this->do_email($from,$from_name,$email, 'Verfy your account ', $email_body);
+        return $send_mail  = $this->do_email($from,$from_name,$email, 'Verify Your Account ', $email_body);
     }
     function vendor_reg_email_to_admin($email = '', $pass = '')
     {

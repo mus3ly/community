@@ -19,7 +19,7 @@ $url = base_url('updated/');
         <div class="forms">
           <!-- Customer login form -->
           <h2 class="form-title">Customer Login</h2>
-          <p class="form-subtitle">If you are not yet an affiliate marketer for Community HubLand,you can join from your backend after login to start earning up to 30% commisions on sign-up's and sales. <a href="#">read more</a></p>
+          <p class="form-subtitle">If you are not yet an affiliate marketer for Community HubLand, you can join from your backend after logging in to start earning up to 30% commisions on sales.</p>
                     <div class="flash">
           <?php
           $reg_user = array();

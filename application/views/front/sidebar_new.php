@@ -99,7 +99,7 @@
         $arr = array();
         if($cat_path)
         {
-            var_dump($cat_path);
+            // var_dump($cat_path);
         $this->db->where_in('category',$cat_path);
         $this->db->order_by("filter_sort", "ASC");
         $arr = $this->db->where('is_filter',1)->where('hide_filter',0)->get('list_fields')->result_array();

@@ -79,13 +79,13 @@ $url = base_url('updated/');
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group mb-3"  id="stats_select">
-                  <input type="text" class="form-control" placeholder="State"  value="<?= (isset($reg_user['state'])?$reg_user['state']:null) ?>" name="state">
+                <div class="form-group mb-3"  id="stats_select1">
+                  <input type="text" placeholder="<?= translate('state'); ?>" class="form-control"  value="<?= (isset($reg_user['state'])?$reg_user['state']:null) ?>" name="state">
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group mb-3" id="city_select">
-                  <input type="text" class="form-control" placeholder="City"  value="<?= (isset($reg_user['city'])?$reg_user['city']:null) ?>" name="city">
+                <div class="form-group mb-3" id="city_select1">
+                  <input type="text" class="form-control" placeholder="<?= translate('city'); ?>"  value="<?= (isset($reg_user['city'])?$reg_user['city']:null) ?>" name="city">
                 </div>
               </div>
               <div class="col-md-6">

@@ -43,7 +43,19 @@
                     <p class="low_me">
                       By
                       <span class="name"><?php echo $row['author']; ?> </span> |
-                      <span class="date"><?= $newDate = formate_date($row['create_at']);?></span>
+                      <span class="date"><?=($row['update_at'] > $row['posted_on'])?'Updated at ':'Posted at ' ?><?php
+                        $newDate = formate_date($row['posted_on']);
+                        if($row['update_at'] > $row['posted_on'])
+                        {
+                            $newDate = formate_date($row['update_at']);
+                        }
+                        else
+                        {
+                            $newDate = formate_date($row['create_at']);
+                        }
+                        echo $newDate;
+                        
+                        ?></span>
                       <a href="#" style="margin-left: 5px;" onclick="share_icon('<?= $product_id ?>')"><i class="bi bi-share"></i></a>
                     </p>
                   </div>

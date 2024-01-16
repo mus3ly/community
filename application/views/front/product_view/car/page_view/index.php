@@ -79,7 +79,8 @@ if(isset($product_data[0]))
                 <div class="widget" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="0">
                   <h4 class="widget-title">Ad Posted By
                    <a class="wishlist heart_icon" style="float:right;" href="<?= base_url('home/wishlist/add/'.$pro['product_id']) ?>"><i class="bi bi-heart"></i></a>
-                   <span class="" onclick="share_icon(<?=$pro['product_id']?>)"><i class="fas fa-share"></i></span>
+                   <span class="" style="float:right; color: #f26122;
+    margin-right: 5px;" onclick="share_icon(<?=$pro['product_id']?>)"><i class="fas fa-share"></i></span>
                   </h4>
                  
                   <?php
